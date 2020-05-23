@@ -1,6 +1,6 @@
 # Trecipe
 
-CPSC 436I Project
+CPSC 436I Project: Team2
 
 ## Project description
 
