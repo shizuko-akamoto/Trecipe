@@ -13,7 +13,9 @@ Our stretch goals include adding collaborators to any bucket list, viewing popul
 ### Minimal requirements (will definitely complete)
 * User should be able to create, delete, edit buckets of travel destinations of interest
 * User should be able to add, remove, move, destinations within a bucket
-* All user information should persist in a database and retrieved upon site load
+* Allow user to check-off destinations in a bucket
+* Display destinations in a bucket on a map with markers marking each destination
+* Hover over pins on map to see destination digest, click to see full detail
 ### Standard requirements (will most likely complete)
 * Support for multiple users
 * Support filtering when viewing map
@@ -33,6 +35,4 @@ Our stretch goals include adding collaborators to any bucket list, viewing popul
 
 ## Prototypes
 
-![placeholder1.png](https://github.com/shizuko-akamoto/Travel-Bucket-List/blob/master/placeholder1.PNG "placeholder 1")
-
-![placeholder2.png](https://github.com/shizuko-akamoto/Travel-Bucket-List/blob/master/placeholder2.PNG "placeholder 2")
+[See prototypes](prototypes.pdf)
