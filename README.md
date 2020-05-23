@@ -18,6 +18,4 @@ Our stretch goals include adding collaborators to any bucket list, viewing popul
 
 ## Prototypes
 
-![placeholder1.png](https://github.com/shizuko-akamoto/Travel-Bucket-List/blob/master/placeholder1.PNG "placeholder 1")
-
-![placeholder2.png](https://github.com/shizuko-akamoto/Travel-Bucket-List/blob/master/placeholder2.PNG "placeholder 2")
+[See prototypes](prototypes.pdf)
