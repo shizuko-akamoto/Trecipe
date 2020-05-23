@@ -30,8 +30,17 @@ Our stretch goals include adding collaborators to any bucket list, viewing popul
 * Allow	full review of destination (blog-style) upon check-off
 
 ## Tasks breakdown
+Tasks have been broken-down into issues in this repository. [See Issues!](https://github.com/shizuko-akamoto/Trecipe/issues)
 
-*placeholder*
+Here is a list of acronym definition:
+Acronym | Definition
+------------ | -------------
+FE | FrontEnd
+BE | BackEnd
+TC | Trecipe Card
+TP | Trecipe Page
+SP | Story Points
+
 
 ## Prototypes
 
