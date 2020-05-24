@@ -18,3 +18,12 @@
     - Implement and Create React Component for Trecipe Card, Popup after `Add`, and assist Yun for Photo Logic.
 3. Where you might have gotten stuck during the last two weeks.
     - Deciding the name and key features for our website were some hard decisions for us. It was difficult to think outside of the box when there are many well-developed travel sites in the market and to find gaps in user demand.
+
+### o1u1b
+
+1. What you’ve worked on in the previous two weeks
+    - We had a few meetings and discussed the project requirements, name, features, and page design of the website. 
+2. What you’ll be working on in the next two weeks
+    - For the next two weeks, I will setup the project, implement the front end for right click menu, and integrate Trecipe card component into a page.
+3. Where you might have gotten stuck during the last two weeks
+    - We had a bit of difficulty coming up with a name for the website. In the end, the idea of adding ingredients to a trip sounds awesome, so we chose Trecipe which is a combination of trip and recipe. 
