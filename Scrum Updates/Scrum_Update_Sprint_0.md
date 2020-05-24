@@ -1,4 +1,4 @@
-## Scrum Update
+## Scrum Update - Sprint 0
 
 ### k7y0b
 
