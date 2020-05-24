@@ -1,4 +1,5 @@
 ## Scrum Update - Sprint 0
+[Sprint 1 Issues](https://github.com/shizuko-akamoto/Trecipe/milestone/1)
 
 ### k7y0b
 
