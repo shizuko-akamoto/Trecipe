@@ -4,7 +4,7 @@
 .button {
   outline-style: none;
   background-color: $tc-white;
-  border: 1px solid $light-gray;
+  border: 1px solid $silver-gray;
   box-sizing: border-box;
   border-radius: 8px;
   font-style: normal;
@@ -15,6 +15,7 @@
   padding: 0 2em;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   &:hover {
     background-color: lighten($indigo-dye, 75%);
     color: $indigo-dye;
@@ -23,5 +24,13 @@
   &:active {
     background: $indigo-dye;
     color: $tc-white;
+  }
+  &:disabled {
+    color: $light-gray;
+    background-color: $white-gray;
+    border-color: $light-gray;
+  }
+  .button-icon {
+    padding: 5px;
   }
 }
