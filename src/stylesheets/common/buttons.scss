@@ -1,0 +1,27 @@
+@import "colors";
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+.button {
+  outline-style: none;
+  background-color: $tc-white;
+  border: 1px solid $light-gray;
+  box-sizing: border-box;
+  border-radius: 8px;
+  font-style: normal;
+  font-size: 14px;
+  font-family: 'Lato', sans-serif;
+  color: $mid-gray;
+  height: 40px;
+  padding: 0 2em;
+  display: flex;
+  align-items: center;
+  &:hover {
+    background-color: lighten($indigo-dye, 75%);
+    color: $indigo-dye;
+    border-color: $indigo-dye;
+  }
+  &:active {
+    background: $indigo-dye;
+    color: $tc-white;
+  }
+}
