@@ -1,0 +1,124 @@
+@import "colors";
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+.contextFilterButtons {
+  outline-style: none;
+  background-color: $tc-white;
+  border: 1px solid $silver-gray;
+  box-sizing: border-box;
+  border-radius: 8px;
+  font-style: normal;
+  font-size: 14px;
+  font-family: 'Lato', sans-serif;
+  color: $mid-gray;
+  height: 40px;
+  width: 140px;
+  padding: 0 1em;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  display: flex;
+  text-align: left;
+  &:hover {
+    background-color: lighten($indigo-dye, 75%);
+    color: $indigo-dye;
+    border-color: $indigo-dye;
+  }
+  &:active {
+    background: $indigo-dye;
+    color: $tc-white;
+  }
+  .button-icon {
+    padding: 5px;
+  }
+}
+
+.contextFilterButtons.active {
+  font-size: 14px;
+  color: white;
+  border-radius: 8px;
+  box-sizing: border-box;
+  outline-style: none;
+  border: none;
+  background: $indigo-dye;
+
+  &:hover {
+    background-color: lighten($indigo-dye, 75%);
+    color: $indigo-dye;
+    border-color: $indigo-dye;
+  }
+}
+
+.button-icon{
+  float: right;
+  width: 20px;
+  height: 20px;
+}
+
+.contextFilterSelector{
+  border: 8px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #52575C;
+  background: white;
+  width: 110px;
+  height: 40px;
+  padding: 0 1em;
+  font-style: normal;
+  font-family: 'Lato', sans-serif;
+  justify-content: space-between;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  &:hover{
+    font-size: 14px;
+    color: $indigo-dye;
+    background: $indigo-dye, 4%;
+  }
+}
+
+.contextFilterSelectorEntry{
+  border: 8px;
+  font-size: 14px;
+  color: #52575C;
+  background: white;
+  width: 140px;
+  height: 40px;
+  padding: 0 1em;
+  font-style: normal;
+  font-family: 'Lato', sans-serif;
+  justify-content: space-between;
+  cursor: pointer;
+  &:hover{
+    font-size: 14px;
+    color: $indigo-dye;
+    background: $indigo-dye, 4%;
+    box-shadow: 0 0 8px rgba(37, 40, 43, 0.12);
+  }
+
+  &:active {
+    background: $indigo-dye;
+    color: $tc-white;
+  }
+}
+
+
+.contextFilterSelectorEntry .button-icon{
+  float: left;
+  width: 20px;
+  height: 20px;
+}
+
+.contextFilterSelectorList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contextFilterSelectorEntry{
+  margin: 0;
+}
+
+li{
+  display: flex;
+}
