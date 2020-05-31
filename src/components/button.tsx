@@ -40,7 +40,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
             <div>
                 <button className="button" onClick={this.props.onClick} disabled={this.state.disabled}>
                     {this.props.text}
-                    {isUndefined(this.props.icon) &&
+                    {!isUndefined(this.props.icon) &&
                     <span className="button-icon"><FontAwesomeIcon icon={this.props.icon} fixedWidth/></span>}
                 </button>
             </div>
