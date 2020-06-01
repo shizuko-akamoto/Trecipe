@@ -1,11 +1,12 @@
 import React from 'react';
-import './App.css';
+import './fontawesome'
+import './stylesheets/App.scss';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Trecipe</h1>
+          <h1>Trecipe</h1>
       </header>
     </div>
   );
