@@ -11,13 +11,13 @@
   font-size: 14px;
   font-family: 'Lato', sans-serif;
   color: $mid-gray;
-  height: 40px;
-  padding: 0 2em;
+  height: 2.5em;
+  padding: 0 0.5em 0 1em;
   display: flex;
   align-items: center;
   justify-content: space-between;
   &:hover {
-    background-color: lighten($indigo-dye, 75%);
+    background-color: rgba($indigo-dye, 0.04);
     color: $indigo-dye;
     border-color: $indigo-dye;
   }
