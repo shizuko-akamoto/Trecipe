@@ -16,6 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
   &:hover {
     background-color: lighten($indigo-dye, 75%);
     color: $indigo-dye;

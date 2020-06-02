@@ -1,26 +1,14 @@
-import React, {MouseEvent} from 'react';
+import React from 'react';
 import "../stylesheets/filterbuttons.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {IconProp} from "@fortawesome/fontawesome-svg-core";
+import {ButtonProps, ButtonState} from "./button";
 
-export interface FilterButtonProps {
-    text: string;
-    icon: IconProp;
-    onClick(e: MouseEvent<HTMLElement>): void;
-}
-
-export interface FilterButtonState {
+export interface FilterButtonState extends ButtonState {
     selected: boolean;
 }
 
-export class FilterButton extends React.Component<FilterButtonProps, FilterButtonState> {
-    public static defaultProps: Partial<FilterButtonProps> = {
-        text: 'Filter',
-        icon: undefined,
-        onClick: () => {}
-    };
-
-    public readonly state: Readonly<FilterButtonState> = {selected: false};
+export class FilterButton extends React.Component<ButtonProps, FilterButtonState> {
+    public readonly state: Readonly<FilterButtonState> = {disabled: false, selected: true};
 
     render() {
         return (

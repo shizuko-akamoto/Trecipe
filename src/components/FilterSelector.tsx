@@ -1,21 +1,27 @@
 import React, {MouseEvent} from 'react';
 import "../stylesheets/filterbuttons.scss"
-import {FilterSelectorEntry} from "./FilterSelectorEntry";
-import {FilterButton} from "./FilterButton";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
+
+
+export interface FilterSelectorProps{
+    listItem: Array<{text: string, icon: IconProp}>;
+}
 
 export interface FilterSelectorState {
     listOpen: boolean,
     selected: string
 }
 
-export class FilterSelector extends React.Component<{defaultText: string},FilterSelectorState> {
+export class FilterSelector extends React.Component<FilterSelectorProps, FilterSelectorState> {
+    public readonly state: Readonly<FilterSelectorState> = {listOpen: false, selected: "All"};
+
     constructor(props: any){
         super(props)
         this.state = {
             listOpen: false,
             // should make into enum later
-            selected: "All"
+            selected: "Any"
         }
     }
 
@@ -32,9 +38,9 @@ export class FilterSelector extends React.Component<{defaultText: string},Filter
         }))
     }
 
-    toggleSelected(key: string){
-        console.log(key);
-        this.setState({selected: key});
+    toggleSelected(event: any){
+        console.log(event.target.innerText);
+        this.setState({selected: event.target.innerText});
     }
 
     render() {
@@ -46,9 +52,12 @@ export class FilterSelector extends React.Component<{defaultText: string},Filter
                     {listOpen? <FontAwesomeIcon icon = "chevron-up" className="button-icon"/> : <FontAwesomeIcon icon="chevron-down" className="button-icon"/>}
                 </div>
                 {listOpen &&  <ul className="contextFilterSelectorList">
-                    <li><FilterSelectorEntry icon = "border-all" text = "All" onClick={this.toggleSelected.bind(this)}/></li>
-                    <li><FilterSelectorEntry icon = "unlock" text = "Public" onClick={this.toggleSelected.bind(this)}/></li>
-                    <li><FilterSelectorEntry icon = "lock" text = "Private" onClick={this.toggleSelected.bind(this)}/></li>
+                    {this.props.listItem.map(item => {
+                        return (
+                            <li><button className = "contextFilterSelectorEntry" onClick={this.toggleSelected.bind(this)}>
+                                <span className="button-icon"><FontAwesomeIcon icon={item.icon} fixedWidth/></span>
+                                {item.text}
+                            </button></li>)})}
                 </ul>}
             </div>
         );

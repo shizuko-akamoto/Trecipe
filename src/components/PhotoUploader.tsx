@@ -1,5 +1,4 @@
 import React from 'react';
-import {FilterButtonProps} from "./FilterButton";
 
 export interface PhotoUploaderProps{
     onChangeFile(event: React.ChangeEvent<HTMLInputElement>): void;
