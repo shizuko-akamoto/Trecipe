@@ -39,8 +39,7 @@ export class FilterSelector extends React.Component<FilterSelectorProps, FilterS
     }
 
     toggleSelected(event: any){
-        console.log(event.target.innerText);
-        this.setState({selected: event.target.innerText});
+        this.setState({listOpen: false, selected: event.target.innerText});
     }
 
     render() {

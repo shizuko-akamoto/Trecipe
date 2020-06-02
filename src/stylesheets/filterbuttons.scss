@@ -35,6 +35,7 @@
   border-radius: 8px;
   width: 140px;
   padding: 0 1em;
+  justify-content: flex-start;
   &:hover{
     font-size: 14px;
     color: $indigo-dye;
@@ -44,14 +45,12 @@
 
 .contextFilterSelectorEntry{
   @extend .contextFilterSelector;
-  display: inline;
   border-radius: 0;
   width: 140px;
-  text-align: start;
+  text-align: left;
   &:hover{
     font-size: 14px;
     color: $indigo-dye;
-    background: rgba($indigo-dye, 0.04);
     box-shadow: 0 0 8px rgba(37, 40, 43, 0.12);
   }
 
