@@ -1,4 +1,4 @@
-import React, {MouseEvent} from 'react';
+import React from 'react';
 import "../stylesheets/filterbuttons.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
@@ -17,7 +17,7 @@ export class FilterSelector extends React.Component<FilterSelectorProps, FilterS
     public readonly state: Readonly<FilterSelectorState> = {listOpen: false, selected: "All"};
 
     constructor(props: any){
-        super(props)
+        super(props);
         this.state = {
             listOpen: false,
             // should make into enum later
@@ -48,7 +48,9 @@ export class FilterSelector extends React.Component<FilterSelectorProps, FilterS
             <div className = "contextFilterSelectorWrapper">
                 <div className = "contextFilterSelector" onClick={this.toggleList.bind(this)}>
                     {this.state.selected}
-                    {listOpen? <FontAwesomeIcon icon = "chevron-up" className="button-icon"/> : <FontAwesomeIcon icon="chevron-down" className="button-icon"/>}
+                    {listOpen?
+                        <FontAwesomeIcon icon = "chevron-up" className="button-icon" fixedWidth/> :
+                        <FontAwesomeIcon icon="chevron-down" className="button-icon" fixedWidth/>}
                 </div>
                 {listOpen &&  <ul className="contextFilterSelectorList">
                     {this.props.listItem.map(item => {

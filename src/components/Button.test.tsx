@@ -1,5 +1,5 @@
 import React from "react";
-import {Button} from './button'
+import {Button} from './Button'
 import {shallow} from "enzyme";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
