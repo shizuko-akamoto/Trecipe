@@ -8,9 +8,13 @@
   width: 400px;
   height: 2rem;
   border-radius: 8px;
-  border: solid 1px $mid-gray;
+  border: solid 1px $silver-gray;
   background-color: $tc-white;
   padding: 0.3rem 0.5rem;
+
+  &:focus-within {
+    border-color: $mid-gray;
+  }
 
   .search-input {
     flex-grow: 1;
