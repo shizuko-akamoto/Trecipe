@@ -3,10 +3,6 @@ import './fontawesome'
 import './stylesheets/App.scss';
 import {NavBar} from "./components/NavBar";
 import {SearchBar} from "./components/SearchBar";
-import {FilterSelector} from "./components/FilterSelector";
-import {IconName} from "@fortawesome/fontawesome-svg-core";
-import {Button} from "./components/Button";
-import {FilterButton} from "./components/FilterButton";
 
 function App() {
   return (
@@ -18,12 +14,6 @@ function App() {
               {text: 'My Trecipes', url: ''},
               {text: 'Account', url: ''}]}/>
           <SearchBar/>
-          <Button icon='check'/>
-          <FilterButton text="All Trecipes" icon='check' fontSize={1} onClick={() => {}}/>
-          <FilterSelector listItem={[
-              {text: 'All', icon: 'check' as IconName},
-              {text: "Private", icon: 'lock' as IconName},
-              {text: "Public", icon: 'unlock' as IconName}]}/>
       </header>
     </div>
   );

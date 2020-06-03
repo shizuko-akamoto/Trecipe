@@ -4,18 +4,18 @@
 
 .contextFilterButtons {
   @extend .button;
-}
 
-.contextFilterButtons.active {
-  font-size: $button-font-size;
-  color: white;
-  border-color: $indigo-dye;
-  border-radius: 8px;
-  background: $indigo-dye;
+  &.active {
+    font-size: $button-font-size;
+    color: white;
+    border-color: $indigo-dye;
+    border-radius: 8px;
+    background: $indigo-dye;
 
-  &:hover {
-    background-color: rgba($indigo-dye, 0.04);
-    color: $indigo-dye;
+    &:hover {
+      background-color: rgba($indigo-dye, 0.04);
+      color: $indigo-dye;
+    }
   }
 }
 
@@ -29,6 +29,10 @@
   border-radius: 0;
   border: none;
   justify-content: flex-start;
+
+  .button-icon {
+    padding-right: 1rem;
+  }
 }
 
 .contextFilterSelectorList {
@@ -38,8 +42,4 @@
   box-shadow: rgba($tc-black, 0.12) 0 5px 12px;
   border-radius: 0 0 8px 8px;
   background-color: $tc-white;
-}
-
-.contextFilterSelectorEntry .button-icon{
-  padding-right: 1rem;
 }
