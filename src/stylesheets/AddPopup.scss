@@ -1,0 +1,60 @@
+@import "colors";
+
+.AddPopup {
+    font-family: 'Lato', sans-serif;
+    background-color: $tc-white;
+    width: 500px;
+    height: 500px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid $silver-gray;
+    padding: 27px;
+}
+
+h1 {
+    width: 45%;
+    font-style: normal;
+    font-size: 35px;
+    color: $indigo-dye;
+}
+
+.Title {
+    border-bottom: 5px solid $crayola-yellow;
+    position: relative;
+}
+
+.Title:after {
+    position: absolute;
+    left: 62%;
+    right: 0;
+    bottom: -5px;
+    border-top: 5px solid $powder-blue;;
+    content: '';
+}
+
+h2 {
+    font-size: 13px;
+    font-style: normal;
+    color: $mid-gray;
+}
+
+input {
+    width: 410px;
+    border-color: $silver-gray;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+input::placeholder {
+    color: $bright-gray;
+}
+.Name {
+    height: 40px;
+}
+
+.Description {
+    height: 100px;
+}
+
