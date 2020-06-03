@@ -8,7 +8,7 @@ import {isUndefined} from "lodash";
  * Button props
  * text: text to display on button
  * icon: font awesome icon name [optional]
- * fontSize: button text font size in px [optional]
+ * fontSize: button text font size in rem [optional]
  * onClick: onClick handler function
  */
 export interface ButtonProps {
@@ -33,7 +33,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
     public static defaultProps: Partial<ButtonProps> = {
         text: 'Button item',
         icon: undefined,
-        fontSize: 14,
+        fontSize: 1,
         onClick: () => {}
     };
     public readonly state: Readonly<ButtonState> = {disabled: false};
@@ -42,7 +42,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
         return (
             <div>
                 <button className="button" onClick={this.props.onClick} disabled={this.state.disabled}
-                        style={{fontSize: `${this.props.fontSize}px`}}>
+                        style={{fontSize: `${this.props.fontSize}rem`}}>
                     {this.props.text}
                     {!isUndefined(this.props.icon) &&
                     <span className="button-icon"><FontAwesomeIcon icon={this.props.icon} fixedWidth/></span>}
