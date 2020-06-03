@@ -1,0 +1,63 @@
+@import "colors";
+@import "buttons";
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+.contextFilterButtons {
+  @extend .button;
+  width: 140px;
+}
+
+.contextFilterButtons.active {
+  font-size: 14px;
+  color: white;
+  border-radius: 8px;
+  box-sizing: border-box;
+  outline-style: none;
+  border: none;
+  background: $indigo-dye;
+
+  &:hover {
+    background-color: lighten($indigo-dye, 75%);
+    color: $indigo-dye;
+    border-color: $indigo-dye;
+  }
+}
+
+.button-icon{
+  float: right;
+  width: 20px;
+  height: 20px;
+}
+
+.contextFilterSelector{
+  @extend .button;
+  border: 8px;
+  width: 140px;
+  padding: 0 1em;
+}
+
+.contextFilterSelectorEntry{
+  @extend .contextFilterSelector;
+  border-radius: 0;
+  width: 140px;
+  text-align: left;
+  justify-content: flex-start;
+}
+
+.contextFilterSelectorList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: $tc-white;
+}
+
+.contextFilterSelectorEntry .button-icon{
+  float: left;
+  width: 20px;
+  height: 20px;
+  padding-right: 10px;
+}
+
+.contextFilterSelectorList li{
+  display: flex;
+}
