@@ -32,15 +32,8 @@
 .contextFilterSelector{
   @extend .button;
   border: 8px;
-  border-radius: 8px;
   width: 140px;
   padding: 0 1em;
-  justify-content: flex-start;
-  &:hover{
-    font-size: 14px;
-    color: $indigo-dye;
-    background: $indigo-dye, 4%;
-  }
 }
 
 .contextFilterSelectorEntry{
@@ -48,30 +41,21 @@
   border-radius: 0;
   width: 140px;
   text-align: left;
-  &:hover{
-    font-size: 14px;
-    color: $indigo-dye;
-    box-shadow: 0 0 8px rgba(37, 40, 43, 0.12);
-  }
-
-  &:active {
-    background: $indigo-dye;
-    color: $tc-white;
-  }
-}
-
-
-.contextFilterSelectorEntry .button-icon{
-  float: left;
-  width: 20px;
-  height: 20px;
-  padding-right: 10px;
+  justify-content: flex-start;
 }
 
 .contextFilterSelectorList {
   list-style: none;
   padding: 0;
   margin: 0;
+  background-color: $tc-white;
+}
+
+.contextFilterSelectorEntry .button-icon{
+  float: left;
+  width: 20px;
+  height: 20px;
+  padding-right: 10px;
 }
 
 .contextFilterSelectorList li{
