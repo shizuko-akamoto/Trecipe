@@ -12,7 +12,8 @@ export interface NavigationProps {
 export class NavBar extends React.Component<NavigationProps, {}> {
     render() {
         return (<nav className="nav-bar">
-                {this.props.links.map((link) => <a className="nav-item" href={link.url}>{link.text}</a>)}
+                {this.props.links.map((link) =>
+                    <a className="nav-item" href={link.url} key={link.text}>{link.text}</a>)}
         </nav>);
     }
 }
