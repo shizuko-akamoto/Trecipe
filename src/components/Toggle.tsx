@@ -3,14 +3,25 @@ import React from "react";
 import "../stylesheets/ToggleSwitch.scss"
 
 
+/**
+ * Toggle Switch State
+ * checked: true if on, false otherwise
+ */
 export interface ToggleState {
     checked: boolean;
 }
 
+/**
+ * Toggle Switch Props
+ * defaultChecked: default state at init.
+ */
 export interface ToggleProps {
     defaultChecked: boolean;
 }
 
+/**
+ * A Toggle Switch component configured with ToggleProps
+ */
 export class ToggleSwitch extends React.Component<ToggleProps, ToggleState> {
     public static defaultProps: Partial<ToggleProps> = {
         defaultChecked: false
@@ -20,6 +31,9 @@ export class ToggleSwitch extends React.Component<ToggleProps, ToggleState> {
         checked: this.props.defaultChecked
     };
 
+    /**
+    * Toggle on and off the switch.
+    */
     toggle() {
         this.setState({ checked: !this.state.checked })
     }

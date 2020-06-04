@@ -1,14 +1,21 @@
 import React, { MouseEvent, Component } from "react";
 
-
 import "../stylesheets/AddPopup.scss"
 import  { ToggleSwitch } from "./Toggle"
 import { Button } from "./button";
 
+
+/**
+ * Add Popup state
+ * content: The content inside the Trecipe Name input box.
+ */
 export interface AddPopupState {
     content: string;
 }
 
+/**
+ * An Add Popup component
+ */
 export class AddPopup extends React.Component<{}, AddPopupState> {
 
     constructor(props:any){
@@ -21,6 +28,9 @@ export class AddPopup extends React.Component<{}, AddPopupState> {
     private createButtonRef: React.RefObject<Button>;
     private currLength: number;
 
+    /**
+    *  Enable and Disable the 'Create Button' according to the content in Trecipe Name Input Box.
+    */
     handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value;
         let tempLenth: number = value.length;
@@ -30,7 +40,6 @@ export class AddPopup extends React.Component<{}, AddPopupState> {
         this.currLength = value.length;
         this.setState({ content: value });
     }
-
 
     render() {
         return (
@@ -53,4 +62,3 @@ export class AddPopup extends React.Component<{}, AddPopupState> {
         )
     }
 }
-

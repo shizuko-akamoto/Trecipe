@@ -61,16 +61,4 @@ export class Button extends Component<ButtonProps, ButtonState> {
             disabled: !state.disabled
         }))
     }
-
-    public enable(){
-        this.setState((state: ButtonState) => ({
-            disabled: false
-        }))
-    }
-
-    public disable() {
-        this.setState((state: ButtonState) => ({
-            disabled: true
-        }))
-    }
 }
