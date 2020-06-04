@@ -1,28 +1,36 @@
-import React, { Component } from "react";
+import React from "react";
 
 import "../stylesheets/ToggleSwitch.scss"
+
 
 export interface ToggleState {
     checked: boolean;
 }
 
-export class ToggleSwitch extends React.Component {
-    // state = { checked: true };
+export interface ToggleProps {
+    defaultChecked: boolean;
+}
+
+export class ToggleSwitch extends React.Component<ToggleProps, ToggleState> {
+    public static defaultProps: Partial<ToggleProps> = {
+        defaultChecked: false
+    };
+
+    public readonly state: Readonly<ToggleState> = {
+        checked: this.props.defaultChecked
+    };
+
+    toggle() {
+        this.setState({ checked: !this.state.checked })
+    }
 
     render() {
+        const className = `toggle-component ${this.state.checked ? ' active' : ''}`
         return (
-            <div className="toggle-switch">
-                <input
-                    type="checkbox"
-                    className="toggle-switch-checkbox"
-                // name={this.props.Name}
-                // id={this.props.Name}
-                />
-                <label className="toggle-switch-label">
-                    {/* <label className="toggle-switch-label" htmlFor={this.props.Name}> */}
-                    <span className="toggle-switch-inner" />
-                    <span className="toggle-switch-switch" />
-                </label>
+            <div
+                className={className}
+                onClick={() => this.toggle()}>
+                <div className='toggle-button' />
             </div>
         )
     }
