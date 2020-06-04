@@ -4,12 +4,11 @@
     font-family: 'Lato', sans-serif;
     background-color: $tc-white;
     width: 500px;
-    height: 500px;
+    height: auto;
     box-sizing: border-box;
     border-radius: 8px;
     border: 1px solid $silver-gray;
-    padding: 27px;
-    padding-top: 10px;
+    padding: 10px 27px 27px;
 }
 
 h1 {
@@ -33,47 +32,49 @@ h1 {
     content: '';
 }
 
-h2 {
-    font-size: 13px;
-    font-style: normal;
-    color: $mid-gray;
-}
-
-.input {
-    width: 410px;
-    border: 1px solid $silver-gray;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 8px;
-    font-size: 12px;
-
-}
-
-input::placeholder {
-    color: $bright-gray;
-}
-input {
-    height: 40px;
-}
-
-textarea {
-    height: 100px;
-    resize: none;
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-
-.button {
-    height: 40px;
-    font-size: 13px;
-    text-align: right;
-    position: relative;
-    left: 265px;
-    top: 20px;
-    margin-left: 10px;
-}
-
-.btn {
+.contents {
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    label {
+        font-size: 13px;
+        font-style: normal;
+        color: $mid-gray;
+    }
+
+    .input {
+        font-family: 'Lato', sans-serif;
+        border: 1px solid $silver-gray;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        border-radius: 8px;
+        font-size: 12px;
+
+        &::placeholder {
+            color: $bright-gray;
+        }
+    }
+
+    input {
+        height: 40px;
+    }
+
+    textarea {
+        height: 100px;
+        resize: none;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .button {
+        margin-left: 10px;
+    }
+
+    .btn {
+        display: flex;
+        justify-content: flex-end;
+    }
 }
