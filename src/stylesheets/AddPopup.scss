@@ -9,6 +9,7 @@
     border-radius: 8px;
     border: 1px solid $silver-gray;
     padding: 27px;
+    padding-top: 10px;
 }
 
 h1 {
@@ -38,23 +39,41 @@ h2 {
     color: $mid-gray;
 }
 
-input {
+.input {
     width: 410px;
-    border-color: $silver-gray;
+    border: 1px solid $silver-gray;
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 8px;
     font-size: 12px;
+
 }
 
 input::placeholder {
     color: $bright-gray;
 }
-.Name {
+input {
     height: 40px;
 }
 
-.Description {
+textarea {
     height: 100px;
+    resize: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
+
+.button {
+    height: 40px;
+    font-size: 13px;
+    text-align: right;
+    position: relative;
+    left: 265px;
+    top: 20px;
+    margin-left: 10px;
+}
+
+.btn {
+    display: flex;
+}

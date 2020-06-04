@@ -4,7 +4,8 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { isUndefined } from "lodash";
 
 import "../stylesheets/AddPopup.scss"
-
+import  { ToggleSwitch } from "./Toggle"
+import { Button } from "./button";
 
 export interface AddPopupState {
     disabled: boolean;
@@ -15,12 +16,16 @@ export class AddPopup extends React.Component {
         return (
             <div className='AddPopup'>
                 <h1 className="Title"> New Trecipe </h1>
-                <br></br>
                 <h2> Trecipe Name *</h2>
-                <input className="Name" maxLength={50} placeholder="Enter Trecipe Name" />
+                <input className="input" maxLength={50} placeholder="Enter Trecipe Name" />
                 <h2> Description </h2>
-                <input className="Description" />
+                <textarea className="input" />
                 <h2> Make Public</h2>
+                <ToggleSwitch />
+                <div className='btn'>
+                    <Button text = {"Create"}/>
+                    <Button text = {"Cancel"}/>
+                </div>
             </div>
         )
     }
