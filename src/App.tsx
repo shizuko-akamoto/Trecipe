@@ -3,6 +3,7 @@ import './fontawesome'
 import './stylesheets/App.scss';
 import {NavBar} from "./components/NavBar";
 import {SearchBar} from "./components/SearchBar";
+import {AddPopup} from "./components/AddPopup";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
               {text: 'My Trecipes', url: ''},
               {text: 'Account', url: ''}]}/>
           <SearchBar/>
+          <AddPopup/>
       </header>
     </div>
   );

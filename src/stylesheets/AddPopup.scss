@@ -1,0 +1,80 @@
+@import "variables";
+
+.AddPopup {
+    font-family: 'Lato', sans-serif;
+    background-color: $tc-white;
+    width: 500px;
+    height: auto;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid $silver-gray;
+    padding: 10px 27px 27px;
+}
+
+h1 {
+    width: 45%;
+    font-style: normal;
+    font-size: 35px;
+    color: $indigo-dye;
+}
+
+.Title {
+    border-bottom: 5px solid $crayola-yellow;
+    position: relative;
+}
+
+.Title:after {
+    position: absolute;
+    left: 62%;
+    right: 0;
+    bottom: -5px;
+    border-top: 5px solid $powder-blue;;
+    content: '';
+}
+
+.contents {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    label {
+        font-size: 13px;
+        font-style: normal;
+        color: $mid-gray;
+    }
+
+    .input {
+        font-family: 'Lato', sans-serif;
+        border: 1px solid $silver-gray;
+        padding-left: 10px;
+        padding-right: 10px;
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        border-radius: 8px;
+        font-size: 12px;
+
+        &::placeholder {
+            color: $bright-gray;
+        }
+    }
+
+    input {
+        height: 40px;
+    }
+
+    textarea {
+        height: 100px;
+        resize: none;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .button {
+        margin-left: 10px;
+    }
+
+    .btn {
+        display: flex;
+        justify-content: flex-end;
+    }
+}

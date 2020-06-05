@@ -16,6 +16,7 @@ export interface ButtonProps {
     icon: IconProp;
     fontSize: number;
     onClick(e: MouseEvent<HTMLElement>): void;
+    defaultDisabled: boolean;
 }
 
 /**
@@ -34,9 +35,10 @@ export class Button extends Component<ButtonProps, ButtonState> {
         text: 'Button item',
         icon: undefined,
         fontSize: 0.875,
-        onClick: () => {}
+        onClick: () => {},
+        defaultDisabled: false
     };
-    public readonly state: Readonly<ButtonState> = {disabled: false};
+    public readonly state: Readonly<ButtonState> = {disabled: this.props.defaultDisabled};
 
     render() {
         return (
