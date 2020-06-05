@@ -7,7 +7,7 @@ import { AddPopup } from './components/AddPopup';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AddPopup />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
