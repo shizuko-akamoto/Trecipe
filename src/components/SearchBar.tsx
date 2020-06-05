@@ -89,7 +89,7 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
     }
 
     render() {
-        return (<div>
+        return (<div className="search-bar-wrapper">
             <form className="search-bar">
                 <div className="search-options">
                     <div className="option">

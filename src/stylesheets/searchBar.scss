@@ -1,11 +1,12 @@
 @import "variables";
 
 .search-bar {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 400px;
+  width: 25rem;
   height: 2rem;
   border-radius: 8px;
   border: solid 1px $silver-gray;
@@ -28,6 +29,7 @@
   }
 
   .search-button {
+    font-size: $default-font-size;
     flex: 0 0;
     border: none;
     background: none;

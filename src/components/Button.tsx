@@ -33,7 +33,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
     public static defaultProps: Partial<ButtonProps> = {
         text: 'Button item',
         icon: undefined,
-        fontSize: 1,
+        fontSize: 0.875,
         onClick: () => {}
     };
     public readonly state: Readonly<ButtonState> = {disabled: false};
