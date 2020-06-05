@@ -7,7 +7,11 @@ import {
     faChevronUp,
     faLock,
     faPlusCircle,
-    faUnlock
+    faUnlock,
+    faEdit,
+    faCopy,
+    faTrash,
+    faEllipsisH
 } from "@fortawesome/free-solid-svg-icons";
 import {faQuestionCircle} from "@fortawesome/free-regular-svg-icons";
 
@@ -19,5 +23,9 @@ library.add(
     faChevronDown,
     faLock,
     faUnlock,
-    faBorderAll
+    faBorderAll,
+    faEdit,
+    faCopy,
+    faTrash,
+    faEllipsisH
 );
