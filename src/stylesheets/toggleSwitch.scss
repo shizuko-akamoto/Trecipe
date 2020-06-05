@@ -1,8 +1,7 @@
-@import "colors";
-
+@import "variables";
 
 .wrapper {
-  padding: 50px;
+  padding: 3.125rem;
 }
 
 .toggle-component {
@@ -10,17 +9,17 @@
   color: $light-gray;
   width: 50px;
   height: 25px;
-  background: #777777;
+  background: $mid-gray;
   border: 1px solid $silver-gray;
   position: relative;
   border-radius: 13px;
   cursor: pointer;
-  transition: border-color background-color 0.3s;
+  transition: border-color 0.3s, background-color 0.3s;
   margin-top: 10px;
 }
 .toggle-component.active {
   background: $powder-blue;
-  border-color: #dfdfdf;
+  border-color: $light-gray;
 }
 .toggle-component.active .toggle-button {
   right: 2px;
@@ -32,7 +31,7 @@
   height: 23px;
   width: 23px;
   background: $tc-white;
-  box-shadow: 0 0 3px #555;
+  box-shadow: 0 0 3px $mid-gray;
   border-radius: 50%;
   transition: right 0.3s;
 }

@@ -1,8 +1,7 @@
-import React, { MouseEvent, Component } from "react";
-
-import "../stylesheets/AddPopup.scss"
+import React from "react";
+import "../stylesheets/addPopup.scss"
 import  { ToggleSwitch } from "./Toggle"
-import { Button } from "./button";
+import { Button } from "./Button";
 
 
 /**
@@ -43,9 +42,9 @@ export class AddPopup extends React.Component<{}, AddPopupState> {
 
     render() {
         return (
-            <div className='AddPopup'>
+            <div className='addPopup'>
                 <div className="contents">
-                <h1 className="Title"> New Trecipe </h1>
+                <h1 className="title"> New Trecipe </h1>
                 <label htmlFor="name">Trecipe Name *</label>
                     <input id="name" className="input" maxLength={50} placeholder="Enter Trecipe Name" value={this.state.content} onChange={this.handleChange}/>
                 <label htmlFor="description">Description</label>
