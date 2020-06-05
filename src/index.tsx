@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { AddPopup } from './components/AddPopup';
 
 ReactDOM.render(
   <React.StrictMode>
