@@ -35,3 +35,27 @@
     padding: 5px;
   }
 }
+
+.iconButton{
+  color: $tc-white;
+  background-color: transparent;
+  box-sizing: border-box;
+  padding: 0rem;
+  border: none;
+  display: inline-block;
+  cursor: pointer;
+
+  .icon {
+    font-size: 1.8rem;
+    padding: 0.3125rem;
+  }
+  &:hover {
+    color: $silver-gray;
+  }
+  &:active {
+    color: $mid-gray;
+  }
+  &:disabled {
+    color: $light-gray;
+  }
+}

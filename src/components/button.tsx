@@ -41,11 +41,14 @@ export class Button extends Component<ButtonProps, ButtonState> {
     render() {
         return (
             <div>
-                <button className="button" onClick={this.props.onClick} disabled={this.state.disabled}
+                <button className={(this.props.text === '' && !isUndefined(this.props.icon))?
+                        "iconButton" : "button"} 
+                        onClick={this.props.onClick} disabled={this.state.disabled}
                         style={{fontSize: `${this.props.fontSize}px`}}>
                     {this.props.text}
                     {!isUndefined(this.props.icon) &&
-                    <span className="button-icon"><FontAwesomeIcon icon={this.props.icon} fixedWidth/></span>}
+                    <span className={this.props.text === '' ? "icon" : "button-icon"}>
+                        <FontAwesomeIcon icon={this.props.icon} fixedWidth/></span>}
                 </button>
             </div>
         );
