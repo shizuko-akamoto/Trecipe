@@ -1,7 +1,7 @@
 @import "variables";
 
-.AddPopup {
-    font-family: 'Lato', sans-serif;
+.addPopup {
+    font-family: $default-font-family;
     background-color: $tc-white;
     width: 500px;
     height: auto;
@@ -9,21 +9,22 @@
     border-radius: 8px;
     border: 1px solid $silver-gray;
     padding: 10px 27px 27px;
+    text-align: left;
 }
 
 h1 {
     width: 45%;
     font-style: normal;
-    font-size: 35px;
+    font-size: $title-font-size;
     color: $indigo-dye;
 }
 
-.Title {
+.title {
     border-bottom: 5px solid $crayola-yellow;
     position: relative;
 }
 
-.Title:after {
+.title:after {
     position: absolute;
     left: 62%;
     right: 0;
@@ -38,20 +39,20 @@ h1 {
     justify-content: space-between;
 
     label {
-        font-size: 13px;
+        font-size: $default-font-size;
         font-style: normal;
         color: $mid-gray;
     }
 
     .input {
-        font-family: 'Lato', sans-serif;
+        font-family: $default-font-family;
+        font-size: $input-font-size;
         border: 1px solid $silver-gray;
         padding-left: 10px;
         padding-right: 10px;
         margin-bottom: 1rem;
-        margin-top: 1rem;
+        margin-top: 0.5rem;
         border-radius: 8px;
-        font-size: 12px;
 
         &::placeholder {
             color: $bright-gray;
@@ -59,11 +60,11 @@ h1 {
     }
 
     input {
-        height: 40px;
+        height: 2.5rem;
     }
 
     textarea {
-        height: 100px;
+        height: 6.25rem;
         resize: none;
         padding-top: 10px;
         padding-bottom: 10px;

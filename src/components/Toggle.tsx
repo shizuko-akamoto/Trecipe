@@ -1,6 +1,6 @@
 import React from "react";
 
-import "../stylesheets/ToggleSwitch.scss"
+import "../stylesheets/toggleSwitch.scss"
 
 
 /**

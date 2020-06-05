@@ -76,7 +76,8 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
                     <ul className="results-list">
                         {results.map((result) => (
                             // temporarily using result as key. Change to some id later
-                            <li className="results-entry"><a href="#" key={result}>{result}</a></li>)
+                            // TODO: replace with valid href
+                            <li className="results-entry" key={result}><a href="placeholder">{result}</a></li>)
                         )}
                     </ul>
                 </div>
