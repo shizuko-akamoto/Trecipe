@@ -35,7 +35,9 @@ export class ToggleSwitch extends React.Component<ToggleProps, ToggleState> {
     * Toggle on and off the switch.
     */
     toggle() {
-        this.setState({ checked: !this.state.checked })
+        this.setState((state) => ({ 
+            checked: !state.checked 
+        }))
     }
 
     render() {
