@@ -12,6 +12,7 @@ import {
     faUnlock,
 } from "@fortawesome/free-solid-svg-icons";
 import {faQuestionCircle, faStar} from "@fortawesome/free-regular-svg-icons";
+import {faGithub} from "@fortawesome/free-brands-svg-icons";
 
 library.add(
     faPlusCircle,
@@ -25,4 +26,5 @@ library.add(
     faSearch,
     faMapMarkerAlt,
     faStar,
+    faGithub
 );

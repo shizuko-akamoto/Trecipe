@@ -3,6 +3,7 @@
 .button {
   background-color: $tc-white;
   border: 1px solid $silver-gray;
+  outline: none;
   box-sizing: border-box;
   border-radius: 8px;
   font-style: normal;
@@ -10,11 +11,12 @@
   font-family: $default-font-family;
   color: $mid-gray;
   height: 2.5rem;
-  padding: 0 1rem 0 1rem;
+  padding: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+  transition: all 0.2s ease;
   &:hover {
     background-color: rgba($indigo-dye, 0.04);
     color: $indigo-dye;
