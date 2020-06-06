@@ -19,12 +19,13 @@
     .page-title {
       @include title-border-bottom($powder-blue, $crayola-yellow);
       font-size: $title-font-size;
+      margin-left: 0.5rem;
     }
 
     .buttons-wrapper {
       display: flex;
       justify-content: space-between;
-      margin: 0.5em 0;
+      margin: 0.5rem 0.5rem;
     }
 
     .context-filters {
@@ -52,7 +53,9 @@
 
       .card-item {
         flex: none;
-        flex-basis: calc(100%/3);
+        // TODO: a hack to make items display nicely. Think of other ways to calculate this
+        flex-basis: calc((100%/3) - (2*0.5rem));
+        margin: 0.5rem;
       }
     }
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import Background from "../images/DefaultImage.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../stylesheets/TrecipeCard.scss"
+import "../stylesheets/trecipeCard.scss"
 
 /**
  * Trecipe Props
@@ -41,10 +41,14 @@ export class TrecipeCard extends React.Component<TCProps>{
     render() {
         return (
             <div className='TrecipeCard'>
-                <div className="Image" style={{ backgroundImage: this.props.imageSrc}}>
-                    <label> {this.props.name}</label>
-                    {this.props.isPrivate ? <FontAwesomeIcon icon="lock" className='icon' /> : null}
-                    <div className='icon ellipsis' ><FontAwesomeIcon icon={["fas", "ellipsis-h"]}/></div>
+                <div className="Image" style={{backgroundImage: this.props.imageSrc}}>
+                    <div className="LabelEdit">
+                        <label>
+                            {this.props.name}
+                            {this.props.isPrivate ? <FontAwesomeIcon icon="lock" className='icon' /> : null}
+                        </label>
+                        <FontAwesomeIcon className="icon ellipsis" icon={["fas", "ellipsis-h"]}/>
+                    </div>
                 </div>
                 <div className="Text">
                     <div className='MetaData'>
@@ -56,7 +60,7 @@ export class TrecipeCard extends React.Component<TCProps>{
                     </div>
                 </div>
                 <div className="ProgressBar">
-                    <div className="Filler" style={{ width: (this.percentage + "%")}}></div>
+                    <div className="Filler" style={{width: (this.percentage + "%")}}/>
                 </div>
             </div>
         );
