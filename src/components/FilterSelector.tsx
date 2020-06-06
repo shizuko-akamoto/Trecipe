@@ -65,7 +65,7 @@ export class FilterSelector extends React.Component<FilterSelectorProps, FilterS
                 {listOpen && <ul className="contextFilterSelectorList">
                     {this.props.listItem.map(item => {
                         return (
-                            <li><button className = "contextFilterSelectorEntry" onClick={this.toggleSelected.bind(this)}>
+                            <li key={item.text}><button className = "contextFilterSelectorEntry" onClick={this.toggleSelected.bind(this)}>
                                 <span className="button-icon"><FontAwesomeIcon icon={item.icon} fixedWidth/></span>
                                 {item.text}
                             </button></li>)})}

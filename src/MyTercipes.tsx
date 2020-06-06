@@ -43,8 +43,8 @@ export class MyTrecipes extends React.Component<{}, MyTrecipesState>{
                         </div>
                     </div>
                     <div className="cards-wrapper">
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(() => (
-                            <div className="card-item"><TrecipeCard/></div>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => (
+                            <div className="card-item" key={index}><TrecipeCard/></div>
                         ))}
                     </div>
                     </body>
