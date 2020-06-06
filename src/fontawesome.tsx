@@ -6,14 +6,16 @@ import {
     faChevronDown,
     faChevronUp,
     faLock,
+    faMapMarkerAlt,
     faPlusCircle,
     faUnlock,
     faEdit,
     faCopy,
     faTrash,
-    faEllipsisH
+    faEllipsisH,
+    faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import {faQuestionCircle} from "@fortawesome/free-regular-svg-icons";
+import {faQuestionCircle, faStar} from "@fortawesome/free-regular-svg-icons";
 
 library.add(
     faPlusCircle,
@@ -27,5 +29,8 @@ library.add(
     faEdit,
     faCopy,
     faTrash,
-    faEllipsisH
+    faEllipsisH,
+    faSearch,
+    faMapMarkerAlt,
+    faStar,
 );

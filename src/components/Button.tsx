@@ -8,7 +8,7 @@ import {isUndefined} from "lodash";
  * Button props
  * text: text to display on button
  * icon: font awesome icon name [optional]
- * fontSize: button text font size in px [optional]
+ * fontSize: button text font size in rem [optional]
  * onClick: onClick handler function
  */
 export interface ButtonProps {
@@ -16,6 +16,7 @@ export interface ButtonProps {
     icon: IconProp;
     fontSize: number;
     onClick(e: MouseEvent<HTMLElement>): void;
+    defaultDisabled: boolean;
 }
 
 /**
@@ -33,10 +34,11 @@ export class Button extends Component<ButtonProps, ButtonState> {
     public static defaultProps: Partial<ButtonProps> = {
         text: 'Button item',
         icon: undefined,
-        fontSize: 14,
-        onClick: () => {}
+        fontSize: 0.875,
+        onClick: () => {},
+        defaultDisabled: false
     };
-    public readonly state: Readonly<ButtonState> = {disabled: false};
+    public readonly state: Readonly<ButtonState> = {disabled: this.props.defaultDisabled};
 
     render() {
         return (
@@ -44,7 +46,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
                 <button className={(this.props.text === '' && !isUndefined(this.props.icon))?
                         "iconButton" : "button"} 
                         onClick={this.props.onClick} disabled={this.state.disabled}
-                        style={{fontSize: `${this.props.fontSize}px`}}>
+                        style={{fontSize: `${this.props.fontSize}rem`}}>
                     {this.props.text}
                     {!isUndefined(this.props.icon) &&
                     <span className={this.props.text === '' ? "icon" : "button-icon"}>

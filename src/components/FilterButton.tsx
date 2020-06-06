@@ -1,7 +1,7 @@
 import React from 'react';
-import "../stylesheets/filterbuttons.scss"
+import "../stylesheets/filterButtons.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {ButtonProps, ButtonState} from "./button";
+import {ButtonProps, ButtonState} from "./Button";
 
 export interface FilterButtonState extends ButtonState {
     selected: boolean;

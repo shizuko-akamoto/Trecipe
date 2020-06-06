@@ -1,18 +1,16 @@
-@import "colors";
-@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+@import "variables";
 
 .button {
-  outline-style: none;
   background-color: $tc-white;
   border: 1px solid $silver-gray;
   box-sizing: border-box;
   border-radius: 8px;
   font-style: normal;
-  font-size: 14px;
-  font-family: 'Lato', sans-serif;
+  font-size: $button-font-size;
+  font-family: $default-font-family;
   color: $mid-gray;
-  height: 2.5em;
-  padding: 0 0.5em 0 1em;
+  height: 2.5rem;
+  padding: 0 1rem 0 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
