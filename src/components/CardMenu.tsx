@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button } from './button';
-import { Menu, MenuItem } from './menu'
+import { Button } from './Button';
+import { Menu, MenuItem } from './Menu'
 
 /**
  * TODO
@@ -39,7 +39,7 @@ export class CardMenu extends React.Component<{}, CardMenuState> {
     render() {
         return (
             <div className="cardMenu">
-                <Button onClick={this.handleClick} icon="ellipsis-h" text=''></Button>
+                <Button onClick={this.handleClick} icon="ellipsis-h" fontSize={1.8} text=''/>
                 {Boolean(this.state.originElement) && 
                     <Menu
                         menuItems = {CARD_MENU_DATA}
@@ -48,7 +48,7 @@ export class CardMenu extends React.Component<{}, CardMenuState> {
                         position = "right"
                         width = {10} 
                         buttonHeight = {2.5} 
-                    ></Menu>}
+                    />}
             </div>
         );
     }

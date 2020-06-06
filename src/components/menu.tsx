@@ -1,4 +1,4 @@
-import React, {MouseEvent, CSSProperties} from "react";
+import React, {CSSProperties, RefObject} from "react";
 import "../stylesheets/menu.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
@@ -14,7 +14,7 @@ export type MenuItem = {
     id: number,
     text: string, 
     icon: IconProp,
-    onClick: (e: MouseEvent<HTMLElement>) => void;
+    onClick: (e: React.MouseEvent<HTMLElement>) => void;
 }
 
 /**
@@ -33,6 +33,8 @@ export type MenuProps = typeof Menu.defaultProps & {
 }
 
 export class Menu extends React.Component<MenuProps, {}> {
+    menuRef: RefObject<HTMLDivElement> = React.createRef();
+    
     static defaultProps = {
         position: "right",
         width: 10,
@@ -61,57 +63,37 @@ export class Menu extends React.Component<MenuProps, {}> {
 
         // Get coordinate of the HTML element relative to the document
         const coords = originElement.getBoundingClientRect();
-        const documentCoords = {
-            left: coords.left + window.pageXOffset,
-            right: coords.right + window.pageXOffset,
-            top: coords.top + window.pageYOffset,
-            bottom: coords.bottom + window.pageYOffset,
+
+        // Return the menu position within the window
+        function getBoundingPos (menuCoord: number, menuSize:number, 
+            windowSize:number, windowOffset: number):number {
+            if (menuCoord + menuSize > windowSize) {
+                return windowSize - menuSize + windowOffset;
+            } else {
+                return menuCoord + windowOffset;
+            }
         }
 
         switch(position) {
             case "right": {
-                menuStyle.left = documentCoords.right;
-                menuStyle.top = documentCoords.top;
-                
-                // Check if the menu go off screen
-                if (coords.right + menuWidth > window.innerWidth) {
-                    menuStyle.left = window.innerWidth - menuWidth 
-                        + window.pageXOffset;
-                }
-                if (coords.top + menuHeight > window.innerHeight) {
-                    menuStyle.top = window.innerHeight - menuHeight
-                        + window.pageYOffset;
-                }
+                menuStyle.left = getBoundingPos(coords.right, menuWidth, 
+                    window.innerWidth, window.pageXOffset);
+                menuStyle.top = getBoundingPos(coords.top, menuHeight, 
+                    window.innerHeight, window.pageYOffset);
                 break;
             }
             case "bottom": {
-                menuStyle.left = documentCoords.left;
-                menuStyle.top = documentCoords.bottom;
-                
-                // Check if the menu go off screen
-                if (coords.left + menuWidth > window.innerWidth) {
-                    menuStyle.left = window.innerWidth - menuWidth
-                        + window.pageXOffset;
-                }
-                if (coords.bottom + menuHeight > window.innerHeight) {
-                    menuStyle.top = window.innerHeight - menuHeight
-                        + window.pageYOffset;
-                }
+                menuStyle.left = getBoundingPos(coords.left, menuWidth, 
+                    window.innerWidth, window.pageXOffset);
+                menuStyle.top = getBoundingPos(coords.bottom, menuHeight, 
+                    window.innerHeight, window.pageYOffset);
                 break;
             }
             default: {
-                menuStyle.left = documentCoords.right;
-                menuStyle.top = documentCoords.top;
-                
-                // Check if the menu go off screen
-                if (coords.right + menuWidth > window.innerWidth) {
-                    menuStyle.left = window.innerWidth - menuWidth 
-                        + window.pageXOffset;
-                }
-                if (coords.top + menuHeight > window.innerHeight) {
-                    menuStyle.top = window.innerHeight - menuHeight
-                        + window.pageYOffset;
-                }
+                menuStyle.left = getBoundingPos(coords.right, menuWidth, 
+                    window.innerWidth, window.pageXOffset);
+                menuStyle.top = getBoundingPos(coords.top, menuHeight, 
+                    window.innerHeight, window.pageYOffset);
                 break;
             }
         }
@@ -129,10 +111,23 @@ export class Menu extends React.Component<MenuProps, {}> {
         return menuStyle;
     }
 
+    handleClickOutside = (event: MouseEvent): void => {
+        if (this.menuRef.current && (event.target instanceof Node) && !this.menuRef.current.contains(event.target)) {
+            this.props.onClose();
+        }
+      };
+      
+    componentDidMount() {
+        document.addEventListener("mousedown", this.handleClickOutside);
+    }
+    componentWillUnmount() {
+        document.removeEventListener("mousedown", this.handleClickOutside);
+    }
+    
     render() {
         const style = this.getPosition(this.props.position, this.props.originElement);
         return (
-            <div className = "menu" style={style}>
+            <div className = "menu" ref={this.menuRef} style={style}>
                 {<ul className="menu-list">
                     {this.props.menuItems.map(item => {return (
                     <li key = {item.id}>
