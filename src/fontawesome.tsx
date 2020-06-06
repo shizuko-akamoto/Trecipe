@@ -8,8 +8,12 @@ import {
     faLock,
     faMapMarkerAlt,
     faPlusCircle,
-    faSearch,
     faUnlock,
+    faEdit,
+    faCopy,
+    faTrash,
+    faEllipsisH,
+    faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import {faQuestionCircle, faStar} from "@fortawesome/free-regular-svg-icons";
 
@@ -22,6 +26,10 @@ library.add(
     faLock,
     faUnlock,
     faBorderAll,
+    faEdit,
+    faCopy,
+    faTrash,
+    faEllipsisH,
     faSearch,
     faMapMarkerAlt,
     faStar,
