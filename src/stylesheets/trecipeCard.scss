@@ -29,12 +29,11 @@
             font-size: 2em;
             text-transform: uppercase;
             padding: 0.2rem 0.5rem;
-        }
-
-        .icon {
-            font-size: 0.5em;
-            position: relative;
-            padding: 5px;
+            .icon {
+                font-size: 0.5em;
+                position: relative;
+                padding: 5px;
+            }
         }
 
         .ellipsis {
@@ -71,18 +70,15 @@
         text-align: left;
         overflow: hidden;
     }
-
-
 }
 
-    .ProgressBar {
-        height: 10px;
-        position: relative;
-        background-color: $tc-white;
+.ProgressBar {
+    height: 10px;
+    background-color: $tc-white;
 
-        .Filler {
-            background-color: $powder-blue;
-            height: 100%;
-            width: 100%;
-        }
+    .Filler {
+        background-color: $powder-blue;
+        height: 100%;
+        width: 100%;
     }
+}

@@ -39,7 +39,7 @@ export class CardMenu extends React.Component<{}, CardMenuState> {
     render() {
         return (
             <div className="cardMenu">
-                <Button onClick={this.handleClick} icon="ellipsis-h" fontSize={1.8} text=''/>
+                <Button onClick={this.handleClick} icon="ellipsis-h" fontSize={2} text=''/>
                 {Boolean(this.state.originElement) && 
                     <Menu
                         menuItems = {CARD_MENU_DATA}

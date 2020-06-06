@@ -37,7 +37,7 @@ export class MyTrecipes extends React.Component<{}, MyTrecipesState> {
                 <Header/>
                 <div className="content-wrapper">
                     <div className="content">
-                    <h1 className="page-title">Trecipes</h1>
+                    <h1 className="page-title">My Trecipes</h1>
                     <div className="buttons-wrapper">
                         <ul className="context-filters">
                             {MyTrecipes.contextFilters.map((filter) =>

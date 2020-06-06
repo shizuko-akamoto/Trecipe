@@ -2,6 +2,7 @@ import React from 'react';
 import Background from "../images/DefaultImage.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../stylesheets/trecipeCard.scss"
+import {CardMenu} from "./CardMenu";
 
 /**
  * Trecipe Props
@@ -47,7 +48,7 @@ export class TrecipeCard extends React.Component<TCProps>{
                             {this.props.name}
                             {this.props.isPrivate ? <FontAwesomeIcon icon="lock" className='icon' /> : null}
                         </label>
-                        <FontAwesomeIcon className="icon ellipsis" icon={["fas", "ellipsis-h"]}/>
+                        <CardMenu/>
                     </div>
                 </div>
                 <div className="Text">
