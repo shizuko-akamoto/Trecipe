@@ -1,8 +1,10 @@
 @import "variables";
 @import "buttons";
+@import "animation";
 
 .menu {
   width: 8.75rem;
+  animation: rotate-in .1s cubic-bezier(.06,.08,.68,1.51);
 }
 
 .menu-list {
