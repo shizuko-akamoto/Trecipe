@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {RefObject}  from 'react';
+import "../stylesheets/filterButtons.scss"
 import "../stylesheets/filterButtons.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
@@ -14,8 +15,8 @@ export interface FilterSelectorState {
 }
 
 export class FilterSelector extends React.Component<FilterSelectorProps, FilterSelectorState> {
+    private container: RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
     public readonly state: Readonly<FilterSelectorState> = {listOpen: false, selected: "All"};
-
     constructor(props: any){
         super(props);
         this.state = {
@@ -25,12 +26,21 @@ export class FilterSelector extends React.Component<FilterSelectorProps, FilterS
         }
     }
 
-    // called from parent component
-    handleClickOutside(){
-        this.setState({
-            listOpen: false
-        })
+    componentDidMount(): void {
+        document.addEventListener("mousedown", this.handleClickOutside);
     }
+
+    componentWillUnmount(): void {
+        document.removeEventListener("mousedown", this.handleClickOutside);
+    }
+
+    // called from parent component
+    private handleClickOutside = (event: MouseEvent) => {
+        if (this.container.current && event.target instanceof Node &&
+            !this.container.current.contains(event.target)) {
+            this.setState({listOpen: false});
+        }
+    };
 
     toggleList(){
         this.setState((prevState: FilterSelectorState) => ({
@@ -45,17 +55,17 @@ export class FilterSelector extends React.Component<FilterSelectorProps, FilterS
     render() {
         const listOpen = this.state.listOpen;
         return (
-            <div className = "contextFilterSelectorWrapper">
+            <div className = "contextFilterSelectorWrapper" ref={this.container}>
                 <div className = "contextFilterSelector" onClick={this.toggleList.bind(this)}>
                     {this.state.selected}
                     {listOpen?
                         <FontAwesomeIcon icon = "chevron-up" className="button-icon" fixedWidth/> :
                         <FontAwesomeIcon icon="chevron-down" className="button-icon" fixedWidth/>}
                 </div>
-                {listOpen &&  <ul className="contextFilterSelectorList">
+                {listOpen && <ul className="contextFilterSelectorList">
                     {this.props.listItem.map(item => {
                         return (
-                            <li><button className = "contextFilterSelectorEntry" onClick={this.toggleSelected.bind(this)}>
+                            <li key={item.text}><button className = "contextFilterSelectorEntry" onClick={this.toggleSelected.bind(this)}>
                                 <span className="button-icon"><FontAwesomeIcon icon={item.icon} fixedWidth/></span>
                                 {item.text}
                             </button></li>)})}
