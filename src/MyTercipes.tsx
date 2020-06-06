@@ -13,18 +13,30 @@ interface MyTrecipesState {
     addPopupOpen: boolean;
 }
 
-export class MyTrecipes extends React.Component<{}, MyTrecipesState>{
+export class MyTrecipes extends React.Component<{}, MyTrecipesState> {
     private static contextFilters: string[] = ["All Trecipes", "Completed", "In Progress", "To Do"];
 
     private renderAddPopup = () => {
         this.setState({addPopupOpen: true})
     };
 
+    private closeAddPopup = (e: React.MouseEvent<HTMLElement>) => {
+        this.setState({addPopupOpen: false})
+    };
+
+    private createTrecipe = (e: React.MouseEvent<HTMLElement>, name: string, description: string) => {
+        this.closeAddPopup(e)
+    };
+
+    public readonly state: MyTrecipesState = {
+        addPopupOpen: false
+    };
+
     render() {
         return (<div>
                 <Header/>
-                <div className="body-wrapper">
-                    <body className="body">
+                <div className="content-wrapper">
+                    <div className="content">
                     <h1 className="page-title">Trecipes</h1>
                     <div className="buttons-wrapper">
                         <ul className="context-filters">
@@ -47,9 +59,13 @@ export class MyTrecipes extends React.Component<{}, MyTrecipesState>{
                             <div className="card-item" key={index}><TrecipeCard/></div>
                         ))}
                     </div>
-                    </body>
+                    {this.state.addPopupOpen && <div className="modal">
+                        <AddPopup onClose={this.closeAddPopup} onCreate={this.createTrecipe}/>
+                    </div>}
+                    {this.state.addPopupOpen && <div className="modal-overlay" onClick={this.closeAddPopup}/>}
                 </div>
                 <Footer/>
+            </div>
             </div>
         )
     }

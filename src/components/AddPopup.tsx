@@ -3,6 +3,10 @@ import "../stylesheets/addPopup.scss"
 import  { ToggleSwitch } from "./Toggle"
 import { Button } from "./Button";
 
+export interface AddPopupProps {
+    onClose: (e: React.MouseEvent<HTMLElement>) => void;
+    onCreate: (e: React.MouseEvent<HTMLElement>, name: string, description: string) => void;
+}
 
 /**
  * Add Popup state
@@ -15,9 +19,9 @@ export interface AddPopupState {
 /**
  * An Add Popup component
  */
-export class AddPopup extends React.Component<{}, AddPopupState> {
+export class AddPopup extends React.Component<AddPopupProps, AddPopupState> {
 
-    constructor(props:any){
+    constructor(props: AddPopupProps){
         super(props);
         this.createButtonRef = React.createRef();
         this.currLength = 0;
@@ -53,8 +57,9 @@ export class AddPopup extends React.Component<{}, AddPopupState> {
                         <ToggleSwitch/>
                 </label>
                 <div className='btn'>
-                    <Button text={"Create"} ref={this.createButtonRef} defaultDisabled = {true}/>
-                    <Button text = {"Cancel"}/>
+                    <Button text={"Create"} ref={this.createButtonRef} defaultDisabled={true}
+                            onClick={(e) => this.props.onCreate(e, this.state.content, "")}/>
+                    <Button text = {"Cancel"} onClick={(e) => this.props.onClose(e)}/>
                 </div>
                 </div>
             </div>
