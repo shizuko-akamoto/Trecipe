@@ -1,13 +1,17 @@
 import React from 'react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-
-import "../stylesheets/TrecipeCard.scss"
-import { url } from 'inspector';
-
 import Background from "../images/DefaultImage.png"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../stylesheets/TrecipeCard.scss"
 
-
+/**
+ * Trecipe Props
+ * name: Trecipe Title
+ * imageSrc: Backgroud Image source
+ * author: Owner of the Trecipe
+ * isPrivate: true if the Trecipe is a private one, false otherwise
+ * totalDest: total number of destination in this Trecipe
+ * completedDest: number of destination that has been checked off
+ */
 export interface TCProps {
     name: string;
     imageSrc?: string;
@@ -40,7 +44,7 @@ export class TrecipeCard extends React.Component<TCProps>{
                 <div className="Image" style={{ backgroundImage: this.props.imageSrc}}>
                     <label> {this.props.name}</label>
                     {this.props.isPrivate ? <FontAwesomeIcon icon="lock" className='icon' /> : null}
-                    <FontAwesomeIcon icon={["fas", "ellipsis-h"]} className='icon ellipsis'/>
+                    <div className='icon ellipsis' ><FontAwesomeIcon icon={["fas", "ellipsis-h"]}/></div>
                 </div>
                 <div className="Text">
                     <div className='MetaData'>
