@@ -39,4 +39,4 @@
       - (stretch) Investigate how to add custom clickable pins to the map.
 3. Where you might have gotten stuck during the last two weeks.
     - Some design issues that was discovered and addressed during code review that improved the overall re-usability of the components
-    - Some styling problems jthat took some time to get addressed
+    - Some styling problems that took some time to get addressed
