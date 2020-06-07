@@ -19,8 +19,11 @@
 ### o1u1b
 
 1. What you’ve worked on in the previous two weeks
+    - Started out by setting up the project with Create-React-app + typescript. I then implemented a menu component and a card menu component for the Trecipe card.
 2. What you’ll be working on in the next two weeks
+    - Implement the add and edit button on Trecipe page, clicking the edit button should bring up three additional buttons (check, delete, reorder)
 3. Where you might have gotten stuck during the last two weeks
+    - Ensuring the menu component is always within the viewport was a challenge. The calculation was a bit more complicated than I anticipated as it involves two coordinate systems.
 
 ### z8c1b
 
