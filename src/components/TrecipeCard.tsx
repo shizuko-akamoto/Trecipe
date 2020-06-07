@@ -1,7 +1,7 @@
 import React from 'react';
 import Background from "../images/DefaultImage.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../stylesheets/TrecipeCard.scss"
+import "../stylesheets/trecipeCard.scss"
 
 /**
  * Trecipe Props

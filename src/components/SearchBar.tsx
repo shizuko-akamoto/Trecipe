@@ -1,4 +1,4 @@
-import React from "react";
+import React, {RefObject} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import '../stylesheets/searchBar.scss';
 import _ from "lodash";
@@ -22,6 +22,7 @@ export interface SearchBarState {
     filter: SearchFilter,
     searchKey: string;
     results: Array<string>;
+    resultsOpen: boolean;
     loading: boolean;
     errMsg: string;
 }
@@ -30,12 +31,33 @@ export interface SearchBarState {
  * A general search bar for searching up keywords with search filters
  */
 export class SearchBar extends React.Component<{}, SearchBarState> {
+
+    private container: RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
+
     public readonly state = {
         filter: SearchFilter.Trecipe,
         searchKey: '',
+        resultsOpen: false,
         results: [],
         loading: false,
         errMsg: ''
+    };
+
+    componentDidMount(): void {
+        document.addEventListener("mousedown", this.handleClickOutside);
+    }
+
+    componentWillUnmount(): void {
+        document.removeEventListener("mousedown", this.handleClickOutside);
+    }
+
+    private handleClickOutside = (event: MouseEvent) => {
+        if (this.container.current && event.target instanceof Node) {
+            if (!this.container.current.contains(event.target)) {
+                this.setState({resultsOpen: false});
+            } else {
+                this.setState({resultsOpen: true});
+        }}
     };
 
     private handleOnSearchInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
@@ -62,15 +84,15 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
             }
             resolve(result);
         }).then((results: string[]) => {
-            this.setState({results: results, loading: false});
+            this.setState({resultsOpen: true, results: results, loading: false});
         }).catch((err) => {
-            this.setState({loading: false, errMsg: err.toString()})
+            this.setState({resultsOpen: false, loading: false, errMsg: err.toString()})
         });
     }
 
     private renderSearchResults() {
         const {results} = this.state;
-        if (_.isArray(results) && !_.isEmpty(results)) {
+        if (this.state.resultsOpen && _.isArray(results) && !_.isEmpty(results)) {
             return (
                 <div className="results-container">
                     <ul className="results-list">
@@ -90,7 +112,7 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
     }
 
     render() {
-        return (<div className="search-bar-wrapper">
+        return (<div className="search-bar-wrapper" ref={this.container}>
             <form className="search-bar">
                 <div className="search-options">
                     <div className="option">
