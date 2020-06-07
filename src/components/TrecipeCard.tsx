@@ -33,8 +33,8 @@ export class TrecipeCard extends React.Component<TCProps> {
         author: "team2",
         description: "This is a description.",
         isPrivate: true,
-        totalDest: 10,
-        completedDest: 3
+        totalDest: 0,
+        completedDest: 0
     }
 
     private calcPercentage = (totalDest: number, completedDest: number) => {
