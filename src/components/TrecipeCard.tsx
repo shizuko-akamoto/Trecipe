@@ -38,7 +38,7 @@ export class TrecipeCard extends React.Component<TCProps> {
     }
 
     private calcPercentage = (totalDest: number, completedDest: number) => {
-        return completedDest / totalDest * 100;
+        return (totalDest === 0) ? 0 : completedDest / totalDest * 100;
     }
 
     render() {
