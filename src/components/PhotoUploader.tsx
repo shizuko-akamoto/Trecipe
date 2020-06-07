@@ -1,12 +1,14 @@
 import React from 'react';
+import "../stylesheets/coverPhoto.scss"
+import {Button} from "./Button";
 
 export interface PhotoUploaderProps{
-    onChangeFile(event: React.ChangeEvent<HTMLInputElement>): void;
+    changeFileCallback(event: React.ChangeEvent<HTMLInputElement>): void;
 }
 
 class PhotoUploader extends React.Component<PhotoUploaderProps> {
     public static defaultProps: Partial<PhotoUploaderProps> = {
-        onChangeFile: () => {}
+        changeFileCallback: () => {}
     };
 
     // If to be invoked from other component, use this ref's fileUploadAction.
@@ -14,28 +16,26 @@ class PhotoUploader extends React.Component<PhotoUploaderProps> {
 
     constructor(props: any) {
         super(props);
-        this.state = {selectedPhoto: ""};
         this.inputReference = React.createRef();
     }
 
-    fileUploadAction(){
+    fileUploadAction() {
         this.inputReference.current.click();
     }
 
     render() {
         return (
-            <div>
-                <input id="photoSelector"
+            <div className= "coverPhotoUploadButton">
+                <input id="coverPhotoSelector"
                        type="file"
                        ref={this.inputReference}
                        style={{display: 'none'}}
-                       onChange={this.props.onChangeFile}
+                       accept="image/*"
+                       onChange={this.props.changeFileCallback}
                 />
 
                 {/* Placeholder button */}
-                <button onClick={this.fileUploadAction}>
-                    Upload!
-                </button>
+                <Button text = "Change Cover" icon = "camera-polaroid"  onClick={this.fileUploadAction.bind(this)}/>
             </div>
         );
     }
