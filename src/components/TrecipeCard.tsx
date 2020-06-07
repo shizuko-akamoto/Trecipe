@@ -1,6 +1,6 @@
 import React from 'react';
 import Background from "../images/DefaultImage.png"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import "../stylesheets/trecipeCard.scss"
 import {CardMenu} from "./CardMenu";
 
@@ -25,7 +25,7 @@ export interface TCProps {
 }
 
 
-export class TrecipeCard extends React.Component<TCProps>{
+export class TrecipeCard extends React.Component<TCProps> {
     public static defaultProps: Partial<TCProps> = {
         name: 'trecipe title',
         imageSrc: "url(" + Background + ")",
@@ -45,14 +45,14 @@ export class TrecipeCard extends React.Component<TCProps>{
         return (
             <div className='trecipeCard'>
                 <div className="tcHeaderContainer" style={{backgroundImage: this.props.imageSrc}}>
-                <div className="tcHeader">
-                    <label className="tcTitle">
-                        {this.props.name}
-                        <FontAwesomeIcon icon={(this.props.isPrivate) ? "lock" : "unlock"} className='tcPrivacy'/>
-                    </label>
-                    <div className="tcEdit"><CardMenu/></div>
+                    <div className="tcHeader">
+                        <label className="tcTitle">
+                            {this.props.name}
+                            <FontAwesomeIcon icon={(this.props.isPrivate) ? "lock" : "unlock"} className='tcPrivacy'/>
+                        </label>
+                        <div className="tcEdit"><CardMenu/></div>
+                    </div>
                 </div>
-            </div>
                 <div className="tcBody">
                     <div className='tcMetaData'>
                         <div className='tcDate'>{this.props.date}</div>
