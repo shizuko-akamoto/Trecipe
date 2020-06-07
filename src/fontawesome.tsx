@@ -14,6 +14,7 @@ import {
     faTrash,
     faEllipsisH,
     faSearch,
+    faCameraRetro,
 } from "@fortawesome/free-solid-svg-icons";
 import {faQuestionCircle, faStar} from "@fortawesome/free-regular-svg-icons";
 
@@ -33,4 +34,5 @@ library.add(
     faSearch,
     faMapMarkerAlt,
     faStar,
+    faCameraRetro,
 );

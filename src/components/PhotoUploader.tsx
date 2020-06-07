@@ -35,7 +35,7 @@ class PhotoUploader extends React.Component<PhotoUploaderProps> {
                 />
 
                 {/* Placeholder button */}
-                <Button text = "Change Cover" icon = "camera-polaroid"  onClick={this.fileUploadAction.bind(this)}/>
+                <Button text = "Change Cover" icon = "camera-retro"  onClick={this.fileUploadAction.bind(this)}/>
             </div>
         );
     }
