@@ -58,7 +58,7 @@
       display: inline-block;
       padding: 0 3px;
 
-      input[type='radio'] {
+      input[type="radio"] {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -91,7 +91,7 @@
         top: -1.25rem;
         transition: all 0.2s ease-in-out;
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: -3px;
           left: 50%;
@@ -117,12 +117,12 @@
         opacity: 0.9;
       }
 
-      input[type='radio']:checked + label svg {
+      input[type="radio"]:checked + label svg {
         color: $indigo-dye;
         opacity: 1;
       }
 
-      input[type='radio']:checked + label span {
+      input[type="radio"]:checked + label span {
         background-color: $indigo-dye;
         &::after {
           border-top-color: $indigo-dye;

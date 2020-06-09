@@ -1,6 +1,6 @@
 @import "variables";
 
-@mixin title-border-bottom ($baseColor, $accentColor) {
+@mixin title-border-bottom($baseColor, $accentColor) {
   display: inline-block;
   border-bottom: 3px solid $accentColor;
   position: relative;
@@ -9,7 +9,7 @@
     left: 62%;
     right: 0;
     bottom: -3px;
-    border-top: 3px solid $baseColor;;
-    content: '';
+    border-top: 3px solid $baseColor;
+    content: "";
   }
 }

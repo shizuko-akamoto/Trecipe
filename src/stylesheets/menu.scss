@@ -4,7 +4,7 @@
 
 .menu {
   width: 8.75rem;
-  animation: rotate-in .1s cubic-bezier(.06,.08,.68,1.51);
+  animation: rotate-in 0.1s cubic-bezier(0.06, 0.08, 0.68, 1.51);
 }
 
 .menu-list {
@@ -17,9 +17,9 @@
   z-index: 1;
 }
 
-.menu-list-entry{
+.menu-list-entry {
   @extend .button;
-  
+
   border: 8px;
   border-radius: 0;
   cursor: pointer;
@@ -31,11 +31,10 @@
   text-align: left;
   width: 100%;
 
-  .button-icon{
+  .button-icon {
     float: left;
     padding: 0.312rem 1.25rem;
     height: 1rem;
     width: 1rem;
   }
 }
-

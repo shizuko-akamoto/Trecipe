@@ -1,6 +1,6 @@
 @import "variables";
 @import "buttons";
-@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
 
 .contextFilterButtons {
   @extend .button;
@@ -23,12 +23,12 @@
   }
 }
 
-.contextFilterSelector{
+.contextFilterSelector {
   @extend .button;
   width: 8.75rem;
 }
 
-.contextFilterSelectorEntry{
+.contextFilterSelectorEntry {
   @extend .contextFilterSelector;
   border-radius: 0;
   border: none;

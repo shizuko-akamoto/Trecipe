@@ -1,38 +1,38 @@
-import {library} from "@fortawesome/fontawesome-svg-core";
+import { library } from "@fortawesome/fontawesome-svg-core";
 
 import {
-    faBorderAll,
-    faCheck,
-    faChevronDown,
-    faChevronUp,
-    faLock,
-    faMapMarkerAlt,
-    faPlusCircle,
-    faUnlock,
-    faEdit,
-    faCopy,
-    faTrash,
-    faEllipsisH,
-    faSearch,
+  faBorderAll,
+  faCheck,
+  faChevronDown,
+  faChevronUp,
+  faLock,
+  faMapMarkerAlt,
+  faPlusCircle,
+  faUnlock,
+  faEdit,
+  faCopy,
+  faTrash,
+  faEllipsisH,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import {faQuestionCircle, faStar} from "@fortawesome/free-regular-svg-icons";
-import {faGithub} from "@fortawesome/free-brands-svg-icons";
+import { faQuestionCircle, faStar } from "@fortawesome/free-regular-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 library.add(
-    faPlusCircle,
-    faQuestionCircle,
-    faCheck,
-    faChevronUp,
-    faChevronDown,
-    faLock,
-    faUnlock,
-    faBorderAll,
-    faEdit,
-    faCopy,
-    faTrash,
-    faEllipsisH,
-    faSearch,
-    faMapMarkerAlt,
-    faStar,
-    faGithub
+  faPlusCircle,
+  faQuestionCircle,
+  faCheck,
+  faChevronUp,
+  faChevronDown,
+  faLock,
+  faUnlock,
+  faBorderAll,
+  faEdit,
+  faCopy,
+  faTrash,
+  faEllipsisH,
+  faSearch,
+  faMapMarkerAlt,
+  faStar,
+  faGithub
 );
