@@ -1,7 +1,7 @@
 import React from "react";
-import { MyTrecipes } from "./MyTercipes";
-import "./fontawesome";
-import "./stylesheets/App.scss";
+import { MyTrecipes } from "./pages/MyTrecipe/MyTercipes";
+import "./components/fontawesome";
+import "./App.scss";
 
 function App() {
   return (
