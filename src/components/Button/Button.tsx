@@ -53,8 +53,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
           }
           onClick={this.props.onClick}
           disabled={this.state.disabled}
-          style={{ fontSize: `${this.props.fontSize}rem` }}
-        >
+          style={{ fontSize: `${this.props.fontSize}rem` }}>
           {this.props.text}
           {!isUndefined(this.props.icon) && (
             <span className={this.props.text === "" ? "icon" : "button-icon"}>

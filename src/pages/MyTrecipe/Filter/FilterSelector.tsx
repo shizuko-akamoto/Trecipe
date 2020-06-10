@@ -67,8 +67,7 @@ export class FilterSelector extends React.Component<
       <div className="contextFilterSelectorWrapper" ref={this.container}>
         <div
           className="contextFilterSelector"
-          onClick={this.toggleList.bind(this)}
-        >
+          onClick={this.toggleList.bind(this)}>
           {this.state.selected}
           {listOpen ? (
             <FontAwesomeIcon
@@ -91,8 +90,7 @@ export class FilterSelector extends React.Component<
                 <li key={item.text}>
                   <button
                     className="contextFilterSelectorEntry"
-                    onClick={this.toggleSelected.bind(this)}
-                  >
+                    onClick={this.toggleSelected.bind(this)}>
                     <span className="button-icon">
                       <FontAwesomeIcon icon={item.icon} fixedWidth />
                     </span>

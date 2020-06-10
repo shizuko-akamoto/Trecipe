@@ -178,8 +178,7 @@ export class Menu extends React.Component<MenuProps, {}> {
                     onClick={(event) => {
                       item.onClick(event);
                       this.props.onClose();
-                    }}
-                  >
+                    }}>
                     <span className="button-icon">
                       <FontAwesomeIcon icon={item.icon} fixedWidth />
                     </span>

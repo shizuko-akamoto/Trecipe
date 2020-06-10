@@ -45,8 +45,7 @@ export class TrecipeCard extends React.Component<TCProps> {
       <div className="trecipeCard">
         <div
           className="tcHeaderContainer"
-          style={{ backgroundImage: this.props.imageSrc }}
-        >
+          style={{ backgroundImage: this.props.imageSrc }}>
           <div className="tcHeader">
             <label className="tcTitle">
               {this.props.name}

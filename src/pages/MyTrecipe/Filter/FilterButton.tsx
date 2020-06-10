@@ -31,14 +31,12 @@ export class FilterButton extends React.Component<
             ? "contextFilterButtons active"
             : "contextFilterButtons"
         }
-        onClick={(e) => this.handleClick(e)}
-      >
+        onClick={(e) => this.handleClick(e)}>
         {this.props.text}
         <span
           className={
             this.state.selected ? "button-icon" : "button-icon icon-hidden"
-          }
-        >
+          }>
           <FontAwesomeIcon icon={this.props.icon} fixedWidth />
         </span>
       </button>
