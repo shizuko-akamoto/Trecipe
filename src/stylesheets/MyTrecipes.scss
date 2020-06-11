@@ -18,13 +18,14 @@
 
     .page-title {
       @include title-border-bottom($powder-blue, $crayola-yellow);
+      margin: 0;
       font-size: $title-font-size;
     }
 
     .buttons-wrapper {
       display: flex;
       justify-content: space-between;
-      margin: 0.5rem 0;
+      margin: 2rem 0;
     }
 
     .context-filters {
@@ -47,7 +48,7 @@
 
     .cards-wrapper {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax($tc-max-width, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax($tc-min-width, 1fr));
       grid-gap: 1rem;
       grid-auto-flow: dense;
     }

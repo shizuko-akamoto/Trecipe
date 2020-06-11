@@ -1,6 +1,5 @@
 import React, {RefObject}  from 'react';
 import "../stylesheets/filterButtons.scss"
-import "../stylesheets/filterButtons.scss"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {IconProp} from "@fortawesome/fontawesome-svg-core";
 

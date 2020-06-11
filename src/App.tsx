@@ -1,5 +1,5 @@
 import React from 'react';
-import {MyTrecipes} from "./MyTercipes";
+import {MyTrecipes} from "./MyTrecipes";
 import './fontawesome';
 import './stylesheets/App.scss';
 

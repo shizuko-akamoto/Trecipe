@@ -48,7 +48,7 @@ export class TrecipeCard extends React.Component<TCProps> {
                     <div className="tcHeader">
                         <label className="tcTitle">
                             {this.props.name}
-                            <FontAwesomeIcon icon={(this.props.isPrivate) ? "lock" : "unlock"} className='tcPrivacy'/>
+                            <FontAwesomeIcon icon={(this.props.isPrivate) ? "lock" : "lock-open"} className='tcPrivacy'/>
                         </label>
                         <div className="tcEdit"><CardMenu/></div>
                     </div>

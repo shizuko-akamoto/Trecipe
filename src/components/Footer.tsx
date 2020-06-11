@@ -12,7 +12,7 @@ export class Footer extends React.Component<{}, {}> {
                     <h2>Trecipe</h2>
                     <p>CPSC432I(2020S) Team2</p>
                 </div>
-                <div className='sns'>
+                <div className='links'>
                     <a href={Footer.githubLink} className='github'>
                         <FontAwesomeIcon icon={['fab', 'github']} fixedWidth/>
                     </a>

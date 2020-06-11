@@ -28,11 +28,4 @@ export class FilterButton extends React.Component<ButtonProps, FilterButtonState
             </button>
         );
     }
-
-    // callback used to change the state after parent finished processing onClick.
-    public toggle() {
-        this.setState((state: FilterButtonState) => ({
-            selected: !state.selected
-        }))
-    }
 }
