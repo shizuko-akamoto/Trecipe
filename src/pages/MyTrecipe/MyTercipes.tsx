@@ -4,10 +4,17 @@ import { Footer } from "../../components/Footer/Footer";
 import "./MyTrecipes.scss";
 import { FilterButton } from "./Filter/FilterButton";
 import { Button } from "../../components/Button/Button";
-import { TCProps, TrecipeCard } from "./TrecipeCard/TrecipeCard";
+import  TrecipeCard from "./TrecipeCard/TrecipeCard"
 import { FilterSelector } from "./Filter/FilterSelector";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { AddPopup } from "./AddPopup/AddPopup";
+import {connect} from "react-redux";
+import {RootState} from "../../redux";
+import {createNewTrecipe, deleteTrecipe, loadTrecipes, updateTrecipe} from "../../redux/TrecipeList/action";
+import {newTrecipeModel, TrecipeModel} from "../../redux/TrecipeList/types";
+import {bindActionCreators, Dispatch} from 'redux';
+
+type MyTrecipesProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
 /**
  * addPopupOpen: true if create new modal dialog should open, false otherwise
@@ -15,11 +22,9 @@ import { AddPopup } from "./AddPopup/AddPopup";
  */
 interface MyTrecipesState {
   addPopupOpen: boolean;
-  // TODO: Temporary for project_2, remove and load properly from redux store once redux is implemented
-  trecipeCards: Array<Partial<TCProps>>;
 }
 
-export class MyTrecipes extends React.Component<{}, MyTrecipesState> {
+class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
   private static contextFilters: string[] = [
     "All Trecipes",
     "Completed",
@@ -29,10 +34,11 @@ export class MyTrecipes extends React.Component<{}, MyTrecipesState> {
 
   public readonly state: MyTrecipesState = {
     addPopupOpen: false,
-    trecipeCards: [1, 2, 3, 4, 5, 6, 7, 8, 9].map(
-      () => TrecipeCard.defaultProps
-    ),
   };
+
+  componentDidMount(): void {
+    this.props.loadTrecipes();
+  }
 
   private renderAddPopup = () => {
     this.setState({ addPopupOpen: true });
@@ -44,11 +50,10 @@ export class MyTrecipes extends React.Component<{}, MyTrecipesState> {
 
   private createTrecipe = (
     e: React.MouseEvent<HTMLElement>,
-    tcProps: Partial<TCProps>
+    tcProps: Partial<TrecipeModel>
   ) => {
-    this.setState((state: MyTrecipesState) => ({
-      trecipeCards: state.trecipeCards.concat(tcProps),
-    }));
+    const newTrecipeModal: TrecipeModel = Object.assign(newTrecipeModel(), tcProps);
+    this.props.createNewTrecipe(newTrecipeModal);
     this.closeAddPopup(e);
   };
 
@@ -89,9 +94,9 @@ export class MyTrecipes extends React.Component<{}, MyTrecipesState> {
               </div>
             </div>
             <div className="cards-wrapper">
-              {this.state.trecipeCards.map((card: Partial<TCProps>, index) => (
-                <div className="card-item" key={index}>
-                  <TrecipeCard {...card} />
+              {this.props.trecipes.map((trecipe: TrecipeModel) => (
+                <div className="card-item" key={trecipe.id}>
+                  <TrecipeCard {...trecipe} />
                 </div>
               ))}
             </div>
@@ -113,3 +118,21 @@ export class MyTrecipes extends React.Component<{}, MyTrecipesState> {
     );
   }
 }
+
+const mapStateToProps = (state: RootState) => ({
+  trecipes: state.trecipeList.trecipes,
+});
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return bindActionCreators(
+      {
+        createNewTrecipe,
+        deleteTrecipe,
+        updateTrecipe,
+        loadTrecipes,
+      },
+      dispatch
+  )
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyTrecipes);

@@ -6,11 +6,15 @@ import { Menu, MenuItem } from "../../../components/Menu/Menu";
  * TODO
  * update the onClick function to do something
  */
-const CARD_MENU_DATA: MenuItem[] = [
-  { id: 1, text: "Edit", icon: "edit", onClick: () => {} },
-  { id: 2, text: "Duplicate", icon: "copy", onClick: () => {} },
-  { id: 3, text: "Delete", icon: "trash", onClick: () => {} },
-];
+export interface CardMenuProps {
+  menuItems: MenuItem[]
+}
+
+/**
+ *  { id: 1, text: "Edit", icon: "edit", onClick: () => {} },
+ { id: 2, text: "Duplicate", icon: "copy", onClick: () => {} },
+ { id: 3, text: "Delete", icon: "trash", onClick: () => {} },
+ */
 
 /**
  * Card Menu State
@@ -21,7 +25,7 @@ export interface CardMenuState {
   originElement: null | HTMLElement;
 }
 
-export class CardMenu extends React.Component<{}, CardMenuState> {
+export class CardMenu extends React.Component<CardMenuProps, CardMenuState> {
   state: CardMenuState = { originElement: null };
 
   handleClose = () => {
@@ -31,11 +35,12 @@ export class CardMenu extends React.Component<{}, CardMenuState> {
   };
 
   handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    this.setState({
-      originElement: Boolean(this.state.originElement)
+    const target = event.currentTarget;
+    this.setState((state) => ({
+      originElement: Boolean(state.originElement)
         ? null
-        : event.currentTarget,
-    });
+        : target,
+    }));
   };
 
   render() {
@@ -49,7 +54,7 @@ export class CardMenu extends React.Component<{}, CardMenuState> {
         />
         {Boolean(this.state.originElement) && (
           <Menu
-            menuItems={CARD_MENU_DATA}
+            menuItems={this.props.menuItems}
             originElement={this.state.originElement as HTMLElement}
             onClose={this.handleClose}
             position="right"
