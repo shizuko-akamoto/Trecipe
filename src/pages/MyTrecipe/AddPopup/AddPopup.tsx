@@ -2,15 +2,17 @@ import React from "react";
 import "./addPopup.scss";
 import { ToggleSwitch } from "../../../components/Toggle/Toggle";
 import { Button } from "../../../components/Button/Button";
-import { TrecipeModel } from "../../../redux/TrecipeList/types";
+import {
+  newTrecipeModel,
+  TrecipeModel,
+} from "../../../redux/TrecipeList/types";
+import Modal from "../../../components/Modal/Modal";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
+import { createNewTrecipe } from "../../../redux/TrecipeList/action";
+import { hideModal } from "../../../redux/Modal/action";
 
-export interface AddPopupProps {
-  onClose: (e: React.MouseEvent<HTMLElement>) => void;
-  onCreate: (
-    e: React.MouseEvent<HTMLElement>,
-    tcProps: Partial<TrecipeModel>
-  ) => void;
-}
+export type AddPopupProps = ReturnType<typeof mapDispatchToProps>;
 
 /**
  * Add Popup state
@@ -24,7 +26,7 @@ export interface AddPopupState {
 /**
  * An Add Popup component
  */
-export class AddPopup extends React.Component<AddPopupProps, AddPopupState> {
+class AddPopup extends React.Component<AddPopupProps, AddPopupState> {
   public readonly state: Readonly<AddPopupState> = {
     name: "",
     description: "",
@@ -39,7 +41,7 @@ export class AddPopup extends React.Component<AddPopupProps, AddPopupState> {
   /**
    *  Enable and Disable the 'Create Button' according to the content in Trecipe Name Input Box.
    */
-  handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  private handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
     let tempLength: number = value.length;
     if (
@@ -52,55 +54,85 @@ export class AddPopup extends React.Component<AddPopupProps, AddPopupState> {
     this.setState({ name: value });
   };
 
-  handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  private handleDescChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     this.setState({ description: e.target.value });
+  };
+
+  private createTrecipe = (
+    e: React.MouseEvent<HTMLElement>,
+    tcProps: Partial<TrecipeModel>
+  ) => {
+    const newTrecipeModal: TrecipeModel = Object.assign(
+      newTrecipeModel(),
+      tcProps
+    );
+    this.props.createNewTrecipe(newTrecipeModal);
+    this.closeAddPopup();
+  };
+
+  private closeAddPopup = () => {
+    this.props.hideModal();
   };
 
   render() {
     return (
-      <div className="addPopup">
-        <div className="contents">
-          <h1 className="title"> New Trecipe </h1>
-          <label htmlFor="name">Trecipe Name *</label>
-          <input
-            id="name"
-            className="input"
-            maxLength={50}
-            placeholder="Enter Trecipe name"
-            value={this.state.name}
-            onChange={this.handleNameChange}
-          />
-          <label htmlFor="description">Description</label>
-          <textarea
-            id="description"
-            className="input"
-            placeholder="Enter a Description"
-            value={this.state.description}
-            onChange={this.handleDescChange}
-          />
-          <label>
-            Make Public
-            <ToggleSwitch ref={this.toggleSwitchRef} />
-          </label>
-          <div className="btn">
-            <Button
-              text={"Create"}
-              ref={this.createButtonRef}
-              defaultDisabled={true}
-              onClick={(e) =>
-                this.props.onCreate(e, {
-                  name: this.state.name,
-                  description: this.state.description,
-                  isPrivate: this.toggleSwitchRef.current
-                    ? !this.toggleSwitchRef.current.state.checked
-                    : false,
-                })
-              }
+      <Modal>
+        <div className="addPopup">
+          <div className="contents">
+            <h1 className="title"> New Trecipe </h1>
+            <label htmlFor="name">Trecipe Name *</label>
+            <input
+              id="name"
+              className="input"
+              maxLength={50}
+              placeholder="Enter Trecipe name"
+              value={this.state.name}
+              onChange={this.handleNameChange}
             />
-            <Button text={"Cancel"} onClick={(e) => this.props.onClose(e)} />
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              className="input"
+              placeholder="Enter a Description"
+              value={this.state.description}
+              onChange={this.handleDescChange}
+            />
+            <label>
+              Make Public
+              <ToggleSwitch ref={this.toggleSwitchRef} />
+            </label>
+            <div className="btn">
+              <Button
+                text={"Create"}
+                ref={this.createButtonRef}
+                defaultDisabled={true}
+                onClick={(e) =>
+                  this.createTrecipe(e, {
+                    name: this.state.name,
+                    description: this.state.description,
+                    isPrivate: this.toggleSwitchRef.current
+                      ? !this.toggleSwitchRef.current.state.checked
+                      : false,
+                  })
+                }
+              />
+              <Button text={"Cancel"} onClick={() => this.closeAddPopup()} />
+            </div>
           </div>
         </div>
-      </div>
+      </Modal>
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return bindActionCreators(
+    {
+      createNewTrecipe,
+      hideModal,
+    },
+    dispatch
+  );
+};
+
+export default connect(null, mapDispatchToProps)(AddPopup);

@@ -7,7 +7,7 @@ import { Button } from "../../components/Button/Button";
 import TrecipeCard from "./TrecipeCard/TrecipeCard";
 import { FilterSelector } from "./Filter/FilterSelector";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { AddPopup } from "./AddPopup/AddPopup";
+import AddPopup from "./AddPopup/AddPopup";
 import { connect } from "react-redux";
 import { RootState } from "../../redux";
 import {
@@ -16,21 +16,14 @@ import {
   loadTrecipes,
   updateTrecipe,
 } from "../../redux/TrecipeList/action";
-import { newTrecipeModel, TrecipeModel } from "../../redux/TrecipeList/types";
+import { TrecipeModel } from "../../redux/TrecipeList/types";
 import { bindActionCreators, Dispatch } from "redux";
+import { showModal } from "../../redux/Modal/action";
 
 type MyTrecipesProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
 
-/**
- * addPopupOpen: true if create new modal dialog should open, false otherwise
- * trecipeCards: all TC with its props to display in page
- */
-interface MyTrecipesState {
-  addPopupOpen: boolean;
-}
-
-class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
+class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
   private static contextFilters: string[] = [
     "All Trecipes",
     "Completed",
@@ -38,32 +31,12 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
     "To Do",
   ];
 
-  public readonly state: MyTrecipesState = {
-    addPopupOpen: false,
-  };
-
   componentDidMount(): void {
     this.props.loadTrecipes();
   }
 
   private renderAddPopup = () => {
-    this.setState({ addPopupOpen: true });
-  };
-
-  private closeAddPopup = (e: React.MouseEvent<HTMLElement>) => {
-    this.setState({ addPopupOpen: false });
-  };
-
-  private createTrecipe = (
-    e: React.MouseEvent<HTMLElement>,
-    tcProps: Partial<TrecipeModel>
-  ) => {
-    const newTrecipeModal: TrecipeModel = Object.assign(
-      newTrecipeModel(),
-      tcProps
-    );
-    this.props.createNewTrecipe(newTrecipeModal);
-    this.closeAddPopup(e);
+    this.props.showModal(<AddPopup />);
   };
 
   render() {
@@ -109,17 +82,6 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
                 </div>
               ))}
             </div>
-            {this.state.addPopupOpen && (
-              <div className="modal">
-                <AddPopup
-                  onClose={this.closeAddPopup}
-                  onCreate={this.createTrecipe}
-                />
-              </div>
-            )}
-            {this.state.addPopupOpen && (
-              <div className="modal-overlay" onClick={this.closeAddPopup} />
-            )}
           </div>
           <Footer />
         </div>
@@ -139,6 +101,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       deleteTrecipe,
       updateTrecipe,
       loadTrecipes,
+      showModal,
     },
     dispatch
   );
