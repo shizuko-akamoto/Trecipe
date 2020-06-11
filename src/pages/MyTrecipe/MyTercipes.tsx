@@ -4,17 +4,23 @@ import { Footer } from "../../components/Footer/Footer";
 import "./MyTrecipes.scss";
 import { FilterButton } from "./Filter/FilterButton";
 import { Button } from "../../components/Button/Button";
-import  TrecipeCard from "./TrecipeCard/TrecipeCard"
+import TrecipeCard from "./TrecipeCard/TrecipeCard";
 import { FilterSelector } from "./Filter/FilterSelector";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { AddPopup } from "./AddPopup/AddPopup";
-import {connect} from "react-redux";
-import {RootState} from "../../redux";
-import {createNewTrecipe, deleteTrecipe, loadTrecipes, updateTrecipe} from "../../redux/TrecipeList/action";
-import {newTrecipeModel, TrecipeModel} from "../../redux/TrecipeList/types";
-import {bindActionCreators, Dispatch} from 'redux';
+import { connect } from "react-redux";
+import { RootState } from "../../redux";
+import {
+  createNewTrecipe,
+  deleteTrecipe,
+  loadTrecipes,
+  updateTrecipe,
+} from "../../redux/TrecipeList/action";
+import { newTrecipeModel, TrecipeModel } from "../../redux/TrecipeList/types";
+import { bindActionCreators, Dispatch } from "redux";
 
-type MyTrecipesProps = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
+type MyTrecipesProps = ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps>;
 
 /**
  * addPopupOpen: true if create new modal dialog should open, false otherwise
@@ -52,7 +58,10 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
     e: React.MouseEvent<HTMLElement>,
     tcProps: Partial<TrecipeModel>
   ) => {
-    const newTrecipeModal: TrecipeModel = Object.assign(newTrecipeModel(), tcProps);
+    const newTrecipeModal: TrecipeModel = Object.assign(
+      newTrecipeModel(),
+      tcProps
+    );
     this.props.createNewTrecipe(newTrecipeModal);
     this.closeAddPopup(e);
   };
@@ -125,14 +134,14 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
-      {
-        createNewTrecipe,
-        deleteTrecipe,
-        updateTrecipe,
-        loadTrecipes,
-      },
-      dispatch
-  )
+    {
+      createNewTrecipe,
+      deleteTrecipe,
+      updateTrecipe,
+      loadTrecipes,
+    },
+    dispatch
+  );
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyTrecipes);

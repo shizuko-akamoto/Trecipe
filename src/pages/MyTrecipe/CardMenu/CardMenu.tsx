@@ -7,7 +7,7 @@ import { Menu, MenuItem } from "../../../components/Menu/Menu";
  * update the onClick function to do something
  */
 export interface CardMenuProps {
-  menuItems: MenuItem[]
+  menuItems: MenuItem[];
 }
 
 /**
@@ -37,9 +37,7 @@ export class CardMenu extends React.Component<CardMenuProps, CardMenuState> {
   handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const target = event.currentTarget;
     this.setState((state) => ({
-      originElement: Boolean(state.originElement)
-        ? null
-        : target,
+      originElement: Boolean(state.originElement) ? null : target,
     }));
   };
 

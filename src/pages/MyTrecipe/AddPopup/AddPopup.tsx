@@ -2,7 +2,7 @@ import React from "react";
 import "./addPopup.scss";
 import { ToggleSwitch } from "../../../components/Toggle/Toggle";
 import { Button } from "../../../components/Button/Button";
-import {TrecipeModel} from "../../../redux/TrecipeList/types";
+import { TrecipeModel } from "../../../redux/TrecipeList/types";
 
 export interface AddPopupProps {
   onClose: (e: React.MouseEvent<HTMLElement>) => void;
