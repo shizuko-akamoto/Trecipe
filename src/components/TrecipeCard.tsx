@@ -1,7 +1,8 @@
 import React from 'react';
 import Background from "../images/DefaultImage.png"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../stylesheets/TrecipeCard.scss"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import "../stylesheets/trecipeCard.scss"
+import {CardMenu} from "./CardMenu";
 
 /**
  * Trecipe Props
@@ -24,7 +25,7 @@ export interface TCProps {
 }
 
 
-export class TrecipeCard extends React.Component<TCProps>{
+export class TrecipeCard extends React.Component<TCProps> {
     public static defaultProps: Partial<TCProps> = {
         name: 'trecipe title',
         imageSrc: "url(" + Background + ")",
@@ -32,31 +33,36 @@ export class TrecipeCard extends React.Component<TCProps>{
         author: "team2",
         description: "This is a description.",
         isPrivate: true,
-        totalDest: 10,
-        completedDest: 3
+        totalDest: 0,
+        completedDest: 0
     }
 
-    private percentage:number = this.props.completedDest/this.props.totalDest * 100;
+    private calcPercentage = (totalDest: number, completedDest: number) => {
+        return (totalDest === 0) ? 0 : completedDest / totalDest * 100;
+    }
 
     render() {
         return (
-            <div className='TrecipeCard'>
-                <div className="Image" style={{ backgroundImage: this.props.imageSrc}}>
-                    <label> {this.props.name}</label>
-                    {this.props.isPrivate ? <FontAwesomeIcon icon="lock" className='icon' /> : null}
-                    <div className='icon ellipsis' ><FontAwesomeIcon icon={["fas", "ellipsis-h"]}/></div>
-                </div>
-                <div className="Text">
-                    <div className='MetaData'>
-                        <div className='date'>{this.props.date}</div>
-                        <div className='author'>by: {this.props.author}</div>
-                    </div>
-                    <div className="Description">
-                        <p>{this.props.description}</p>
+            <div className='trecipeCard'>
+                <div className="tcHeaderContainer" style={{backgroundImage: this.props.imageSrc}}>
+                    <div className="tcHeader">
+                        <label className="tcTitle">
+                            {this.props.name}
+                            <FontAwesomeIcon icon={(this.props.isPrivate) ? "lock" : "lock-open"} className='tcPrivacy'/>
+                        </label>
+                        <div className="tcEdit"><CardMenu/></div>
                     </div>
                 </div>
-                <div className="ProgressBar">
-                    <div className="Filler" style={{ width: (this.percentage + "%")}}></div>
+                <div className="tcBody">
+                    <div className='tcMetaData'>
+                        <div className='tcDate'>{this.props.date}</div>
+                        <div className='tcAuthor'>by: {this.props.author}</div>
+                    </div>
+                    <div className="tcDescription"><p>{this.props.description}</p></div>
+                </div>
+                <div className="tcProgressBar">
+                    <div className="tcFiller" style={
+                        {width: this.calcPercentage(this.props.totalDest, this.props.completedDest) + "%"}}/>
                 </div>
             </div>
         );

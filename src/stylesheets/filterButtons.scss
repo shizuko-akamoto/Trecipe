@@ -17,6 +17,10 @@
       color: $indigo-dye;
     }
   }
+
+  .icon-hidden {
+    opacity: 0;
+  }
 }
 
 .contextFilterSelector{
@@ -36,10 +40,12 @@
 }
 
 .contextFilterSelectorList {
+  position: absolute;
   list-style: none;
   padding: 0.5rem 0;
   margin: 0;
   box-shadow: rgba($tc-black, 0.12) 0 5px 12px;
   border-radius: 0 0 8px 8px;
   background-color: $tc-white;
+  transition: background-color 0.2s ease;
 }

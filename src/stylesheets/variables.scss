@@ -20,8 +20,11 @@ $default-font-family: 'Lato', sans-serif;
 $logo-font-family: 'Shadows Into Light', cursive;
 
 //--- Font Sizes ---//
-$logo-font-size: 5rem;
+$logo-font-size: 4rem;
 $button-font-size: 0.875rem;
 $input-font-size: 0.8rem;
 $default-font-size: 1rem;
 $title-font-size: 2rem;
+
+// --- Element Widths ---//
+$tc-min-width: 350px;

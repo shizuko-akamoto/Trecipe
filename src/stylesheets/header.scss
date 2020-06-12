@@ -1,0 +1,28 @@
+@import "variables";
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+
+  .header-logo {
+    flex: none;
+    margin: 0.5rem 1rem 0.5rem 0;
+    font-size: $logo-font-size;
+    font-family: $logo-font-family;
+  }
+
+  .header-search-bar {
+    align-self: center;
+    flex: 0 1 40%;
+    margin: 0.5em auto 0.5em 1em;
+  }
+
+  .header-nav-bar {
+    align-self: center;
+    flex: none;
+  }
+}

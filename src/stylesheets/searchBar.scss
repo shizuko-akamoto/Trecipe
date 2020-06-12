@@ -1,12 +1,16 @@
 @import "variables";
 
+.search-bar-wrapper {
+  width: 100%;
+  min-width: 18.75rem;
+}
+
 .search-bar {
   position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 25rem;
   height: 2rem;
   border-radius: 8px;
   border: solid 1px $silver-gray;
@@ -129,6 +133,9 @@
 }
 
 .results-container {
+  position: absolute;
+  width: 40%;
+  min-width: 18.75rem;
   font-size: $default-font-size;
   font-family: $default-font-family;
   box-shadow: rgba($tc-black, 0.12) 0 5px 12px;

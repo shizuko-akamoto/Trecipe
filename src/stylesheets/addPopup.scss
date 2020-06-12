@@ -1,4 +1,5 @@
 @import "variables";
+@import "mixins";
 
 .addPopup {
     font-family: $default-font-family;
@@ -12,25 +13,12 @@
     text-align: left;
 }
 
-h1 {
+.title {
+    @include title-border-bottom($powder-blue, $crayola-yellow);
     width: 45%;
     font-style: normal;
     font-size: $title-font-size;
     color: $indigo-dye;
-}
-
-.title {
-    border-bottom: 5px solid $crayola-yellow;
-    position: relative;
-}
-
-.title:after {
-    position: absolute;
-    left: 62%;
-    right: 0;
-    bottom: -5px;
-    border-top: 5px solid $powder-blue;;
-    content: '';
 }
 
 .contents {
