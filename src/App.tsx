@@ -1,12 +1,12 @@
-import React from 'react';
-import {MyTrecipes} from "./MyTrecipes";
-import './fontawesome';
-import './stylesheets/App.scss';
+import React from "react";
+import { MyTrecipes } from "./pages/MyTrecipe/MyTrecipes";
+import "./components/fontawesome";
+import "./App.scss";
 
 function App() {
   return (
     <div className="App">
-        <MyTrecipes/>
+      <MyTrecipes />
     </div>
   );
 }

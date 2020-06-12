@@ -1,0 +1,37 @@
+@import "../variables.scss";
+
+.wrapper {
+  padding: 3.125rem;
+}
+
+.toggle-component {
+  font-size: 2rem;
+  color: $light-gray;
+  width: 50px;
+  height: 25px;
+  background: $mid-gray;
+  border: 1px solid $silver-gray;
+  position: relative;
+  border-radius: 13px;
+  cursor: pointer;
+  transition: border-color 0.3s, background-color 0.3s;
+  margin-top: 10px;
+}
+.toggle-component.active {
+  background: $powder-blue;
+  border-color: $light-gray;
+}
+.toggle-component.active .toggle-button {
+  right: 2px;
+}
+.toggle-component .toggle-button {
+  position: absolute;
+  top: 1px;
+  right: 50%;
+  height: 23px;
+  width: 23px;
+  background: $tc-white;
+  box-shadow: 0 0 3px $mid-gray;
+  border-radius: 50%;
+  transition: right 0.3s;
+}
