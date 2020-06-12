@@ -1,14 +1,18 @@
 import { typedAction } from "../util";
 import { newTrecipeModel, TrecipeListActionTypes, TrecipeModel } from "./types";
-import { Dispatch, AnyAction } from "redux";
+import { AnyAction, Dispatch } from "redux";
 
-const mockTrecipeList: Array<TrecipeModel> = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(
-  (index) => {
-    const newTC: TrecipeModel = newTrecipeModel();
-    newTC.id = index;
-    return newTC;
-  }
-);
+const mockTrecipeList: Array<TrecipeModel> = [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+].map(() => newTrecipeModel());
 
 export const createNewTrecipe = (newTrecipe: TrecipeModel) => {
   return typedAction(TrecipeListActionTypes.CREATE_NEW_TRECIPE, newTrecipe);

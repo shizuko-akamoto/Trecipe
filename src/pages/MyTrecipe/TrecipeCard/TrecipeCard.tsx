@@ -7,35 +7,12 @@ import { bindActionCreators, Dispatch } from "redux";
 import {
   createNewTrecipe,
   deleteTrecipe,
-  loadTrecipes,
-  updateTrecipe,
 } from "../../../redux/TrecipeList/action";
 import { connect } from "react-redux";
 import {
   newTrecipeModel,
   TrecipeModel,
 } from "../../../redux/TrecipeList/types";
-
-/**
- * Trecipe Props
- * name: Trecipe Title
- * imageSrc: Backgroud Image source
- * author: Owner of the Trecipe
- * isPrivate: true if the Trecipe is a private one, false otherwise
- * totalDest: total number of destination in this Trecipe
- * completedDest: number of destination that has been checked off
- */
-// export interface TCProps {
-//   id: number;
-//   name: string;
-//   imageSrc: string | null;
-//   date: string;
-//   author: string;
-//   description: string;
-//   isPrivate: boolean;
-//   totalDest: number;
-//   completedDest: number;
-// }
 
 type TCProps = TrecipeModel & ReturnType<typeof mapDispatchToProps>;
 
@@ -65,7 +42,9 @@ export class TrecipeCard extends React.Component<TCProps> {
   };
 
   private duplicateTrecipe = () => {
-    this.props.createNewTrecipe(Object.assign(newTrecipeModel(), this.props));
+    // copying everything except for id
+    const { id, ...copy } = this.props;
+    this.props.createNewTrecipe(Object.assign(newTrecipeModel(), copy));
   };
 
   private deleteTrecipe = () => {

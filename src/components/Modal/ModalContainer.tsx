@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 type ModalContainerProps = ReturnType<typeof mapStateToProps>;
 
-export class ModalContainer extends React.Component<ModalContainerProps, {}> {
+class ModalContainer extends React.Component<ModalContainerProps, {}> {
   render() {
     return this.props.modal;
   }
