@@ -50,7 +50,7 @@ export class TrecipeCard extends React.Component<TCProps> {
             <label className="tcTitle">
               {this.props.name}
               <FontAwesomeIcon
-                icon={this.props.isPrivate ? "lock" : "unlock"}
+                icon={this.props.isPrivate ? "lock" : "lock-open"}
                 className="tcPrivacy"
               />
             </label>
