@@ -30,6 +30,9 @@ export interface TrecipeModel {
   completedDest: number;
 }
 
+/**
+ * Returns a new default TrecipeModal
+ */
 export function newTrecipeModel(): TrecipeModel {
   return {
     id: getNextUniqueId(), // temporary until we get backend to generate unique id
@@ -44,6 +47,9 @@ export function newTrecipeModel(): TrecipeModel {
   };
 }
 
+/**
+ * TrecipeListState
+ */
 export type TrecipeListState = {
   trecipes: Array<TrecipeModel>;
 };
