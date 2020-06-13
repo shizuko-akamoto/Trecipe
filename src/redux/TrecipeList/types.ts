@@ -1,4 +1,4 @@
-import Background from "../../pages/MyTrecipe/TrecipeCard/DefaultImage.png";
+import Background from "../../pages/MyTrecipes/TrecipeCard/DefaultImage.png";
 
 /**
  * TODO: Remove this when we can generate ids in the backend

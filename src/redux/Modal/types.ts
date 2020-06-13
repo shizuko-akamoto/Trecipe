@@ -1,4 +1,4 @@
-import AddPopup from "../../pages/MyTrecipe/AddPopup/AddPopup";
+import AddPopup from "../../pages/MyTrecipes/AddPopup/AddPopup";
 import React from "react";
 
 /**
