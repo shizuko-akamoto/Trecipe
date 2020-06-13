@@ -10,12 +10,7 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import AddPopup from "./AddPopup/AddPopup";
 import { connect } from "react-redux";
 import { RootState } from "../../redux";
-import {
-  createNewTrecipe,
-  deleteTrecipe,
-  loadTrecipes,
-  updateTrecipe,
-} from "../../redux/TrecipeList/action";
+import { loadTrecipes } from "../../redux/TrecipeList/action";
 import { TrecipeModel } from "../../redux/TrecipeList/types";
 import { bindActionCreators, Dispatch } from "redux";
 import { showModal } from "../../redux/Modal/action";
@@ -97,9 +92,6 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
     {
-      createNewTrecipe,
-      deleteTrecipe,
-      updateTrecipe,
       loadTrecipes,
       showModal,
     },
