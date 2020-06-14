@@ -1,12 +1,14 @@
 import React from "react";
+import "./fontawesome";
+import "./stylesheets/App.scss";
 import { MyTrecipes } from "./pages/MyTrecipe/MyTrecipes";
-import "./components/fontawesome";
-import "./App.scss";
 
 function App() {
   return (
     <div className="App">
-      <MyTrecipes />
+      <header className="App-header">
+        <MyTrecipes />
+      </header>
     </div>
   );
 }
