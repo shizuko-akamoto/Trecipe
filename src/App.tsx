@@ -1,13 +1,13 @@
-import React from 'react';
-import './fontawesome'
-import './stylesheets/App.scss';
-import {Coverphoto} from "./components/Coverphoto";
+import React from "react";
+import "./fontawesome";
+import "./stylesheets/App.scss";
+import { MyTrecipes } from "./pages/MyTrecipe/MyTrecipes";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Coverphoto/>
+        <MyTrecipes />
       </header>
     </div>
   );
