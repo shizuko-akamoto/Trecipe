@@ -12,7 +12,7 @@ export interface CoverphotoState {
   isOpen: boolean;
 }
 
-export class Coverphoto extends React.Component<CoverphotoProps> {
+export class CoverPhoto extends React.Component<CoverphotoProps> {
   public static defaultProps: Partial<CoverphotoProps> = {
     trecipeCardID: 42,
     imageSource: "url(" + Background + ")",
