@@ -1,7 +1,7 @@
 import React from "react";
-import MyTrecipes from "./pages/MyTrecipes/MyTrecipes";
 import "./components/fontawesome";
 import "./App.scss";
+import MyTrecipes from "./pages/MyTrecipes/MyTrecipes";
 import ModalContainer from "./components/Modal/ModalContainer";
 
 function App() {
