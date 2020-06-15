@@ -30,7 +30,7 @@ export class TrecipeCard extends React.Component<TCProps> {
     {
       id: 3,
       text: "Delete",
-      icon: "trash",
+      icon: ["far", "trash-alt"],
       onClick: () => {
         this.deleteTrecipe();
       },

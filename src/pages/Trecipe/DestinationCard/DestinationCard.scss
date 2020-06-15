@@ -1,0 +1,101 @@
+@import "../../../components/variables";
+
+.dest-card-wrapper {
+  width: 100%;
+  height: 12.5rem;
+  display: flex;
+  flex-direction: row;
+  border: 0.5px solid $light-gray;
+  background-color: $tc-white;
+  font-family: $default-font-family;
+
+  .dest-img {
+    flex: 0 1 12.5rem;
+    height: 100%;
+    text-align: center;
+  }
+
+  .dest-info {
+    flex: 1 1;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+
+    .dest-category,
+    .dest-address {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: $sub-text-font-size;
+      color: $silver-gray;
+    }
+
+    .dest-name {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: $default-font-size;
+    }
+
+    .dest-description {
+      flex-grow: 1;
+      margin-bottom: 0;
+      font-size: $default-font-size;
+    }
+  }
+
+  .completed-checkbox {
+    flex: 0 0;
+    display: flex;
+    align-items: center;
+    padding-right: 2rem;
+
+    input[type="checkbox"] {
+      opacity: 0;
+
+      & + .check-mark {
+        cursor: pointer;
+        color: rgba($light-gray, 0.3);
+        font-size: 3rem;
+        transition: color 0.2s;
+
+        &:hover {
+          color: rgba($light-gray, 1);
+        }
+      }
+
+      &:checked + .check-mark {
+        color: rgba($powder-blue, 1);
+      }
+    }
+  }
+
+  .edit-options-wrapper {
+    display: flex;
+    flex: 0 1 12.5rem;
+
+    .edit-option {
+      flex-basis: 50%;
+      border: none;
+      color: $tc-white;
+      font-size: $default-font-size;
+      filter: brightness(0.95);
+      transition: all 0.2s ease-out;
+
+      &:hover {
+        filter: none;
+      }
+
+      &#dest-reorder {
+        display: flex;
+        background-color: $powder-blue;
+        justify-content: center;
+        align-items: center;
+      }
+
+      &#dest-delete {
+        background-color: #f28482;
+        cursor: pointer;
+      }
+    }
+  }
+}
