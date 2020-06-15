@@ -4,30 +4,60 @@ import "./DestinationCard.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Rating, RatingBar } from "../../../components/Rating/RatingBar";
 
+/**
+ * Destination Category
+ */
+export enum DestinationCategory {
+  Food = "Food",
+  Shopping = "Shopping",
+  Accommodation = "Accommodation",
+  Attraction = "Attraction",
+}
+
+/**
+ * DestinationModal
+ * id: destination unique id
+ * name: destination name
+ * category: destination category
+ * rating: destination rating
+ * imgSrc: destination image
+ */
 export interface DestinationModel {
   id: number;
   name: string;
-  category: string;
+  category: DestinationCategory;
   address: string;
   rating: Rating;
   description: string;
   imgSrc: string;
 }
 
+/**
+ * DCProps
+ * index: where in Destination card list this one is located (needed for Drag & Drop functionality)
+ * destModal: destination model to render
+ * onClickDelete: callback handler for delete button
+ */
 export interface DCProps {
-  destModel: DestinationModel;
   index: number;
+  destModel: DestinationModel;
+  onClickDelete: (e: React.MouseEvent) => void;
 }
 
+/**
+ * DCState
+ * isCompleted: true if destination is checked off, false otherwise
+ * isInEdit: true if currently in edit, false otherwise
+ */
 export interface DCState {
   isCompleted: boolean;
-  inEdit: boolean;
+  isInEdit: boolean;
 }
 
 export class DestinationCard extends React.Component<DCProps, DCState> {
   state: Readonly<DCState> = {
     isCompleted: false,
-    inEdit: true,
+    isInEdit: false,
   };
 
   private handleCompletedCheck() {
@@ -49,7 +79,7 @@ export class DestinationCard extends React.Component<DCProps, DCState> {
           <RatingBar rating={this.props.destModel.rating} />
           <p className="dest-description">{this.props.destModel.description}</p>
         </div>
-        {!this.state.inEdit && (
+        {!this.state.isInEdit && (
           <div className="completed-checkbox">
             <input
               type="checkbox"
@@ -63,12 +93,15 @@ export class DestinationCard extends React.Component<DCProps, DCState> {
             </label>
           </div>
         )}
-        {this.state.inEdit && (
+        {this.state.isInEdit && (
           <div className="edit-options-wrapper">
             <span className="edit-option" id="dest-reorder">
               <FontAwesomeIcon icon="bars" />
             </span>
-            <button className="edit-option" id="dest-delete">
+            <button
+              className="edit-option"
+              id="dest-delete"
+              onClick={this.props.onClickDelete}>
               <FontAwesomeIcon icon={["far", "trash-alt"]} />
             </button>
           </div>
