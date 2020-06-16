@@ -1,5 +1,4 @@
 @import "../../components/variables";
-@import "../../components/animation";
 
 .destination-cards {
   padding: 0;
@@ -7,7 +6,6 @@
 
   & > * {
     margin-bottom: 1rem;
-    animation: fade-in 0.4s ease;
   }
 }
 
