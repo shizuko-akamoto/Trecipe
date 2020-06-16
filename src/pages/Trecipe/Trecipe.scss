@@ -1,0 +1,27 @@
+@import "../../components/variables";
+@import "../../components/animation";
+
+.destination-cards {
+  padding: 0;
+  list-style: none;
+
+  & > * {
+    margin-bottom: 1rem;
+    animation: fade-in 0.4s ease;
+  }
+}
+
+.show-more-btn {
+  display: block;
+  margin: 2rem auto;
+  font-family: $default-font-family;
+  font-size: $default-font-size;
+  border: none;
+  background-color: $tc-white;
+  cursor: pointer;
+
+  #show-more-icon {
+    margin-left: 0.5rem;
+    font-size: $button-font-size;
+  }
+}
