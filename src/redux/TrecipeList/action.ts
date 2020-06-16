@@ -28,9 +28,9 @@ export const updateTrecipe = (idToUpdate: number, updatedTC: TrecipeModel) => {
 
 export const loadTrecipes = () => {
   // Pretending to wait for loading by setTimeout
-  return (dispach: Dispatch<AnyAction>) => {
+  return (dispatch: Dispatch<AnyAction>) => {
     setTimeout(() => {
-      mockTrecipeList.forEach((tc) => dispach(createNewTrecipe(tc)));
+      mockTrecipeList.forEach((tc) => dispatch(createNewTrecipe(tc)));
     }, 1000);
   };
 };

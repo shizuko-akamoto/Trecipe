@@ -3,18 +3,12 @@ import { Button } from "../../../components/Button/Button";
 import { Menu, MenuItem } from "../../../components/Menu/Menu";
 
 /**
- * TODO
- * update the onClick function to do something
+ * CardMenuProps
+ * menuItem: List of menu items (each with onClick callback) to display in menu
  */
 export interface CardMenuProps {
   menuItems: MenuItem[];
 }
-
-/**
- *  { id: 1, text: "Edit", icon: "edit", onClick: () => {} },
- { id: 2, text: "Duplicate", icon: "copy", onClick: () => {} },
- { id: 3, text: "Delete", icon: "trash", onClick: () => {} },
- */
 
 /**
  * Card Menu State
