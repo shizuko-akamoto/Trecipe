@@ -20,7 +20,9 @@ export enum DestinationCategory {
  * id: destination unique id
  * name: destination name
  * category: destination category
+ * address: destination address
  * rating: destination rating
+ * description: destination description
  * imgSrc: destination image
  */
 export interface DestinationModel {
@@ -76,7 +78,10 @@ export class DestinationCard extends React.Component<DCProps, DCState> {
           <div ref={provided.innerRef} {...provided.draggableProps}>
             <div className="dest-card-wrapper">
               <div className="dest-img">
-                <Image src={this.props.destModel.imgSrc} />
+                <Image
+                  src={this.props.destModel.imgSrc}
+                  imgStyle={{ borderRadius: "8px 0 0 8px" }}
+                />
               </div>
               <div className="dest-info">
                 <h6 className="dest-category">
