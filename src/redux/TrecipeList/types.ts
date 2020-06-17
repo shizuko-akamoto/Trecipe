@@ -19,6 +19,7 @@ const getNextUniqueId = () => {
  * isPrivate: true if the Trecipe is a private one, false otherwise
  * totalDest: total number of destination in this Trecipe
  * completedDest: number of destination that has been checked off
+ * destinations: list of destinations in this trecipe (TODO: switch to storing Destination id only as reference)
  */
 export interface TrecipeModel {
   id: number;
@@ -30,6 +31,7 @@ export interface TrecipeModel {
   isPrivate: boolean;
   totalDest: number;
   completedDest: number;
+  destinations: Array<DestinationModel>;
 }
 
 /**
@@ -102,6 +104,7 @@ export function newTrecipeModel(): TrecipeModel {
     isPrivate: true,
     totalDest: 0,
     completedDest: 0,
+    destinations: [],
   };
 }
 

@@ -15,9 +15,20 @@ import { ProgressBar } from "../../components/ProgressBar/ProgressBar";
 import {
   DestinationCategory,
   DestinationModel,
+  newTrecipeModel,
+  TrecipeModel,
 } from "../../redux/TrecipeList/types";
 import { CoverPhoto } from "../../components/CoverPhoto/CoverPhoto";
 import { Button } from "../../components/Button/Button";
+import { RootState } from "../../redux";
+import { connect } from "react-redux";
+import { isUndefined } from "lodash";
+
+type TrecipeProps = ReturnType<typeof mapStateToProps> & TrecipeOwnProps;
+
+export interface TrecipeOwnProps {
+  trecipeId: number;
+}
 
 /**
  * Trecipe State
@@ -31,7 +42,7 @@ export interface TrecipeState {
   isInEdit: boolean;
 }
 
-export class Trecipe extends React.Component<{}, TrecipeState> {
+class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   private static SAMPLE_DEST: DestinationModel = {
     id: 0,
     name: "Destination Name",
@@ -43,22 +54,13 @@ export class Trecipe extends React.Component<{}, TrecipeState> {
   };
   private static DEFAULT_VISIBLE = 5;
 
-  constructor(props: Readonly<{}>) {
+  constructor(props: Readonly<TrecipeProps>) {
     super(props);
     this.state = {
-      destinations: [],
+      destinations: props.trecipe.destinations,
       visibleTo: Trecipe.DEFAULT_VISIBLE,
       isInEdit: false,
     };
-  }
-
-  componentDidMount(): void {
-    // TODO: Replace mock dests with destinations actually in Trecipe
-    const initialDests = [0, 1, 2, 3, 4, 5].map((index) => {
-      const { id, ...rest } = Trecipe.SAMPLE_DEST;
-      return { id: index, ...rest };
-    });
-    this.setState({ destinations: initialDests });
   }
 
   private onDestDragEnd(result: DropResult, provided: ResponderProvided) {
@@ -201,3 +203,14 @@ export class Trecipe extends React.Component<{}, TrecipeState> {
     );
   }
 }
+
+const mapStateToProps = (state: RootState, ownProps: TrecipeOwnProps) => {
+  const trecipeWithId = state.trecipeList.trecipes.find(
+    (trecipe: TrecipeModel) => trecipe.id === ownProps.trecipeId
+  );
+  return {
+    trecipe: isUndefined(trecipeWithId) ? newTrecipeModel() : trecipeWithId,
+  };
+};
+
+export default connect(mapStateToProps)(Trecipe);
