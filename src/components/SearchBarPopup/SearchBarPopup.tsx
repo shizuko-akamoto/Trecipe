@@ -2,7 +2,6 @@ import React, { RefObject } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./searchBarPopup.scss";
 import _ from "lodash";
-import { isObject } from "util";
 
 interface Destination {id: number, name: string, address: string, isAdded: boolean}
 
@@ -81,7 +80,7 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
     }
 
     private addRemovePlace (id: number) {
-        const elementsIndex = this.state.results.findIndex(element => element.id == id);
+        const elementsIndex = this.state.results.findIndex(element => element.id === id);
         let newResults = [...this.state.results];
         newResults[elementsIndex] = { ...newResults[elementsIndex], isAdded: !newResults[elementsIndex].isAdded}
         this.setState({
