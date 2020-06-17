@@ -17,6 +17,10 @@ import {
   faQuestion,
   faStar as fasStar,
   faBars,
+  faUtensils,
+  faBed,
+  faShoppingCart,
+  faBinoculars,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faQuestionCircle,
@@ -46,5 +50,9 @@ library.add(
   fasStar,
   faGithub,
   faQuestion,
-  faBars
+  faBars,
+  faUtensils,
+  faBed,
+  faShoppingCart,
+  faBinoculars
 );

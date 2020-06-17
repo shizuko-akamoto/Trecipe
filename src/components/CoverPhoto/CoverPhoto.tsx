@@ -1,5 +1,5 @@
 import React from "react";
-import Background from "../../pages/MyTrecipe/TrecipeCard/BetterDefaultImage.png";
+import Background from "../../pages/MyTrecipes/TrecipeCard/BetterDefaultImage.png";
 import PhotoUploader from "../PhotoUploader/PhotoUploader";
 
 export interface CoverphotoProps {

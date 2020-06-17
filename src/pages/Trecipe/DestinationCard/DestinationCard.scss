@@ -23,6 +23,11 @@
     flex-direction: column;
     padding: 1rem;
 
+    .dest-category-icon {
+      margin-left: 0.3rem;
+      font-size: $default-font-size;
+    }
+
     .dest-category,
     .dest-address {
       margin-top: 0;

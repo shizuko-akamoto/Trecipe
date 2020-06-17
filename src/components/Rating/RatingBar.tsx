@@ -21,15 +21,13 @@ export class RatingBar extends React.Component<RatingBarProps> {
           />
         ))}
         {/*the rest of the stars are rendered as empty stars*/}
-        {Array.from(Array(5 - this.props.rating).keys()).map((index) => {
-          return (
-            <FontAwesomeIcon
-              key={index}
-              className="star-open"
-              icon={["far", "star"]}
-            />
-          );
-        })}
+        {Array.from(Array(5 - this.props.rating).keys()).map((index) => (
+          <FontAwesomeIcon
+            key={index}
+            className="star-open"
+            icon={["far", "star"]}
+          />
+        ))}
       </div>
     );
   }

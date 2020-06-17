@@ -4,6 +4,8 @@ import "./DestinationCard.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Rating, RatingBar } from "../../../components/Rating/RatingBar";
 import { Draggable } from "react-beautiful-dnd";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { UnreachableCaseException } from "../../../exceptions/Exceptions";
 
 /**
  * Destination Category
@@ -16,6 +18,26 @@ export enum DestinationCategory {
 }
 
 /**
+ * Get icon props associated with each category.
+ * Throws UnreachableCaseException if an icon category is not properly associated to an icon
+ * @param category: the category to get icon prop for
+ */
+export function getIcon(category: DestinationCategory): IconProp {
+  switch (category) {
+    case DestinationCategory.Food:
+      return "utensils";
+    case DestinationCategory.Shopping:
+      return "shopping-cart";
+    case DestinationCategory.Accommodation:
+      return "bed";
+    case DestinationCategory.Attraction:
+      return "binoculars";
+    default:
+      throw new UnreachableCaseException(category);
+  }
+}
+
+/**
  * DestinationModal
  * id: destination unique id
  * name: destination name
@@ -23,7 +45,7 @@ export enum DestinationCategory {
  * address: destination address
  * rating: destination rating
  * description: destination description
- * imgSrc: destination image
+ * imgSrc: destination image (or null if no image)
  */
 export interface DestinationModel {
   id: number;
@@ -32,7 +54,7 @@ export interface DestinationModel {
   address: string;
   rating: Rating;
   description: string;
-  imgSrc: string;
+  imgSrc: string | null;
 }
 
 /**
@@ -86,6 +108,10 @@ export class DestinationCard extends React.Component<DCProps, DCState> {
               <div className="dest-info">
                 <h6 className="dest-category">
                   {this.props.destModel.category}
+                  <FontAwesomeIcon
+                    className="dest-category-icon"
+                    icon={getIcon(this.props.destModel.category)}
+                  />
                 </h6>
                 <h6 className="dest-address">{this.props.destModel.address}</h6>
                 <h3 className="dest-name">{this.props.destModel.name}</h3>
@@ -100,6 +126,7 @@ export class DestinationCard extends React.Component<DCProps, DCState> {
                     type="checkbox"
                     id={this.props.destModel.id + "-completed"}
                     onChange={this.handleCompletedCheck.bind(this)}
+                    checked={this.state.isCompleted}
                   />
                   <label
                     htmlFor={this.props.destModel.id + "-completed"}

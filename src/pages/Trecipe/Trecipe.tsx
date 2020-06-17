@@ -43,7 +43,7 @@ export class Trecipe extends React.Component<{}, TrecipeState> {
     this.state = {
       destinations: [],
       visibleTo: Trecipe.DEFAULT_VISIBLE,
-      isInEdit: true,
+      isInEdit: false,
     };
   }
 
