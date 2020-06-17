@@ -25,6 +25,9 @@ export interface SearchBarState {
  * A popup to search for places and to be added into a Trecipe
  */
 export class SearchBarPopup extends React.Component<{}, SearchBarState> {
+    private container: RefObject<HTMLDivElement> = React.createRef<
+        HTMLDivElement
+    >();
 
     state = {
         searchKey: "",
@@ -54,7 +57,7 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
         ): void {
         new Promise<Array<Destination>>(function (resolve, reject) {
             /** TODO: Modify logic here to make HTTP call to backend for fetching search results.
-             *  Right now, it just returns dummy list of strings based on current search filter selected.
+             *  Update DB if the previous result list has been changed.
              */
 
             let results: Destination[] = [{id: 1, name: "Place 1", address:"City, County", isAdded: false}, 
@@ -86,6 +89,24 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
             resultsOpen: true
         })
     }
+
+    componentDidMount(): void {
+        document.addEventListener("mousedown", this.handleClickOutside, false);
+    }
+
+    componentWillUnmount(): void {
+        document.removeEventListener("mousedown", this.handleClickOutside, false);
+    }
+
+    private handleClickOutside = (event: MouseEvent) => {
+        if (this.container.current && event.target instanceof Node) {
+            if (this.container.current.contains(event.target)) {
+                return;
+            }  else {
+                // TODO: backend, send the updated result list to the backend
+            }
+        }
+    };
     
     private renderSearchResults() {
         const { results } = this.state;
@@ -97,6 +118,7 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
                         {results.map((result) => (
                             // temporarily using result as key. Change to some id later
                             // TODO: replace with valid href
+                            // TODO:<a href> remount the entire component, fix when connecting to backend.
                             <li className="results-entry" key={result["name"]} onClick={() =>this.addRemovePlace(result["id"])}>
                                 <a href="placeholder">
                                     <span className="placeName">{result["name"]}</span>
@@ -112,9 +134,6 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
         }
     }
 
-    componentDidMount() {
-        console.log(Math.random())
-    }
     render(){
         return(
             <div className="searchBarPopup">
