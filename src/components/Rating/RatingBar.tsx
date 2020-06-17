@@ -1,12 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./RatingBar.scss";
-
-export type Rating = 0 | 1 | 2 | 3 | 4 | 5;
-
-export type RatingBarProps = {
-  rating: Rating;
-};
+import { RatingBarProps } from "../../redux/TrecipeList/types";
 
 export class RatingBar extends React.Component<RatingBarProps> {
   render() {

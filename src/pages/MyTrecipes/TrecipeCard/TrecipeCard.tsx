@@ -13,10 +13,11 @@ import {
   newTrecipeModel,
   TrecipeModel,
 } from "../../../redux/TrecipeList/types";
+import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
 
 type TCProps = TrecipeModel & ReturnType<typeof mapDispatchToProps>;
 
-export class TrecipeCard extends React.Component<TCProps> {
+class TrecipeCard extends React.Component<TCProps> {
   private cardMenuItems: MenuItem[] = [
     { id: 1, text: "Edit", icon: "edit", onClick: () => {} },
     {
@@ -36,10 +37,6 @@ export class TrecipeCard extends React.Component<TCProps> {
       },
     },
   ];
-
-  private calcPercentage = (totalDest: number, completedDest: number) => {
-    return totalDest === 0 ? 0 : (completedDest / totalDest) * 100;
-  };
 
   private duplicateTrecipe = () => {
     // copying everything except for id
@@ -81,18 +78,12 @@ export class TrecipeCard extends React.Component<TCProps> {
             <p>{this.props.description}</p>
           </div>
         </div>
-        <div className="tcProgressBar">
-          <div
-            className="tcFiller"
-            style={{
-              width:
-                this.calcPercentage(
-                  this.props.totalDest,
-                  this.props.completedDest
-                ) + "%",
-            }}
-          />
-        </div>
+        <ProgressBar
+          total={this.props.totalDest}
+          completed={this.props.completedDest}
+          showText={false}
+          barStyle={{ borderRadius: "0 0 8px 8px" }}
+        />
       </div>
     );
   }

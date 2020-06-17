@@ -1,4 +1,6 @@
 import Background from "../../pages/MyTrecipes/TrecipeCard/DefaultImage.png";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { UnreachableCaseException } from "../../exceptions/Exceptions";
 
 /**
  * TODO: Remove this when we can generate ids in the backend
@@ -29,6 +31,62 @@ export interface TrecipeModel {
   totalDest: number;
   completedDest: number;
 }
+
+/**
+ * Destination Category
+ */
+export enum DestinationCategory {
+  Food = "Food",
+  Shopping = "Shopping",
+  Accommodation = "Accommodation",
+  Attraction = "Attraction",
+}
+
+/**
+ * Get icon props associated with each category.
+ * Throws UnreachableCaseException if an icon category is not properly associated to an icon
+ * @param category: the category to get icon prop for
+ */
+export function getIcon(category: DestinationCategory): IconProp {
+  switch (category) {
+    case DestinationCategory.Food:
+      return "utensils";
+    case DestinationCategory.Shopping:
+      return "shopping-cart";
+    case DestinationCategory.Accommodation:
+      return "bed";
+    case DestinationCategory.Attraction:
+      return "binoculars";
+    default:
+      throw new UnreachableCaseException(category);
+  }
+}
+
+/**
+ * DestinationModal
+ * id: destination unique id
+ * name: destination name
+ * category: destination category
+ * address: destination address
+ * rating: destination rating
+ * description: destination description
+ * imgSrc: destination image
+ */
+export interface DestinationModel {
+  id: number;
+  name: string;
+  category: DestinationCategory;
+  address: string;
+  rating: Rating;
+  description: string;
+  imgSrc: string;
+}
+
+export type Rating = 0 | 1 | 2 | 3 | 4 | 5;
+
+export type RatingBarProps = {
+  rating: Rating;
+};
 
 /**
  * Returns a new default TrecipeModal

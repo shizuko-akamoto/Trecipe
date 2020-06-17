@@ -1,5 +1,10 @@
 @import "../variables";
 
+.button-wrapper {
+  border-radius: 8px;
+  background-color: $tc-white;
+}
+
 .button {
   background-color: $tc-white;
   border: 1px solid $silver-gray;
@@ -32,7 +37,7 @@
     border-color: $light-gray;
   }
   .button-icon {
-    padding: 5px;
+    padding-left: 5px;
   }
 }
 

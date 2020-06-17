@@ -2,60 +2,9 @@ import React from "react";
 import { Image } from "../../../components/Image/Image";
 import "./DestinationCard.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Rating, RatingBar } from "../../../components/Rating/RatingBar";
+import { RatingBar } from "../../../components/Rating/RatingBar";
 import { Draggable } from "react-beautiful-dnd";
-import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { UnreachableCaseException } from "../../../exceptions/Exceptions";
-
-/**
- * Destination Category
- */
-export enum DestinationCategory {
-  Food = "Food",
-  Shopping = "Shopping",
-  Accommodation = "Accommodation",
-  Attraction = "Attraction",
-}
-
-/**
- * Get icon props associated with each category.
- * Throws UnreachableCaseException if an icon category is not properly associated to an icon
- * @param category: the category to get icon prop for
- */
-export function getIcon(category: DestinationCategory): IconProp {
-  switch (category) {
-    case DestinationCategory.Food:
-      return "utensils";
-    case DestinationCategory.Shopping:
-      return "shopping-cart";
-    case DestinationCategory.Accommodation:
-      return "bed";
-    case DestinationCategory.Attraction:
-      return "binoculars";
-    default:
-      throw new UnreachableCaseException(category);
-  }
-}
-
-/**
- * DestinationModal
- * id: destination unique id
- * name: destination name
- * category: destination category
- * address: destination address
- * rating: destination rating
- * description: destination description
- * imgSrc: destination image (or null if no image)
- */
-export interface DestinationModel {
-  id: number;
-  name: string;
-  category: DestinationCategory;
-  address: string;
-  rating: Rating;
-  description: string;
-  imgSrc: string | null;
-}
+import { DestinationModel, getIcon } from "../../../redux/TrecipeList/types";
 
 /**
  * DCProps

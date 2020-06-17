@@ -1,10 +1,11 @@
-import React from "react";
+import React, { ReactNode, ReactNodeArray } from "react";
 import Background from "../../pages/MyTrecipes/TrecipeCard/BetterDefaultImage.png";
 import PhotoUploader from "../PhotoUploader/PhotoUploader";
 
 export interface CoverphotoProps {
   trecipeCardID: number;
   imageSource: string;
+  buttons?: ReactNodeArray;
 }
 
 export interface CoverphotoState {
@@ -16,6 +17,7 @@ export class CoverPhoto extends React.Component<CoverphotoProps> {
   public static defaultProps: Partial<CoverphotoProps> = {
     trecipeCardID: 42,
     imageSource: "url(" + Background + ")",
+    buttons: [],
   };
 
   public readonly state: Readonly<CoverphotoState> = {
@@ -50,14 +52,18 @@ export class CoverPhoto extends React.Component<CoverphotoProps> {
         <div
           className="coverPhotoImage"
           style={{
-            backgroundImage: `linear-gradient(180deg,rgba(255, 255, 255, 0) 35%,rgba(0, 0, 0, 0.5) 100%), 
+            backgroundImage: `linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 35%), 
                      ${this.state.sourceImage}`,
           }}
-          onClick={this.toggle.bind(this)}
-        />
-        <PhotoUploader
-          changeFileCallback={this.fileUpdateCallback.bind(this)}
-        />
+          onClick={this.toggle.bind(this)}>
+          {this.props.children}
+        </div>
+        <div className="coverPhotoBtnsWrapper">
+          {this.props.buttons}
+          <PhotoUploader
+            changeFileCallback={this.fileUpdateCallback.bind(this)}
+          />
+        </div>
         {this.state.isOpen && (
           <dialog
             className="coverPhotoDialog"

@@ -1,15 +1,20 @@
 @import "../variables";
-.coverPhotoUploadButton {
+
+.coverPhotoBtnsWrapper {
   position: absolute;
-  right: 1em;
-  top: 1em;
+  top: 1rem;
+  right: 0.5rem;
+  display: flex;
+
+  & > * {
+    margin-left: 0.5rem;
+  }
 }
 
 .coverPhotoWrapper {
-  height: 35%;
+  height: 100%;
   width: 100%;
-  position: absolute;
-  top: 0;
+  position: relative;
 }
 
 .coverPhotoImage {
@@ -18,11 +23,9 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  position: relative;
-  margin: auto;
-  top: 0;
-  left: 0;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
   &:hover {
     opacity: 0.7;
   }
@@ -42,14 +45,7 @@
   height: 200%;
   width: 80%;
   top: 10%;
-}
-
-.coverPhotoUploadButton .button {
-  &:hover {
-    background-color: white;
-    color: $mid-gray;
-    border-color: $mid-gray;
-  }
+  z-index: 1000;
 }
 
 .coverPhotoSelector {
