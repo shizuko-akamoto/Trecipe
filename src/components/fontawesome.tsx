@@ -10,13 +10,23 @@ import {
   faPlusCircle,
   faEdit,
   faCopy,
-  faTrash,
   faEllipsisH,
   faSearch,
   faLockOpen,
   faCameraRetro,
+  faQuestion,
+  faStar as fasStar,
+  faBars,
+  faUtensils,
+  faBed,
+  faShoppingCart,
+  faBinoculars,
 } from "@fortawesome/free-solid-svg-icons";
-import { faQuestionCircle, faStar } from "@fortawesome/free-regular-svg-icons";
+import {
+  faQuestionCircle,
+  faStar,
+  faTrashAlt,
+} from "@fortawesome/free-regular-svg-icons";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 
 library.add(
@@ -30,11 +40,19 @@ library.add(
   faBorderAll,
   faEdit,
   faCopy,
-  faTrash,
+  faTrashAlt,
   faEllipsisH,
   faSearch,
   faMapMarkerAlt,
   faStar,
   faGithub,
-  faCameraRetro
+  faCameraRetro,
+  fasStar,
+  faGithub,
+  faQuestion,
+  faBars,
+  faUtensils,
+  faBed,
+  faShoppingCart,
+  faBinoculars
 );
