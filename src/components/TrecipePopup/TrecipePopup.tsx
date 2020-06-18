@@ -1,42 +1,63 @@
 import React from "react";
-import "./addPopup.scss";
-import { ToggleSwitch } from "../../../components/Toggle/Toggle";
-import { Button } from "../../../components/Button/Button";
-import {
-  newTrecipeModel,
-  TrecipeModel,
-} from "../../../redux/TrecipeList/types";
-import Modal from "../../../components/Modal/Modal";
+import "./trecipePopup.scss";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { createNewTrecipe } from "../../../redux/TrecipeList/action";
-import { hideModal } from "../../../redux/Modal/action";
+import { isUndefined } from "lodash";
+import { Button } from "../Button/Button";
+import { ToggleSwitch } from "../Toggle/Toggle";
+import { newTrecipeModel, TrecipeModel } from "../../redux/TrecipeList/types";
+import { RootState } from "../../redux";
+import {
+  createNewTrecipe,
+  updateTrecipe,
+} from "../../redux/TrecipeList/action";
+import { hideModal } from "../../redux/Modal/action";
+import Modal from "../Modal/Modal";
 
-export type AddPopupProps = ReturnType<typeof mapDispatchToProps>;
+export enum TrecipePopupType {
+  Edit,
+  Add,
+}
+export type TrecipePopupProps = ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps> &
+  TrecipePopupOwnProps;
+
+export interface TrecipePopupOwnProps {
+  type: TrecipePopupType;
+  trecipeId?: number;
+}
 
 /**
- * Add Popup state
+ * Trecipe Popup state
  * content: The content inside the Trecipe Name input box.
  */
-export interface AddPopupState {
+export interface TrecipePopupState {
   name: string;
   description: string;
 }
 
 /**
- * An Add Popup component
+ * An TrecipePopup component
  */
-class AddPopup extends React.Component<AddPopupProps, AddPopupState> {
-  public readonly state: Readonly<AddPopupState> = {
-    name: "",
-    description: "",
-  };
+class TrecipePopup extends React.Component<
+  TrecipePopupProps,
+  TrecipePopupState
+> {
   // reference to create button (for disabling the button when name input is empty)
   private createButtonRef: React.RefObject<Button> = React.createRef();
-  private currLength: number = 0;
+  private currLength: number;
 
   // reference to toggle switch (for getting its checked state)
   private toggleSwitchRef: React.RefObject<ToggleSwitch> = React.createRef();
+
+  constructor(props: Readonly<TrecipePopupProps>) {
+    super(props);
+    this.state = {
+      name: this.props.name,
+      description: this.props.description,
+    };
+    this.currLength = this.state.name.length;
+  }
 
   /**
    *  Enable and Disable the 'Create Button' according to the content in Trecipe Name Input Box.
@@ -58,15 +79,19 @@ class AddPopup extends React.Component<AddPopupProps, AddPopupState> {
     this.setState({ description: e.target.value });
   };
 
-  private createTrecipe = (
+  private handleTrecipeAction = (
     e: React.MouseEvent<HTMLElement>,
-    tcProps: Partial<TrecipeModel>
+    model: Partial<TrecipeModel>
   ) => {
-    const newTrecipeModal: TrecipeModel = Object.assign(
-      newTrecipeModel(),
-      tcProps
-    );
-    this.props.createNewTrecipe(newTrecipeModal);
+    if (this.props.type === TrecipePopupType.Add) {
+      const newTrecipeModal: TrecipeModel = Object.assign(
+        newTrecipeModel(),
+        model
+      );
+      this.props.createNewTrecipe(newTrecipeModal);
+    } else {
+      this.props.updateTrecipe(this.props.trecipeId, model);
+    }
     this.closeAddPopup();
   };
 
@@ -77,7 +102,7 @@ class AddPopup extends React.Component<AddPopupProps, AddPopupState> {
   render() {
     return (
       <Modal>
-        <div className="addPopup">
+        <div className="trecipePopup">
           <div className="contents">
             <h1 className="title"> New Trecipe </h1>
             <label htmlFor="name">Trecipe Name *</label>
@@ -99,15 +124,20 @@ class AddPopup extends React.Component<AddPopupProps, AddPopupState> {
             />
             <label>
               Make Public
-              <ToggleSwitch ref={this.toggleSwitchRef} />
+              <ToggleSwitch
+                defaultChecked={!this.props.isPrivate}
+                ref={this.toggleSwitchRef}
+              />
             </label>
             <div className="btn">
               <Button
-                text={"Create"}
+                text={
+                  this.props.type === TrecipePopupType.Add ? "Create" : "Update"
+                }
                 ref={this.createButtonRef}
-                defaultDisabled={true}
+                defaultDisabled={this.currLength === 0}
                 onClick={(e) =>
-                  this.createTrecipe(e, {
+                  this.handleTrecipeAction(e, {
                     name: this.state.name,
                     description: this.state.description,
                     isPrivate: this.toggleSwitchRef.current
@@ -125,14 +155,33 @@ class AddPopup extends React.Component<AddPopupProps, AddPopupState> {
   }
 }
 
+function mapStateToProps(state: RootState, ownProps: TrecipePopupOwnProps) {
+  let trecipeWithId = undefined;
+  if (ownProps.type === TrecipePopupType.Edit && ownProps.trecipeId) {
+    trecipeWithId = state.trecipeList.trecipes.find(
+      (trecipe: TrecipeModel) => trecipe.id === ownProps.trecipeId
+    );
+  }
+  const { id, name, description, isPrivate } = isUndefined(trecipeWithId)
+    ? newTrecipeModel()
+    : trecipeWithId;
+  return {
+    trecipeId: id,
+    name: name,
+    description: description,
+    isPrivate: isPrivate,
+  };
+}
+
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
     {
       createNewTrecipe,
+      updateTrecipe,
       hideModal,
     },
     dispatch
   );
 };
 
-export default connect(null, mapDispatchToProps)(AddPopup);
+export default connect(mapStateToProps, mapDispatchToProps)(TrecipePopup);

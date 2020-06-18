@@ -6,9 +6,17 @@ import SampleDestImage from "../../pages/Trecipe/sample.jpg";
 /**
  * TODO: Remove this when we can generate ids in the backend
  */
-let nextUniqueId: number = 0;
-const getNextUniqueId = () => {
-  return nextUniqueId++;
+let nextUniqueTrecipeId: number = 0;
+const getNextUniqueTrecipeId = () => {
+  return nextUniqueTrecipeId++;
+};
+
+/**
+ * TODO: Remove this when we can generate ids in the backend
+ */
+let nextUniqueDestinationId: number = 0;
+const getNextUniqueDestinationId = () => {
+  return nextUniqueDestinationId++;
 };
 
 /**
@@ -85,16 +93,6 @@ export interface DestinationModel {
   imgSrc: string;
 }
 
-const SAMPLE_DEST: DestinationModel = {
-  id: 0,
-  name: "Destination Name",
-  category: DestinationCategory.Food,
-  address: "City, Country",
-  rating: 3,
-  description: "Some overview on this destination.",
-  imgSrc: SampleDestImage,
-};
-
 export type Rating = 0 | 1 | 2 | 3 | 4 | 5;
 
 export type RatingBarProps = {
@@ -102,27 +100,35 @@ export type RatingBarProps = {
 };
 
 /**
+ * Returns a new default DestinationModel
+ */
+export function newDestinationModel(): DestinationModel {
+  return {
+    id: getNextUniqueDestinationId(),
+    name: "Destination Name",
+    category: DestinationCategory.Food,
+    address: "City, Country",
+    rating: 3,
+    description: "Some overview on this destination.",
+    imgSrc: SampleDestImage,
+  };
+}
+
+/**
  * Returns a new default TrecipeModal
  */
 export function newTrecipeModel(): TrecipeModel {
   return {
-    id: getNextUniqueId(), // temporary until we get backend to generate unique id
-    name: "trecipe title",
+    id: getNextUniqueTrecipeId(), // temporary until we get backend to generate unique id
+    name: "",
     imageSrc: "url(" + Background + ")",
-    date: "2020-01-01", // maybe change it to Date
-    author: "team2",
-    description: "This is a description.",
+    date: "", // maybe change it to Date
+    author: "",
+    description: "",
     isPrivate: true,
     totalDest: 0,
     completedDest: 0,
-    destinations: [
-      SAMPLE_DEST,
-      SAMPLE_DEST,
-      SAMPLE_DEST,
-      SAMPLE_DEST,
-      SAMPLE_DEST,
-      SAMPLE_DEST,
-    ],
+    destinations: [0, 1, 2, 3, 4, 5].map(() => newDestinationModel()),
   };
 }
 

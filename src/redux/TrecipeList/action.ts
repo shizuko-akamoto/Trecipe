@@ -22,7 +22,10 @@ export const deleteTrecipe = (idToDelete: number) => {
   return typedAction(TrecipeListActionTypes.DELETE_TRECIPE, idToDelete);
 };
 
-export const updateTrecipe = (idToUpdate: number, updatedTC: TrecipeModel) => {
+export const updateTrecipe = (
+  idToUpdate: number,
+  updatedTC: Partial<TrecipeModel>
+) => {
   return typedAction(TrecipeListActionTypes.UPDATE_TRECIPE, updatedTC);
 };
 

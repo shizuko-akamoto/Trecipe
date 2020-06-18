@@ -114,6 +114,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   }
 
   render() {
+    const trecipe: TrecipeModel = this.props.trecipe;
     return (
       <div>
         <Header />
@@ -129,13 +130,13 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
             ]}>
             <div className="tc-header-text">
               <div className="tc-header-title">
-                <h1 className="tc-header-name">{this.props.trecipe.name}</h1>
+                <h1 className="tc-header-name">{trecipe.name}</h1>
                 <FontAwesomeIcon
                   className="tc-header-privacy"
-                  icon={this.props.trecipe.isPrivate ? "lock" : "lock-open"}
+                  icon={trecipe.isPrivate ? "lock" : "lock-open"}
                 />
               </div>
-              <h3 className="tc-header-time">{this.props.trecipe.date}</h3>
+              <h3 className="tc-header-time">{trecipe.date}</h3>
             </div>
           </CoverPhoto>
           <svg
@@ -159,8 +160,8 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
               </span>
             </span>
             <ProgressBar
-              total={10}
-              completed={5}
+              total={trecipe.totalDest}
+              completed={trecipe.completedDest}
               showText={true}
               barStyle={{ height: "1rem" }}
             />

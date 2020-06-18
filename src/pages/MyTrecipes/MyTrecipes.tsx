@@ -7,13 +7,15 @@ import { Button } from "../../components/Button/Button";
 import TrecipeCard from "./TrecipeCard/TrecipeCard";
 import { FilterSelector } from "./Filter/FilterSelector";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import AddPopup from "./AddPopup/AddPopup";
 import { connect } from "react-redux";
 import { RootState } from "../../redux";
 import { loadTrecipes } from "../../redux/TrecipeList/action";
 import { TrecipeModel } from "../../redux/TrecipeList/types";
 import { bindActionCreators, Dispatch } from "redux";
 import { showModal } from "../../redux/Modal/action";
+import TrecipePopup, {
+  TrecipePopupType,
+} from "../../components/TrecipePopup/TrecipePopup";
 
 type MyTrecipesProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps>;
@@ -31,7 +33,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
   }
 
   private renderAddPopup = () => {
-    this.props.showModal(<AddPopup />);
+    this.props.showModal(<TrecipePopup type={TrecipePopupType.Add} />);
   };
 
   render() {
