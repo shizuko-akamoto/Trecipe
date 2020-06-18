@@ -44,6 +44,7 @@
 
     .tc-header-time {
       font-size: $title-font-size;
+      font-weight: lighter;
       margin: 1rem;
 
       &:before,
@@ -99,10 +100,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .page-title {
-      @include title-border-bottom($powder-blue, $crayola-yellow);
-      font-size: $title-font-size;
-    }
 
     .dest-edit-btn-wrapper {
       display: flex;
@@ -110,6 +107,11 @@
         margin-left: 0.5rem;
       }
     }
+  }
+
+  .page-title {
+    @include title-border-bottom($powder-blue, $crayola-yellow);
+    font-size: $title-font-size;
   }
 
   .destination-cards {

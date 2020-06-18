@@ -1,6 +1,7 @@
 import Background from "../../pages/MyTrecipes/TrecipeCard/DefaultImage.png";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { UnreachableCaseException } from "../../exceptions/Exceptions";
+import SampleDestImage from "../../pages/Trecipe/sample.jpg";
 
 /**
  * TODO: Remove this when we can generate ids in the backend
@@ -84,6 +85,16 @@ export interface DestinationModel {
   imgSrc: string;
 }
 
+const SAMPLE_DEST: DestinationModel = {
+  id: 0,
+  name: "Destination Name",
+  category: DestinationCategory.Food,
+  address: "City, Country",
+  rating: 3,
+  description: "Some overview on this destination.",
+  imgSrc: SampleDestImage,
+};
+
 export type Rating = 0 | 1 | 2 | 3 | 4 | 5;
 
 export type RatingBarProps = {
@@ -104,7 +115,14 @@ export function newTrecipeModel(): TrecipeModel {
     isPrivate: true,
     totalDest: 0,
     completedDest: 0,
-    destinations: [],
+    destinations: [
+      SAMPLE_DEST,
+      SAMPLE_DEST,
+      SAMPLE_DEST,
+      SAMPLE_DEST,
+      SAMPLE_DEST,
+      SAMPLE_DEST,
+    ],
   };
 }
 

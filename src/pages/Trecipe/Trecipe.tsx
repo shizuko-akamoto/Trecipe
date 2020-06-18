@@ -7,13 +7,11 @@ import {
   DropResult,
   ResponderProvided,
 } from "react-beautiful-dnd";
-import SampleDestImage from "./sample.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Footer } from "../../components/Footer/Footer";
 import { Header } from "../../components/Header/Header";
 import { ProgressBar } from "../../components/ProgressBar/ProgressBar";
 import {
-  DestinationCategory,
   DestinationModel,
   newTrecipeModel,
   TrecipeModel,
@@ -43,15 +41,6 @@ export interface TrecipeState {
 }
 
 class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
-  private static SAMPLE_DEST: DestinationModel = {
-    id: 0,
-    name: "Destination Name",
-    category: DestinationCategory.Food,
-    address: "City, Country",
-    rating: 3,
-    description: "Some overview on this destination.",
-    imgSrc: SampleDestImage,
-  };
   private static DEFAULT_VISIBLE = 5;
 
   constructor(props: Readonly<TrecipeProps>) {
@@ -112,6 +101,10 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
     return listCopy;
   }
 
+  private onTrecipeEditClick() {
+    // TODO: open edit trecipe popup
+  }
+
   private onDestAddClick() {
     // TODO: open destination add popup
   }
@@ -127,14 +120,22 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
         <div className="tc-header-container">
           <CoverPhoto
             buttons={[
-              <Button key="Edit Trecipe" text="Edit Trecipe" icon="edit" />,
+              <Button
+                key="Edit Trecipe"
+                text="Edit Trecipe"
+                icon="edit"
+                onClick={this.onTrecipeEditClick.bind(this)}
+              />,
             ]}>
             <div className="tc-header-text">
               <div className="tc-header-title">
-                <h1 className="tc-header-name">My Summer Plan</h1>
-                <FontAwesomeIcon className="tc-header-privacy" icon={"lock"} />
+                <h1 className="tc-header-name">{this.props.trecipe.name}</h1>
+                <FontAwesomeIcon
+                  className="tc-header-privacy"
+                  icon={this.props.trecipe.isPrivate ? "lock" : "lock-open"}
+                />
               </div>
-              <h3 className="tc-header-time">Date, Year</h3>
+              <h3 className="tc-header-time">{this.props.trecipe.date}</h3>
             </div>
           </CoverPhoto>
           <svg

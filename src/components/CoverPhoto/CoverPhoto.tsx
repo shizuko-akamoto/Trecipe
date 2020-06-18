@@ -1,4 +1,4 @@
-import React, { ReactNode, ReactNodeArray } from "react";
+import React, { ReactNodeArray } from "react";
 import Background from "../../pages/MyTrecipes/TrecipeCard/BetterDefaultImage.png";
 import PhotoUploader from "../PhotoUploader/PhotoUploader";
 
