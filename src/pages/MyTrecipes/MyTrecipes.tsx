@@ -16,9 +16,12 @@ import { showModal } from "../../redux/Modal/action";
 import TrecipePopup, {
   TrecipePopupType,
 } from "../../components/TrecipePopup/TrecipePopup";
+import { Route, Link, withRouter, RouteComponentProps } from "react-router-dom";
+import Trecipe from "../Trecipe/Trecipe";
 
 type MyTrecipesProps = ReturnType<typeof mapStateToProps> &
-  ReturnType<typeof mapDispatchToProps>;
+  ReturnType<typeof mapDispatchToProps> &
+  RouteComponentProps;
 
 class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
   private static contextFilters: string[] = [
@@ -37,6 +40,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
   };
 
   render() {
+    const { match } = this.props;
     return (
       <div>
         <Header />
@@ -75,7 +79,9 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
             <div className="cards-wrapper">
               {this.props.trecipes.map((trecipe: TrecipeModel) => (
                 <div className="card-item" key={trecipe.id}>
-                  <TrecipeCard {...trecipe} />
+                  <Link className="router-link" to={`/${String(trecipe.id)}`}>
+                    <TrecipeCard {...trecipe} />
+                  </Link>
                 </div>
               ))}
             </div>
@@ -101,4 +107,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyTrecipes);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(MyTrecipes)
+);

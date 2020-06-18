@@ -26,14 +26,16 @@ import { showModal } from "../../redux/Modal/action";
 import TrecipePopup, {
   TrecipePopupType,
 } from "../../components/TrecipePopup/TrecipePopup";
+import { RouteComponentProps } from "react-router";
+import { withRouter } from "react-router-dom";
 
 type TrecipeProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> &
-  TrecipeOwnProps;
+  RouteComponentProps<TrecipeOwnProps>;
 
-export interface TrecipeOwnProps {
-  trecipeId: number;
-}
+type TrecipeOwnProps = {
+  trecipeId: string;
+};
 
 /**
  * Trecipe State
@@ -112,7 +114,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
     this.props.showModal(
       <TrecipePopup
         type={TrecipePopupType.Edit}
-        trecipeId={this.props.trecipeId}
+        trecipeId={parseInt(this.props.match.params.trecipeId)}
       />
     );
   }
@@ -218,9 +220,13 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   }
 }
 
-const mapStateToProps = (state: RootState, ownProps: TrecipeOwnProps) => {
+const mapStateToProps = (
+  state: RootState,
+  ownProps: RouteComponentProps<TrecipeOwnProps>
+) => {
   const trecipeWithId = state.trecipeList.trecipes.find(
-    (trecipe: TrecipeModel) => trecipe.id === ownProps.trecipeId
+    (trecipe: TrecipeModel) =>
+      trecipe.id === parseInt(ownProps.match.params.trecipeId)
   );
   return {
     trecipe: isUndefined(trecipeWithId) ? newTrecipeModel() : trecipeWithId,
@@ -236,4 +242,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Trecipe);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(Trecipe)
+);
