@@ -18,6 +18,7 @@ export enum TrecipePopupType {
   Edit,
   Add,
 }
+
 export type TrecipePopupProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> &
   TrecipePopupOwnProps;
@@ -89,13 +90,15 @@ class TrecipePopup extends React.Component<
         model
       );
       this.props.createNewTrecipe(newTrecipeModal);
-    } else {
+    } else if (!isUndefined(this.props.trecipeId)) {
       this.props.updateTrecipe(this.props.trecipeId, model);
+    } else {
+      // TODO: Handle exception for when trecipeId is not given
     }
-    this.closeAddPopup();
+    this.closeTrecipePopup();
   };
 
-  private closeAddPopup = () => {
+  private closeTrecipePopup = () => {
     this.props.hideModal();
   };
 
@@ -104,7 +107,11 @@ class TrecipePopup extends React.Component<
       <Modal>
         <div className="trecipePopup">
           <div className="contents">
-            <h1 className="title"> New Trecipe </h1>
+            <h1 className="title">
+              {this.props.type === TrecipePopupType.Add
+                ? "New Trecipe"
+                : "Edit Trecipe"}
+            </h1>
             <label htmlFor="name">Trecipe Name *</label>
             <input
               id="name"
@@ -146,7 +153,10 @@ class TrecipePopup extends React.Component<
                   })
                 }
               />
-              <Button text={"Cancel"} onClick={() => this.closeAddPopup()} />
+              <Button
+                text={"Cancel"}
+                onClick={() => this.closeTrecipePopup()}
+              />
             </div>
           </div>
         </div>
@@ -162,11 +172,10 @@ function mapStateToProps(state: RootState, ownProps: TrecipePopupOwnProps) {
       (trecipe: TrecipeModel) => trecipe.id === ownProps.trecipeId
     );
   }
-  const { id, name, description, isPrivate } = isUndefined(trecipeWithId)
-    ? newTrecipeModel()
+  const { name, description, isPrivate } = isUndefined(trecipeWithId)
+    ? { name: "", description: "", isPrivate: true }
     : trecipeWithId;
   return {
-    trecipeId: id,
     name: name,
     description: description,
     isPrivate: isPrivate,

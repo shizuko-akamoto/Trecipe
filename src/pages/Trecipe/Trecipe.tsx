@@ -21,8 +21,15 @@ import { Button } from "../../components/Button/Button";
 import { RootState } from "../../redux";
 import { connect } from "react-redux";
 import { isUndefined } from "lodash";
+import { bindActionCreators, Dispatch } from "redux";
+import { showModal } from "../../redux/Modal/action";
+import TrecipePopup, {
+  TrecipePopupType,
+} from "../../components/TrecipePopup/TrecipePopup";
 
-type TrecipeProps = ReturnType<typeof mapStateToProps> & TrecipeOwnProps;
+type TrecipeProps = ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps> &
+  TrecipeOwnProps;
 
 export interface TrecipeOwnProps {
   trecipeId: number;
@@ -102,7 +109,12 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   }
 
   private onTrecipeEditClick() {
-    // TODO: open edit trecipe popup
+    this.props.showModal(
+      <TrecipePopup
+        type={TrecipePopupType.Edit}
+        trecipeId={this.props.trecipeId}
+      />
+    );
   }
 
   private onDestAddClick() {
@@ -215,4 +227,13 @@ const mapStateToProps = (state: RootState, ownProps: TrecipeOwnProps) => {
   };
 };
 
-export default connect(mapStateToProps)(Trecipe);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return bindActionCreators(
+    {
+      showModal,
+    },
+    dispatch
+  );
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Trecipe);

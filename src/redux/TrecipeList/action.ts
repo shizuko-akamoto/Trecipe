@@ -26,7 +26,10 @@ export const updateTrecipe = (
   idToUpdate: number,
   updatedTC: Partial<TrecipeModel>
 ) => {
-  return typedAction(TrecipeListActionTypes.UPDATE_TRECIPE, updatedTC);
+  return typedAction(TrecipeListActionTypes.UPDATE_TRECIPE, {
+    id: idToUpdate,
+    updated: updatedTC,
+  });
 };
 
 export const loadTrecipes = () => {

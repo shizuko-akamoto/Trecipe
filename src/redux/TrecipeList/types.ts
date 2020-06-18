@@ -120,9 +120,9 @@ export function newDestinationModel(): DestinationModel {
 export function newTrecipeModel(): TrecipeModel {
   return {
     id: getNextUniqueTrecipeId(), // temporary until we get backend to generate unique id
-    name: "",
+    name: "Trecipe Name",
     imageSrc: "url(" + Background + ")",
-    date: "", // maybe change it to Date
+    date: "2020/06/18", // maybe change it to Date
     author: "",
     description: "",
     isPrivate: true,
