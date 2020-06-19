@@ -5,7 +5,8 @@
     font-family: $default-font-family;
     background-color: $tc-white;
     width: 500px;
-    height: 150px;
+    min-height: 150px;
+    height: fit-content;
     box-sizing: border-box;
     border-radius: 8px;
     border: 1px solid $silver-gray;
@@ -58,33 +59,17 @@
     outline: none;
     padding: 0 6px;
   }
-
-  .search-button {
-    font-size: $default-font-size;
-    flex: 0 0;
-    border: none;
-    background: none;
-    cursor: pointer;
-    svg {
-      color: $mid-gray;
-      opacity: 0.6;
-      transition: all 0.2s ease-in-out;
-    }
-    &:hover svg {
-      opacity: 0.9;
-    }
-  }
 }
 
 .results-container {
-  position: absolute;
-  min-width: 18.75rem;
+  height: 100%; 
+  overflow: hidden;
+  overflow-y:scroll;
   font-size: $default-font-size;
   font-family: $default-font-family;
-  box-shadow: rgba($tc-black, 0.12) 0 5px 12px;
-  border-radius: 0 0 8px 8px;
   padding: 1em 0;
   background-color: $tc-white;
+  
   .results-list {
     padding: 0;
     margin: 0;
@@ -100,11 +85,12 @@
     width: max-content;
     text-align: start;
     cursor: pointer;
-    a {
+    .result {
       color: $mid-gray;
       text-decoration: none;
     }
-    a span {
+    .result span {
+
         min-width: 18.10rem;
         display: block;
     }

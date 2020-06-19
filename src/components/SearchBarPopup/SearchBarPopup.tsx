@@ -64,11 +64,8 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
                 {id: 3, name: "Place 3", address: "City, County", isAdded: false }];
             resolve(results);
         })
-            .then((results: Destination[]) => {
-                this.setState({ resultsOpen: true, loading: false, searchKey: searchInput });
-
-                // Todo: this needs to be restored afterwards! 
-                // this.setState({ resultsOpen: true, results: results, loading: false });
+            .then((results: Destination[]) => { 
+                this.setState({ resultsOpen: true, results: results, loading: false });
             })
             .catch((err) => {
                 this.setState({
@@ -80,13 +77,11 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
     }
 
     private addRemovePlace (id: number) {
-        const elementsIndex = this.state.results.findIndex(element => element.id === id);
-        let newResults = [...this.state.results];
-        newResults[elementsIndex] = { ...newResults[elementsIndex], isAdded: !newResults[elementsIndex].isAdded}
-        this.setState({
-            results: newResults,
-            resultsOpen: true
-        })
+        this.setState(state => (
+          {
+              results: state.results.map(dest => dest.id === id ? {...dest, isAdded: !dest.isAdded} : dest),
+          }
+        ));
     }
 
     componentDidMount(): void {
@@ -109,7 +104,6 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
     
     private renderSearchResults() {
         const { results } = this.state;
-        // console.log(this.state.resultsOpen)
         if (this.state.resultsOpen && _.isArray(results) && !_.isEmpty(results)) {
             return (
                 <div className="results-container">
@@ -119,12 +113,11 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
                             // TODO: replace with valid href
                             // TODO:<a href> remount the entire component, fix when connecting to backend.
                             <li className="results-entry" key={result["name"]} onClick={() =>this.addRemovePlace(result["id"])}>
-                                <a href="placeholder">
+                                <div className="result">
                                     <span className="placeName">{result["name"]}</span>
                                     <span className="address">{result["address"]}</span>
-                                </a>
-                                <a href="placeholder">                                    
-                                <FontAwesomeIcon className={result["isAdded"] ? "checked" : "checked icon-hidden"} icon="check" fixedWidth /></a>
+                                </div>                             
+                                <FontAwesomeIcon className={result["isAdded"] ? "checked" : "checked icon-hidden"} icon="check" />
                             </li>
                         ))}
                     </ul>
@@ -146,13 +139,10 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
                                 className="search-input"
                                 onChange={this.handleOnSearchInputChange.bind(this)} 
                             />
-                            <button type="submit" className="search-button">
-                                <FontAwesomeIcon icon="search" fixedWidth />
-                            </button>
                         </form>
-                        {this.renderSearchResults()}
                     </div>
                 </div>
+                {this.renderSearchResults()}
             </div>
         )
     }
