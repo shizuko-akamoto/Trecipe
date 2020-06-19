@@ -1,43 +1,54 @@
 import React from "react";
-import Background from "./DefaultImage.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./trecipeCard.scss";
 import { CardMenu } from "../CardMenu/CardMenu";
+import { MenuItem } from "../../../components/Menu/Menu";
+import { bindActionCreators, Dispatch } from "redux";
+import {
+  createNewTrecipe,
+  deleteTrecipe,
+} from "../../../redux/TrecipeList/action";
+import { connect } from "react-redux";
+import {
+  newTrecipeModel,
+  TrecipeModel,
+} from "../../../redux/TrecipeList/types";
 
-/**
- * Trecipe Props
- * name: Trecipe Title
- * imageSrc: Backgroud Image source
- * author: Owner of the Trecipe
- * isPrivate: true if the Trecipe is a private one, false otherwise
- * totalDest: total number of destination in this Trecipe
- * completedDest: number of destination that has been checked off
- */
-export interface TCProps {
-  name: string;
-  imageSrc?: string;
-  date: string;
-  author: string;
-  description: string;
-  isPrivate: boolean;
-  totalDest: number;
-  completedDest: number;
-}
+type TCProps = TrecipeModel & ReturnType<typeof mapDispatchToProps>;
 
 export class TrecipeCard extends React.Component<TCProps> {
-  public static defaultProps: Partial<TCProps> = {
-    name: "trecipe title",
-    imageSrc: "url(" + Background + ")",
-    date: "2020-01-01", // maybe change it to Date
-    author: "team2",
-    description: "This is a description.",
-    isPrivate: true,
-    totalDest: 0,
-    completedDest: 0,
-  };
+  private cardMenuItems: MenuItem[] = [
+    { id: 1, text: "Edit", icon: "edit", onClick: () => {} },
+    {
+      id: 2,
+      text: "Duplicate",
+      icon: "copy",
+      onClick: () => {
+        this.duplicateTrecipe();
+      },
+    },
+    {
+      id: 3,
+      text: "Delete",
+      icon: ["far", "trash-alt"],
+      onClick: () => {
+        this.deleteTrecipe();
+      },
+    },
+  ];
 
   private calcPercentage = (totalDest: number, completedDest: number) => {
     return totalDest === 0 ? 0 : (completedDest / totalDest) * 100;
+  };
+
+  private duplicateTrecipe = () => {
+    // copying everything except for id
+    const { id, ...copy } = this.props;
+    this.props.createNewTrecipe(Object.assign(newTrecipeModel(), copy));
+  };
+
+  private deleteTrecipe = () => {
+    this.props.deleteTrecipe(this.props.id);
   };
 
   render() {
@@ -45,7 +56,9 @@ export class TrecipeCard extends React.Component<TCProps> {
       <div className="trecipeCard">
         <div
           className="tcHeaderContainer"
-          style={{ backgroundImage: this.props.imageSrc }}>
+          style={{
+            backgroundImage: this.props.imageSrc ? this.props.imageSrc : "none",
+          }}>
           <div className="tcHeader">
             <label className="tcTitle">
               {this.props.name}
@@ -55,7 +68,7 @@ export class TrecipeCard extends React.Component<TCProps> {
               />
             </label>
             <div className="tcEdit">
-              <CardMenu />
+              <CardMenu menuItems={this.cardMenuItems} />
             </div>
           </div>
         </div>
@@ -84,3 +97,15 @@ export class TrecipeCard extends React.Component<TCProps> {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return bindActionCreators(
+    {
+      createNewTrecipe,
+      deleteTrecipe,
+    },
+    dispatch
+  );
+};
+
+export default connect(null, mapDispatchToProps)(TrecipeCard);

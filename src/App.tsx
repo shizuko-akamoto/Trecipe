@@ -1,13 +1,14 @@
 import React from "react";
-import { MyTrecipes } from "./pages/MyTrecipe/MyTrecipes";
 import "./components/fontawesome";
 import "./App.scss";
-import { SearchBarPopup } from "./components/SearchBarPopup/SearchBarPopup";
+import ModalContainer from "./components/Modal/ModalContainer";
+import { Trecipe } from "./pages/Trecipe/Trecipe";
 
 function App() {
   return (
     <div className="App">
-      <SearchBarPopup />
+      <Trecipe />
+      <ModalContainer />
     </div>
   );
 }

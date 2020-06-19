@@ -1,0 +1,57 @@
+@import "../variables";
+.coverPhotoUploadButton {
+  position: absolute;
+  right: 1em;
+  top: 1em;
+}
+
+.coverPhotoWrapper {
+  height: 35%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+}
+
+.coverPhotoImage {
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  margin: auto;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+  }
+  transition: opacity 0.5s;
+}
+
+.coverPhotoImageEnlarged {
+  @extend .coverPhotoImage;
+  position: absolute;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.coverPhotoDialog {
+  position: absolute;
+  height: 200%;
+  width: 80%;
+  top: 10%;
+}
+
+.coverPhotoUploadButton .button {
+  &:hover {
+    background-color: white;
+    color: $mid-gray;
+    border-color: $mid-gray;
+  }
+}
+
+.coverPhotoSelector {
+  display: none;
+}

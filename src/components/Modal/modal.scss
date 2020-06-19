@@ -1,0 +1,48 @@
+@import "../variables.scss";
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.65);
+}
+
+.modal-content {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10000;
+  overflow: auto;
+  text-align: center;
+  padding: 4px;
+  cursor: pointer;
+
+  &:after {
+    vertical-align: middle;
+    display: inline-block;
+    height: 100%;
+    margin-left: -0.05em;
+    content: "";
+  }
+
+  .modal-dialog {
+    position: relative;
+    outline: 0;
+    width: auto;
+    height: auto;
+    display: inline-block;
+    vertical-align: middle;
+    box-sizing: border-box;
+    cursor: default;
+    border: 1px solid $silver-gray;
+    border-radius: 8px;
+    background-color: $tc-white;
+  }
+}
