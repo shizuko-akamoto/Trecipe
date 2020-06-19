@@ -8,8 +8,6 @@ import {
   ResponderProvided,
 } from "react-beautiful-dnd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Footer } from "../../components/Footer/Footer";
-import { Header } from "../../components/Header/Header";
 import { ProgressBar } from "../../components/ProgressBar/ProgressBar";
 import {
   DestinationModel,
@@ -28,6 +26,8 @@ import TrecipePopup, {
 } from "../../components/TrecipePopup/TrecipePopup";
 import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
+import { updateTrecipe } from "../../redux/TrecipeList/action";
+import { intersection } from "lodash";
 
 type TrecipeProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> &
@@ -83,7 +83,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   private canExpand() {
     return (
       !this.state.isInEdit &&
-      this.state.visibleTo < this.state.destinations.length
+      this.state.visibleTo < this.props.trecipe.destinations.length
     );
   }
 
@@ -124,14 +124,41 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   }
 
   private onDestEditClick() {
+    if (this.state.isInEdit) {
+      this.props.updateTrecipe(this.props.trecipe.id, {
+        destinations: this.state.destinations,
+        completedDests: new Set(
+          intersection(
+            Array.from(this.props.trecipe.completedDests),
+            this.state.destinations.map((dest) => dest.id)
+          )
+        ),
+      });
+    } else {
+      this.setState({ destinations: this.props.trecipe.destinations });
+    }
     this.toggleEdit();
+  }
+
+  private onDestDeleteClick(destId: number) {
+    if (this.state.isInEdit) {
+      this.setState((state) => ({
+        destinations: state.destinations.filter((dest) => dest.id !== destId),
+      }));
+    }
+  }
+
+  private onDestCompleteClick(id: number) {
+    const trecipe: TrecipeModel = this.props.trecipe;
+    this.props.updateTrecipe(trecipe.id, {
+      completedDests: trecipe.completedDests.add(id),
+    });
   }
 
   render() {
     const trecipe: TrecipeModel = this.props.trecipe;
     return (
       <div>
-        <Header />
         <div className="tc-header-container">
           <CoverPhoto
             buttons={[
@@ -163,8 +190,9 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
         </div>
         <div className="content-wrapper">
           <div className="content">
+            <p>{trecipe.description}</p>
             <span className="title-with-btns">
-              <h1 className="page-title">Places</h1>
+              <h1 className="dest-title">Places</h1>
               <span className="dest-edit-btn-wrapper">
                 <Button text="Add" onClick={this.onDestAddClick.bind(this)} />
                 <Button
@@ -174,8 +202,8 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
               </span>
             </span>
             <ProgressBar
-              total={trecipe.totalDest}
-              completed={trecipe.completedDest}
+              total={trecipe.destinations.length}
+              completed={trecipe.completedDests.size}
               showText={true}
               barStyle={{ height: "1rem" }}
             />
@@ -191,8 +219,10 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                         <DestinationCard
                           key={dest.id}
                           destModel={dest}
+                          isCompleted={trecipe.completedDests.has(dest.id)}
                           index={index}
-                          onClickDelete={() => {}}
+                          onClickDelete={this.onDestDeleteClick.bind(this)}
+                          onClickComplete={this.onDestCompleteClick.bind(this)}
                           isInEdit={this.state.isInEdit}
                         />
                       ))}
@@ -213,7 +243,6 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
             <h1 className="page-title">See places on the map</h1>
             <div className="trecipe-map" />
           </div>
-          <Footer />
         </div>
       </div>
     );
@@ -237,6 +266,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
     {
       showModal,
+      updateTrecipe,
     },
     dispatch
   );

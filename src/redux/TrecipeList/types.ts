@@ -38,9 +38,8 @@ export interface TrecipeModel {
   author: string;
   description: string;
   isPrivate: boolean;
-  totalDest: number;
-  completedDest: number;
   destinations: Array<DestinationModel>;
+  completedDests: Set<number>;
 }
 
 /**
@@ -126,9 +125,8 @@ export function newTrecipeModel(): TrecipeModel {
     author: "",
     description: "",
     isPrivate: true,
-    totalDest: 0,
-    completedDest: 0,
     destinations: [0, 1, 2, 3, 4, 5].map(() => newDestinationModel()),
+    completedDests: new Set<number>(),
   };
 }
 
@@ -145,4 +143,5 @@ export enum TrecipeListActionTypes {
   CREATE_NEW_TRECIPE = "@trecipeList/CREATE_NEW_TRECIPE",
   DELETE_TRECIPE = "@trecipeList/DELETE_TRECIPE",
   UPDATE_TRECIPE = "@trecipeList/UPDATE_TRECIPE",
+  LOAD_TRECIPE = "@trecipeList/LOAD_TRECIPE",
 }

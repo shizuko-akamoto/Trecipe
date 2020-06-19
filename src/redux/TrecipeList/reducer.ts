@@ -29,6 +29,10 @@ export function trecipeListReducer(
             : tc;
         }),
       };
+    case TrecipeListActionTypes.LOAD_TRECIPE:
+      return {
+        trecipes: action.payload.trecipes,
+      };
     default:
       return state;
   }

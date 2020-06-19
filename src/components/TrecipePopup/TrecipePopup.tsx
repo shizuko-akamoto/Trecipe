@@ -167,7 +167,10 @@ class TrecipePopup extends React.Component<
 
 function mapStateToProps(state: RootState, ownProps: TrecipePopupOwnProps) {
   let trecipeWithId = undefined;
-  if (ownProps.type === TrecipePopupType.Edit && ownProps.trecipeId) {
+  if (
+    ownProps.type === TrecipePopupType.Edit &&
+    !isUndefined(ownProps.trecipeId)
+  ) {
     trecipeWithId = state.trecipeList.trecipes.find(
       (trecipe: TrecipeModel) => trecipe.id === ownProps.trecipeId
     );

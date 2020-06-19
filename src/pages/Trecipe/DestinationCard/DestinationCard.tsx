@@ -16,29 +16,13 @@ import { DestinationModel, getIcon } from "../../../redux/TrecipeList/types";
 export interface DCProps {
   index: number;
   destModel: DestinationModel;
-  onClickDelete: (e: React.MouseEvent) => void;
+  isCompleted: boolean;
+  onClickDelete: (destId: number) => void;
+  onClickComplete: (destId: number, isCompleted: boolean) => void;
   isInEdit: boolean;
 }
 
-/**
- * DCState
- * isCompleted: true if destination is checked off, false otherwise
- */
-export interface DCState {
-  isCompleted: boolean;
-}
-
-export class DestinationCard extends React.Component<DCProps, DCState> {
-  state: Readonly<DCState> = {
-    isCompleted: false,
-  };
-
-  private handleCompletedCheck() {
-    this.setState((state) => ({
-      isCompleted: !state.isCompleted,
-    }));
-  }
-
+export class DestinationCard extends React.Component<DCProps> {
   render() {
     return (
       <Draggable
@@ -74,8 +58,13 @@ export class DestinationCard extends React.Component<DCProps, DCState> {
                   <input
                     type="checkbox"
                     id={this.props.destModel.id + "-completed"}
-                    onChange={this.handleCompletedCheck.bind(this)}
-                    checked={this.state.isCompleted}
+                    onChange={() =>
+                      this.props.onClickComplete(
+                        this.props.destModel.id,
+                        !this.props.isCompleted
+                      )
+                    }
+                    checked={this.props.isCompleted}
                   />
                   <label
                     htmlFor={this.props.destModel.id + "-completed"}
@@ -95,7 +84,9 @@ export class DestinationCard extends React.Component<DCProps, DCState> {
                   <button
                     className="edit-option"
                     id="dest-delete"
-                    onClick={(e) => this.props.onClickDelete(e)}>
+                    onClick={() =>
+                      this.props.onClickDelete(this.props.destModel.id)
+                    }>
                     <FontAwesomeIcon icon={["far", "trash-alt"]} />
                   </button>
                 </div>

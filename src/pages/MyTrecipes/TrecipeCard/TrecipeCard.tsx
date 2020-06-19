@@ -79,8 +79,8 @@ class TrecipeCard extends React.Component<TCProps> {
           </div>
         </div>
         <ProgressBar
-          total={this.props.totalDest}
-          completed={this.props.completedDest}
+          total={this.props.destinations.length}
+          completed={this.props.completedDests.size}
           showText={false}
           barStyle={{ borderRadius: "0 0 8px 8px" }}
         />

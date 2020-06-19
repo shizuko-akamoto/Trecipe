@@ -32,15 +32,24 @@ export const updateTrecipe = (
   });
 };
 
-export const loadTrecipes = () => {
+export const loadTrecipes = (trecipes: Array<TrecipeModel>) => {
+  return typedAction(TrecipeListActionTypes.LOAD_TRECIPE, {
+    trecipes: trecipes,
+  });
+};
+
+export const reloadTrecipes = () => {
   // Pretending to wait for loading by setTimeout
   return (dispatch: Dispatch<AnyAction>) => {
     setTimeout(() => {
-      mockTrecipeList.forEach((tc) => dispatch(createNewTrecipe(tc)));
+      dispatch(loadTrecipes(mockTrecipeList));
     }, 1000);
   };
 };
 
 export type TrecipeListAction = ReturnType<
-  typeof createNewTrecipe | typeof deleteTrecipe | typeof updateTrecipe
+  | typeof createNewTrecipe
+  | typeof deleteTrecipe
+  | typeof updateTrecipe
+  | typeof loadTrecipes
 >;
