@@ -37,6 +37,8 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
     HTMLDivElement
   >();
 
+  private timer: number = 0;
+
   public readonly state = {
     filter: SearchFilter.Trecipe,
     searchKey: "",
@@ -71,9 +73,12 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
     if (_.isEmpty(searchKey)) {
       this.setState({ searchKey: searchKey, results: [], errMsg: "" });
     } else {
-      this.setState({ searchKey: searchKey, loading: true, errMsg: "" }, () =>
-        this.fetchSearchResults(searchKey, this.state.filter)
-      );
+      if (this.timer) clearTimeout(this.timer);
+      this.timer = window.setTimeout(() => {
+        this.setState({ searchKey: searchKey, loading: true, errMsg: "" }, () =>
+          this.fetchSearchResults(searchKey, this.state.filter)
+        );
+      }, 500);
     }
   }
 
@@ -85,13 +90,34 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
       /** TODO: Modify logic here to make HTTP call to backend for fetching search results.
        *  Right now, it just returns dummy list of strings based on current search filter selected.
        */
-      let result: string[] = [];
+      let resultList: string[] = [];
+
       if (_.isEqual(searchFilter, SearchFilter.Trecipe)) {
-        result = ["Trecipe1", "Trecipe2", "Trecipe3"];
+        resultList = ["Trecipe1", "Trecipe2", "Trecipe3"];
+        resolve(resultList);
       } else {
-        result = ["Place1", "Place2", "Place3"];
+        let map = new google.maps.Map(
+          document.getElementById("map") as HTMLElement,
+          { center: { lat: 49.246292, lng: -123.116226 }, zoom: 15 }
+        );
+
+        let request = {
+          query: searchKey,
+          fields: ["name", "geometry", "formatted_address", "types"],
+        };
+
+        let service = new google.maps.places.PlacesService(map);
+
+        service.findPlaceFromQuery(request, function (results, status) {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            for (let result of results) {
+              resultList.push(result.name);
+            }
+
+            resolve(resultList);
+          }
+        });
       }
-      resolve(result);
     })
       .then((results: string[]) => {
         this.setState({ resultsOpen: true, results: results, loading: false });
