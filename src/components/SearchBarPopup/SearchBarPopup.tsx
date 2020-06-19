@@ -110,8 +110,6 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
                     <ul className="results-list">
                         {results.map((result) => (
                             // temporarily using result as key. Change to some id later
-                            // TODO: replace with valid href
-                            // TODO:<a href> remount the entire component, fix when connecting to backend.
                             <li className="results-entry" key={result["name"]} onClick={() =>this.addRemovePlace(result["id"])}>
                                 <div className="result">
                                     <span className="placeName">{result["name"]}</span>
