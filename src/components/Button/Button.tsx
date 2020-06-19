@@ -44,7 +44,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
 
   render() {
     return (
-      <div>
+      <div className="button-wrapper">
         <button
           className={
             this.props.text === "" && !isUndefined(this.props.icon)
