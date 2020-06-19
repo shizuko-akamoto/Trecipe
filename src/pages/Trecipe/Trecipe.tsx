@@ -28,6 +28,7 @@ import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
 import { updateTrecipe } from "../../redux/TrecipeList/action";
 import { intersection } from "lodash";
+import { SearchBarPopup } from "../../components/SearchBarPopup/SearchBarPopup";
 
 type TrecipeProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> &
@@ -120,7 +121,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   }
 
   private onDestAddClick() {
-    // TODO: open destination add popup
+    this.props.showModal(<SearchBarPopup />);
   }
 
   private onDestEditClick() {

@@ -2,114 +2,87 @@
 @import "../mixins.scss";
 
 .searchBarPopup {
-    font-family: $default-font-family;
-    background-color: $tc-white;
-    width: 500px;
-    min-height: 150px;
-    height: fit-content;
-    box-sizing: border-box;
-    border-radius: 8px;
-    border: 1px solid $silver-gray;
-    padding: 15px 35px ;
-}
+  font-family: $default-font-family;
+  background-color: $tc-white;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid $silver-gray;
+  padding: 15px 35px;
+  min-width: 31.25rem;
 
-
-.title {
-  @include title-border-bottom($powder-blue, $crayola-yellow);
-  width: fit-content;
-  font-style: normal;
-  font-size: $default-font-size;
-  color: $indigo-dye;
-}
-
-.contents {
+  .contents {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-}
 
-.search-bar-wrapper {
-  width: 100%;
-  min-width: 18.75rem;
-}
-
-.search-bar {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  height: 1.5rem;
-  border-radius: 8px;
-  border: solid 1px $silver-gray;
-  background-color: $tc-white;
-  padding: 0.3rem 0.5rem;
-
-  &:focus-within {
-    border-color: $mid-gray;
+    .title {
+      @include title-border-bottom($powder-blue, $crayola-yellow);
+      width: fit-content;
+      font-style: normal;
+      font-size: $default-font-size;
+      color: $indigo-dye;
+    }
   }
 
   .search-input {
-    flex-grow: 1;
+    line-height: 2rem;
     font-size: $input-font-size;
     font-family: $default-font-family;
-    background: none;
+    background-color: $tc-white;
     color: $mid-gray;
-    border: none;
+    border-radius: 8px;
+    border: solid 1px $silver-gray;
     outline: none;
-    padding: 0 6px;
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.5rem;
+
+    &:focus-within {
+      border-color: $mid-gray;
+    }
   }
-}
 
-.results-container {
-  height: 100%; 
-  overflow: hidden;
-  overflow-y:scroll;
-  font-size: $default-font-size;
-  font-family: $default-font-family;
-  padding: 1em 0;
-  background-color: $tc-white;
-  
-  .results-list {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-  
-  .results-entry {
-    display: flex;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 1rem;
-    height: 3.2em;
-    width: max-content;
-    text-align: start;
-    cursor: pointer;
-    .result {
-      color: $mid-gray;
-      text-decoration: none;
-    }
-    .result span {
+  & .results-container {
+    height: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    font-size: $default-font-size;
+    font-family: $default-font-family;
+    padding: 1em 0;
+    background-color: $tc-white;
 
-        min-width: 18.10rem;
-        display: block;
-    }
-    .address {
-        font-size: 0.8rem;
-        color: $silver-gray;
+    .results-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
     }
 
-    .checked {
-        float: right;
-        position: relative;
-    }
-    .icon-hidden {
-        opacity: 0%;
-    }
+    .results-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      overflow: hidden;
+      padding: 1rem 0.5rem;
+      text-align: start;
+      cursor: pointer;
 
-    &:hover {
-      transition: background-color 0.3s ease;
-      background-color: rgba($indigo-dye, 0.04);
+      .result {
+        color: $mid-gray;
+        text-decoration: none;
+
+        & > * {
+          display: block;
+        }
+
+        .address {
+          font-size: 0.8rem;
+          color: $silver-gray;
+        }
+      }
+
+      &:hover {
+        transition: background-color 0.3s ease;
+        background-color: rgba($indigo-dye, 0.04);
+      }
     }
   }
 }
