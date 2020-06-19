@@ -48,6 +48,11 @@ class TrecipeCard extends React.Component<TCProps> {
     this.props.deleteTrecipe(this.props.id);
   };
 
+  private onTCEditClick(e: React.MouseEvent) {
+    // needed to prevent link redirection to Trecipe page on TC click
+    e.preventDefault();
+  }
+
   render() {
     return (
       <div className="trecipeCard">
@@ -64,7 +69,7 @@ class TrecipeCard extends React.Component<TCProps> {
                 className="tcPrivacy"
               />
             </label>
-            <div className="tcEdit">
+            <div className="tcEdit" onClick={(e) => this.onTCEditClick(e)}>
               <CardMenu menuItems={this.cardMenuItems} />
             </div>
           </div>

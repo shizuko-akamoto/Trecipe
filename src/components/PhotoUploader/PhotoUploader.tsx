@@ -25,7 +25,7 @@ class PhotoUploader extends React.Component<PhotoUploaderProps> {
 
   render() {
     return (
-      <div className="coverPhotoUploadButton">
+      <div>
         <input
           className="coverPhotoSelector"
           type="file"

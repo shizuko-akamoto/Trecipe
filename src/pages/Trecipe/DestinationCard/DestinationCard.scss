@@ -71,6 +71,7 @@
 
       &:checked + .check-mark {
         color: rgba($powder-blue, 1);
+        cursor: default;
       }
     }
   }
