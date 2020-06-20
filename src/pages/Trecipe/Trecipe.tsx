@@ -29,6 +29,7 @@ import { withRouter } from "react-router-dom";
 import { updateTrecipe } from "../../redux/TrecipeList/action";
 import { intersection } from "lodash";
 import { SearchBarPopup } from "../../components/SearchBarPopup/SearchBarPopup";
+import { StaticMap } from "../../components/Map/StaticMap";
 
 type TrecipeProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> &
@@ -52,6 +53,7 @@ export interface TrecipeState {
 
 class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   private static DEFAULT_VISIBLE = 5;
+  private addDestButtonRef: React.RefObject<Button> = React.createRef();
 
   constructor(props: Readonly<TrecipeProps>) {
     super(props);
@@ -138,6 +140,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
     } else {
       this.setState({ destinations: this.props.trecipe.destinations });
     }
+    this.addDestButtonRef.current?.toggle();
     this.toggleEdit();
   }
 
@@ -193,9 +196,13 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
           <div className="content">
             <p>{trecipe.description}</p>
             <span className="title-with-btns">
-              <h1 className="dest-title">Places</h1>
+              <h1 className="trecipe-page-title">Places</h1>
               <span className="dest-edit-btn-wrapper">
-                <Button text="Add" onClick={this.onDestAddClick.bind(this)} />
+                <Button
+                  text="Add"
+                  onClick={this.onDestAddClick.bind(this)}
+                  ref={this.addDestButtonRef}
+                />
                 <Button
                   text={this.state.isInEdit ? "Done" : "Edit"}
                   onClick={this.onDestEditClick.bind(this)}
@@ -241,8 +248,8 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                 </button>
               )}
             </div>
-            <h1 className="page-title">See places on the map</h1>
-            <div className="trecipe-map" />
+            <h1 className="trecipe-page-title">See places on the map</h1>
+            <StaticMap />
           </div>
         </div>
       </div>

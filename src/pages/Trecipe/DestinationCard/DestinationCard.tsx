@@ -73,24 +73,25 @@ export class DestinationCard extends React.Component<DCProps> {
                   </label>
                 </div>
               )}
-              {this.props.isInEdit && (
-                <div className="edit-options-wrapper">
-                  <span
-                    {...provided.dragHandleProps}
-                    className="edit-option"
-                    id="dest-reorder">
-                    <FontAwesomeIcon icon="bars" />
-                  </span>
-                  <button
-                    className="edit-option"
-                    id="dest-delete"
-                    onClick={() =>
-                      this.props.onClickDelete(this.props.destModel.id)
-                    }>
-                    <FontAwesomeIcon icon={["far", "trash-alt"]} />
-                  </button>
-                </div>
-              )}
+              <div
+                className={`edit-options-wrapper ${
+                  this.props.isInEdit ? "in-edit" : ""
+                }`}>
+                <span
+                  {...provided.dragHandleProps}
+                  className="edit-option"
+                  id="dest-reorder">
+                  <FontAwesomeIcon icon="bars" />
+                </span>
+                <button
+                  className="edit-option"
+                  id="dest-delete"
+                  onClick={() =>
+                    this.props.onClickDelete(this.props.destModel.id)
+                  }>
+                  <FontAwesomeIcon icon={["far", "trash-alt"]} />
+                </button>
+              </div>
             </div>
           </div>
         )}

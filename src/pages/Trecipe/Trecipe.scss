@@ -109,7 +109,7 @@
     }
   }
 
-  .dest-title {
+  .trecipe-page-title {
     @include title-border-bottom($powder-blue, $crayola-yellow);
     font-size: $title-font-size;
   }
@@ -120,7 +120,6 @@
 
     & > * {
       margin-bottom: 1rem;
-      //animation: fade-in 0.4s ease;
     }
   }
 

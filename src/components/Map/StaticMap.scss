@@ -2,8 +2,6 @@
 
 .static-map-wrapper {
   display: flex;
-  // TODO: maybe remove this and let parent element decide the size
-  height: 31.25rem;
 }
 
 .static-map-image {
@@ -23,6 +21,7 @@
   z-index: 100;
   transition: background-color 0.5s;
   cursor: pointer;
+  border-radius: 8px;
 
   .button-wrapper {
     height: 100%;

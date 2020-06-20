@@ -129,7 +129,10 @@ export class StaticMap extends Component<StaticMapProps> {
     return (
       <div className="static-map-wrapper">
         <div className="static-map-image">
-          <Image src={this.getMapUrl(this.props)} />
+          <Image
+            src={this.getMapUrl(this.props)}
+            imgStyle={{ borderRadius: "8px" }}
+          />
         </div>
         <div
           className="static-map-overlay"

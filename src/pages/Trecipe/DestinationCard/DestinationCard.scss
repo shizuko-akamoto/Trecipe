@@ -1,6 +1,7 @@
 @import "../../../components/variables";
 
 .dest-card-wrapper {
+  position: relative;
   width: 100%;
   height: 12.5rem;
   display: flex;
@@ -9,6 +10,7 @@
   border-radius: 8px;
   background-color: $tc-white;
   font-family: $default-font-family;
+  overflow: hidden;
 
   .dest-img {
     flex: 0 1 12.5rem;
@@ -77,8 +79,14 @@
   }
 
   .edit-options-wrapper {
+    position: absolute;
+    height: 100%;
+    width: 15%;
+    right: 0;
     display: flex;
-    flex: 0 1 12.5rem;
+    // hidden by default
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out;
 
     .edit-option {
       flex-basis: 50%;
@@ -86,7 +94,7 @@
       color: $tc-white;
       font-size: $default-font-size;
       filter: brightness(0.95);
-      transition: all 0.2s ease-out;
+      transition: filter 0.2s ease-out;
 
       &:hover {
         filter: none;
@@ -104,6 +112,10 @@
         cursor: pointer;
         border-radius: 0 8px 8px 0;
       }
+    }
+
+    &.in-edit {
+      transform: translateX(0);
     }
   }
 }
