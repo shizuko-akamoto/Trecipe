@@ -1,6 +1,6 @@
-import "./userIcon.scss";
-import SampleAvatar from "./sample.png";
+import "./addUser.scss";
 import React, { MouseEvent, Component } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export interface userIconProps {
   imageSource: string;
