@@ -1,4 +1,4 @@
-import React, { MouseEvent, Component } from "react";
+import React, { MouseEvent, Component, RefObject } from "react";
 import { Image } from "../Image/Image";
 import { Button } from "../Button/Button";
 import { MAP_KEY } from "./constant";
@@ -27,20 +27,26 @@ export interface Marker {
 
 /**
  * StaticMapProps
- * mapWidth: width of the map (maximum is 640px)
- * mapHeight: height of the map  (maximum is 640px)
  * mapScale: scale of the map (1 or 2), 2 will double the resolution
  * markers: array of Marker with latitude and longitude
  * markerSize: the size of the markers on the map ("tiny" | "small" | "mid")
  * Refer to Google static map API for more information
  */
 export interface StaticMapProps {
-  mapWidth: number;
-  mapHeight: number;
   mapScale: 1 | 2;
   markers: Array<Marker>;
   markerSize: "tiny" | "small" | "mid";
   onClick: (e: MouseEvent<HTMLElement>) => void;
+}
+
+/**
+ * StaticMapState
+ * mapWidth: width of the map
+ * mapHeight: height of the map
+ */
+export interface StaticMapState {
+  mapWidth: number;
+  mapHeight: number;
 }
 
 // TODO: Remove this before merging into master
@@ -51,10 +57,8 @@ const SAMPLE_LAT_LONG: Array<Marker> = [
   { lat: 49.28737, long: -123.12911 },
 ];
 
-export class StaticMap extends Component<StaticMapProps> {
+export class StaticMap extends Component<StaticMapProps, StaticMapState> {
   public static defaultProps: StaticMapProps = {
-    mapWidth: 640,
-    mapHeight: 224,
     mapScale: 2,
     onClick: () => {},
     markerSize: "small",
@@ -62,14 +66,66 @@ export class StaticMap extends Component<StaticMapProps> {
     markers: SAMPLE_LAT_LONG,
   };
 
+  public readonly state = {
+    mapWidth: 640,
+    mapHeight: 640,
+  };
+
+  /**
+   * mapRef: a reference of the map container
+   * timer: amount of time left before calling another function
+   * timeInterval: time between each function call
+   */
+  private mapRef: RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
+  private timer: any = null;
+  private timeInterval = 100;
+
+  componentDidMount() {
+    this.setMapSize();
+    window.addEventListener("resize", this.startTimer.bind(this));
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.startTimer.bind(this));
+  }
+
+  // Using timer to reduce the amount of function call on window resize
+  private startTimer() {
+    clearTimeout(this.timer);
+    this.timer = setTimeout(this.setMapSize.bind(this), this.timeInterval);
+  }
+
+  private setMapSize() {
+    if (this.mapRef.current) {
+      this.setState({
+        mapWidth: this.mapRef.current.clientWidth,
+        mapHeight: this.mapRef.current.clientHeight,
+      });
+    }
+  }
+
+  private getMapSize(): [number, number] {
+    const width = this.state.mapWidth;
+    const height = this.state.mapHeight;
+
+    // Maximun map size is 640, scale it down if it is larger than 640
+    if (height > 640 || width > 640) {
+      const ratio = width / height;
+      return width > height ? [640, 640 / ratio] : [640 * ratio, 640];
+    } else {
+      return [width, height];
+    }
+  }
+
   /**
    * Generate the google map API URL based on the map props and location of markers
    */
   private getMapUrl(mapProps: StaticMapProps): string {
     const baseUrl = new URL("https://maps.googleapis.com/maps/api/staticmap");
 
+    const mapSize = this.getMapSize();
     const urlParams = new URLSearchParams({
-      size: `${mapProps.mapWidth}x${mapProps.mapHeight}`,
+      size: `${Math.round(mapSize[0])}x${Math.round(mapSize[1])}`,
       scale: `${mapProps.mapScale}`,
       key: `${MAP_KEY}`,
     });
@@ -127,7 +183,7 @@ export class StaticMap extends Component<StaticMapProps> {
 
   render() {
     return (
-      <div className="static-map-wrapper">
+      <div className="static-map-wrapper" ref={this.mapRef}>
         <div className="static-map-image">
           <Image
             src={this.getMapUrl(this.props)}
