@@ -1,4 +1,4 @@
-import Background from "../../pages/MyTrecipes/TrecipeCard/DefaultImage.png";
+import Background from "../../pages/MyTrecipes/TrecipeCard/BetterDefaultImage.png";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { UnreachableCaseException } from "../../exceptions/Exceptions";
 import SampleDestImage from "../../pages/Trecipe/sample.jpg";
@@ -104,7 +104,7 @@ export type RatingBarProps = {
 export function newDestinationModel(): DestinationModel {
   return {
     id: getNextUniqueDestinationId(),
-    name: "Destination Name",
+    name: `Destination ${nextUniqueDestinationId}`,
     category: DestinationCategory.Food,
     address: "City, Country",
     rating: 3,
@@ -119,11 +119,11 @@ export function newDestinationModel(): DestinationModel {
 export function newTrecipeModel(): TrecipeModel {
   return {
     id: getNextUniqueTrecipeId(), // temporary until we get backend to generate unique id
-    name: "Trecipe Name",
+    name: `Trecipe ${nextUniqueTrecipeId}`,
     imageSrc: "url(" + Background + ")",
     date: "2020/06/18", // maybe change it to Date
-    author: "",
-    description: "",
+    author: "team2",
+    description: "Some description about the trecipe.",
     isPrivate: true,
     destinations: [0, 1, 2, 3, 4, 5].map(() => newDestinationModel()),
     completedDests: new Set<number>(),

@@ -14,12 +14,23 @@ import {
   TrecipeModel,
 } from "../../../redux/TrecipeList/types";
 import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
+import { showModal } from "../../../redux/Modal/action";
+import TrecipePopup, {
+  TrecipePopupType,
+} from "../../../components/TrecipePopup/TrecipePopup";
 
 type TCProps = TrecipeModel & ReturnType<typeof mapDispatchToProps>;
 
 class TrecipeCard extends React.Component<TCProps> {
   private cardMenuItems: MenuItem[] = [
-    { id: 1, text: "Edit", icon: "edit", onClick: () => {} },
+    {
+      id: 1,
+      text: "Edit",
+      icon: "edit",
+      onClick: () => {
+        this.showTCEditPopup();
+      },
+    },
     {
       id: 2,
       text: "Duplicate",
@@ -46,6 +57,12 @@ class TrecipeCard extends React.Component<TCProps> {
 
   private deleteTrecipe = () => {
     this.props.deleteTrecipe(this.props.id);
+  };
+
+  private showTCEditPopup = () => {
+    this.props.showModal(
+      <TrecipePopup type={TrecipePopupType.Edit} trecipeId={this.props.id} />
+    );
   };
 
   private onTCEditClick(e: React.MouseEvent) {
@@ -99,6 +116,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     {
       createNewTrecipe,
       deleteTrecipe,
+      showModal,
     },
     dispatch
   );
