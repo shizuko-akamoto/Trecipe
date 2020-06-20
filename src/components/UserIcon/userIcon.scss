@@ -1,0 +1,10 @@
+@import "../variables.scss";
+@import "../mixins.scss";
+
+.avatar {
+  background-color: $tc-white;
+  border: 3px solid $powder-blue;
+  border-radius: 8px;
+  height: 60px;
+  width: 60px;
+}

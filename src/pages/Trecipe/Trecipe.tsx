@@ -30,6 +30,7 @@ import { updateTrecipe } from "../../redux/TrecipeList/action";
 import { intersection } from "lodash";
 import { SearchBarPopup } from "../../components/SearchBarPopup/SearchBarPopup";
 import { StaticMap } from "../../components/Map/StaticMap";
+import { UserIcon } from "../../components/UserIcon/userIcon";
 
 type TrecipeProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> &
@@ -194,6 +195,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
         </div>
         <div className="content-wrapper">
           <div className="content">
+            <UserIcon />
             <p>{trecipe.description}</p>
             <span className="title-with-btns">
               <h1 className="trecipe-page-title">Places</h1>
