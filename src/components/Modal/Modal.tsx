@@ -14,7 +14,7 @@ export interface ComponentProps {
 
 export type ModalProps = ComponentProps & ReturnType<typeof mapDispatchToProps>;
 
-export class Modal extends React.Component<ModalProps, {}> {
+class Modal extends React.Component<ModalProps, {}> {
   static defaultProps = {
     onClose: undefined,
   };
