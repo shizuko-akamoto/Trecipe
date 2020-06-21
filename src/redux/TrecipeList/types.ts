@@ -3,9 +3,9 @@ import Background from "../../pages/MyTrecipes/TrecipeCard/DefaultImage.png";
 /**
  * TODO: Remove this when we can generate ids in the backend
  */
-let nextUniqueId: number = 0;
-const getNextUniqueId = () => {
-  return nextUniqueId++;
+let nextUniqueTrecipeId: number = 0;
+const getNextUniqueTrecipeId = () => {
+  return nextUniqueTrecipeId++;
 };
 
 /**
@@ -19,7 +19,7 @@ const getNextUniqueId = () => {
  * completedDest: number of destination that has been checked off
  */
 export interface TrecipeModel {
-  id: number;
+  id: string;
   name: string;
   imageSrc: string | null;
   date: string;
@@ -35,8 +35,8 @@ export interface TrecipeModel {
  */
 export function newTrecipeModel(): TrecipeModel {
   return {
-    id: getNextUniqueId(), // temporary until we get backend to generate unique id
-    name: "trecipe title",
+    id: String(getNextUniqueTrecipeId()), // temporary until we get backend to generate unique id
+    name: `Trecipe ${nextUniqueTrecipeId}`,
     imageSrc: "url(" + Background + ")",
     date: "2020-01-01", // maybe change it to Date
     author: "team2",
@@ -60,4 +60,5 @@ export enum TrecipeListActionTypes {
   CREATE_NEW_TRECIPE = "@trecipeList/CREATE_NEW_TRECIPE",
   DELETE_TRECIPE = "@trecipeList/DELETE_TRECIPE",
   UPDATE_TRECIPE = "@trecipeList/UPDATE_TRECIPE",
+  LOAD_TRECIPE = "@trecipeList/LOAD_TRECIPE",
 }

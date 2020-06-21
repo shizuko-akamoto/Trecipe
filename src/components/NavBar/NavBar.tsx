@@ -1,12 +1,13 @@
 import React from "react";
 import "./navBar.scss";
+import { Link } from "react-router-dom";
 
-export interface Link {
+export interface LinkProps {
   text: string;
-  url: string;
+  path: string;
 }
 export interface NavigationProps {
-  links: Array<Link>;
+  links: Array<LinkProps>;
 }
 
 export class NavBar extends React.Component<NavigationProps, {}> {
@@ -14,9 +15,9 @@ export class NavBar extends React.Component<NavigationProps, {}> {
     return (
       <nav className="nav-bar">
         {this.props.links.map((link) => (
-          <a className="nav-item" href={link.url} key={link.text}>
+          <Link className="nav-item" to={{ pathname: link.path }} key={link.text}>
             {link.text}
-          </a>
+          </Link>
         ))}
       </nav>
     );
