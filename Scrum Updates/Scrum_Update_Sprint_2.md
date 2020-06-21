@@ -26,8 +26,11 @@
 ### z8c1b
 
 1. What you’ve worked on in the previous two weeks
+- Fist part of the sprint on producing mock ups for individual Trecipe page, and set up redux store to maintain Trecipe list and a Popup dialog show/hide state. Then, worked on implementing each Destination card and finally integrating all components to build the Trecipe page.
 2. What you’ll be working on in the next two weeks
+- Mock up for Map view of all destinations, implementing destination cards in the map view, and hooking up backend CRUD endpoints to frontend.
 3. Where you might have gotten stuck during the last two weeks
+- Setting up redux with typescript was a bit of a learning curve, where I had to define a lot of interfaces and some generic types to get the compiler happy. But after the initial setup, the rest came pretty straightforwardedly.
 
 ### k7y0b
 1. What you’ve worked on in the previous two weeks
