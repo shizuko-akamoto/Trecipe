@@ -1,7 +1,6 @@
 import React, { MouseEvent, Component, RefObject } from "react";
 import { Image } from "../Image/Image";
 import { Button } from "../Button/Button";
-import { MAP_KEY } from "./constant";
 import "./StaticMap.scss";
 
 /**
@@ -130,7 +129,7 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
     const urlParams = new URLSearchParams({
       size: `${Math.round(mapSize[0])}x${Math.round(mapSize[1])}`,
       scale: `${mapProps.mapScale}`,
-      key: `${MAP_KEY}`,
+      key: `${process.env.REACT_APP_MAP_API_KEY}`,
     });
 
     const markersParams = this.getMarkerParams(mapProps.markers);
