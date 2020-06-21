@@ -27,12 +27,14 @@ export interface Marker {
 
 /**
  * StaticMapProps
+ * height: height of the static map (in rem)
  * mapScale: scale of the map (1 or 2), 2 will double the resolution
  * markers: array of Marker with latitude and longitude
  * markerSize: the size of the markers on the map ("tiny" | "small" | "mid")
  * Refer to Google static map API for more information
  */
 export interface StaticMapProps {
+  height: number;
   mapScale: 1 | 2;
   markers: Array<Marker>;
   markerSize: "tiny" | "small" | "mid";
@@ -59,6 +61,7 @@ const SAMPLE_LAT_LONG: Array<Marker> = [
 
 export class StaticMap extends Component<StaticMapProps, StaticMapState> {
   public static defaultProps: StaticMapProps = {
+    height: 31.25,
     mapScale: 2,
     onClick: () => {},
     markerSize: "small",
@@ -183,7 +186,10 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
 
   render() {
     return (
-      <div className="static-map-wrapper" ref={this.mapRef}>
+      <div
+        className="static-map-wrapper"
+        ref={this.mapRef}
+        style={{ height: `${this.props.height}rem` }}>
         <div className="static-map-image">
           <Image
             src={this.getMapUrl(this.props)}
