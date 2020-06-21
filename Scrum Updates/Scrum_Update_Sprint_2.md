@@ -15,8 +15,13 @@
 ### o1u1b
 
 1. What you’ve worked on in the previous two weeks
+    - Reorganized the project structure based on components, pages, and services
+    - Implemented a static map component using Google map API
 2. What you’ll be working on in the next two weeks
+    - Implement all the components required for the interactive map
+    - Work on user model and authentication 
 3. Where you might have gotten stuck during the last two weeks
+    - The merge conflicts I had while I was reorganizing the project was interesting. Some files are modified on both branches, some files no longer exists, and some files have been renamed and moved. :scream: Git was able to identify some of these changes, but I had to manually resolve the remaining conflicts.
 
 ### z8c1b
 
