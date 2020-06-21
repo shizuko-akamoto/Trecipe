@@ -24,9 +24,10 @@ export function trecipeListReducer(
     case TrecipeListActionTypes.UPDATE_TRECIPE:
       return {
         trecipes: state.trecipes.map((tc: TrecipeModel) => {
-          return tc.id === action.payload.id ?
-            {...tc, ...action.payload.updated} : tc
-        })
+          return tc.id === action.payload.id
+            ? { ...tc, ...action.payload.updated }
+            : tc;
+        }),
       };
     case TrecipeListActionTypes.LOAD_TRECIPE:
       return {

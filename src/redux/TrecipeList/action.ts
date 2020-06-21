@@ -22,7 +22,10 @@ export const deleteTrecipe = (idToDelete: string) => {
   return typedAction(TrecipeListActionTypes.DELETE_TRECIPE, idToDelete);
 };
 
-export const updateTrecipe = (idToUpdate: string, updatedTC: Partial<TrecipeModel>) => {
+export const updateTrecipe = (
+  idToUpdate: string,
+  updatedTC: Partial<TrecipeModel>
+) => {
   return typedAction(TrecipeListActionTypes.UPDATE_TRECIPE, {
     id: idToUpdate,
     updated: updatedTC,
@@ -45,5 +48,8 @@ export const reloadTrecipes = () => {
 };
 
 export type TrecipeListAction = ReturnType<
-  typeof createNewTrecipe | typeof deleteTrecipe | typeof updateTrecipe | typeof loadTrecipes
+  | typeof createNewTrecipe
+  | typeof deleteTrecipe
+  | typeof updateTrecipe
+  | typeof loadTrecipes
 >;

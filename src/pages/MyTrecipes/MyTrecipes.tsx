@@ -37,49 +37,49 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
 
   render() {
     return (
-        <div className="content-wrapper">
-          <div className="content">
-            <h1 className="page-title">My Trecipes</h1>
-            <div className="buttons-wrapper">
-              <ul className="context-filters">
-                {MyTrecipes.contextFilters.map((filter) => (
-                  <li className="filter-item" key={filter}>
-                    <FilterButton
-                      text={filter}
-                      icon="check"
-                      fontSize={1}
-                      onClick={() => {}}
-                      defaultDisabled={false}
-                    />
-                  </li>
-                ))}
-                <FilterSelector
-                  listItem={[
-                    { text: "Any", icon: "border-all" as IconProp },
-                    { text: "Private", icon: "lock" as IconProp },
-                    { text: "Public", icon: "unlock" as IconProp },
-                  ]}
-                />
-              </ul>
-              <div className="new-trecipe-button">
-                <Button
-                  text="Create New"
-                  icon="plus-circle"
-                  onClick={this.renderAddPopup}
-                />
-              </div>
-            </div>
-            <div className="cards-wrapper">
-              {this.props.trecipes.map((trecipe: TrecipeModel) => (
-                <div className="card-item" key={trecipe.id}>
-                  <Link className="router-link" to={trecipe.id}>
-                    <TrecipeCard {...trecipe} />
-                  </Link>
-                </div>
+      <div className="content-wrapper">
+        <div className="content">
+          <h1 className="page-title">My Trecipes</h1>
+          <div className="buttons-wrapper">
+            <ul className="context-filters">
+              {MyTrecipes.contextFilters.map((filter) => (
+                <li className="filter-item" key={filter}>
+                  <FilterButton
+                    text={filter}
+                    icon="check"
+                    fontSize={1}
+                    onClick={() => {}}
+                    defaultDisabled={false}
+                  />
+                </li>
               ))}
+              <FilterSelector
+                listItem={[
+                  { text: "Any", icon: "border-all" as IconProp },
+                  { text: "Private", icon: "lock" as IconProp },
+                  { text: "Public", icon: "unlock" as IconProp },
+                ]}
+              />
+            </ul>
+            <div className="new-trecipe-button">
+              <Button
+                text="Create New"
+                icon="plus-circle"
+                onClick={this.renderAddPopup}
+              />
             </div>
           </div>
+          <div className="cards-wrapper">
+            {this.props.trecipes.map((trecipe: TrecipeModel) => (
+              <div className="card-item" key={trecipe.id}>
+                <Link className="router-link" to={trecipe.id}>
+                  <TrecipeCard {...trecipe} />
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
+      </div>
     );
   }
 }

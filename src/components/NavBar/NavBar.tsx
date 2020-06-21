@@ -15,7 +15,10 @@ export class NavBar extends React.Component<NavigationProps, {}> {
     return (
       <nav className="nav-bar">
         {this.props.links.map((link) => (
-          <Link className="nav-item" to={{ pathname: link.path }} key={link.text}>
+          <Link
+            className="nav-item"
+            to={{ pathname: link.path }}
+            key={link.text}>
             {link.text}
           </Link>
         ))}
