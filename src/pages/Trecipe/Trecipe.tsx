@@ -25,6 +25,7 @@ import { getDestModelsByTrecipeId } from "../../redux/Destinations/action";
 import TrecipePopup, {
   TrecipePopupType,
 } from "../../components/TrecipePopup/TrecipePopup";
+import { SearchBarPopup } from "../../components/SearchBarPopup/SearchBarPopup";
 
 /**
  * TrecipeProps
@@ -127,7 +128,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   }
 
   private onDestAddClick() {
-    // this.props.showModal(<SearchBarPopup />);
+    this.props.showModal(<SearchBarPopup />);
   }
 
   private onDestEditClick() {
