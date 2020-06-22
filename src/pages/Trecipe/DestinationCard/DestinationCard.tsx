@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
 import { Image } from "../../../components/Image/Image";
-import "./DestinationCard.scss";
+import "./destinationCard.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { RatingBar } from "../../../components/Rating/RatingBar";
 import { Draggable } from "react-beautiful-dnd";
