@@ -15,6 +15,9 @@ import {
   TrecipeModel,
 } from "../../../redux/TrecipeList/types";
 import { showModal } from "../../../redux/Modal/action";
+import TrecipePopup, {
+  TrecipePopupType,
+} from "../../../components/TrecipePopup/TrecipePopup";
 
 type TCProps = TrecipeModel & ReturnType<typeof mapDispatchToProps>;
 
@@ -47,9 +50,9 @@ class TrecipeCard extends React.Component<TCProps> {
   ];
 
   private showTCEditPopup = () => {
-    // this.props.showModal(
-    //   <TrecipePopup type={TrecipePopupType.Edit} trecipeId={this.props.id} />
-    // );
+    this.props.showModal(
+      <TrecipePopup type={TrecipePopupType.Edit} trecipeId={this.props.id} />
+    );
   };
 
   private duplicateTrecipe = () => {

@@ -3,3 +3,5 @@ export class UnreachableCaseException extends Error {
     super(`Unreachable case: ${val}`);
   }
 }
+
+export class TrecipeException extends Error {}

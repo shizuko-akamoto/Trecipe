@@ -22,6 +22,9 @@ import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
 import { DestinationModel } from "../../redux/Destinations/types";
 import { getDestModelsByTrecipeId } from "../../redux/Destinations/action";
+import TrecipePopup, {
+  TrecipePopupType,
+} from "../../components/TrecipePopup/TrecipePopup";
 
 /**
  * TrecipeProps
@@ -115,12 +118,12 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   }
 
   private onTrecipeEditClick() {
-    // this.props.showModal(
-    //   <TrecipePopup
-    //     type={TrecipePopupType.Edit}
-    //     trecipeId={parseInt(this.props.match.params.trecipeId)}
-    //   />
-    // );
+    this.props.showModal(
+      <TrecipePopup
+        type={TrecipePopupType.Edit}
+        trecipeId={this.props.match.params.trecipeId}
+      />
+    );
   }
 
   private onDestAddClick() {
