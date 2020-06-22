@@ -13,7 +13,7 @@ enum SearchFilter {
 }
 
 /**
- * Search nar states
+ * Search bar states
  * filter: Search filter currently selected
  * searchKey: Keyword to perform search with
  * results: Search results retrieved from backend call
