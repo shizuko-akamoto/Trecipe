@@ -1,8 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./RatingBar.scss";
-
-export type Rating = 0 | 1 | 2 | 3 | 4 | 5;
+import { Rating } from "../../redux/Destinations/types";
 
 export type RatingBarProps = {
   rating: Rating;

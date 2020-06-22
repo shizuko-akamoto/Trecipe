@@ -15,8 +15,7 @@ const getNextUniqueTrecipeId = () => {
  * imageSrc: Backgroud image source
  * author: Owner of the Trecipe
  * isPrivate: true if the Trecipe is a private one, false otherwise
- * totalDest: total number of destination in this Trecipe
- * completedDest: number of destination that has been checked off
+ * destinations: list of destinations in this trecipe and isCompleted boolean
  */
 export interface TrecipeModel {
   id: string;
@@ -26,8 +25,8 @@ export interface TrecipeModel {
   author: string;
   description: string;
   isPrivate: boolean;
-  totalDest: number;
-  completedDest: number;
+  destinations: Array<string>;
+  completed: Set<string>;
 }
 
 /**
@@ -42,8 +41,8 @@ export function newTrecipeModel(): TrecipeModel {
     author: "team2",
     description: "This is a description.",
     isPrivate: true,
-    totalDest: 0,
-    completedDest: 0,
+    destinations: ["0", "1", "2", "3", "4", "5"],
+    completed: new Set<string>(),
   };
 }
 

@@ -6,17 +6,17 @@ import Pages from "./pages/Pages";
 import { reloadTrecipes } from "./redux/TrecipeList/action";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 function App(props: ReturnType<typeof mapDispatchToProps>) {
   props.reloadTrecipes();
   return (
-    <BrowserRouter>
+    <Router>
       <div className="App">
         <Route component={Pages} />
         <ModalContainer />
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 

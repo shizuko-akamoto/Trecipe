@@ -13,6 +13,7 @@ import { TrecipeModel } from "../../redux/TrecipeList/types";
 import { bindActionCreators, Dispatch } from "redux";
 import { showModal } from "../../redux/Modal/action";
 import { Link, withRouter, RouteComponentProps } from "react-router-dom";
+import { getDestModelsByTrecipeId } from "../../redux/Destinations/action";
 
 type MyTrecipesProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> &
@@ -93,6 +94,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     {
       reloadTrecipes,
       showModal,
+      loadDestsByTrecipeId: getDestModelsByTrecipeId,
     },
     dispatch
   );
