@@ -25,3 +25,9 @@ yarn-error.log*
 
 # idea
 .idea/*
+
+# Visual studio code
+/.vscode
+
+# env
+.env

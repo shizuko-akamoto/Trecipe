@@ -1,4 +1,4 @@
-import React from "react";
+import React, { CSSProperties } from "react";
 import { Image } from "../../../components/Image/Image";
 import "./DestinationCard.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,6 +25,17 @@ export interface DCProps {
 }
 
 export class DestinationCard extends React.Component<DCProps> {
+  private getDCFilter(): CSSProperties {
+    const defaultFilter = { filter: "none" };
+    if (this.props.isInEdit) {
+      return defaultFilter;
+    } else if (this.props.isCompleted) {
+      return { filter: "opacity(50%)" };
+    } else {
+      return defaultFilter;
+    }
+  }
+
   render() {
     return (
       <Draggable
@@ -33,7 +44,7 @@ export class DestinationCard extends React.Component<DCProps> {
         isDragDisabled={!this.props.isInEdit}>
         {(provided) => (
           <div ref={provided.innerRef} {...provided.draggableProps}>
-            <div className="dest-card-wrapper">
+            <div className="dest-card-wrapper" style={this.getDCFilter()}>
               <div className="dest-img">
                 <Image
                   src={this.props.destModel.imgSrc}
@@ -55,7 +66,10 @@ export class DestinationCard extends React.Component<DCProps> {
                   {this.props.destModel.description}
                 </p>
               </div>
-              {!this.props.isInEdit && (
+              <span
+                className={`check-edit-wrapper ${
+                  this.props.isInEdit ? "in-edit" : ""
+                }`}>
                 <div className="completed-checkbox">
                   <input
                     type="checkbox"
@@ -74,11 +88,6 @@ export class DestinationCard extends React.Component<DCProps> {
                     <FontAwesomeIcon icon="check" />
                   </label>
                 </div>
-              )}
-              <div
-                className={`edit-options-wrapper ${
-                  this.props.isInEdit ? "in-edit" : ""
-                }`}>
                 <span
                   {...provided.dragHandleProps}
                   className="edit-option"
@@ -93,7 +102,7 @@ export class DestinationCard extends React.Component<DCProps> {
                   }>
                   <FontAwesomeIcon icon={["far", "trash-alt"]} />
                 </button>
-              </div>
+              </span>
             </div>
           </div>
         )}

@@ -11,6 +11,7 @@
   background-color: $tc-white;
   font-family: $default-font-family;
   overflow: hidden;
+  transition: filter 0.3s ease-out;
 
   .dest-img {
     flex: 0 1 12.5rem;
@@ -51,45 +52,41 @@
     }
   }
 
-  .completed-checkbox {
-    flex: 0 0;
+  .check-edit-wrapper {
     display: flex;
-    align-items: center;
-    padding-right: 2rem;
-
-    input[type="checkbox"] {
-      opacity: 0;
-
-      & + .check-mark {
-        cursor: pointer;
-        color: rgba($light-gray, 0.3);
-        font-size: 3rem;
-        transition: color 0.2s;
-
-        &:hover {
-          color: rgba($light-gray, 1);
-        }
-      }
-
-      &:checked + .check-mark {
-        color: rgba($powder-blue, 1);
-        cursor: default;
-      }
-    }
-  }
-
-  .edit-options-wrapper {
-    position: absolute;
-    height: 100%;
-    width: 15%;
-    right: 0;
-    display: flex;
-    // hidden by default
-    transform: translateX(100%);
+    flex: 0 0 30%;
+    transform: translateX(66.67%);
     transition: transform 0.3s ease-out;
 
+    .completed-checkbox {
+      flex: 1 1 10%;
+      display: flex;
+      align-items: center;
+      padding-right: 1rem;
+
+      input[type="checkbox"] {
+        opacity: 0;
+
+        & + .check-mark {
+          cursor: pointer;
+          color: rgba($light-gray, 0.3);
+          font-size: 3rem;
+          transition: color 0.2s;
+
+          &:hover {
+            color: rgba($light-gray, 1);
+          }
+        }
+
+        &:checked + .check-mark {
+          color: rgba($powder-blue, 1);
+          cursor: default;
+        }
+      }
+    }
+
     .edit-option {
-      flex-basis: 50%;
+      flex: 1 1 10%;
       border: none;
       color: $tc-white;
       font-size: $default-font-size;

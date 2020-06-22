@@ -22,7 +22,6 @@ import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
 import { DestinationModel } from "../../redux/Destinations/types";
 import { getDestModelsByTrecipeId } from "../../redux/Destinations/action";
-import _ from "lodash";
 
 /**
  * TrecipeProps
