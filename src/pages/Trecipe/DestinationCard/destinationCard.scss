@@ -61,8 +61,9 @@
     .completed-checkbox {
       flex: 1 1 10%;
       display: flex;
+      position: relative;
       align-items: center;
-      padding-right: 1rem;
+      justify-content: center;
 
       input[type="checkbox"] {
         opacity: 0;
@@ -72,6 +73,7 @@
           color: rgba($light-gray, 0.3);
           font-size: 3rem;
           transition: color 0.2s;
+          position: absolute;
 
           &:hover {
             color: rgba($light-gray, 1);

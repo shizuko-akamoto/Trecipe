@@ -26,6 +26,7 @@ import TrecipePopup, {
   TrecipePopupType,
 } from "../../components/TrecipePopup/TrecipePopup";
 import { SearchBarPopup } from "../../components/SearchBarPopup/SearchBarPopup";
+import { StaticMap } from "../../components/Map/StaticMap";
 
 /**
  * TrecipeProps
@@ -258,6 +259,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
               )}
             </div>
             <h1 className="trecipe-page-title">See places on the map</h1>
+            <StaticMap />
           </div>
         </div>
       </div>
