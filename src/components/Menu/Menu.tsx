@@ -9,12 +9,14 @@ import { IconProp } from "@fortawesome/fontawesome-svg-core";
  * text: Text on the menu item
  * icon: Icon on the menu item
  * onClick: Menu item onClick function handler
+ * disabled: Whether to disable this menu item
  */
 export type MenuItem = {
   id: number;
   text: string;
   icon: IconProp;
   onClick: (e: React.MouseEvent<HTMLElement>) => void;
+  disabled?: boolean;
 };
 
 /**
@@ -178,7 +180,8 @@ export class Menu extends React.Component<MenuProps, {}> {
                     onClick={(event) => {
                       item.onClick(event);
                       this.props.onClose();
-                    }}>
+                    }}
+                    disabled={item.disabled}>
                     <span className="button-icon">
                       <FontAwesomeIcon icon={item.icon} fixedWidth />
                     </span>

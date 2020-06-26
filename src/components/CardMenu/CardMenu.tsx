@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "../../../components/Button/Button";
-import { Menu, MenuItem } from "../../../components/Menu/Menu";
+import { Button } from "../Button/Button";
+import { Menu, MenuItem } from "../Menu/Menu";
 
 /**
  * CardMenuProps

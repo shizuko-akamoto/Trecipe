@@ -21,7 +21,7 @@ export interface DCProps {
   isCompleted: boolean;
   onClickDelete: (destId: string) => void;
   onClickComplete: (destId: string, isCompleted: boolean) => void;
-  isInEdit: boolean;
+  isInEdit?: boolean;
 }
 
 export class DestinationCard extends React.Component<DCProps> {
