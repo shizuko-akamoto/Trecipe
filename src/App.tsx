@@ -7,22 +7,14 @@ import { reloadTrecipes } from "./redux/TrecipeList/action";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { newDestinationModel } from "./redux/Destinations/types";
-import { DestinationCard } from "./pages/Map/DestinationCard/DestinationCard";
+import { Map } from "./pages/Map/Map";
 
 function App(props: ReturnType<typeof mapDispatchToProps>) {
   props.reloadTrecipes();
-  const destModel = newDestinationModel();
   return (
     <Router>
       <div className="App">
-        <DestinationCard
-          destModel={destModel}
-          onClickComplete={() => {}}
-          onClickDelete={() => {}}
-          isCompleted={true}
-          index={0}
-        />
+        <Map />
         <ModalContainer />
       </div>
     </Router>

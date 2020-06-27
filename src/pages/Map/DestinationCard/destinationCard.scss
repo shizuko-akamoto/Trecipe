@@ -7,7 +7,6 @@
   min-height: 250px;
   font-family: $default-font-family;
   background-color: $tc-white;
-  border: 1px solid $light-gray;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
@@ -32,6 +31,7 @@
         color: $tc-white;
         font-size: $title-font-size;
         text-transform: uppercase;
+        font-weight: normal;
         margin: 0;
         padding: 0.2rem 0.5rem;
         text-overflow: ellipsis;
@@ -55,7 +55,7 @@
       #dest-category,
       #dest-location {
         color: $silver-gray;
-        font-size: $sub-text-font-size;
+        font-size: $subtext-font-size;
         margin: 0;
         padding: 0 0 0.5rem 0;
       }
