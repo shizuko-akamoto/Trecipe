@@ -3,8 +3,30 @@ import "./map.scss";
 import { DestinationCard } from "./DestinationCard/DestinationCard";
 import { newDestinationModel } from "../../redux/Destinations/types";
 import { CardMenu } from "../../components/CardMenu/CardMenu";
+import { MenuItem } from "../../components/Menu/Menu";
 
 export class Map extends React.Component {
+  private trecipeEditMenuItems: MenuItem[] = [
+    {
+      id: 1,
+      text: "Edit",
+      icon: "edit",
+      onClick: () => {},
+    },
+    {
+      id: 2,
+      text: "Duplicate",
+      icon: "copy",
+      onClick: () => {},
+    },
+    {
+      id: 3,
+      text: "Delete",
+      icon: ["far", "trash-alt"],
+      onClick: () => {},
+    },
+  ];
+
   render() {
     const destModel = newDestinationModel();
     return (
@@ -12,7 +34,10 @@ export class Map extends React.Component {
         <aside className="map-side-bar">
           <div className="trecipe-header">
             <span>Trecipe Name</span>
-            <CardMenu menuItems={[]} editIconColor="#000000" />
+            <CardMenu
+              menuItems={this.trecipeEditMenuItems}
+              editIconColor="#000000"
+            />
           </div>
           <div>
             <ul className="dest-card-list">
@@ -20,28 +45,28 @@ export class Map extends React.Component {
                 destModel={destModel}
                 onClickComplete={() => {}}
                 onClickDelete={() => {}}
-                isCompleted={true}
+                isCompleted={false}
                 index={0}
               />
               <DestinationCard
                 destModel={destModel}
                 onClickComplete={() => {}}
                 onClickDelete={() => {}}
-                isCompleted={true}
+                isCompleted={false}
                 index={1}
               />
               <DestinationCard
                 destModel={destModel}
                 onClickComplete={() => {}}
                 onClickDelete={() => {}}
-                isCompleted={true}
+                isCompleted={false}
                 index={2}
               />
               <DestinationCard
                 destModel={destModel}
                 onClickComplete={() => {}}
                 onClickDelete={() => {}}
-                isCompleted={true}
+                isCompleted={false}
                 index={3}
               />
             </ul>

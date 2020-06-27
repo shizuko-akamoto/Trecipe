@@ -8,7 +8,7 @@
   .map-side-bar {
     flex: 0 0 400px;
     height: 100vh;
-    padding: 0 0.2rem;
+    padding: 0;
 
     .trecipe-header {
       position: sticky;
@@ -28,6 +28,10 @@
       max-height: calc(100vh - 4rem);
       margin: 0;
       padding: 0;
+
+      & > * {
+        padding: 0.3rem 0.5rem;
+      }
     }
   }
 
