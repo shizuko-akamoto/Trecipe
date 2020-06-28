@@ -44,7 +44,7 @@ export class DestinationCard extends React.Component<DCProps> {
         isDragDisabled={!this.props.isInEdit}>
         {(provided) => (
           <div ref={provided.innerRef} {...provided.draggableProps}>
-            <div className="dest-card-wrapper" style={this.getDCFilter()}>
+            <div className="dest-list-item-wrapper" style={this.getDCFilter()}>
               <div className="dest-img">
                 <Image
                   src={this.props.destModel.imgSrc}

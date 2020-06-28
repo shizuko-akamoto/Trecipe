@@ -40,7 +40,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
 
   render() {
     return (
-      <div className="content-wrapper">
+      <div className="mytrecipes-wrapper">
         <div className="content">
           <h1 className="page-title">My Trecipes</h1>
           <div className="buttons-wrapper">

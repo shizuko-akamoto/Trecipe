@@ -14,7 +14,6 @@ import { isUndefined } from "lodash";
 export interface ButtonProps {
   text: string;
   icon: IconProp;
-  iconColor?: string;
   fontSize: number;
   onClick(e: MouseEvent<HTMLElement>): void;
   defaultDisabled: boolean;
@@ -35,7 +34,6 @@ export class Button extends Component<ButtonProps, ButtonState> {
   public static defaultProps: Partial<ButtonProps> = {
     text: "Button item",
     icon: undefined,
-    iconColor: "#FFFFFF",
     fontSize: 0.875,
     onClick: () => {},
     defaultDisabled: false,
@@ -59,11 +57,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
           {this.props.text}
           {!isUndefined(this.props.icon) && (
             <span className={this.props.text === "" ? "icon" : "button-icon"}>
-              <FontAwesomeIcon
-                icon={this.props.icon}
-                color={this.props.iconColor}
-                fixedWidth
-              />
+              <FontAwesomeIcon icon={this.props.icon} fixedWidth />
             </span>
           )}
         </button>

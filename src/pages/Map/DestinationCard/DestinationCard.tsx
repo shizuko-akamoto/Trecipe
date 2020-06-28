@@ -34,7 +34,7 @@ export class DestinationCard extends React.Component<DCProps> {
   render() {
     const destModel = this.props.destModel;
     return (
-      <div className="dest-card-wrapper">
+      <div className="dest-card-item-wrapper">
         <div
           className="dest-card-header-container"
           style={{

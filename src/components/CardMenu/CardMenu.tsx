@@ -8,7 +8,6 @@ import { Menu, MenuItem } from "../Menu/Menu";
  */
 export interface CardMenuProps {
   menuItems: MenuItem[];
-  editIconColor?: string;
 }
 
 /**
@@ -42,7 +41,6 @@ export class CardMenu extends React.Component<CardMenuProps, CardMenuState> {
         <Button
           onClick={this.handleClick}
           icon="ellipsis-h"
-          iconColor={this.props.editIconColor}
           fontSize={1.8}
           text=""
         />

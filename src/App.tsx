@@ -7,14 +7,13 @@ import { reloadTrecipes } from "./redux/TrecipeList/action";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-import { Map } from "./pages/Map/Map";
 
 function App(props: ReturnType<typeof mapDispatchToProps>) {
   props.reloadTrecipes();
   return (
     <Router>
       <div className="App">
-        <Map />
+        <Route component={Pages} />
         <ModalContainer />
       </div>
     </Router>
