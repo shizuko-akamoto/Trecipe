@@ -1,5 +1,5 @@
 import React from "react";
-import "./map.scss";
+import "./Map.scss";
 import { DestinationCard } from "./DestinationCard/DestinationCard";
 import { CardMenu } from "../../components/CardMenu/CardMenu";
 import { MenuItem } from "../../components/Menu/Menu";
@@ -44,6 +44,22 @@ class Map extends React.Component<MapProps> {
     this.props.getDestModelsByTrecipeId(this.props.trecipe.id);
   }
 
+  private onDestCompleteClick(destId: string, isCompleted: boolean) {
+    const trecipe: TrecipeModel = this.props.trecipe;
+    this.props.updateTrecipe(trecipe.id, {
+      completed: trecipe.completed.add(destId),
+    });
+  }
+
+  private onDestDeleteClick(idToDelete: string) {
+    const trecipe: TrecipeModel = this.props.trecipe;
+    this.props.updateTrecipe(trecipe.id, {
+      destinations: trecipe.destinations.filter(
+        (destId) => destId !== idToDelete
+      ),
+    });
+  }
+
   render() {
     const trecipe = this.props.trecipe;
     return (
@@ -62,8 +78,8 @@ class Map extends React.Component<MapProps> {
                     key={dest.id}
                     destModel={dest}
                     isCompleted={trecipe.completed.has(dest.id)}
-                    onClickDelete={() => {}}
-                    onClickComplete={() => {}}
+                    onClickDelete={this.onDestDeleteClick.bind(this)}
+                    onClickComplete={this.onDestCompleteClick.bind(this)}
                   />
                 ))}
               </ul>

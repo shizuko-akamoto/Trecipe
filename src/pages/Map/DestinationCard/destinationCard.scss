@@ -30,12 +30,18 @@
         color: $tc-white;
         font-size: $title-font-size;
         text-transform: uppercase;
-        font-weight: normal;
         margin: 0;
         padding: 0.2rem 0.5rem;
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
+        display: flex;
+        align-items: center;
+
+        .dest-check-icon {
+          margin-left: 0.5rem;
+          font-size: $default-font-size;
+        }
       }
     }
   }
