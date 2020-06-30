@@ -1,0 +1,55 @@
+@import "../variables";
+
+.coverPhotoBtnsWrapper {
+  position: absolute;
+  top: 1rem;
+  right: 0.5rem;
+  display: flex;
+
+  & > * {
+    margin-left: 0.5rem;
+    background-color: $tc-white;
+    border-radius: 8px;
+  }
+}
+
+.coverPhotoWrapper {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.coverPhotoImage {
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  &:hover {
+    opacity: 0.7;
+  }
+  transition: opacity 0.5s;
+}
+
+.coverPhotoImageEnlarged {
+  @extend .coverPhotoImage;
+  position: absolute;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.coverPhotoDialog {
+  position: absolute;
+  height: 200%;
+  width: 80%;
+  top: 10%;
+  z-index: 1000;
+}
+
+.coverPhotoSelector {
+  display: none;
+}
