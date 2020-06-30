@@ -1,9 +1,18 @@
 {
   "name": "trecipe",
   "version": "1.0.0",
-  "repository": "https://github.com/shizuko-akamoto/Trecipe.git",
-  "devDependencies": {
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "start:client": "yarn workspace client start",
+    "start:server": "yarn workspace server dev",
+    "start": "concurrently --kill-others-on-fail \"yarn start:client\" \"yarn start:server\""
+  },
+  "dependencies": {
     "concurrently": "^5.2.0",
-    "husky": "^4.2.5"
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11"
   }
 }
