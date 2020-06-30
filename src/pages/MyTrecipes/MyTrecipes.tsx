@@ -60,7 +60,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
                 listItem={[
                   { text: "Any", icon: "border-all" as IconProp },
                   { text: "Private", icon: "lock" as IconProp },
-                  { text: "Public", icon: "unlock" as IconProp },
+                  { text: "Public", icon: "lock-open" as IconProp },
                 ]}
               />
             </ul>
