@@ -49,7 +49,7 @@ export class CardMenu extends React.Component<CardMenuProps, CardMenuState> {
             menuItems={this.props.menuItems}
             originElement={this.state.originElement as HTMLElement}
             onClose={this.handleClose}
-            position="right"
+            position="left"
             width={10}
             buttonHeight={2.5}
           />
