@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "repository": "https://github.com/shizuko-akamoto/Trecipe.git",
   "devDependencies": {
-    "concurrently": "^5.2.0"
+    "concurrently": "^5.2.0",
+    "husky": "^4.2.5"
   }
 }
