@@ -14,11 +14,36 @@
   "scripts": {
     "start:client": "yarn workspace client start",
     "start:server": "yarn workspace server dev",
-    "start": "concurrently --kill-others-on-fail \"yarn start:client\" \"yarn start:server\""
+    "start": "concurrently --kill-others-on-fail \"yarn start:client\" \"yarn start:server\"",
+    "lint": "yarn lint:client && yarn lint:server",
+    "lint:client": "yarn workspace client lint",
+    "lint:server": "yarn workspace server lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "./packages/client/src/**/*.{js,jsx,ts,tsx}": [
+      "yarn lint:client"
+    ],
+    "./packages/server/{server,test}/**/*.{js,jsx,ts,tsx}": [
+      "yarn lint:server"
+    ]
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.5.0",
+    "@typescript-eslint/parser": "^3.5.0",
     "concurrently": "^5.2.0",
+    "eslint": "6.6.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.3",
     "husky": "^4.2.5",
-    "lint-staged": "^10.2.11"
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5"
   }
 }

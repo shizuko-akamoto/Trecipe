@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 /**
  * React element of popup components. Extend by or-ing
@@ -10,14 +10,14 @@ export type ModalType = React.ReactNode;
  * component declared by ModalType
  */
 export type ModalState = {
-  modal: ModalType | null;
+    modal: ModalType | null;
 };
 
 export const initialState: ModalState = {
-  modal: null,
+    modal: null,
 };
 
 export enum ModalActionTypes {
-  SHOW_MODAL = "@modal/SHOW_MODAL",
-  HIDE_MODAL = "@modal/HIDE_MODAL",
+    SHOW_MODAL = '@modal/SHOW_MODAL',
+    HIDE_MODAL = '@modal/HIDE_MODAL',
 }
