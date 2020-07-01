@@ -27,6 +27,7 @@ import TrecipePopup, {
 } from "../../components/TrecipePopup/TrecipePopup";
 import { SearchBarPopup } from "../../components/SearchBarPopup/SearchBarPopup";
 import { StaticMap } from "../../components/Map/StaticMap";
+import Background from "../MyTrecipes/TrecipeCard/BetterDefaultImage.png";
 
 /**
  * TrecipeProps
@@ -175,6 +176,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
       <div>
         <div className="tc-header-container">
           <CoverPhoto
+            imageSource={`url( ${Background})`}
             buttons={[
               <Button
                 key={editTrecipeBtnString}
