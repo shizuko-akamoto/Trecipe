@@ -2,17 +2,31 @@ import React from "react";
 import "./components/fontawesome";
 import "./App.scss";
 import ModalContainer from "./components/Modal/ModalContainer";
-import { Trecipe } from "./pages/Trecipe/Trecipe";
-import { StaticMap } from "./components/Map/StaticMap";
+import Pages from "./pages/Pages";
+import { reloadTrecipes } from "./redux/TrecipeList/action";
+import { connect } from "react-redux";
+import { bindActionCreators, Dispatch } from "redux";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-function App() {
+function App(props: ReturnType<typeof mapDispatchToProps>) {
+  props.reloadTrecipes();
   return (
-    <div className="App">
-      <Trecipe />
-      <StaticMap />
-      <ModalContainer />
-    </div>
+    <Router>
+      <div className="App">
+        <Route component={Pages} />
+        <ModalContainer />
+      </div>
+    </Router>
   );
 }
 
-export default App;
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return bindActionCreators(
+    {
+      reloadTrecipes,
+    },
+    dispatch
+  );
+};
+
+export default connect(null, mapDispatchToProps)(App);

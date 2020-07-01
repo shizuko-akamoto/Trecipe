@@ -1,10 +1,9 @@
-import AddPopup from "../../pages/MyTrecipes/AddPopup/AddPopup";
 import React from "react";
 
 /**
  * React element of popup components. Extend by or-ing
  */
-export type ModalType = React.ReactElement<typeof AddPopup>;
+export type ModalType = React.ReactNode;
 
 /**
  * Modal state: If null, modal dialog box is not shown, otherwise, displays

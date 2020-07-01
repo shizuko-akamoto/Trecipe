@@ -1,11 +1,11 @@
-import Background from "../../pages/MyTrecipes/TrecipeCard/DefaultImage.png";
+import Background from "../../pages/MyTrecipes/TrecipeCard/BetterDefaultImage.png";
 
 /**
  * TODO: Remove this when we can generate ids in the backend
  */
-let nextUniqueId: number = 0;
-const getNextUniqueId = () => {
-  return nextUniqueId++;
+let nextUniqueTrecipeId: number = 0;
+const getNextUniqueTrecipeId = () => {
+  return nextUniqueTrecipeId++;
 };
 
 /**
@@ -15,19 +15,18 @@ const getNextUniqueId = () => {
  * imageSrc: Backgroud image source
  * author: Owner of the Trecipe
  * isPrivate: true if the Trecipe is a private one, false otherwise
- * totalDest: total number of destination in this Trecipe
- * completedDest: number of destination that has been checked off
+ * destinations: list of destinations in this trecipe and isCompleted boolean
  */
 export interface TrecipeModel {
-  id: number;
+  id: string;
   name: string;
   imageSrc: string | null;
   date: string;
   author: string;
   description: string;
   isPrivate: boolean;
-  totalDest: number;
-  completedDest: number;
+  destinations: Array<string>;
+  completed: Set<string>;
 }
 
 /**
@@ -35,15 +34,15 @@ export interface TrecipeModel {
  */
 export function newTrecipeModel(): TrecipeModel {
   return {
-    id: getNextUniqueId(), // temporary until we get backend to generate unique id
-    name: "trecipe title",
+    id: String(getNextUniqueTrecipeId()), // temporary until we get backend to generate unique id
+    name: `Trecipe ${nextUniqueTrecipeId}`,
     imageSrc: "url(" + Background + ")",
     date: "2020-01-01", // maybe change it to Date
     author: "team2",
     description: "This is a description.",
     isPrivate: true,
-    totalDest: 0,
-    completedDest: 0,
+    destinations: ["0", "1", "2", "3", "4", "5"],
+    completed: new Set<string>(),
   };
 }
 
@@ -60,4 +59,5 @@ export enum TrecipeListActionTypes {
   CREATE_NEW_TRECIPE = "@trecipeList/CREATE_NEW_TRECIPE",
   DELETE_TRECIPE = "@trecipeList/DELETE_TRECIPE",
   UPDATE_TRECIPE = "@trecipeList/UPDATE_TRECIPE",
+  LOAD_TRECIPE = "@trecipeList/LOAD_TRECIPE",
 }

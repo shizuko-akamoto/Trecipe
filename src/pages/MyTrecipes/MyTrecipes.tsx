@@ -1,22 +1,24 @@
 import React from "react";
-import { Header } from "../../components/Header/Header";
-import { Footer } from "../../components/Footer/Footer";
 import "./MyTrecipes.scss";
 import { FilterButton } from "./Filter/FilterButton";
 import { Button } from "../../components/Button/Button";
 import TrecipeCard from "./TrecipeCard/TrecipeCard";
 import { FilterSelector } from "./Filter/FilterSelector";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import AddPopup from "./AddPopup/AddPopup";
 import { connect } from "react-redux";
 import { RootState } from "../../redux";
-import { loadTrecipes } from "../../redux/TrecipeList/action";
+import { reloadTrecipes } from "../../redux/TrecipeList/action";
 import { TrecipeModel } from "../../redux/TrecipeList/types";
 import { bindActionCreators, Dispatch } from "redux";
 import { showModal } from "../../redux/Modal/action";
+import { Link, withRouter, RouteComponentProps } from "react-router-dom";
+import TrecipePopup, {
+  TrecipePopupType,
+} from "../../components/TrecipePopup/TrecipePopup";
 
 type MyTrecipesProps = ReturnType<typeof mapStateToProps> &
-  ReturnType<typeof mapDispatchToProps>;
+  ReturnType<typeof mapDispatchToProps> &
+  RouteComponentProps;
 
 class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
   private static contextFilters: string[] = [
@@ -27,58 +29,57 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
   ];
 
   componentDidMount(): void {
-    this.props.loadTrecipes();
+    // TODO: Commenting this out while backend is getting set up as this wipes out frontend redux data
+    //this.props.reloadTrecipes();
   }
 
   private renderAddPopup = () => {
-    this.props.showModal(<AddPopup />);
+    this.props.showModal(<TrecipePopup type={TrecipePopupType.Add} />);
   };
 
   render() {
     return (
-      <div>
-        <Header />
-        <div className="content-wrapper">
-          <div className="content">
-            <h1 className="page-title">My Trecipes</h1>
-            <div className="buttons-wrapper">
-              <ul className="context-filters">
-                {MyTrecipes.contextFilters.map((filter) => (
-                  <li className="filter-item" key={filter}>
-                    <FilterButton
-                      text={filter}
-                      icon="check"
-                      fontSize={1}
-                      onClick={() => {}}
-                      defaultDisabled={false}
-                    />
-                  </li>
-                ))}
-                <FilterSelector
-                  listItem={[
-                    { text: "Any", icon: "border-all" as IconProp },
-                    { text: "Private", icon: "lock" as IconProp },
-                    { text: "Public", icon: "unlock" as IconProp },
-                  ]}
-                />
-              </ul>
-              <div className="new-trecipe-button">
-                <Button
-                  text="Create New"
-                  icon="plus-circle"
-                  onClick={this.renderAddPopup}
-                />
-              </div>
-            </div>
-            <div className="cards-wrapper">
-              {this.props.trecipes.map((trecipe: TrecipeModel) => (
-                <div className="card-item" key={trecipe.id}>
-                  <TrecipeCard {...trecipe} />
-                </div>
+      <div className="content-wrapper">
+        <div className="content">
+          <h1 className="page-title">My Trecipes</h1>
+          <div className="buttons-wrapper">
+            <ul className="context-filters">
+              {MyTrecipes.contextFilters.map((filter) => (
+                <li className="filter-item" key={filter}>
+                  <FilterButton
+                    text={filter}
+                    icon="check"
+                    fontSize={1}
+                    onClick={() => {}}
+                    defaultDisabled={false}
+                  />
+                </li>
               ))}
+              <FilterSelector
+                listItem={[
+                  { text: "Any", icon: "border-all" as IconProp },
+                  { text: "Private", icon: "lock" as IconProp },
+                  { text: "Public", icon: "unlock" as IconProp },
+                ]}
+              />
+            </ul>
+            <div className="new-trecipe-button">
+              <Button
+                text="Create New"
+                icon="plus-circle"
+                onClick={this.renderAddPopup}
+              />
             </div>
           </div>
-          <Footer />
+          <div className="cards-wrapper">
+            {this.props.trecipes.map((trecipe: TrecipeModel) => (
+              <div className="card-item" key={trecipe.id}>
+                <Link className="router-link" to={trecipe.id}>
+                  <TrecipeCard {...trecipe} />
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -92,11 +93,13 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return bindActionCreators(
     {
-      loadTrecipes,
+      reloadTrecipes,
       showModal,
     },
     dispatch
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyTrecipes);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(MyTrecipes)
+);

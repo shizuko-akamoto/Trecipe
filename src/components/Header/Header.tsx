@@ -14,9 +14,9 @@ export class Header extends React.Component<{}, {}> {
         <div className="header-nav-bar">
           <NavBar
             links={[
-              { text: "About", url: "" },
-              { text: "My Trecipes", url: "" },
-              { text: "Account", url: "" },
+              { text: "About", path: "" },
+              { text: "My Trecipes", path: "/" },
+              { text: "Account", path: "" },
             ]}
           />
         </div>

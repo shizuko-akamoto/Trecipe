@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./trecipeCard.scss";
 import { CardMenu } from "../CardMenu/CardMenu";
 import { MenuItem } from "../../../components/Menu/Menu";
+import { ProgressBar } from "../../../components/ProgressBar/ProgressBar";
 import { bindActionCreators, Dispatch } from "redux";
 import {
   createNewTrecipe,
@@ -13,12 +14,23 @@ import {
   newTrecipeModel,
   TrecipeModel,
 } from "../../../redux/TrecipeList/types";
+import { showModal } from "../../../redux/Modal/action";
+import TrecipePopup, {
+  TrecipePopupType,
+} from "../../../components/TrecipePopup/TrecipePopup";
 
 type TCProps = TrecipeModel & ReturnType<typeof mapDispatchToProps>;
 
-export class TrecipeCard extends React.Component<TCProps> {
+class TrecipeCard extends React.Component<TCProps> {
   private cardMenuItems: MenuItem[] = [
-    { id: 1, text: "Edit", icon: "edit", onClick: () => {} },
+    {
+      id: 1,
+      text: "Edit",
+      icon: "edit",
+      onClick: () => {
+        this.showTCEditPopup();
+      },
+    },
     {
       id: 2,
       text: "Duplicate",
@@ -37,8 +49,10 @@ export class TrecipeCard extends React.Component<TCProps> {
     },
   ];
 
-  private calcPercentage = (totalDest: number, completedDest: number) => {
-    return totalDest === 0 ? 0 : (completedDest / totalDest) * 100;
+  private showTCEditPopup = () => {
+    this.props.showModal(
+      <TrecipePopup type={TrecipePopupType.Edit} trecipeId={this.props.id} />
+    );
   };
 
   private duplicateTrecipe = () => {
@@ -50,6 +64,11 @@ export class TrecipeCard extends React.Component<TCProps> {
   private deleteTrecipe = () => {
     this.props.deleteTrecipe(this.props.id);
   };
+
+  private onTCEditClick(e: React.MouseEvent) {
+    // needed to prevent link redirection to Trecipe page on TC click
+    e.preventDefault();
+  }
 
   render() {
     return (
@@ -67,7 +86,7 @@ export class TrecipeCard extends React.Component<TCProps> {
                 className="tcPrivacy"
               />
             </label>
-            <div className="tcEdit">
+            <div className="tcEdit" onClick={(e) => this.onTCEditClick(e)}>
               <CardMenu menuItems={this.cardMenuItems} />
             </div>
           </div>
@@ -81,18 +100,12 @@ export class TrecipeCard extends React.Component<TCProps> {
             <p>{this.props.description}</p>
           </div>
         </div>
-        <div className="tcProgressBar">
-          <div
-            className="tcFiller"
-            style={{
-              width:
-                this.calcPercentage(
-                  this.props.totalDest,
-                  this.props.completedDest
-                ) + "%",
-            }}
-          />
-        </div>
+        <ProgressBar
+          total={this.props.destinations.length}
+          completed={this.props.completed.size}
+          showText={false}
+          barStyle={{ borderRadius: "0 0 8px 8px" }}
+        />
       </div>
     );
   }
@@ -103,6 +116,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     {
       createNewTrecipe,
       deleteTrecipe,
+      showModal,
     },
     dispatch
   );
