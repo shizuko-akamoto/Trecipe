@@ -3,7 +3,10 @@ import express, { Application } from 'express';
 import errorHandler from '../api/middlewares/error.handler';
 import { OpenApiValidator } from 'express-openapi-validator';
 
-export default function (app: Application, routes: (app: Application) => void): Promise<void> {
+export default function (
+  app: Application,
+  routes: (app: Application) => void
+): Promise<void> {
   const apiSpec = path.join(__dirname, 'api.yml');
   const validateResponses = !!(
     process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION &&
@@ -19,4 +22,4 @@ export default function (app: Application, routes: (app: Application) => void): 
       routes(app);
       app.use(errorHandler);
     });
-};
+}
