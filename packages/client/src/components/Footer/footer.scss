@@ -1,58 +1,58 @@
-@import "../variables";
+@import '../variables';
 
 .footer {
-  box-sizing: border-box;
-  position: fixed;
-  z-index: -100;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 21.875rem;
-  background-color: $powder-blue;
-  font-size: $default-font-size;
-  font-family: $default-font-family;
+    box-sizing: border-box;
+    position: fixed;
+    z-index: -100;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 21.875rem;
+    background-color: $powder-blue;
+    font-size: $default-font-size;
+    font-family: $default-font-family;
 
-  .footer-contents {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 4rem 1.5rem;
-  }
-
-  .footer-logo {
-    float: left;
-    width: 50%;
-
-    h2 {
-      margin: 0;
-      font-family: $logo-font-family;
+    .footer-contents {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 4rem 1.5rem;
     }
 
-    p {
-      font-size: 0.7rem;
-      color: $mid-gray;
-    }
-  }
+    .footer-logo {
+        float: left;
+        width: 50%;
 
-  .links {
-    float: right;
-    width: 50%;
-    display: flex;
-    flex-direction: row-reverse;
-    font-size: 2rem;
+        h2 {
+            margin: 0;
+            font-family: $logo-font-family;
+        }
 
-    a {
-      transition: all 0.3s;
-      color: $tc-white;
-      border-radius: 8px;
+        p {
+            font-size: 0.7rem;
+            color: $mid-gray;
+        }
     }
 
-    a:hover {
-      transition: all 0.3s;
-      background-color: $indigo-dye;
-    }
+    .links {
+        float: right;
+        width: 50%;
+        display: flex;
+        flex-direction: row-reverse;
+        font-size: 2rem;
 
-    .github {
-      background-color: $tc-black;
+        a {
+            transition: all 0.3s;
+            color: $tc-white;
+            border-radius: 8px;
+        }
+
+        a:hover {
+            transition: all 0.3s;
+            background-color: $indigo-dye;
+        }
+
+        .github {
+            background-color: $tc-black;
+        }
     }
-  }
 }

@@ -1,21 +1,21 @@
-@import "../../components/variables";
+@import '../../components/variables';
 
 .progress-bar {
-  height: 10px;
-  position: relative;
-  background-color: $white-gray;
+    height: 10px;
+    position: relative;
+    background-color: $white-gray;
 
-  .progress-bar-filler {
-    background-color: $powder-blue;
-    height: 100%;
-    max-width: 100%;
-    transition: width 0.3s ease;
-  }
+    .progress-bar-filler {
+        background-color: $powder-blue;
+        height: 100%;
+        max-width: 100%;
+        transition: width 0.3s ease;
+    }
 }
 
 .progress-bar-text {
-  font-size: $button-font-size;
-  font-family: $default-font-family;
-  text-align: right;
-  color: $mid-gray;
+    font-size: $button-font-size;
+    font-family: $default-font-family;
+    text-align: right;
+    color: $mid-gray;
 }

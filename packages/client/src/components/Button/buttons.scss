@@ -1,60 +1,61 @@
-@import "../variables";
+@import '../variables';
 
 .button {
-  background-color: $tc-white;
-  border: 1px solid $silver-gray;
-  outline: none;
-  box-sizing: border-box;
-  border-radius: 8px;
-  font-style: normal;
-  font-size: $button-font-size;
-  font-family: $default-font-family;
-  color: $mid-gray;
-  height: 2.5rem;
-  padding: 0 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  &:hover {
-    background-color: rgba($indigo-dye, 0.04);
-    color: $indigo-dye;
-    border-color: $indigo-dye;
-  }
-  &:active {
-    background: $indigo-dye;
-    color: $tc-white;
-  }
-  &:disabled {
-    color: $light-gray;
-    background-color: $white-gray;
-    border-color: $light-gray;
-  }
-  .button-icon {
-    padding: 5px;
-  }
+    background-color: $tc-white;
+    border: 1px solid $silver-gray;
+    outline: none;
+    box-sizing: border-box;
+    border-radius: 8px;
+    font-style: normal;
+    font-size: $button-font-size;
+    font-family: $default-font-family;
+    color: $mid-gray;
+    height: 2.5rem;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    &:hover {
+        background-color: rgba($indigo-dye, 0.04);
+        color: $indigo-dye;
+        border-color: $indigo-dye;
+    }
+
+    &: active {
+        background: $indigo-dye;
+        color: $tc-white;
+    }
+    &:disabled {
+        color: $light-gray;
+        background-color: $white-gray;
+        border-color: $light-gray;
+    }
+    .button-icon {
+        padding: 5px;
+    }
 }
 
 .iconButton {
-  color: $tc-white;
-  background-color: transparent;
-  box-sizing: border-box;
-  padding: 0rem;
-  border: none;
-  display: inline-block;
-  cursor: pointer;
+    color: $tc-white;
+    background-color: transparent;
+    box-sizing: border-box;
+    padding: 0rem;
+    border: none;
+    display: inline-block;
+    cursor: pointer;
 
-  .icon {
-    padding: 0.3125rem;
-  }
-  &:hover {
-    color: $silver-gray;
-  }
-  &:active {
-    color: $mid-gray;
-  }
-  &:disabled {
-    color: $light-gray;
-  }
+    .icon {
+        padding: 0.3125rem;
+    }
+    &:hover {
+        color: $silver-gray;
+    }
+    &:active {
+        color: $mid-gray;
+    }
+    &:disabled {
+        color: $light-gray;
+    }
 }
