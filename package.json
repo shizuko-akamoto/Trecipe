@@ -2,15 +2,21 @@
   "name": "trecipe",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/react-scripts",
+      "**/react-scripts/**"
+    ]
+  },
   "scripts": {
     "start:client": "yarn workspace client start",
     "start:server": "yarn workspace server dev",
     "start": "concurrently --kill-others-on-fail \"yarn start:client\" \"yarn start:server\""
   },
-  "dependencies": {
+  "devDependencies": {
     "concurrently": "^5.2.0",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11"
