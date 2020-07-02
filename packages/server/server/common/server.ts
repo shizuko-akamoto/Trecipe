@@ -5,6 +5,7 @@ import http from 'http';
 import os from 'os';
 import cookieParser from 'cookie-parser';
 import l from './logger';
+import mongoose from 'mongoose';
 
 import installValidator from './openapi';
 
@@ -26,6 +27,16 @@ export default class ExpressServer {
         app.use(bodyParser.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
         app.use(cookieParser(process.env.SESSION_SECRET));
         app.use(express.static(`${root}/public`));
+
+        const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
+        mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`);
+        mongoose.connection.once('open', () => {
+            l.info(`connected to MongoDB vis Mongoose`);
+        });
+        mongoose.connection.on('error', (err) => {
+            l.error(`unable to connect to Mongo via Mongoose`, err);
+            exit(1);
+        });
     }
 
     router(routes: (app: Application) => void): ExpressServer {

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 
 // eslint-disable-next-line no-unused-vars, no-shadow
 export default function errorHandler(
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     err,
     req: Request,
     res: Response,
