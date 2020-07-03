@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Modal from '../../components/Modal/Modal';
 import './searchBarPopup.scss';
@@ -30,8 +30,6 @@ export interface SearchBarState {
  * A popup to search for places and to be added into a Trecipe
  */
 export class SearchBarPopup extends React.Component<{}, SearchBarState> {
-    private container: RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
-
     state = {
         searchKey: '',
         resultsOpen: false,
@@ -88,24 +86,6 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
         }));
     }
 
-    componentDidMount(): void {
-        document.addEventListener('mousedown', this.handleClickOutside, false);
-    }
-
-    componentWillUnmount(): void {
-        document.removeEventListener('mousedown', this.handleClickOutside, false);
-    }
-
-    private handleClickOutside = (event: MouseEvent) => {
-        if (this.container.current && event.target instanceof Node) {
-            if (this.container.current.contains(event.target)) {
-                return;
-            } else {
-                // TODO: backend, send the updated result list to the backend
-            }
-        }
-    };
-
     private renderSearchResults() {
         const { results } = this.state;
         if (this.state.resultsOpen && _.isArray(results) && !_.isEmpty(results)) {
@@ -130,6 +110,7 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
             );
         }
     }
+
     render() {
         return (
             <Modal>

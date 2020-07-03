@@ -30,7 +30,7 @@
         border-radius: 8px;
         border: solid 1px $silver-gray;
         outline: none;
-        margin-top: 0.5rem;
+        margin: 0.5rem 0;
         padding: 0.3rem 0.5rem;
         &:focus-within {
             border-color: $mid-gray;
@@ -42,7 +42,6 @@
         overflow-y: auto;
         font-size: $default-font-size;
         font-family: $default-font-family;
-        padding: 1em 0;
         background-color: $tc-white;
         .results-list {
             padding: 0;

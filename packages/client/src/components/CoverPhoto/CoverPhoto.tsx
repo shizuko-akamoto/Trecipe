@@ -1,26 +1,18 @@
 import React, { ReactNodeArray } from 'react';
-import Background from '../../pages/MyTrecipes/TrecipeCard/BetterDefaultImage.png';
 import PhotoUploader from '../PhotoUploader/PhotoUploader';
 
-export interface CoverphotoProps {
-    trecipeCardID: number;
+export interface CoverPhotoProps {
     imageSource: string;
     buttons?: ReactNodeArray;
 }
 
-export interface CoverphotoState {
+export interface CoverPhotoState {
     sourceImage: string;
     isOpen: boolean;
 }
 
-export class CoverPhoto extends React.Component<CoverphotoProps> {
-    public static defaultProps: Partial<CoverphotoProps> = {
-        trecipeCardID: 42,
-        imageSource: 'url(' + Background + ')',
-        buttons: [],
-    };
-
-    public readonly state: Readonly<CoverphotoState> = {
+export class CoverPhoto extends React.Component<CoverPhotoProps, CoverPhotoState> {
+    public readonly state: Readonly<CoverPhotoState> = {
         sourceImage: this.props.imageSource,
         isOpen: false,
     };
@@ -41,7 +33,7 @@ export class CoverPhoto extends React.Component<CoverphotoProps> {
     }
 
     toggle() {
-        this.setState((state: CoverphotoState) => ({
+        this.setState((state: CoverPhotoState) => ({
             isOpen: !state.isOpen,
         }));
     }
