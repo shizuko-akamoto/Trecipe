@@ -8,10 +8,17 @@ import { newTrecipeModel, TrecipeModel } from "../../redux/TrecipeList/types";
 import { isUndefined } from "lodash";
 import { bindActionCreators, Dispatch } from "redux";
 import { showModal } from "../../redux/Modal/action";
-import { updateTrecipe } from "../../redux/TrecipeList/action";
+import {
+  createNewTrecipe,
+  deleteTrecipe,
+  updateTrecipe,
+} from "../../redux/TrecipeList/action";
 import { getDestModelsByTrecipeId } from "../../redux/Destinations/action";
 import { connect } from "react-redux";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import TrecipePopup, {
+  TrecipePopupType,
+} from "../../components/TrecipePopup/TrecipePopup";
 
 export type MapProps = ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> &
@@ -23,19 +30,19 @@ class Map extends React.Component<MapProps> {
       id: 1,
       text: "Edit",
       icon: "edit",
-      onClick: () => {},
+      onClick: () => this.onTrecipeEditClick(),
     },
     {
       id: 2,
       text: "Duplicate",
       icon: "copy",
-      onClick: () => {},
+      onClick: () => this.onTrecipeCopyClick(),
     },
     {
       id: 3,
       text: "Delete",
       icon: ["far", "trash-alt"],
-      onClick: () => {},
+      onClick: () => this.onTrecipeDeleteClick(),
     },
   ];
 
@@ -58,6 +65,27 @@ class Map extends React.Component<MapProps> {
         (destId) => destId !== idToDelete
       ),
     });
+  }
+
+  private onTrecipeEditClick() {
+    this.props.showModal(
+      <TrecipePopup
+        type={TrecipePopupType.Edit}
+        trecipeId={this.props.trecipe.id}
+      />
+    );
+  }
+
+  private onTrecipeCopyClick() {
+    // copying everything except for id
+    const { id, ...copy } = this.props.trecipe;
+    this.props.createNewTrecipe(Object.assign(newTrecipeModel(), copy));
+    // TODO: Redirect to Map page of copied Trecipe
+  }
+
+  private onTrecipeDeleteClick() {
+    this.props.deleteTrecipe(this.props.trecipe.id);
+    // TODO: Redirect back to My Trecipes page
   }
 
   render() {
@@ -124,6 +152,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     {
       showModal,
       updateTrecipe,
+      deleteTrecipe,
+      createNewTrecipe,
       getDestModelsByTrecipeId,
     },
     dispatch
