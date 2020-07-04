@@ -9,9 +9,15 @@ export default function (app: Application, routes: (app: Application) => void): 
         process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION &&
         process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION.toLowerCase() === 'true'
     );
+    const validateRequests = !!(
+        process.env.OPENAPI_ENABLE_REQUEST_VALIDATION &&
+        process.env.OPENAPI_ENABLE_REQUEST_VALIDATION.toLowerCase() === 'true'
+    );
     return new OpenApiValidator({
-        apiSpec,
-        validateResponses,
+        apiSpec: apiSpec,
+        validateResponses: validateResponses,
+        validateRequests: validateRequests,
+        validateFormats: validateResponses || validateRequests ? 'fast' : false,
     })
         .install(app)
         .then(() => {

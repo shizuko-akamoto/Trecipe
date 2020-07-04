@@ -1,5 +1,9 @@
 import { Application } from 'express';
-import examplesRouter from './api/controllers/examples/router';
+import TrecipeController from './api/trecipe/trecipe.controller';
+import Controller from './common/controller';
 export default function routes(app: Application): void {
-    app.use('/api/v1/examples', examplesRouter);
+    const controllers = [new TrecipeController()];
+    controllers.forEach((controller: Controller) => {
+        app.use('/api/v1', controller.router);
+    });
 }

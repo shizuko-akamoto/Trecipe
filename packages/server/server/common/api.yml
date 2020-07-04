@@ -1,58 +1,102 @@
 openapi: 3.0.1
 info:
   title: server
-  description: Trecipe backend
+  description: trecipe backend
   version: 1.0.0
 servers:
 - url: /api/v1
+  description: Dev server
 tags:
-- name: Examples
-  description: Simple example endpoints
-- name: Specification
-  description: The swagger API specification
+- name: Trecipes
+  description: Trecipe endpoints
 paths:
-  /examples:
+  /trecipes:
     get:
       tags:
-      - Examples
-      description: Fetch all examples
+      - Trecipes
+      summary: Fetch all trecipes
+      description: Fetch all trecipes either owned or shared with current user
       responses:
         200:
-          description: Returns all examples
-          content: {}
+          description: Returns all trecipes owned or shared with current user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trecipe'
     post:
       tags:
-      - Examples
-      description: Create a new example
+      - Trecipes
+      summary: Create a new trecipe
+      description: Create a new trecipe with given name, description, and privacy setting
       requestBody:
-        description: an example
+        description: New Trecipe's name, description, privacy setting
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExampleBody'
+              $ref: '#/components/schemas/CreateNewTrecipeDTO'
         required: true
       responses:
-        200:
-          description: Returns all examples
-          content: {}
-  /examples/{id}:
+        201:
+          description: Returns the newly created trecipe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trecipe'
+        400:
+          $ref: '#/components/responses/BadRequest'
+
+  /trecipes/{id}:
     get:
       tags:
-      - Examples
+      - Trecipes
+      summary: Gets a trecipe by uuid
+      description: Gets a trecipe by uuid
       parameters:
-      - name: id
-        in: path
-        description: The id of the example to retrieve
-        required: true
-        schema:
-          type: integer
+      - $ref: '#/components/parameters/id'
       responses:
         200:
-          description: Return the example with the specified id
-          content: {}
+          description: Returns the trecipe with the specified uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trecipe'
         404:
-          description: Example not found
-          content: {}
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags:
+      - Trecipes
+      summary: Updates a trecipe by uuid
+      description: Updates a trecipe of given uuid by updated trecipe model
+      parameters:
+      - $ref: '#/components/parameters/id'
+      requestBody:
+        description: Updated trecipe model
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trecipe'
+        required: true
+      responses:
+        200:
+          description: Returns the updated trecipe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trecipe'
+        404:
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags:
+        - Trecipes
+      summary: Deletes a trecipe by uuid
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          $ref: '#/components/responses/Deleted'
+
   /spec:
     get:
       tags:
@@ -61,14 +105,108 @@ paths:
         200:
           description: Return the API specification
           content: {}
+
 components:
+  parameters:
+    id:
+      name: id
+      in: path
+      description: "**UUID of trecipe**. *Example: `123e4567-e89b-12d3-a456-426614174000`*"
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
-    ExampleBody:
-      title: example
-      required:
-      - name
+    Trecipe:
+      title: Trecipe
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          example: My Trecipe
+        description:
+          type: string
+          example: Description for my Trecipe
+        owner:
+          type: string
+          example: Team2
+        isPrivate:
+          type: boolean
+          example: true
+        collaborators:
+            type: array
+            items:
+              type: string
+            example: []
+        image:
+          type: string
+        destinations:
+          type: array
+          items:
+            type: object
+            properties:
+              destUuid:
+                type: string
+                example: 234e4567-g72h-2857-a456-426614138477
+              completed:
+                type: boolean
+                example: false
+          example: []
+    CreateNewTrecipeDTO:
+      title: CreateNewTrecipeDTO
       type: object
       properties:
         name:
           type: string
-          example: no_stress
+          example: My new Trecipe
+        description:
+          type: string
+          example: Description for my new Trecipe
+        isPrivate:
+          type: boolean
+          example: true
+      required:
+        - name
+        - description
+        - isPrivate
+    Error:
+      title: Error
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+  responses:
+    NotFound:
+      description: Entity not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Deleted:
+      description: Operation success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              deletedCount:
+                type: integer
+                format: int64
+
+
+
+
+
