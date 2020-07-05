@@ -1,5 +1,5 @@
 interface DestWithStatus {
-    destUuid: string;
+    destUUID: string;
     completed: boolean;
 }
 

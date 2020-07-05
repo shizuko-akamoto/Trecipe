@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import Trecipe from './trecipe.interface';
 
 const destWithStatus = new mongoose.Schema({
-    destUuid: String,
+    destUUID: { type: String, ref: 'Destination' },
     completed: Boolean,
 });
 
@@ -11,9 +11,9 @@ const trecipeSchema = new mongoose.Schema(
         uuid: String,
         name: String,
         description: String,
-        owner: String,
+        owner: { type: String, ref: 'User' },
         isPrivate: Boolean,
-        collaborators: [String],
+        collaborators: [{ type: String, ref: 'User' }],
         image: String,
         destinations: [destWithStatus],
     },

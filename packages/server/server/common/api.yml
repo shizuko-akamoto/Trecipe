@@ -44,8 +44,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trecipe'
-        400:
-          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /trecipes/{id}:
     get:
@@ -54,7 +54,7 @@ paths:
       summary: Gets a trecipe by uuid
       description: Gets a trecipe by uuid
       parameters:
-      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/pathId'
       responses:
         200:
           description: Returns the trecipe with the specified uuid
@@ -70,7 +70,7 @@ paths:
       summary: Updates a trecipe by uuid
       description: Updates a trecipe of given uuid by updated trecipe model
       parameters:
-      - $ref: '#/components/parameters/id'
+      - $ref: '#/components/parameters/pathId'
       requestBody:
         description: Updated trecipe model
         content:
@@ -92,11 +92,70 @@ paths:
         - Trecipes
       summary: Deletes a trecipe by uuid
       parameters:
-        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/pathId'
       responses:
         200:
           $ref: '#/components/responses/Deleted'
-
+  /destinations:
+    post:
+      tags:
+        - Destinations
+      summary: Create new destination
+      description: Create a new destination with given placeId
+      requestBody:
+        description: Google place id for this destination
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeId:
+                  type: string
+                  example: ChIJN1t_tDeuEmsRUsoyG83frY4
+      responses:
+        201:
+          description: Returns the newly created destination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Destination'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Destinations
+      summary: Get destinations by trecipe uuid
+      description: Get all destinations in a trecipe with specified uuid
+      parameters:
+        - $ref: '#/components/parameters/queryTrecipeId'
+      responses:
+        200:
+          description: Returns an array of destinations in trecipe of given uuid
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Destination'
+  /destinations/{id}:
+    get:
+      tags:
+        - Destinations
+      summary: Get destination by uuid
+      description: Get destination by uuid
+      parameters:
+        - $ref: '#/components/parameters/pathId'
+      responses:
+        200:
+          description: Returns the destination given by uuid
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Destination'
+        404:
+          $ref: '#/components/responses/NotFound'
   /spec:
     get:
       tags:
@@ -108,10 +167,20 @@ paths:
 
 components:
   parameters:
-    id:
+    pathId:
       name: id
       in: path
-      description: "**UUID of trecipe**. *Example: `123e4567-e89b-12d3-a456-426614174000`*"
+      description: uuid
+      example: 123e4567-e89b-12d3-a456-426614174000
+      required: true
+      schema:
+        type: string
+        format: uuid
+    queryTrecipeId:
+      name: id
+      in: query
+      description: Trecipe uuid
+      example: 123e4567-e89b-12d3-a456-426614174000
       required: true
       schema:
         type: string
@@ -156,6 +225,82 @@ components:
                 type: boolean
                 example: false
           example: []
+    Destination:
+      title: Destination
+      type: object
+      required:
+        - uuid
+        - name
+        - placeId
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 2h357246-g725-4872-g84m-48692745878567
+        name:
+          type: string
+          example: Sample destination
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/DestinationCategory'
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+        formattedAddress:
+          type: string
+          example: 5, 48 Pirrama Rd, Pyrmont NSW 2009, Australia
+        formattedPhoneNumber:
+          type: string
+          example: +61 2 9374 4000
+        website:
+          type: string
+          example: https://www.google.com.au/about/careers/locations/sydney/
+        rating:
+          $ref: '#/components/schemas/Rating'
+        userRatings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rating'
+          example: [4.2, 3.0, 4.5]
+        placeId:
+          type: string
+          example: ChIJN1t_tDeuEmsRUsoyG83frY4
+        photoRefs:
+          type: array
+          items:
+            type: string
+          example: [CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU]
+    DestinationCategory:
+      title: DestinationCategory
+      type: string
+      enum:
+        - food
+        - accommodation
+        - entertainment
+        - shopping
+        - sightseeing
+    Geometry:
+      title: Geometry
+      type: object
+      properties:
+        lat:
+          type: number
+          format: double
+          example: 35.929673
+        lon:
+          type: number
+          format: double
+          example: -78.948237
+      required:
+        - lat
+        - lon
+    Rating:
+      title: Rating
+      type: number
+      format: float
+      minimum: 0.0
+      maximum: 5.0
+      example: 4.3
     CreateNewTrecipeDTO:
       title: CreateNewTrecipeDTO
       type: object
@@ -189,8 +334,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request
+    InternalServerError:
+      description: Internal server error
       content:
         application/json:
           schema:

@@ -4,7 +4,7 @@ import TrecipeService from './trecipe.service';
 import Trecipe from './trecipe.interface';
 import CreateNewTrecipeDTO from './trecipe.dto';
 import { uuid } from 'uuidv4';
-import { BadRequest } from 'express-openapi-validator/dist/framework/types';
+import { InternalServerError } from 'express-openapi-validator/dist/framework/types';
 
 class TrecipeController implements Controller {
     public readonly path = '/trecipes';
@@ -44,7 +44,7 @@ class TrecipeController implements Controller {
             })
             .catch((err) =>
                 next(
-                    new BadRequest({
+                    new InternalServerError({
                         path: this.path,
                         message: `Failed to create trecipe: ${err.toString()}`,
                     })
