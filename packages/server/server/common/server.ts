@@ -6,6 +6,7 @@ import os from 'os';
 import cookieParser from 'cookie-parser';
 import l from './logger';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
 import installValidator from './openapi';
 
@@ -17,6 +18,7 @@ export default class ExpressServer {
     constructor() {
         const root = path.normalize(__dirname + '/../..');
         app.set('appPath', root + 'client');
+        app.use(cors());
         app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || '100kb' }));
         app.use(
             bodyParser.urlencoded({
