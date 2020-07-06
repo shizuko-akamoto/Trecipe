@@ -38,7 +38,7 @@
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false",
     "eject": "react-scripts eject",
-    "lint": "eslint -c .eslintrc.js \"src/**/*.{js,ts,tsx}\" --quiet --fix && prettier \"src/**/*.{js,ts,tsx,css,scss,json,md}\" --write"
+    "lint": "eslint -c .eslintrc.js \"src/**/*.{js,ts,tsx}\" --fix && prettier \"src/**/*.{js,ts,tsx,css,scss,json,md}\" --write"
   },
   "browserslist": {
     "production": [
