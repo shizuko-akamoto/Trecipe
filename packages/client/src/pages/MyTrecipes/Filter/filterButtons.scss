@@ -1,0 +1,51 @@
+@import '../../../components/variables.scss';
+@import '../../../components/Button/buttons.scss';
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+.contextFilterButtons {
+    @extend .button;
+
+    &.active {
+        font-size: $button-font-size;
+        color: white;
+        border-color: $indigo-dye;
+        border-radius: 8px;
+        background: $indigo-dye;
+
+        &:hover {
+            background-color: rgba($indigo-dye, 0.04);
+            color: $indigo-dye;
+        }
+    }
+
+    .icon-hidden {
+        opacity: 0;
+    }
+}
+
+.contextFilterSelector {
+    @extend .button;
+    width: 8.75rem;
+}
+
+.contextFilterSelectorEntry {
+    @extend .contextFilterSelector;
+    border-radius: 0;
+    border: none;
+    justify-content: flex-start;
+
+    .button-icon {
+        padding-right: 1rem;
+    }
+}
+
+.contextFilterSelectorList {
+    position: absolute;
+    list-style: none;
+    padding: 0.5rem 0;
+    margin: 0;
+    box-shadow: rgba($tc-black, 0.12) 0 5px 12px;
+    border-radius: 0 0 8px 8px;
+    background-color: $tc-white;
+    transition: background-color 0.2s ease;
+}
