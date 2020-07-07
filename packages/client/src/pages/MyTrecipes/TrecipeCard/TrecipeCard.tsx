@@ -5,7 +5,12 @@ import { CardMenu } from '../CardMenu/CardMenu';
 import { MenuItem } from '../../../components/Menu/Menu';
 import { ProgressBar } from '../../../components/ProgressBar/ProgressBar';
 import { bindActionCreators, Dispatch } from 'redux';
-import { createNewTrecipe, deleteTrecipe } from '../../../redux/TrecipeList/action';
+import {
+    addTrecipe,
+    createTrecipeRequest,
+    deleteTrecipe,
+    deleteTrecipeRequest,
+} from '../../../redux/TrecipeList/action';
 import { connect } from 'react-redux';
 import { newTrecipeModel, TrecipeModel } from '../../../redux/TrecipeList/types';
 import { showModal } from '../../../redux/Modal/action';
@@ -49,8 +54,8 @@ class TrecipeCard extends React.Component<TCProps> {
 
     private duplicateTrecipe = () => {
         // copying everything except for id
-        const { id, ...copy } = this.props;
-        this.props.createNewTrecipe(Object.assign(newTrecipeModel(), copy));
+        const { name, description, isPrivate } = this.props;
+        this.props.createNewTrecipe({ name: name, description: description, isPrivate: isPrivate });
     };
 
     private deleteTrecipe = () => {
@@ -85,8 +90,8 @@ class TrecipeCard extends React.Component<TCProps> {
                 </div>
                 <div className="tcBody">
                     <div className="tcMetaData">
-                        <div className="tcDate">{this.props.date}</div>
-                        <div className="tcAuthor">by: {this.props.author}</div>
+                        <div className="tcDate">{this.props.date.toLocaleString()}</div>
+                        <div className="tcAuthor">by: {this.props.owner}</div>
                     </div>
                     <div className="tcDescription">
                         <p>{this.props.description}</p>
@@ -106,8 +111,8 @@ class TrecipeCard extends React.Component<TCProps> {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
-            createNewTrecipe,
-            deleteTrecipe,
+            createNewTrecipe: createTrecipeRequest,
+            deleteTrecipe: deleteTrecipeRequest,
             showModal,
         },
         dispatch

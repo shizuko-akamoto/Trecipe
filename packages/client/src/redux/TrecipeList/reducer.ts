@@ -6,7 +6,7 @@ export function trecipeListReducer(
     action: TrecipeListAction
 ): TrecipeListState {
     switch (action.type) {
-        case TrecipeListActionTypes.CREATE_NEW_TRECIPE:
+        case TrecipeListActionTypes.ADD_TRECIPE:
             return {
                 trecipes: state.trecipes.concat(action.payload),
             };

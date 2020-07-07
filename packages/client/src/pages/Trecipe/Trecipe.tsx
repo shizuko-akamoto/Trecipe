@@ -183,7 +183,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                                     className="tc-header-privacy"
                                 />
                             </div>
-                            <h3 className="tc-header-time">{trecipe.date}</h3>
+                            <h3 className="tc-header-time">{trecipe.date.toLocaleString()}</h3>
                         </div>
                     </CoverPhoto>
                     <svg

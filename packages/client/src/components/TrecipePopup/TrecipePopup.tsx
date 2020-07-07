@@ -5,9 +5,13 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { isUndefined } from 'lodash';
 import { Button } from '../Button/Button';
 import { ToggleSwitch } from '../Toggle/Toggle';
-import { newTrecipeModel, TrecipeModel } from '../../redux/TrecipeList/types';
+import { TrecipeModel } from '../../redux/TrecipeList/types';
 import { RootState } from '../../redux';
-import { createNewTrecipe, updateTrecipe } from '../../redux/TrecipeList/action';
+import {
+    createTrecipeRequest,
+    updateTrecipe,
+    updateTrecipeRequest,
+} from '../../redux/TrecipeList/action';
 import { hideModal } from '../../redux/Modal/action';
 import Modal from '../Modal/Modal';
 import { TrecipeException } from '../../exceptions/Exceptions';
@@ -87,8 +91,7 @@ class TrecipePopup extends React.Component<TrecipePopupProps, TrecipePopupState>
         model: Partial<TrecipeModel>
     ) => {
         if (this.props.type === TrecipePopupType.Add) {
-            const newTrecipeModal: TrecipeModel = Object.assign(newTrecipeModel(), model);
-            this.props.createNewTrecipe(newTrecipeModal);
+            this.props.createNewTrecipe(model);
         } else if (!isUndefined(this.props.trecipeId)) {
             this.props.updateTrecipe(this.props.trecipeId, model);
         } else {
@@ -184,8 +187,8 @@ function mapStateToProps(state: RootState, ownProps: TrecipePopupOwnProps) {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
-            createNewTrecipe,
-            updateTrecipe,
+            createNewTrecipe: createTrecipeRequest,
+            updateTrecipe: updateTrecipeRequest,
             hideModal,
         },
         dispatch

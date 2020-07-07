@@ -12,4 +12,6 @@ export default interface Trecipe {
     collaborators: Array<string>;
     image: string;
     destinations: Array<DestWithStatus>;
+    createdAt: Date | null;
+    updatedAt: Date | null;
 }

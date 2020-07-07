@@ -189,11 +189,6 @@ components:
     Trecipe:
       title: Trecipe
       type: object
-      required:
-        - uuid
-        - name
-        - isPrivate
-        - owner
       properties:
         uuid:
           type: string
@@ -230,13 +225,17 @@ components:
                 type: boolean
                 example: false
           example: []
+        createdAt:
+          type: object
+          description: Mongoose timestamp for creation date-time
+          example: 2020-07-07T00:19:51.710Z
+        updatedAt:
+          type: object
+          description: Mongoose timestamp for last update date-time
+          example: 2020-07-08T00:19:51.710Z
     Destination:
       title: Destination
       type: object
-      required:
-        - uuid
-        - name
-        - placeId
       properties:
         uuid:
           type: string
