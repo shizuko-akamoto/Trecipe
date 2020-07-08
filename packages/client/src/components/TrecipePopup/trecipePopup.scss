@@ -1,0 +1,64 @@
+@import '../variables';
+@import '../mixins';
+
+.trecipePopup {
+    font-family: $default-font-family;
+    width: 500px;
+    padding: 10px 27px 27px;
+    text-align: left;
+
+    .title {
+        @include title-border-bottom($powder-blue, $crayola-yellow);
+        width: fit-content;
+        font-style: normal;
+        font-size: $title-font-size;
+        color: $indigo-dye;
+    }
+
+    .contents {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        label {
+            font-size: $default-font-size;
+            font-style: normal;
+            color: $mid-gray;
+        }
+
+        .input {
+            font-family: $default-font-family;
+            font-size: $input-font-size;
+            border: 1px solid $silver-gray;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-bottom: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 8px;
+
+            &::placeholder {
+                color: $bright-gray;
+            }
+        }
+
+        input {
+            height: 2.5rem;
+        }
+
+        textarea {
+            height: 6.25rem;
+            resize: none;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        .button {
+            margin-left: 10px;
+        }
+
+        .btn {
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
+}

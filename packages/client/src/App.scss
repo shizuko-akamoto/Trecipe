@@ -1,0 +1,10 @@
+@import './components/variables';
+
+.App {
+    box-sizing: border-box;
+    width: 100%;
+
+    .router-link {
+        text-decoration: none;
+    }
+}
