@@ -15,6 +15,7 @@
       flex: 0 0 400px;
       height: 100vh;
       padding: 0;
+      min-width: 0;
 
       .trecipe-header {
         position: sticky;
@@ -51,9 +52,8 @@
 
     .map-container {
       flex: 1 1 100%;
-      background-size: cover;
-      background-image: url(./sampleMap.png);
-      background-position: center center;
+      position: relative;
+      overflow: hidden;
     }
   }
 }
