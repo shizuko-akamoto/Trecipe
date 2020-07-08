@@ -28,6 +28,7 @@ import TrecipePopup, {
 import { SearchBarPopup } from "../../components/SearchBarPopup/SearchBarPopup";
 import { StaticMap } from "../../components/Map/StaticMap";
 import Background from "../MyTrecipes/TrecipeCard/BetterDefaultImage.png";
+import Modal from "../../components/Modal/Modal";
 
 /**
  * TrecipeProps
@@ -130,7 +131,13 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
   }
 
   private onDestAddClick() {
-    this.props.showModal(<SearchBarPopup />);
+    // TODO: Modal is moved to here from SearchBarPopup so that the searchbar can be reused in map
+    // Might be a good idea to refactor SearchBarPopup and rename it
+    this.props.showModal(
+      <Modal>
+        <SearchBarPopup />
+      </Modal>
+    );
   }
 
   private onDestEditClick() {
@@ -263,7 +270,10 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
             <h1 className="trecipe-page-title">See places on the map</h1>
             <div className="trecipe-map-wrapper">
               <Link to={`/map/${trecipe.id}`}>
-                <StaticMap />
+                <StaticMap
+                  destinations={this.props.destinations}
+                  completedDests={this.props.trecipe.completed}
+                />
                 <div className="static-map-overlay">
                   <Button icon="external-link-alt" text="Expand View" />
                 </div>
