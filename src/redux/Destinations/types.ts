@@ -18,6 +18,7 @@ export enum DestinationCategory {
   Shopping = "Shopping",
   Accommodation = "Accommodation",
   Attraction = "Attraction",
+  Others = "Others",
 }
 
 /**
@@ -35,6 +36,8 @@ export function getIcon(category: DestinationCategory): IconProp {
       return "bed";
     case DestinationCategory.Attraction:
       return "binoculars";
+    case DestinationCategory.Others:
+      return "map-marked-alt";
     default:
       throw new UnreachableCaseException(category);
   }
@@ -63,6 +66,8 @@ export interface DestinationModel {
   rating: Rating;
   description: string;
   imgSrc: string;
+  lat: number;
+  lng: number;
 }
 
 /**
@@ -77,6 +82,8 @@ export function newDestinationModel(): DestinationModel {
     rating: 3,
     description: "Some overview on this destination.",
     imgSrc: SampleDestImage,
+    lat: 49.2606,
+    lng: -123.246,
   };
 }
 
@@ -93,4 +100,6 @@ export const initialState = {
 
 export enum DestinationsActionTypes {
   LOAD_DESTS_BY_TRECIPE_ID = "@destination/LOAD_DESTS_BY_TRECIPE_ID",
+  ADD_DESTINATION = "@destination/ADD_DESTINATION",
+  REMOVE_DESTINATION = "@destination/REMOVE_DESTINATIO",
 }

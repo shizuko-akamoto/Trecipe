@@ -28,4 +28,23 @@ export const loadByTrecipeId = (
   });
 };
 
-export type DestinationsAction = ReturnType<typeof loadByTrecipeId>;
+export const addDestination = (
+  trecipeId: string,
+  destination: DestinationModel
+) => {
+  return typedAction(DestinationsActionTypes.ADD_DESTINATION, {
+    trecipeId: trecipeId,
+    dest: destination,
+  });
+};
+
+export const removeDestination = (trecipeId: string, destinationId: string) => {
+  return typedAction(DestinationsActionTypes.REMOVE_DESTINATION, {
+    trecipeId: trecipeId,
+    destinationId: destinationId,
+  });
+};
+
+export type DestinationsAction = ReturnType<
+  typeof loadByTrecipeId | typeof addDestination | typeof removeDestination
+>;

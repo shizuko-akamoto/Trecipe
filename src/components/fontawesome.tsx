@@ -22,6 +22,7 @@ import {
   faShoppingCart,
   faBinoculars,
   faExternalLinkAlt,
+  faMapMarkedAlt,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faQuestionCircle,
@@ -56,5 +57,6 @@ library.add(
   faBed,
   faShoppingCart,
   faBinoculars,
-  faExternalLinkAlt
+  faExternalLinkAlt,
+  faMapMarkedAlt
 );
