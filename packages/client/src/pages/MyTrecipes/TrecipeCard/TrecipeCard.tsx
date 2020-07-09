@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './trecipeCard.scss';
-import { CardMenu } from '../CardMenu/CardMenu';
+import { CardMenu } from '../../../components/CardMenu/CardMenu';
 import { MenuItem } from '../../../components/Menu/Menu';
 import { ProgressBar } from '../../../components/ProgressBar/ProgressBar';
 import { bindActionCreators, Dispatch } from 'redux';

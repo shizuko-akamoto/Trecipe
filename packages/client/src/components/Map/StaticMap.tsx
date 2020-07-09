@@ -1,6 +1,5 @@
-import React, { MouseEvent, Component, RefObject } from 'react';
+import React, { Component, RefObject } from 'react';
 import { Image } from '../Image/Image';
-import { Button } from '../Button/Button';
 import './StaticMap.scss';
 
 /**
@@ -37,7 +36,6 @@ export interface StaticMapProps {
     mapScale: 1 | 2;
     markers: Array<Marker>;
     markerSize: 'tiny' | 'small' | 'mid';
-    onClick: (e: MouseEvent<HTMLElement>) => void;
 }
 
 /**
@@ -62,9 +60,6 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
     public static defaultProps: StaticMapProps = {
         height: 31.25,
         mapScale: 2,
-        onClick: () => {
-            return;
-        },
         markerSize: 'small',
         // TODO: Update this to empty array before merging into master
         markers: SAMPLE_LAT_LONG,
@@ -191,9 +186,6 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
                 style={{ height: `${this.props.height}rem` }}>
                 <div className="static-map-image">
                     <Image src={this.getMapUrl(this.props)} imgStyle={{ borderRadius: '8px' }} />
-                </div>
-                <div className="static-map-overlay" onClick={(e) => this.props.onClick(e)}>
-                    <Button icon="external-link-alt" text="Expand View" />
                 </div>
             </div>
         );
