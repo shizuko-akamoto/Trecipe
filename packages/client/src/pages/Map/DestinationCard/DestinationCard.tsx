@@ -24,7 +24,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                 <FontAwesomeIcon className="dest-check-icon" icon="check" />
                             )}
                         </span>
-                        <span className="dest-card-edit">
+                        <span className="dest-cfard-edit">
                             <CardMenu
                                 menuItems={[
                                     {

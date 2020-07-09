@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '../../../components/Button/Button';
-import { Menu, MenuItem } from '../../../components/Menu/Menu';
+import { Button } from '../Button/Button';
+import { Menu, MenuItem } from '../Menu/Menu';
 
 /**
  * CardMenuProps
@@ -44,7 +44,7 @@ export class CardMenu extends React.Component<CardMenuProps, CardMenuState> {
                         menuItems={this.props.menuItems}
                         originElement={this.state.originElement as HTMLElement}
                         onClose={this.handleClose}
-                        position="right"
+                        position="left"
                         width={10}
                         buttonHeight={2.5}
                     />

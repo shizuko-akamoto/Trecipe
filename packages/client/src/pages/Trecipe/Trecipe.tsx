@@ -14,7 +14,7 @@ import { showModal } from '../../redux/Modal/action';
 import { RootState } from '../../redux';
 import { intersection, isUndefined } from 'lodash';
 import { RouteComponentProps } from 'react-router';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { DestinationModel } from '../../redux/Destinations/types';
 import { getDestModelsByTrecipeId } from '../../redux/Destinations/action';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
@@ -194,7 +194,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                         <path d="M 0 0 Q 50 50 100 0 V 100 H 0 Z" />
                     </svg>
                 </div>
-                <div className="content-wrapper">
+                <div className="trecipe-content-wrapper">
                     <div className="content">
                         <p>{trecipe.description}</p>
                         <span className="title-with-btns">
@@ -255,7 +255,14 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                             )}
                         </div>
                         <h1 className="trecipe-page-title">See places on the map</h1>
-                        <StaticMap />
+                        <div className="trecipe-map-wrapper">
+                            <Link to={`/map/${trecipe.id}`}>
+                                <StaticMap />
+                                <div className="static-map-overlay">
+                                    <Button icon="external-link-alt" text="Expand View" />
+                                </div>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>
