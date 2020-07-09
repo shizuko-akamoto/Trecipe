@@ -74,12 +74,17 @@ export class HoverMarker extends Component<markerProps, markerState> {
         this.toggleMarker();
     };
 
-    // Override the default google map's info window padding dynamically
+    // Override the default google map's info window style dynamically
     // Can't use a scss file because they get wiped whenever the map is closed (side effect of library)
     private onDomReady = () => {
-        let eles = document.getElementsByClassName('gm-style-iw');
+        let eles = document.getElementsByClassName('gm-style-iw-c');
         Array.prototype.forEach.call(eles, function (ele, index) {
             ele.style.padding = '0';
+        });
+
+        eles = document.getElementsByClassName('gm-style-iw-d');
+        Array.prototype.forEach.call(eles, function (ele, index) {
+            ele.style.overflow = 'auto';
         });
     };
 

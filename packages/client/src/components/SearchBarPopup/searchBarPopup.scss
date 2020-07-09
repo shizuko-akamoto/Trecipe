@@ -6,8 +6,8 @@
     background-color: $tc-white;
     box-sizing: border-box;
     border-radius: 8px;
-    border: 1px solid $silver-gray;
-    padding: 15px 35px;
+    border: 1px solid $bright-gray;
+    padding: 15px 25px;
     .contents {
         display: flex;
         flex-direction: column;
@@ -27,7 +27,7 @@
         background-color: $tc-white;
         color: $mid-gray;
         border-radius: 8px;
-        border: solid 1px $silver-gray;
+        border: solid 1px $bright-gray;
         outline: none;
         margin: 0.5rem 0;
         padding: 0.3rem 0.5rem;
