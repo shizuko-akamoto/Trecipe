@@ -1,0 +1,86 @@
+@import '../../../components/variables';
+
+.dest-card-item-wrapper {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    font-family: $default-font-family;
+    background-color: $tc-white;
+    display: flex;
+    flex-direction: column;
+
+    .dest-card-header-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        background-size: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 8px 8px 0 0;
+        flex: 1 1 67%;
+
+        .dest-card-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            #dest-card-title {
+                color: $tc-white;
+                font-size: $title-font-size;
+                text-transform: uppercase;
+                margin: 0;
+                padding: 0.2rem 0.5rem;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                display: flex;
+                align-items: center;
+
+                .dest-check-icon {
+                    margin-left: 0.5rem;
+                    font-size: $default-font-size;
+                }
+            }
+        }
+    }
+
+    .dest-card-body {
+        display: flex;
+        flex-direction: column;
+        padding: 0.4em 0.5em;
+        border: solid $light-gray;
+        border-width: 0 1px 1px 1px;
+        border-radius: 0 0 8px 8px;
+
+        .dest-metadata {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding-top: 0.5rem;
+
+            #dest-category,
+            #dest-location {
+                color: $silver-gray;
+                font-size: $subtext-font-size;
+                margin: 0;
+                padding: 0 0 0.5rem 0;
+            }
+
+            #dest-category .dest-category-icon {
+                margin-left: 0.3rem;
+                font-size: $default-font-size;
+            }
+        }
+
+        #dest-description {
+            color: $tc-black;
+            font-size: $default-font-size;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0;
+            padding: 0.5rem 0;
+        }
+    }
+}

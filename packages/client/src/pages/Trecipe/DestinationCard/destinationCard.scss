@@ -1,0 +1,120 @@
+@import '../../../components/variables';
+
+.dest-list-item-wrapper {
+    position: relative;
+    width: 100%;
+    height: 12.5rem;
+    display: flex;
+    flex-direction: row;
+    border: 0.5px solid $light-gray;
+    border-radius: 8px;
+    background-color: $tc-white;
+    font-family: $default-font-family;
+    overflow: hidden;
+    transition: filter 0.3s ease-out;
+
+    .dest-img {
+        flex: 0 1 12.5rem;
+        height: 100%;
+        text-align: center;
+    }
+
+    .dest-info {
+        flex: 1 1;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+
+        .dest-category-icon {
+            margin-left: 0.3rem;
+            font-size: $default-font-size;
+        }
+
+        .dest-category,
+        .dest-address {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: $subtext-font-size;
+            color: $silver-gray;
+        }
+
+        .dest-name {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            font-size: $default-font-size;
+        }
+
+        .dest-description {
+            flex-grow: 1;
+            margin-bottom: 0;
+            font-size: $default-font-size;
+        }
+    }
+
+    .check-edit-wrapper {
+        display: flex;
+        flex: 0 0 30%;
+        transform: translateX(66.67%);
+        transition: transform 0.3s ease-out;
+
+        .completed-checkbox {
+            flex: 1 1 10%;
+            display: flex;
+            position: relative;
+            align-items: center;
+            justify-content: center;
+
+            input[type='checkbox'] {
+                opacity: 0;
+
+                & + .check-mark {
+                    cursor: pointer;
+                    color: rgba($light-gray, 0.3);
+                    font-size: 3rem;
+                    transition: color 0.2s;
+                    position: absolute;
+
+                    &:hover {
+                        color: rgba($light-gray, 1);
+                    }
+                }
+
+                &:checked + .check-mark {
+                    color: rgba($powder-blue, 1);
+                    cursor: default;
+                }
+            }
+        }
+
+        .edit-option {
+            flex: 1 1 10%;
+            border: none;
+            color: $tc-white;
+            font-size: $default-font-size;
+            filter: brightness(0.95);
+            transition: filter 0.2s ease-out;
+
+            &:hover {
+                filter: none;
+            }
+
+            &#dest-reorder {
+                display: flex;
+                background-color: $powder-blue;
+                justify-content: center;
+                align-items: center;
+            }
+
+            &#dest-delete {
+                background-color: #f28482;
+                cursor: pointer;
+                border-radius: 0 8px 8px 0;
+            }
+        }
+
+        &.in-edit {
+            transform: translateX(0);
+        }
+    }
+}
