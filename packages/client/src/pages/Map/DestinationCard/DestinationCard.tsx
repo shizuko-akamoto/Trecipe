@@ -10,7 +10,7 @@ export class DestinationCard extends React.Component<DCProps> {
     render() {
         const destModel = this.props.destModel;
         return (
-            <div className="dest-card-item-wrapper">
+            <div className="dest-card-item-wrapper" id={this.props.destModel.id}>
                 <div
                     className="dest-card-header-container"
                     style={{
@@ -24,7 +24,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                 <FontAwesomeIcon className="dest-check-icon" icon="check" />
                             )}
                         </span>
-                        <span className="dest-cfard-edit">
+                        <span className="dest-card-edit">
                             <CardMenu
                                 menuItems={[
                                     {

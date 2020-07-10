@@ -1,14 +1,16 @@
 import React, { Component, RefObject } from 'react';
 import { Image } from '../Image/Image';
 import './StaticMap.scss';
+import { staticMapStyle } from './mapHelper';
+import { DestinationModel } from '../../redux/Destinations/types';
 
 /**
  * MarkerColor
  * Color (24-bit) for markers on the map
  */
 export enum MarkerColor {
-    Blue = '58a5fc',
-    Grey = '82aabf',
+    Blue = '489fb5',
+    Grey = '52575c',
 }
 
 /**
@@ -34,8 +36,9 @@ export interface Marker {
 export interface StaticMapProps {
     height: number;
     mapScale: 1 | 2;
-    markers: Array<Marker>;
     markerSize: 'tiny' | 'small' | 'mid';
+    destinations: Array<DestinationModel>;
+    completedDests: Set<string>;
 }
 
 /**
@@ -48,21 +51,13 @@ export interface StaticMapState {
     mapHeight: number;
 }
 
-// TODO: Remove this before merging into master
-const SAMPLE_LAT_LONG: Array<Marker> = [
-    { lat: 49.2606, long: -123.246, color: MarkerColor.Grey },
-    { lat: 49.22446, long: -123.11864, color: MarkerColor.Blue },
-    { lat: 49.18056, long: -123.18021, color: MarkerColor.Grey },
-    { lat: 49.28737, long: -123.12911 },
-];
-
 export class StaticMap extends Component<StaticMapProps, StaticMapState> {
     public static defaultProps: StaticMapProps = {
         height: 31.25,
         mapScale: 2,
         markerSize: 'small',
-        // TODO: Update this to empty array before merging into master
-        markers: SAMPLE_LAT_LONG,
+        destinations: [],
+        completedDests: new Set<string>(),
     };
 
     public readonly state = {
@@ -129,18 +124,31 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
             key: `${process.env.REACT_APP_MAP_API_KEY}`,
         });
 
-        const markersParams = this.getMarkerParams(mapProps.markers);
+        const markers = mapProps.destinations.map((dest) => {
+            return this.getMarker(dest, mapProps.completedDests.has(dest.id));
+        });
+
+        const markersParams = this.getMarkerParams(markers);
         markersParams.forEach((param) => {
             urlParams.append('markers', param);
         });
 
         // Center the map at a location when there is no marker
-        if (this.props.markers.length === 0) {
+        if (this.props.destinations.length === 0) {
             urlParams.append('center', 'vancouver');
         }
 
         baseUrl.search = `?${urlParams.toString()}`;
-        return baseUrl.toString();
+        return baseUrl.toString() + staticMapStyle;
+    }
+
+    private getMarker(destination: DestinationModel, completed: boolean): Marker {
+        //TODO : update this when destination model is updated
+        return {
+            lat: destination.lat,
+            long: destination.lng,
+            color: completed ? MarkerColor.Blue : MarkerColor.Grey,
+        };
     }
 
     /**
@@ -149,7 +157,7 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
      * This function forms the parameters and return them in a array
      */
     private getMarkerParams(markers: Array<Marker>): string[] {
-        const paramsMap: any = {};
+        let paramsMap: any = {};
 
         const markerColors = Object.values(MarkerColor);
         markerColors.forEach((color) => {

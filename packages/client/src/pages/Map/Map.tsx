@@ -3,16 +3,22 @@ import './Map.scss';
 import { DestinationCard } from './DestinationCard/DestinationCard';
 import { CardMenu } from '../../components/CardMenu/CardMenu';
 import { MenuItem } from '../../components/Menu/Menu';
+import { GMap } from './GoogleMap/Gmap';
 import { RootState } from '../../redux';
 import { newTrecipeModel, TrecipeModel } from '../../redux/TrecipeList/types';
 import { isUndefined } from 'lodash';
 import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
 import { createNewTrecipe, deleteTrecipe, updateTrecipe } from '../../redux/TrecipeList/action';
-import { getDestModelsByTrecipeId } from '../../redux/Destinations/action';
+import {
+    getDestModelsByTrecipeId,
+    addDestination,
+    removeDestination,
+} from '../../redux/Destinations/action';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
+import { DestinationModel } from '../../redux/Destinations/types';
 
 export type MapProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -57,6 +63,15 @@ class Map extends React.Component<MapProps> {
         this.props.updateTrecipe(trecipe.id, {
             destinations: trecipe.destinations.filter((destId) => destId !== idToDelete),
         });
+        this.props.removeDestination(trecipe.id, idToDelete);
+    }
+
+    private onDestAddClick(destination: DestinationModel) {
+        const trecipe: TrecipeModel = this.props.trecipe;
+        this.props.updateTrecipe(trecipe.id, {
+            destinations: [...trecipe.destinations, destination.id],
+        });
+        this.props.addDestination(trecipe.id, destination);
     }
 
     private onTrecipeEditClick() {
@@ -102,7 +117,14 @@ class Map extends React.Component<MapProps> {
                             </ul>
                         </div>
                     </aside>
-                    <div className="map-container" />
+                    <div className="map-container">
+                        <GMap
+                            destinations={this.props.destinations}
+                            completedDest={this.props.trecipe.completed}
+                            onDestAdd={this.onDestAddClick.bind(this)}
+                            onDestRemove={this.onDestDeleteClick.bind(this)}
+                        />
+                    </div>
                 </div>
             </div>
         );
@@ -138,6 +160,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             deleteTrecipe,
             createNewTrecipe,
             getDestModelsByTrecipeId,
+            addDestination,
+            removeDestination,
         },
         dispatch
     );
