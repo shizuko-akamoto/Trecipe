@@ -9,7 +9,7 @@ import { CoverPhoto } from '../../components/CoverPhoto/CoverPhoto';
 import { Button } from '../../components/Button/Button';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { updateTrecipe, updateTrecipeRequest } from "../../redux/TrecipeList/action";
+import { updateTrecipe, updateTrecipeRequest } from '../../redux/TrecipeList/action';
 import { showModal } from '../../redux/Modal/action';
 import { RootState } from '../../redux';
 import { intersection, isUndefined } from 'lodash';
@@ -162,7 +162,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
     private onCoverPhotoChange(updatedFilename: string) {
         const trecipe: TrecipeModel = this.props.trecipe;
         this.props.updateTrecipeRequest(trecipe.id, {
-            image: updatedFilename
+            image: updatedFilename,
         });
     }
 
@@ -182,8 +182,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                                 onClick={this.onTrecipeEditClick.bind(this)}
                             />,
                         ]}
-                        onFileChange = {this.onCoverPhotoChange.bind(this)}
-                    >
+                        onFileChange={this.onCoverPhotoChange.bind(this)}>
                         <div className="tc-header-text">
                             <div className="tc-header-title">
                                 <h1 className="tc-header-name">{trecipe.name}</h1>

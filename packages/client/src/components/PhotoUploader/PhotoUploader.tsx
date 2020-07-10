@@ -28,9 +28,9 @@ class PhotoUploader extends React.Component<PhotoUploaderProps> {
 
     onFileSelected(event: React.ChangeEvent<HTMLInputElement>) {
         if (event.target.files && event.target.files[0].type.match(/image.*/)) {
-            UploadService.uploadSingleFile(event.target.files[0]).then(filename => {
+            UploadService.uploadSingleFile(event.target.files[0]).then((filename) => {
                 this.props.changeFileCallback(filename);
-            })
+            });
         }
     }
 
