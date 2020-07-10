@@ -20,7 +20,6 @@ import { getDestModelsByTrecipeId } from '../../redux/Destinations/action';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import { SearchBarPopup } from '../../components/SearchBarPopup/SearchBarPopup';
 import { StaticMap } from '../../components/Map/StaticMap';
-import Background from '../MyTrecipes/TrecipeCard/BetterDefaultImage.png';
 
 /**
  * TrecipeProps
