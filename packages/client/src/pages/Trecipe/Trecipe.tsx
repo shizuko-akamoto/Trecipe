@@ -9,7 +9,7 @@ import { CoverPhoto } from '../../components/CoverPhoto/CoverPhoto';
 import { Button } from '../../components/Button/Button';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { updateTrecipe } from '../../redux/TrecipeList/action';
+import { updateTrecipe, updateTrecipeRequest } from '../../redux/TrecipeList/action';
 import { showModal } from '../../redux/Modal/action';
 import { RootState } from '../../redux';
 import { intersection, isUndefined } from 'lodash';
@@ -20,7 +20,6 @@ import { getDestModelsByTrecipeId } from '../../redux/Destinations/action';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import { SearchBarPopup } from '../../components/SearchBarPopup/SearchBarPopup';
 import { StaticMap } from '../../components/Map/StaticMap';
-import Background from '../MyTrecipes/TrecipeCard/BetterDefaultImage.png';
 import Modal from '../../components/Modal/Modal';
 
 /**
@@ -166,6 +165,13 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
         });
     }
 
+    private onCoverPhotoChange(updatedFilename: string) {
+        const trecipe: TrecipeModel = this.props.trecipe;
+        this.props.updateTrecipeRequest(trecipe.id, {
+            image: updatedFilename,
+        });
+    }
+
     render() {
         const trecipe: TrecipeModel = this.props.trecipe;
         const editTrecipeBtnString = 'Edit Trecipe';
@@ -173,7 +179,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
             <div>
                 <div className="tc-header-container">
                     <CoverPhoto
-                        imageSource={`url( ${Background})`}
+                        imageSource={trecipe.image}
                         buttons={[
                             <Button
                                 key={editTrecipeBtnString}
@@ -181,7 +187,8 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                                 icon="edit"
                                 onClick={this.onTrecipeEditClick.bind(this)}
                             />,
-                        ]}>
+                        ]}
+                        onFileChange={this.onCoverPhotoChange.bind(this)}>
                         <div className="tc-header-text">
                             <div className="tc-header-title">
                                 <h1 className="tc-header-name">{trecipe.name}</h1>
@@ -190,7 +197,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                                     className="tc-header-privacy"
                                 />
                             </div>
-                            <h3 className="tc-header-time">{trecipe.date}</h3>
+                            <h3 className="tc-header-time">{trecipe.date.toLocaleString()}</h3>
                         </div>
                     </CoverPhoto>
                     <svg
@@ -306,6 +313,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         {
             showModal,
             updateTrecipe,
+            updateTrecipeRequest,
             getDestModelsByTrecipeId,
         },
         dispatch

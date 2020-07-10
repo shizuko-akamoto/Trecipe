@@ -7,7 +7,7 @@ import { FilterSelector } from './Filter/FilterSelector';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux';
-import { reloadTrecipes } from '../../redux/TrecipeList/action';
+import { fetchAllTrecipes } from '../../redux/TrecipeList/action';
 import { TrecipeModel } from '../../redux/TrecipeList/types';
 import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
@@ -88,7 +88,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
-            reloadTrecipes,
+            reloadTrecipes: fetchAllTrecipes,
             showModal,
         },
         dispatch

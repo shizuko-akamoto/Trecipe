@@ -1,13 +1,14 @@
-import { typedAction } from '../util';
-import { newTrecipeModel, TrecipeListActionTypes, TrecipeModel } from './types';
-import { AnyAction, Dispatch } from 'redux';
+import { AppThunk, typedAction } from '../util';
+import { TrecipeListActionTypes, TrecipeModel } from './types';
+import TrecipeService from '../../services/trecipeService';
+import { RootState } from '../index';
+import { ThunkDispatch } from 'redux-thunk';
+import { Action } from 'redux';
 
-const mockTrecipeList: Array<TrecipeModel> = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(() =>
-    newTrecipeModel()
-);
+/**----- Trecipe actions -----**/
 
-export const createNewTrecipe = (newTrecipe: TrecipeModel) => {
-    return typedAction(TrecipeListActionTypes.CREATE_NEW_TRECIPE, newTrecipe);
+export const addTrecipe = (newTrecipe: TrecipeModel) => {
+    return typedAction(TrecipeListActionTypes.ADD_TRECIPE, newTrecipe);
 };
 
 export const deleteTrecipe = (idToDelete: string) => {
@@ -27,15 +28,45 @@ export const loadTrecipes = (trecipes: Array<TrecipeModel>) => {
     });
 };
 
-export const reloadTrecipes = () => {
-    // Pretending to wait for loading by setTimeout
-    return (dispatch: Dispatch<AnyAction>) => {
-        setTimeout(() => {
-            dispatch(loadTrecipes(mockTrecipeList));
-        }, 1000);
+/**----- Sends trecipe requests to server and dispatches trecipe actions with results -----**/
+
+export const fetchAllTrecipes = (): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        TrecipeService.fetchAllTrecipes().then((trecipes: Array<TrecipeModel>) => {
+            dispatch(loadTrecipes(trecipes));
+        });
+    };
+};
+
+export const createTrecipeRequest = (trecipeData: Partial<TrecipeModel>): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        TrecipeService.createTrecipe(trecipeData).then((createdTrecipe: TrecipeModel) => {
+            dispatch(addTrecipe(createdTrecipe));
+        });
+    };
+};
+
+export const deleteTrecipeRequest = (idToDelete: string): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        TrecipeService.deleteTrecipe(idToDelete).then((deletedCount: number) => {
+            if (deletedCount > 0) {
+                dispatch(deleteTrecipe(idToDelete));
+            }
+        });
+    };
+};
+
+export const updateTrecipeRequest = (
+    idToUpdate: string,
+    updatedTrecipe: Partial<TrecipeModel>
+): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        TrecipeService.updateTrecipe(idToUpdate, updatedTrecipe).then((updated: TrecipeModel) => {
+            dispatch(updateTrecipe(idToUpdate, updated));
+        });
     };
 };
 
 export type TrecipeListAction = ReturnType<
-    typeof createNewTrecipe | typeof deleteTrecipe | typeof updateTrecipe | typeof loadTrecipes
+    typeof addTrecipe | typeof deleteTrecipe | typeof updateTrecipe | typeof loadTrecipes
 >;
