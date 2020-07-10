@@ -15,36 +15,3 @@
         object-fit: contain;
     }
 }
-
-.static-map-overlay {
-    width: 100%;
-    margin-left: -100%;
-    z-index: 100;
-    transition: background-color 0.5s;
-    cursor: pointer;
-    border-radius: 8px;
-
-    .button-wrapper {
-        height: 100%;
-        position: relative;
-
-        .button {
-            opacity: 0;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.5s;
-        }
-    }
-
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.65);
-        .button {
-            opacity: 1;
-            background-color: white;
-            color: $mid-gray;
-            border-color: $mid-gray;
-        }
-    }
-}

@@ -8,7 +8,7 @@
     "compile": "ts-node build.ts && tsc",
     "dev": "nodemon server/index.ts | pino-pretty",
     "dev:debug": "nodemon --exec \"node -r ts-node/register --inspect-brk\" server/index.ts | pino-pretty",
-    "lint": "eslint -c .eslintrc.js \"{server, test}/**/*.{js,ts,tsx}\" --fix && prettier \"{server, test}/**/*.{js,ts,tsx,json,md}\" --write\"",
+    "lint": "eslint -c .eslintrc.js \"{server, test}/**/*.{js,ts,tsx}\" --fix && prettier \"{server, test}/**/*.{js,ts,tsx,json,md}\" --write",
     "test": "mocha -r ts-node/register test/**/*.ts --exit",
     "test:debug": "mocha -r ts-node/register --inspect-brk test/**/*.ts --exit"
   },

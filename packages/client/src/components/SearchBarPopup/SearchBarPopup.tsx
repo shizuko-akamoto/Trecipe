@@ -1,11 +1,12 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Modal from '../../components/Modal/Modal';
 import './searchBarPopup.scss';
 import _ from 'lodash';
+import { AutoComplete, getDestModel } from '../Map/mapHelper';
+import { DestinationModel } from '../../redux/Destinations/types';
 
 interface Destination {
-    id: number;
+    id: string;
     name: string;
     address: string;
     isAdded: boolean;
@@ -26,17 +27,34 @@ export interface SearchBarState {
     errMsg: string;
 }
 
-/**
+export interface SearchBarProps {
+    minWidth: number;
+    onDestAdd: (destination: DestinationModel) => void;
+    onDestRemove: (destinationId: string) => void;
+}
+
+/**s
  * A popup to search for places and to be added into a Trecipe
  */
-export class SearchBarPopup extends React.Component<{}, SearchBarState> {
+export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarState> {
+    constructor(props: any) {
+        super(props);
+        this.fetchSearchResults = _.debounce(this.fetchSearchResults, 500);
+    }
+
+    public static defaultProps: Partial<SearchBarProps> = {
+        minWidth: 31.25,
+    };
+
+    private autoComplete: AutoComplete = new AutoComplete();
+
     state = {
         searchKey: '',
         resultsOpen: false,
         results: [
-            { id: 1, name: 'Place 1', address: 'City, County', isAdded: false },
-            { id: 2, name: 'Place 2', address: 'City, County', isAdded: false },
-            { id: 3, name: 'Place 3', address: 'City, County', isAdded: false },
+            { id: '1', name: 'Place 1', address: 'City, County', isAdded: false },
+            { id: '2', name: 'Place 2', address: 'City, County', isAdded: false },
+            { id: '3', name: 'Place 3', address: 'City, County', isAdded: false },
         ],
         loading: false,
         errMsg: '',
@@ -47,29 +65,37 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
         if (_.isEmpty(searchKey)) {
             this.setState({ searchKey: searchKey, results: [], errMsg: '' });
         } else {
-            this.setState({ searchKey: searchKey, loading: true, errMsg: '' }, () =>
-                this.fetchSearchResults(searchKey)
-            );
+            this.setState({ searchKey: searchKey, loading: true, errMsg: '' });
         }
+        this.fetchSearchResults(searchKey);
     }
 
     private fetchSearchResults(searchInput: string): void {
-        new Promise<Array<Destination>>(function (resolve, reject) {
-            /** TODO: Modify logic here to make HTTP call to backend for fetching search results.
-             *  Update DB if the previous result list has been changed.
-             */
+        if (_.isEmpty(searchInput)) {
+            return;
+        }
 
-            const results: Destination[] = [
-                { id: 1, name: 'Place 1', address: 'City, County', isAdded: false },
-                { id: 2, name: 'Place 2', address: 'City, County', isAdded: false },
-                { id: 3, name: 'Place 3', address: 'City, County', isAdded: false },
-            ];
-            resolve(results);
-        })
-            .then((results: Destination[]) => {
-                this.setState({ resultsOpen: true, results: results, loading: false });
+        this.autoComplete
+            .getPredictions(searchInput)
+            .then((predictions: Array<google.maps.places.AutocompletePrediction>) => {
+                // Connvert predictions into destinations and store them in state
+                let newResult = predictions.map(
+                    (prediction: google.maps.places.AutocompletePrediction) => {
+                        return {
+                            id: prediction.place_id,
+                            name: prediction.structured_formatting.main_text,
+                            address: prediction.structured_formatting.secondary_text,
+                            isAdded: false,
+                        };
+                    }
+                );
+                this.setState({
+                    resultsOpen: true,
+                    results: newResult,
+                    loading: false,
+                });
             })
-            .catch((err) => {
+            .catch((err: any) => {
                 this.setState({
                     resultsOpen: false,
                     loading: false,
@@ -78,12 +104,39 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
             });
     }
 
-    private addRemovePlace(id: number) {
+    // Add destination if it has not been added, and remove if already exist
+    private addRemovePlace(destinationId: string) {
+        let destAdded;
+        this.state.results.forEach((dest) => {
+            if (dest.id === destinationId) {
+                destAdded = dest.isAdded;
+            }
+        });
+
         this.setState((state) => ({
             results: state.results.map((dest) =>
-                dest.id === id ? { ...dest, isAdded: !dest.isAdded } : dest
+                dest.id === destinationId ? { ...dest, isAdded: !dest.isAdded } : dest
             ),
         }));
+
+        if (!destAdded) {
+            this.autoComplete
+                .getPlaceDetails(destinationId)
+                .then((result: google.maps.places.PlaceResult) => {
+                    this.props.onDestAdd(getDestModel(result));
+                })
+                .catch((err: any) => {
+                    this.setState({
+                        resultsOpen: false,
+                        loading: false,
+                        errMsg: err.toString(),
+                    });
+                });
+        } else {
+            // TODO: I just realized it might be unnecessary to remove dest from destinations store
+            // All we need is to remove destination id from the trecipe store
+            this.props.onDestRemove(destinationId);
+        }
     }
 
     private renderSearchResults() {
@@ -93,11 +146,10 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
                 <div className="results-container">
                     <ul className="results-list">
                         {results.map((result) => (
-                            // temporarily using result as key. Change to some id later
                             <li
                                 className="results-entry"
-                                key={result['name']}
-                                onClick={() => this.addRemovePlace(result['id'])}>
+                                key={result.id}
+                                onClick={() => this.addRemovePlace(result.id)}>
                                 <div className="result">
                                     <span className="placeName">{result['name']}</span>
                                     <span className="address">{result['address']}</span>
@@ -113,20 +165,18 @@ export class SearchBarPopup extends React.Component<{}, SearchBarState> {
 
     render() {
         return (
-            <Modal>
-                <div className="searchBarPopup">
-                    <div className="contents">
-                        <h1 className="title"> Find and add places </h1>
-                        <input
-                            type="search"
-                            placeholder="Search for..."
-                            className="search-input"
-                            onChange={this.handleOnSearchInputChange.bind(this)}
-                        />
-                    </div>
-                    {this.renderSearchResults()}
+            <div className="searchBarPopup" style={{ minWidth: `${this.props.minWidth}rem` }}>
+                <div className="contents">
+                    <h1 className="title"> Find and add places </h1>
+                    <input
+                        type="search"
+                        placeholder="Search for..."
+                        className="search-input"
+                        onChange={this.handleOnSearchInputChange.bind(this)}
+                    />
                 </div>
-            </Modal>
+                {this.renderSearchResults()}
+            </div>
         );
     }
 }
