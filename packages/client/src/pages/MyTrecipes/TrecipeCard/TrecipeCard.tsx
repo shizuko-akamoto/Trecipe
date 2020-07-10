@@ -6,15 +6,14 @@ import { MenuItem } from '../../../components/Menu/Menu';
 import { ProgressBar } from '../../../components/ProgressBar/ProgressBar';
 import { bindActionCreators, Dispatch } from 'redux';
 import {
-    addTrecipe,
     createTrecipeRequest,
-    deleteTrecipe,
     deleteTrecipeRequest,
 } from '../../../redux/TrecipeList/action';
 import { connect } from 'react-redux';
-import { newTrecipeModel, TrecipeModel } from '../../../redux/TrecipeList/types';
+import { TrecipeModel } from '../../../redux/TrecipeList/types';
 import { showModal } from '../../../redux/Modal/action';
 import TrecipePopup, { TrecipePopupType } from '../../../components/TrecipePopup/TrecipePopup';
+import { baseURL } from "../../../api";
 
 type TCProps = TrecipeModel & ReturnType<typeof mapDispatchToProps>;
 
@@ -73,7 +72,7 @@ class TrecipeCard extends React.Component<TCProps> {
                 <div
                     className="tcHeaderContainer"
                     style={{
-                        backgroundImage: this.props.imageSrc ? this.props.imageSrc : 'none',
+                        backgroundImage: this.props.image ? `url(${baseURL}upload/${this.props.image})` : 'none',
                     }}>
                     <div className="tcHeader">
                         <label className="tcTitle">

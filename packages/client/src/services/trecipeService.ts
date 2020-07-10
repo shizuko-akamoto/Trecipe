@@ -103,7 +103,7 @@ class TrecipeService {
         return {
             id: uuid,
             name: name,
-            imageSrc: image,
+            image: image,
             date: new Date(updatedAt),
             owner: owner,
             description: description,

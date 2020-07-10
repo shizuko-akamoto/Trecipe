@@ -20,7 +20,7 @@ const getNextUniqueTrecipeId = () => {
 export interface TrecipeModel {
     id: string;
     name: string;
-    imageSrc: string | null;
+    image: string | null;
     date: Date;
     owner: string;
     description: string;
@@ -37,7 +37,7 @@ export function newTrecipeModel(): TrecipeModel {
     return {
         id: String(getNextUniqueTrecipeId()), // temporary until we get backend to generate unique id
         name: `Trecipe ${nextUniqueTrecipeId}`,
-        imageSrc: 'url(' + Background + ')',
+        image: 'url(' + Background + ')',
         date: new Date(),
         owner: 'team2',
         description: 'This is a description.',

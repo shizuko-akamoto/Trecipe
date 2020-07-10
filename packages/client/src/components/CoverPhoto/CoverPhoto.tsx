@@ -1,42 +1,14 @@
 import React, { ReactNodeArray } from 'react';
 import PhotoUploader from '../PhotoUploader/PhotoUploader';
+import {baseURL} from '../../api';
 
 export interface CoverPhotoProps {
-    imageSource: string;
+    imageSource: string | null;
     buttons?: ReactNodeArray;
+    onFileChange: (filename: string) => void
 }
 
-export interface CoverPhotoState {
-    sourceImage: string;
-    isOpen: boolean;
-}
-
-export class CoverPhoto extends React.Component<CoverPhotoProps, CoverPhotoState> {
-    public readonly state: Readonly<CoverPhotoState> = {
-        sourceImage: this.props.imageSource,
-        isOpen: false,
-    };
-
-    fileUpdateCallback(event: React.ChangeEvent<HTMLInputElement>) {
-        if (event.target.files && event.target.files[0].type.match(/image.*/)) {
-            // Upload to server
-            const reader = new FileReader();
-
-            reader.addEventListener('load', (event) => {
-                if (event.target) {
-                    this.setState({ sourceImage: 'url(' + event.target.result + ')' });
-                }
-            });
-
-            reader.readAsDataURL(event.target.files[0]);
-        }
-    }
-
-    toggle() {
-        this.setState((state: CoverPhotoState) => ({
-            isOpen: !state.isOpen,
-        }));
-    }
+export class CoverPhoto extends React.Component<CoverPhotoProps> {
 
     render() {
         return (
@@ -44,24 +16,15 @@ export class CoverPhoto extends React.Component<CoverPhotoProps, CoverPhotoState
                 <div
                     className="coverPhotoImage"
                     style={{
-                        backgroundImage: `linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 35%), 
-                     ${this.state.sourceImage}`,
-                    }}
-                    onClick={this.toggle.bind(this)}>
+                        backgroundImage: this.props.imageSource ? `linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 35%), 
+                     url(${baseURL}upload/${this.props.imageSource})` : `none`,
+                    }}>
                     {this.props.children}
                 </div>
                 <div className="coverPhotoBtnsWrapper">
                     {this.props.buttons}
-                    <PhotoUploader changeFileCallback={this.fileUpdateCallback.bind(this)} />
+                    <PhotoUploader changeFileCallback={this.props.onFileChange} />
                 </div>
-                {this.state.isOpen && (
-                    <dialog className="coverPhotoDialog" open onClick={this.toggle.bind(this)}>
-                        <div
-                            className="coverPhotoImageEnlarged"
-                            style={{ backgroundImage: this.state.sourceImage }}
-                        />
-                    </dialog>
-                )}
             </div>
         );
     }
