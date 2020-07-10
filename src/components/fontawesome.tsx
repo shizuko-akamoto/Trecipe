@@ -21,6 +21,7 @@ import {
   faBed,
   faShoppingCart,
   faBinoculars,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faQuestionCircle,
@@ -54,5 +55,6 @@ library.add(
   faUtensils,
   faBed,
   faShoppingCart,
-  faBinoculars
+  faBinoculars,
+  faPlus
 );

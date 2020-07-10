@@ -1,0 +1,15 @@
+@import "../variables.scss";
+@import "../mixins.scss";
+
+.addUser {
+  background-color: $tc-white;
+  border: 2px solid $mid-gray;
+  border-radius: 8px;
+  height: 60px;
+  width: 60px;
+  font-size: 2em;
+  color: $mid-gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

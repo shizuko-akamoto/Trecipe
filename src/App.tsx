@@ -3,13 +3,12 @@ import "./components/fontawesome";
 import "./App.scss";
 import ModalContainer from "./components/Modal/ModalContainer";
 import { Trecipe } from "./pages/Trecipe/Trecipe";
-import { UserIcon } from "./components/UserIcon/userIcon";
+import { AddUserIcon } from "./components/AddUser/addUser";
 
 function App() {
   return (
     <div className="App">
-      <UserIcon />
-      <ModalContainer />
+      <AddUserIcon />
     </div>
   );
 }
