@@ -9,7 +9,11 @@ import { newTrecipeModel, TrecipeModel } from '../../redux/TrecipeList/types';
 import { isUndefined } from 'lodash';
 import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
-import { createNewTrecipe, deleteTrecipe, updateTrecipe } from '../../redux/TrecipeList/action';
+import {
+    createTrecipeRequest,
+    deleteTrecipeRequest,
+    updateTrecipeRequest,
+} from '../../redux/TrecipeList/action';
 import {
     getDestModelsByTrecipeId,
     addDestination,
@@ -156,9 +160,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
             showModal,
-            updateTrecipe,
-            deleteTrecipe,
-            createNewTrecipe,
+            updateTrecipe: updateTrecipeRequest,
+            deleteTrecipe: deleteTrecipeRequest,
+            createNewTrecipe: createTrecipeRequest,
             getDestModelsByTrecipeId,
             addDestination,
             removeDestination,
