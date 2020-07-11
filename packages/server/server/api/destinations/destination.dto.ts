@@ -1,5 +1,4 @@
-export default interface Destination {
-    uuid: string;
+export interface CreateNewDestinationDTO {
     name: string;
     category: string[];
     geometry: {
@@ -10,7 +9,5 @@ export default interface Destination {
     formattedPhoneNumber: string;
     website: string;
     rating: number;
-    userRatings: Array<number>;
     placeId: string;
-    photoRefs: Array<string>;
 }

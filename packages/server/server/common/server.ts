@@ -34,7 +34,11 @@ export default class ExpressServer {
 
         const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
         const connection = mongoose.connect(
-            `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`
+            `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`,
+            {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            }
         );
         mongoose.connection.once('open', () => {
             l.info(`connected to MongoDB via Mongoose`);

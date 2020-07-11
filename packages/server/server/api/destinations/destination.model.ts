@@ -1,17 +1,11 @@
 import mongoose from 'mongoose';
-import Destination, { DestinationCategory } from './destination.interface';
+import Destination from './destination.interface';
 
 const destinationSchema = new mongoose.Schema(
     {
         uuid: String,
         name: String,
-        category: {
-            type: [String],
-            enum: Object.keys(DestinationCategory),
-            get: (category: string) =>
-                DestinationCategory[category as keyof typeof DestinationCategory],
-            set: (category: DestinationCategory) => DestinationCategory[category],
-        },
+        category: [String],
         geometry: {
             lat: Number,
             lon: Number,
@@ -24,7 +18,7 @@ const destinationSchema = new mongoose.Schema(
         placeId: String,
         photoRefs: [String],
     },
-    { timestamps: true, toJSON: { getters: true } }
+    { timestamps: true }
 );
 
 const destinationModel = mongoose.model<Destination & mongoose.Document>(

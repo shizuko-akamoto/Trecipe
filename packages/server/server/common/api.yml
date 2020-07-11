@@ -134,9 +134,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Destination'
+                type: object
+                properties:
+                  destinations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Destination'
   /destinations/{id}:
     get:
       tags:
@@ -321,11 +324,11 @@ components:
       title: DestinationCategory
       type: string
       enum:
-        - food
-        - accommodation
-        - entertainment
-        - shopping
-        - sightseeing
+        - Food
+        - Accommodation
+        - Entertainment
+        - Shopping
+        - Sightseeing
     Geometry:
       title: Geometry
       type: object
