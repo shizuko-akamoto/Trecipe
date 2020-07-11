@@ -7,11 +7,7 @@ import { Button } from '../Button/Button';
 import { ToggleSwitch } from '../Toggle/Toggle';
 import { TrecipeModel } from '../../redux/TrecipeList/types';
 import { RootState } from '../../redux';
-import {
-    createTrecipeRequest,
-    updateTrecipe,
-    updateTrecipeRequest,
-} from '../../redux/TrecipeList/action';
+import { createTrecipeRequest, updateTrecipeRequest } from '../../redux/TrecipeList/action';
 import { hideModal } from '../../redux/Modal/action';
 import Modal from '../Modal/Modal';
 import { TrecipeException } from '../../exceptions/Exceptions';

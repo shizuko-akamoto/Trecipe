@@ -326,9 +326,9 @@ components:
       enum:
         - Food
         - Accommodation
-        - Entertainment
         - Shopping
-        - Sightseeing
+        - Attraction
+        - Others
     Geometry:
       title: Geometry
       type: object
@@ -337,13 +337,13 @@ components:
           type: number
           format: double
           example: 35.929673
-        lon:
+        lng:
           type: number
           format: double
           example: -78.948237
       required:
         - lat
-        - lon
+        - lng
     Rating:
       title: Rating
       type: number

@@ -4,6 +4,7 @@ import './searchBarPopup.scss';
 import _ from 'lodash';
 import { AutoComplete, getDestModel } from '../Map/mapHelper';
 import { DestinationModel } from '../../redux/Destinations/types';
+import { CreateDestinationRequestDTO } from '../../services/destinationService';
 
 interface Destination {
     id: string;
@@ -29,7 +30,7 @@ export interface SearchBarState {
 
 export interface SearchBarProps {
     minWidth: number;
-    onDestAdd: (destination: DestinationModel) => void;
+    onDestAdd: (destination: CreateDestinationRequestDTO) => void;
     onDestRemove: (destinationId: string) => void;
 }
 

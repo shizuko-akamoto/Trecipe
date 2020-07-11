@@ -9,18 +9,19 @@ import { CoverPhoto } from '../../components/CoverPhoto/CoverPhoto';
 import { Button } from '../../components/Button/Button';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { updateTrecipe, updateTrecipeRequest } from '../../redux/TrecipeList/action';
+import { updateTrecipeRequest } from '../../redux/TrecipeList/action';
 import { showModal } from '../../redux/Modal/action';
 import { RootState } from '../../redux';
 import { intersection, isUndefined } from 'lodash';
 import { RouteComponentProps } from 'react-router';
 import { Link, withRouter } from 'react-router-dom';
 import { DestinationModel } from '../../redux/Destinations/types';
-import { getDestModelsByTrecipeId } from '../../redux/Destinations/action';
+import { addDestination, getDestModelsByTrecipeId } from '../../redux/Destinations/action';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import { SearchBarPopup } from '../../components/SearchBarPopup/SearchBarPopup';
 import { StaticMap } from '../../components/Map/StaticMap';
 import Modal from '../../components/Modal/Modal';
+import DestinationService, { CreateDestinationRequestDTO } from '../../services/destinationService';
 
 /**
  * TrecipeProps
@@ -124,7 +125,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
         // Might be a good idea to refactor SearchBarPopup and rename it
         this.props.showModal(
             <Modal>
-                <SearchBarPopup />
+                <SearchBarPopup onDestAdd={this.newDestAdded.bind(this)} />
             </Modal>
         );
     }
@@ -133,7 +134,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
         // if exiting from editing, update TrecipeModel with the changes to destination,
         // else if entering editing, reset destinationsInEdit state to store's destinations
         if (this.state.isInEdit) {
-            const destIds = this.state.destinationsInEdit.map((dest) => dest.id);
+            const destIds = this.state.destinationsInEdit.map((dest) => dest.uuid);
             const updatedCompleted = new Set(
                 intersection(destIds, Array.from(this.props.trecipe.completed))
             );
@@ -141,6 +142,7 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                 destinations: destIds,
                 completed: updatedCompleted,
             });
+            this.props.getDestModelsByTrecipeId(this.props.trecipe.id);
         } else {
             this.setState({ destinationsInEdit: this.props.destinations });
         }
@@ -152,22 +154,35 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
         if (this.state.isInEdit) {
             this.setState((state) => ({
                 destinationsInEdit: state.destinationsInEdit.filter(
-                    (dest) => dest.id !== idToDelete
+                    (dest) => dest.uuid !== idToDelete
                 ),
             }));
         }
     }
 
+    private newDestAdded(dest: CreateDestinationRequestDTO) {
+        const trecipe: TrecipeModel = this.props.trecipe;
+        DestinationService.createDestination(dest).then((created: DestinationModel) => {
+            this.props.updateTrecipe(trecipe.id, {
+                destinations: [...trecipe.destinations, created.uuid],
+                completed: trecipe.completed,
+            });
+            // TODO: Project_4 - Have to make sure update trecipe completes before this
+            this.props.addDestination(trecipe.id, created);
+        });
+    }
+
     private onDestCompleteClick(id: string) {
         const trecipe: TrecipeModel = this.props.trecipe;
         this.props.updateTrecipe(trecipe.id, {
+            destinations: trecipe.destinations,
             completed: trecipe.completed.add(id),
         });
     }
 
     private onCoverPhotoChange(updatedFilename: string) {
         const trecipe: TrecipeModel = this.props.trecipe;
-        this.props.updateTrecipeRequest(trecipe.id, {
+        this.props.updateTrecipe(trecipe.id, {
             image: updatedFilename,
         });
     }
@@ -241,9 +256,9 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                                             ref={provided.innerRef}>
                                             {this.getDestinationsList().map((dest, index) => (
                                                 <DestinationCard
-                                                    key={dest.id}
+                                                    key={dest.uuid}
                                                     destModel={dest}
-                                                    isCompleted={trecipe.completed.has(dest.id)}
+                                                    isCompleted={trecipe.completed.has(dest.uuid)}
                                                     index={index}
                                                     onClickDelete={this.onDestDeleteClick.bind(
                                                         this
@@ -297,14 +312,16 @@ const mapStateToProps = (
     );
     const maybeUnsortedDestModels = state.destinations.destsByTrecipeId.get(trecipeId);
 
-    const trecipeWithId = isUndefined(maybeTrecipeWithId) ? newTrecipeModel() : maybeTrecipeWithId;
-    const unsortedDestModels = isUndefined(maybeUnsortedDestModels) ? [] : maybeUnsortedDestModels;
+    const trecipeWithId: TrecipeModel = isUndefined(maybeTrecipeWithId)
+        ? newTrecipeModel()
+        : maybeTrecipeWithId;
+    const destinations: Array<DestinationModel> = isUndefined(maybeUnsortedDestModels)
+        ? []
+        : maybeUnsortedDestModels;
     return {
         // TODO: Proper Error handling (should show Error Not Found page if trecipe id is not found)
         trecipe: trecipeWithId,
-        destinations: trecipeWithId.destinations.flatMap((destId) => {
-            return unsortedDestModels.filter((model) => destId === model.id);
-        }),
+        destinations: destinations,
     };
 };
 
@@ -312,9 +329,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
             showModal,
-            updateTrecipe,
-            updateTrecipeRequest,
+            updateTrecipe: updateTrecipeRequest,
             getDestModelsByTrecipeId,
+            addDestination,
         },
         dispatch
     );

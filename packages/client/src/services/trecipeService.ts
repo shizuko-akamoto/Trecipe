@@ -1,16 +1,16 @@
 import API from '../api';
 import { TrecipeModel } from '../redux/TrecipeList/types';
-import { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, AxiosTransformer } from 'axios';
 
-interface TrecipeResponse {
+interface TrecipeDTO {
     uuid: string;
     name: string;
     description: string;
     owner: string;
     isPrivate: boolean;
     collaborators: Array<string>;
-    image: string;
-    destinations: Array<{ destUuid: string; completed: boolean }>;
+    image: string | null;
+    destinations: Array<{ destUUID: string; completed: boolean }>;
     createdAt: string;
     updatedAt: string;
 }
@@ -29,7 +29,7 @@ class TrecipeService {
         return API.get<Array<TrecipeModel>>(this.apiEndpoint, {
             transformResponse: [
                 (data): Array<TrecipeModel> => {
-                    return JSON.parse(data).map((response: TrecipeResponse) =>
+                    return JSON.parse(data).map((response: TrecipeDTO) =>
                         this.toTrecipeModel(response)
                     );
                 },
@@ -75,13 +75,17 @@ class TrecipeService {
         updatedTrecipe: Partial<TrecipeModel>
     ): Promise<TrecipeModel> {
         return API.put<TrecipeModel>(`${this.apiEndpoint}/${idToUpdate}`, updatedTrecipe, {
+            transformRequest: [
+                (data, headers) => this.fromTrecipeModel(data),
+                ...(axios.defaults.transformRequest as AxiosTransformer[]),
+            ],
             transformResponse: [(data): TrecipeModel => this.toTrecipeModel(JSON.parse(data))],
         }).then((res: AxiosResponse<TrecipeModel>) => {
             return Promise.resolve(res.data);
         });
     }
 
-    private toTrecipeModel(data: TrecipeResponse): TrecipeModel {
+    private toTrecipeModel(data: TrecipeDTO): TrecipeModel {
         const {
             uuid,
             name,
@@ -97,7 +101,7 @@ class TrecipeService {
         // splitting destination response into client format for convenience in client use
         const completedDests: Set<string> = new Set(
             destinations.flatMap((destWithStatus) =>
-                destWithStatus.completed ? [destWithStatus.destUuid] : []
+                destWithStatus.completed ? [destWithStatus.destUUID] : []
             )
         );
         return {
@@ -109,9 +113,23 @@ class TrecipeService {
             description: description,
             isPrivate: isPrivate,
             collaborators: collaborators,
-            destinations: destinations.map((destWithStatus) => destWithStatus.destUuid),
+            destinations: destinations.map((destWithStatus) => destWithStatus.destUUID),
             completed: completedDests,
         };
+    }
+
+    private fromTrecipeModel(data: TrecipeModel): Partial<TrecipeDTO> {
+        const { destinations, completed, ...rest } = data;
+        const dto: Partial<TrecipeDTO> = rest;
+        if (destinations && completed) {
+            dto.destinations = destinations.map((dest) => {
+                return {
+                    destUUID: dest,
+                    completed: completed.has(dest),
+                };
+            });
+        }
+        return dto;
     }
 }
 

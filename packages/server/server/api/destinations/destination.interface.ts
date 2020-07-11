@@ -4,7 +4,7 @@ export default interface Destination {
     category: string[];
     geometry: {
         lat: number;
-        lon: number;
+        lng: number;
     };
     formattedAddress: string;
     formattedPhoneNumber: string;

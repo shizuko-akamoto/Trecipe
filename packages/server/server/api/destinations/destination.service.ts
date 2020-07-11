@@ -7,10 +7,19 @@ import Trecipe, { DestWithStatus } from '../trecipe/trecipe.interface';
 
 class DestinationService {
     public createDestination(destData: Destination) {
-        const newDestination = new destinationModel(destData);
-        return newDestination.save().then((created: Destination) => {
-            logger.info(`created destination with name: ${created.name}, uuid: ${created.uuid}`);
-            return Promise.resolve(created);
+        return destinationModel.findOne({ placeId: destData.placeId }).then((res) => {
+            if (res) {
+                logger.info(`destination with placeId: ${res.placeId} already exists`);
+                return Promise.resolve(res);
+            } else {
+                const newDestination = new destinationModel(destData);
+                return newDestination.save().then((created: Destination) => {
+                    logger.info(
+                        `created destination with name: ${created.name}, uuid: ${created.uuid}`
+                    );
+                    return Promise.resolve(created);
+                });
+            }
         });
     }
 

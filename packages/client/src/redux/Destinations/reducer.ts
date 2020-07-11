@@ -29,7 +29,9 @@ export function destinationsReducer(
         case DestinationsActionTypes.REMOVE_DESTINATION:
             const dests = state.destsByTrecipeId.get(action.payload.trecipeId);
             const result = dests
-                ? dests.filter((dest: DestinationModel) => dest.id !== action.payload.destinationId)
+                ? dests.filter(
+                      (dest: DestinationModel) => dest.uuid !== action.payload.destinationId
+                  )
                 : [];
             return {
                 destsByTrecipeId: state.destsByTrecipeId.set(action.payload.trecipeId, result),

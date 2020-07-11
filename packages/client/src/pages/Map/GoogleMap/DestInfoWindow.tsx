@@ -3,6 +3,7 @@ import './destInfoWindow.scss';
 import { DestinationModel } from '../../../redux/Destinations/types';
 import { Image } from '../../../components/Image/Image';
 import { RatingBar } from '../../../components/Rating/RatingBar';
+import { isEmpty } from 'lodash';
 
 interface infoWindowProps {
     destModel: DestinationModel;
@@ -14,7 +15,12 @@ export class DestInfoWindow extends React.Component<infoWindowProps> {
             <div className="iw-wrapper">
                 <div className="iw-image">
                     <Image
-                        src={this.props.destModel.imgSrc}
+                        // Arbitrarily taking the first photo for display
+                        src={
+                            isEmpty(this.props.destModel.photoRefs)
+                                ? ''
+                                : this.props.destModel.photoRefs[0]
+                        }
                         imgStyle={{ borderRadius: '8px 0 0 8px' }}
                     />
                 </div>

@@ -1,6 +1,7 @@
 import { DestinationCategory, DestinationModel, Rating } from '../../redux/Destinations/types';
 import { intersection } from 'lodash';
 import SampleDestImage from '../../pages/Trecipe/sample.jpg';
+import { CreateDestinationRequestDTO } from '../../services/destinationService';
 
 // Start a autocomplete service and place details service
 export class AutoComplete {
@@ -70,31 +71,38 @@ export class AutoComplete {
 }
 
 // Convert google place result to our destination model
-export const getDestModel = (placeResult: google.maps.places.PlaceResult): DestinationModel => {
+export const getDestModel = (
+    placeResult: google.maps.places.PlaceResult
+): CreateDestinationRequestDTO => {
     return {
-        // TODO: update this once the DestinationModel and backend is updated
-        id: placeResult.place_id ? placeResult.place_id : 'defaultID',
         name: placeResult.name,
-        category: getDestCategory(placeResult.types) as DestinationCategory,
-        address: placeResult.formatted_address ? placeResult.formatted_address : 'defaultAddress',
+        category: getDestCategory(placeResult.types),
+        address: placeResult.formatted_address ? placeResult.formatted_address : '',
+        phone: placeResult.formatted_phone_number ? placeResult.formatted_phone_number : '',
         rating: placeResult.rating ? (Math.round(placeResult.rating) as Rating) : (3 as Rating),
-        description: placeResult.website ? placeResult.website : '',
-        imgSrc: SampleDestImage,
-        lat: placeResult.geometry ? placeResult.geometry.location.lat() : 49,
-        lng: placeResult.geometry ? placeResult.geometry.location.lng() : -123,
+        userRatings: [],
+        website: placeResult.website ? placeResult.website : '',
+        description: '',
+        photoRefs: [SampleDestImage],
+        geometry: {
+            lat: placeResult.geometry ? placeResult.geometry.location.lat() : 49,
+            lng: placeResult.geometry ? placeResult.geometry.location.lng() : -123,
+        },
+        placeId: placeResult.place_id ? placeResult.place_id : '',
     };
 };
 
 // Get destination category based on the types return by the google's place API
-export const getDestCategory = (types: Array<string> | undefined) => {
+export const getDestCategory = (types: Array<string> | undefined): Array<DestinationCategory> => {
+    // TODO: Project_4 - Change to accept multiple categories
     if (types) {
         for (const [key, value] of Object.entries(destTypes)) {
             if (intersection(types, value).length > 0) {
-                return key;
+                return [key as DestinationCategory];
             }
         }
     }
-    return DestinationCategory.Others;
+    return [DestinationCategory.Others];
 };
 
 export const destTypes = {

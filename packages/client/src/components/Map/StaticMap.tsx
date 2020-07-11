@@ -125,7 +125,7 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
         });
 
         const markers = mapProps.destinations.map((dest) => {
-            return this.getMarker(dest, mapProps.completedDests.has(dest.id));
+            return this.getMarker(dest, mapProps.completedDests.has(dest.uuid));
         });
 
         const markersParams = this.getMarkerParams(markers);
@@ -145,8 +145,8 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
     private getMarker(destination: DestinationModel, completed: boolean): Marker {
         //TODO : update this when destination model is updated
         return {
-            lat: destination.lat,
-            long: destination.lng,
+            lat: destination.geometry.lat,
+            long: destination.geometry.lng,
             color: completed ? MarkerColor.Blue : MarkerColor.Grey,
         };
     }

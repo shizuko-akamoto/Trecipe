@@ -10,12 +10,12 @@ export class DestinationCard extends React.Component<DCProps> {
     render() {
         const destModel = this.props.destModel;
         return (
-            <div className="dest-card-item-wrapper" id={this.props.destModel.id}>
+            <div className="dest-card-item-wrapper" id={this.props.destModel.uuid}>
                 <div
                     className="dest-card-header-container"
                     style={{
                         backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.5) 100%), 
-      url(${destModel.imgSrc})`,
+      url(${destModel.photoRefs})`,
                     }}>
                     <div className="dest-card-header">
                         <span id="dest-card-title">
@@ -33,7 +33,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                         icon: 'check',
                                         onClick: () => {
                                             this.props.onClickComplete(
-                                                this.props.destModel.id,
+                                                this.props.destModel.uuid,
                                                 !this.props.isCompleted
                                             );
                                         },
@@ -44,7 +44,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                         text: 'Remove',
                                         icon: ['far', 'trash-alt'],
                                         onClick: () => {
-                                            this.props.onClickDelete(this.props.destModel.id);
+                                            this.props.onClickDelete(this.props.destModel.uuid);
                                         },
                                     },
                                 ]}
@@ -59,14 +59,18 @@ export class DestinationCard extends React.Component<DCProps> {
                                 {destModel.category}
                                 <FontAwesomeIcon
                                     className="dest-category-icon"
-                                    icon={getIcon(destModel.category)}
+                                    icon={getIcon(destModel.category[0])}
                                 />
                             </h6>
                             <h6 id="dest-location">{destModel.address}</h6>
                         </span>
                         <RatingBar rating={destModel.rating} />
                     </div>
-                    <p id="dest-description">{destModel.description}</p>
+                    <p id="dest-description">
+                        {destModel.address}
+                        {destModel.phone}
+                        {destModel.website}
+                    </p>
                 </div>
             </div>
         );

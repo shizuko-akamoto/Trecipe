@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { RatingBar } from '../../../components/Rating/RatingBar';
 import { Draggable } from 'react-beautiful-dnd';
 import { DestinationModel, getIcon } from '../../../redux/Destinations/types';
+import { isEmpty } from 'lodash';
 
 /**
  * DCProps
@@ -39,7 +40,7 @@ export class DestinationCard extends React.Component<DCProps> {
     render() {
         return (
             <Draggable
-                draggableId={this.props.destModel.id}
+                draggableId={this.props.destModel.uuid}
                 index={this.props.index}
                 isDragDisabled={!this.props.isInEdit}>
                 {(provided) => (
@@ -47,7 +48,11 @@ export class DestinationCard extends React.Component<DCProps> {
                         <div className="dest-list-item-wrapper" style={this.getDCFilter()}>
                             <div className="dest-img">
                                 <Image
-                                    src={this.props.destModel.imgSrc}
+                                    src={
+                                        isEmpty(this.props.destModel.photoRefs)
+                                            ? null
+                                            : this.props.destModel.photoRefs[0]
+                                    }
                                     imgStyle={{ borderRadius: '8px 0 0 8px' }}
                                 />
                             </div>
@@ -56,14 +61,16 @@ export class DestinationCard extends React.Component<DCProps> {
                                     {this.props.destModel.category}
                                     <FontAwesomeIcon
                                         className="dest-category-icon"
-                                        icon={getIcon(this.props.destModel.category)}
+                                        icon={getIcon(this.props.destModel.category[0])}
                                     />
                                 </h6>
                                 <h6 className="dest-address">{this.props.destModel.address}</h6>
                                 <h3 className="dest-name">{this.props.destModel.name}</h3>
                                 <RatingBar rating={this.props.destModel.rating} />
                                 <p className="dest-description">
-                                    {this.props.destModel.description}
+                                    {this.props.destModel.address}
+                                    {this.props.destModel.phone}
+                                    {this.props.destModel.website}
                                 </p>
                             </div>
                             <span
@@ -73,17 +80,17 @@ export class DestinationCard extends React.Component<DCProps> {
                                 <div className="completed-checkbox">
                                     <input
                                         type="checkbox"
-                                        id={this.props.destModel.id + '-completed'}
+                                        id={this.props.destModel.uuid + '-completed'}
                                         onChange={() =>
                                             this.props.onClickComplete(
-                                                this.props.destModel.id,
+                                                this.props.destModel.uuid,
                                                 !this.props.isCompleted
                                             )
                                         }
                                         checked={this.props.isCompleted}
                                     />
                                     <label
-                                        htmlFor={this.props.destModel.id + '-completed'}
+                                        htmlFor={this.props.destModel.uuid + '-completed'}
                                         className="check-mark">
                                         <FontAwesomeIcon icon="check" />
                                     </label>
@@ -98,7 +105,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                     className="edit-option"
                                     id="dest-delete"
                                     onClick={() =>
-                                        this.props.onClickDelete(this.props.destModel.id)
+                                        this.props.onClickDelete(this.props.destModel.uuid)
                                     }>
                                     <FontAwesomeIcon icon={['far', 'trash-alt']} />
                                 </button>

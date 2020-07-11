@@ -3,14 +3,6 @@ import { UnreachableCaseException } from '../../exceptions/Exceptions';
 import SampleDestImage from '../../pages/Trecipe/sample.jpg';
 
 /**
- * TODO: Remove this when we can generate ids in the backend
- */
-let nextUniqueDestinationId: number = 0;
-const getNextUniqueDestinationId = () => {
-    return nextUniqueDestinationId++;
-};
-
-/**
  * Destination Category
  */
 export enum DestinationCategory {
@@ -48,6 +40,8 @@ export function getIcon(category: DestinationCategory): IconProp {
  */
 export type Rating = 0 | 1 | 2 | 3 | 4 | 5;
 
+export type Geometry = { lat: number; lng: number };
+
 /**
  * DestinationModal
  * id: destination unique id
@@ -59,32 +53,18 @@ export type Rating = 0 | 1 | 2 | 3 | 4 | 5;
  * imgSrc: destination image
  */
 export interface DestinationModel {
-    id: string;
+    uuid: string;
     name: string;
-    category: DestinationCategory;
-    address: string;
-    rating: Rating;
+    category: Array<DestinationCategory>;
+    geometry: Geometry;
+    address?: string;
+    phone?: string;
+    website?: string;
     description: string;
-    imgSrc: string;
-    lat: number;
-    lng: number;
-}
-
-/**
- * Returns a new default DestinationModel
- */
-export function newDestinationModel(): DestinationModel {
-    return {
-        id: String(getNextUniqueDestinationId()),
-        name: `Destination ${nextUniqueDestinationId}`,
-        category: DestinationCategory.Food,
-        address: 'City, Country',
-        rating: 3,
-        description: 'Some overview on this destination.',
-        imgSrc: SampleDestImage,
-        lat: 49.2606,
-        lng: -123.246,
-    };
+    rating: Rating;
+    userRatings: Array<Rating>;
+    photoRefs: Array<string>;
+    placeId: string;
 }
 
 /**
@@ -101,5 +81,5 @@ export const initialState = {
 export enum DestinationsActionTypes {
     LOAD_DESTS_BY_TRECIPE_ID = '@destination/LOAD_DESTS_BY_TRECIPE_ID',
     ADD_DESTINATION = '@destination/ADD_DESTINATION',
-    REMOVE_DESTINATION = '@destination/REMOVE_DESTINATIO',
+    REMOVE_DESTINATION = '@destination/REMOVE_DESTINATION',
 }

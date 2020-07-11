@@ -1,16 +1,17 @@
-import { DestinationModel, DestinationsActionTypes, newDestinationModel } from './types';
-import { typedAction } from '../util';
-import { AnyAction, Dispatch } from 'redux';
-
-const mockDestinations: Array<DestinationModel> = [1, 2, 3, 4, 5, 6].map(() =>
-    newDestinationModel()
-);
+import { DestinationModel, DestinationsActionTypes } from './types';
+import { AppThunk, typedAction } from '../util';
+import { Action, AnyAction, Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { RootState } from '../index';
+import DestinationService from '../../services/destinationService';
 
 export const getDestModelsByTrecipeId = (trecipeId: string) => {
-    return (dispatch: Dispatch<AnyAction>) => {
-        setTimeout(() => {
-            dispatch(loadByTrecipeId(trecipeId, mockDestinations));
-        }, 500);
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        DestinationService.getDestinationsByTrecipeId(trecipeId).then(
+            (dests: Array<DestinationModel>) => {
+                dispatch(loadByTrecipeId(trecipeId, dests));
+            }
+        );
     };
 };
 

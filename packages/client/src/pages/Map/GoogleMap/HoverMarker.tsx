@@ -65,7 +65,7 @@ export class HoverMarker extends Component<markerProps, markerState> {
     };
 
     private onClick = () => {
-        let elementToView = document.getElementById(this.props.dest.id);
+        let elementToView = document.getElementById(this.props.dest.uuid);
         elementToView?.scrollIntoView({
             behavior: 'smooth',
             block: 'end',
@@ -91,15 +91,13 @@ export class HoverMarker extends Component<markerProps, markerState> {
     render() {
         const dest = this.props.dest;
         const completed = this.props.completed;
-        const destLatLong = {
-            lat: dest.lat,
-            lng: dest.lng,
-        };
-        const iconURL = this.getIconUrl(dest.category, completed);
+        // Taking the first category for icon.
+        // NOTE: Category array WILL NEVER be empty as by default, we assign the Others category
+        const iconURL = this.getIconUrl(dest.category[0], completed);
         const showInfoWindow = this.state.isActive || this.state.onHover;
         return (
             <Marker
-                position={destLatLong}
+                position={dest.geometry}
                 title={dest.name}
                 icon={iconURL}
                 onMouseOver={this.onMouseEnter}
@@ -107,7 +105,7 @@ export class HoverMarker extends Component<markerProps, markerState> {
                 onClick={this.onClick}>
                 {showInfoWindow && (
                     <InfoWindow onDomReady={this.onDomReady} onCloseClick={this.toggleMarker}>
-                        <DestInfoWindow destModel={dest}></DestInfoWindow>
+                        <DestInfoWindow destModel={dest} />
                     </InfoWindow>
                 )}
             </Marker>

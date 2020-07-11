@@ -8,7 +8,7 @@ const destinationSchema = new mongoose.Schema(
         category: [String],
         geometry: {
             lat: Number,
-            lon: Number,
+            lng: Number,
         },
         formattedAddress: String,
         formattedPhoneNumber: String,
