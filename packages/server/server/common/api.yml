@@ -1,58 +1,171 @@
 openapi: 3.0.1
 info:
   title: server
-  description: Trecipe backend
+  description: trecipe backend
   version: 1.0.0
 servers:
 - url: /api/v1
+  description: Dev server
 tags:
-- name: Examples
-  description: Simple example endpoints
-- name: Specification
-  description: The swagger API specification
+- name: Trecipes
+  description: Trecipe endpoints
 paths:
-  /examples:
+  /trecipes:
     get:
       tags:
-      - Examples
-      description: Fetch all examples
+      - Trecipes
+      summary: Fetch all trecipes
+      description: Fetch all trecipes either owned or shared with current user
       responses:
         200:
-          description: Returns all examples
-          content: {}
+          description: Returns all trecipes owned or shared with current user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trecipe'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     post:
       tags:
-      - Examples
-      description: Create a new example
+      - Trecipes
+      summary: Create a new trecipe
+      description: Create a new trecipe with given name, description, and privacy setting
       requestBody:
-        description: an example
+        description: New Trecipe's name, description, privacy setting
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ExampleBody'
+              $ref: '#/components/schemas/CreateNewTrecipeDTO'
         required: true
       responses:
-        200:
-          description: Returns all examples
-          content: {}
-  /examples/{id}:
+        201:
+          description: Returns the newly created trecipe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trecipe'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /trecipes/{id}:
     get:
       tags:
-      - Examples
+      - Trecipes
+      summary: Gets a trecipe by uuid
+      description: Gets a trecipe by uuid
       parameters:
-      - name: id
-        in: path
-        description: The id of the example to retrieve
-        required: true
-        schema:
-          type: integer
+      - $ref: '#/components/parameters/pathId'
       responses:
         200:
-          description: Return the example with the specified id
-          content: {}
+          description: Returns the trecipe with the specified uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trecipe'
         404:
-          description: Example not found
-          content: {}
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    put:
+      tags:
+      - Trecipes
+      summary: Updates a trecipe by uuid
+      description: Updates a trecipe of given uuid by updated trecipe model
+      parameters:
+      - $ref: '#/components/parameters/pathId'
+      requestBody:
+        description: Updated trecipe model
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trecipe'
+        required: true
+      responses:
+        200:
+          description: Returns the updated trecipe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trecipe'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - Trecipes
+      summary: Deletes a trecipe by uuid
+      parameters:
+        - $ref: '#/components/parameters/pathId'
+      responses:
+        200:
+          $ref: '#/components/responses/Deleted'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /destinations:
+    post:
+      tags:
+        - Destinations
+      summary: Create new destination
+      description: Create a new destination with given placeId
+      requestBody:
+        description: Google place id for this destination
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                placeId:
+                  type: string
+                  example: ChIJN1t_tDeuEmsRUsoyG83frY4
+      responses:
+        201:
+          description: Returns the newly created destination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Destination'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Destinations
+      summary: Get destinations by trecipe uuid
+      description: Get all destinations in a trecipe with specified uuid
+      parameters:
+        - $ref: '#/components/parameters/queryTrecipeId'
+      responses:
+        200:
+          description: Returns an array of destinations in trecipe of given uuid
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Destination'
+  /destinations/{id}:
+    get:
+      tags:
+        - Destinations
+      summary: Get destination by uuid
+      description: Get destination by uuid
+      parameters:
+        - $ref: '#/components/parameters/pathId'
+      responses:
+        200:
+          description: Returns the destination given by uuid
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Destination'
+        404:
+          $ref: '#/components/responses/NotFound'
   /spec:
     get:
       tags:
@@ -61,14 +174,187 @@ paths:
         200:
           description: Return the API specification
           content: {}
+
 components:
+  parameters:
+    pathId:
+      name: id
+      in: path
+      description: uuid
+      example: 123e4567-e89b-12d3-a456-426614174000
+      required: true
+      schema:
+        type: string
+        format: uuid
+    queryTrecipeId:
+      name: id
+      in: query
+      description: Trecipe uuid
+      example: 123e4567-e89b-12d3-a456-426614174000
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
-    ExampleBody:
-      title: example
+    Trecipe:
+      title: Trecipe
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          example: My Trecipe
+        description:
+          type: string
+          example: Description for my Trecipe
+        owner:
+          type: string
+          example: Team2
+        isPrivate:
+          type: boolean
+          example: true
+        collaborators:
+            type: array
+            items:
+              type: string
+            example: []
+        image:
+          type: string
+        destinations:
+          type: array
+          items:
+            type: object
+            properties:
+              destUuid:
+                type: string
+                example: 234e4567-g72h-2857-a456-426614138477
+              completed:
+                type: boolean
+                example: false
+          example: []
+    Destination:
+      title: Destination
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 2h357246-g725-4872-g84m-48692745878567
+        name:
+          type: string
+          example: Sample destination
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/DestinationCategory'
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+        formattedAddress:
+          type: string
+          example: 5, 48 Pirrama Rd, Pyrmont NSW 2009, Australia
+        formattedPhoneNumber:
+          type: string
+          example: +61 2 9374 4000
+        website:
+          type: string
+          example: https://www.google.com.au/about/careers/locations/sydney/
+        rating:
+          $ref: '#/components/schemas/Rating'
+        userRatings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rating'
+          example: [4.2, 3.0, 4.5]
+        description:
+          type: string
+          example: Description about this destination
+        placeId:
+          type: string
+          example: ChIJN1t_tDeuEmsRUsoyG83frY4
+        photoRefs:
+          type: array
+          items:
+            type: string
+          example: [CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU]
+    DestinationCategory:
+      title: DestinationCategory
+      type: string
+      enum:
+        - Food
+        - Accommodation
+        - Attraction
+        - Shopping
+    Geometry:
+      title: Geometry
+      type: object
+      properties:
+        lat:
+          type: number
+          format: double
+          example: 35.929673
+        lng:
+          type: number
+          format: double
+          example: -78.948237
       required:
-      - name
+        - lat
+        - lng
+    Rating:
+      title: Rating
+      type: number
+      format: float
+      minimum: 0.0
+      maximum: 5.0
+      example: 4.3
+    CreateNewTrecipeDTO:
+      title: CreateNewTrecipeDTO
       type: object
       properties:
         name:
           type: string
-          example: no_stress
+          example: My new Trecipe
+        description:
+          type: string
+          example: Description for my new Trecipe
+        isPrivate:
+          type: boolean
+          example: true
+      required:
+        - name
+        - description
+        - isPrivate
+    Error:
+      title: Error
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+  responses:
+    NotFound:
+      description: Entity not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Deleted:
+      description: Operation success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              deletedCount:
+                type: integer
+                format: int64
