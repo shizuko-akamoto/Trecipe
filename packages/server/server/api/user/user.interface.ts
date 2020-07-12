@@ -3,5 +3,6 @@ export default interface User {
     displayName: string;
     email: string;
     password: string;
+    profilePic: string;
     trecipes: Array<string>;
 }

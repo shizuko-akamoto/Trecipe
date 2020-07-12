@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
         displayName: String,
         email: String,
         password: String,
+        profilePic: String,
         trecipes: [String],
     },
     { timestamps: true }

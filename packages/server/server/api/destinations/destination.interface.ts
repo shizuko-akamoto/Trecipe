@@ -1,15 +1,7 @@
-export enum DestinationCategory {
-    FOOD = 'food',
-    ACCOMMODATION = 'accommodation',
-    ENTERTAINMENT = 'entertainment',
-    SHOPPING = 'shopping',
-    SIGHTSEEING = 'sightseeing',
-}
-
 export default interface Destination {
     uuid: string;
     name: string;
-    category: DestinationCategory;
+    category: Array<string>;
     geometry: {
         lat: number;
         lon: number;
@@ -19,6 +11,7 @@ export default interface Destination {
     website: string;
     rating: number;
     userRatings: Array<number>;
+    description: String,
     placeId: string;
     photoRefs: Array<string>;
 }
