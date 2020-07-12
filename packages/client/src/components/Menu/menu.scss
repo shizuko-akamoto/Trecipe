@@ -2,19 +2,26 @@
 @import '../Button/buttons.scss';
 @import '../animation';
 
+.menuContainer {
+    position: relative;
+}
+
 .menu {
     width: 8.75rem;
     animation: rotate-in 0.1s cubic-bezier(0.06, 0.08, 0.68, 1.51);
+    z-index: 5000;
+    position: absolute;
+    left: auto;
 }
 
 .menu-list {
     background-color: $tc-white;
     box-shadow: 0rem 0rem 0.5rem $light-gray;
+    border: 1px solid $light-gray;
     border-radius: 0.5rem;
     list-style: none;
     margin: 0;
     padding: 0.5rem 0rem 0.5rem 0rem;
-    z-index: 1;
 }
 
 .menu-list-entry {

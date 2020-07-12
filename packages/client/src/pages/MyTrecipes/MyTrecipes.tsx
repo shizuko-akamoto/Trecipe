@@ -32,7 +32,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
 
     render() {
         return (
-            <div className="content-wrapper">
+            <div className="mytrecipes-wrapper">
                 <div className="content">
                     <h1 className="page-title">My Trecipes</h1>
                     <div className="buttons-wrapper">
@@ -54,7 +54,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
                                 listItem={[
                                     { text: 'Any', icon: 'border-all' as IconProp },
                                     { text: 'Private', icon: 'lock' as IconProp },
-                                    { text: 'Public', icon: 'unlock' as IconProp },
+                                    { text: 'Public', icon: 'lock-open' as IconProp },
                                 ]}
                             />
                         </ul>
