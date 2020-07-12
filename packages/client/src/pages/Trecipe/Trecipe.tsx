@@ -22,6 +22,7 @@ import { SearchBarPopup } from '../../components/SearchBarPopup/SearchBarPopup';
 import { StaticMap } from '../../components/Map/StaticMap';
 import Background from '../MyTrecipes/TrecipeCard/BetterDefaultImage.png';
 import Modal from '../../components/Modal/Modal';
+import { Legend } from '../Map/GoogleMap/Legend';
 
 /**
  * TrecipeProps
@@ -268,6 +269,9 @@ class Trecipe extends React.Component<TrecipeProps, TrecipeState> {
                                     destinations={this.props.destinations}
                                     completedDests={this.props.trecipe.completed}
                                 />
+                                <div className="static-map-legend">
+                                    <Legend />
+                                </div>
                                 <div className="static-map-overlay">
                                     <Button icon="external-link-alt" text="Expand View" />
                                 </div>
