@@ -1,10 +1,9 @@
 import Controller from '../../common/controller';
 import { NextFunction, Request, Response, Router } from 'express';
 import TrecipeService from './trecipe.service';
-import Trecipe from './trecipe.interface';
+import Trecipe from '../../../../shared/models/trecipe';
 import CreateNewTrecipeDTO from './trecipe.dto';
 import { uuid } from 'uuidv4';
-import { InternalServerError } from 'express-openapi-validator/dist/framework/types';
 
 class TrecipeController implements Controller {
     public readonly path = '/trecipes';
@@ -23,9 +22,11 @@ class TrecipeController implements Controller {
     }
 
     private getAllTrecipes(req: Request, res: Response, next: NextFunction) {
-        TrecipeService.getAll().then((trecipes: Array<Trecipe>) => {
-            res.status(200).json(trecipes);
-        }).catch(err => next(err));
+        TrecipeService.getAll()
+            .then((trecipes: Array<Trecipe>) => {
+                res.status(200).json(trecipes);
+            })
+            .catch((err) => next(err));
     }
 
     private createTrecipe(req: Request, res: Response, next: NextFunction) {

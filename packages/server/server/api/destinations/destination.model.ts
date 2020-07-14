@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Destination from './destination.interface';
+import Destination from '../../../../shared/models/destination';
 
 const destinationSchema = new mongoose.Schema(
     {
@@ -8,7 +8,7 @@ const destinationSchema = new mongoose.Schema(
         category: [String],
         geometry: {
             lat: Number,
-            lon: Number,
+            lng: Number,
         },
         formattedAddress: String,
         formattedPhoneNumber: String,

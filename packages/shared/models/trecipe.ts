@@ -1,4 +1,4 @@
-interface DestWithStatus {
+export interface DestWithStatus {
     destUUID: string;
     completed: boolean;
 }
