@@ -2,7 +2,7 @@ import Controller from '../../common/controller';
 import { NextFunction, Request, Response, Router } from 'express';
 import Destination from '../../../../shared/models/destination';
 import { DestWithStatus } from '../../../../shared/models/trecipe';
-import { CreateNewDestinationDTO } from './destination.dto';
+import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import DestinationService from './destination.service';
 import { uuid } from 'uuidv4';
 

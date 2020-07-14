@@ -2,7 +2,7 @@ import Controller from '../../common/controller';
 import { NextFunction, Request, Response, Router } from 'express';
 import TrecipeService from './trecipe.service';
 import Trecipe from '../../../../shared/models/trecipe';
-import CreateNewTrecipeDTO from './trecipe.dto';
+import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
 import { uuid } from 'uuidv4';
 
 class TrecipeController implements Controller {

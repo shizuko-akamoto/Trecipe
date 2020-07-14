@@ -3,6 +3,7 @@ import Trecipe from '../../../../shared/models/trecipe';
 import logger from '../../common/logger';
 import { TrecipeNotFound } from './trecipe.error';
 import { InternalServerError } from 'express-openapi-validator/dist';
+import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
 
 class TrecipeService {
     public getAll(): Promise<Array<Trecipe>> {
@@ -22,7 +23,7 @@ class TrecipeService {
             );
     }
 
-    public createTrecipe(trecipeData: Trecipe): Promise<Trecipe> {
+    public createTrecipe(trecipeData: CreateNewTrecipeDTO): Promise<Trecipe> {
         const newTrecipe = new trecipeModel(trecipeData);
         return newTrecipe
             .save()
