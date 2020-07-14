@@ -15,17 +15,17 @@ class TrecipeController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.get(this.path, this.getAllTrecipes);
-        this.router.post(this.path, this.createTrecipe);
-        this.router.get(`${this.path}/:id`, this.getTrecipeById);
-        this.router.delete(`${this.path}/:id`, this.deleteTrecipeById);
-        this.router.put(`${this.path}/:id`, this.updateTrecipeById);
+        this.router.get(this.path, this.getAllTrecipes.bind(this));
+        this.router.post(this.path, this.createTrecipe.bind(this));
+        this.router.get(`${this.path}/:id`, this.getTrecipeById.bind(this));
+        this.router.delete(`${this.path}/:id`, this.deleteTrecipeById.bind(this));
+        this.router.put(`${this.path}/:id`, this.updateTrecipeById.bind(this));
     }
 
     private getAllTrecipes(req: Request, res: Response, next: NextFunction) {
         TrecipeService.getAll().then((trecipes: Array<Trecipe>) => {
-            res.json(trecipes);
-        });
+            res.status(200).json(trecipes);
+        }).catch(err => next(err));
     }
 
     private createTrecipe(req: Request, res: Response, next: NextFunction) {
@@ -42,14 +42,7 @@ class TrecipeController implements Controller {
             .then((createdTrecipe: Trecipe) => {
                 res.status(201).json(createdTrecipe);
             })
-            .catch((err) =>
-                next(
-                    new InternalServerError({
-                        path: this.path,
-                        message: `Failed to create trecipe: ${err.toString()}`,
-                    })
-                )
-            );
+            .catch((err) => next(err));
     }
 
     private getTrecipeById(req: Request, res: Response, next: NextFunction) {
