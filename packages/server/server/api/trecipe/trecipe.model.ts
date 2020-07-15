@@ -1,9 +1,19 @@
 import mongoose from 'mongoose';
-import Trecipe from './trecipe.interface';
+import Trecipe from '../../../../shared/models/trecipe';
 
-const destWithStatus = new mongoose.Schema({
-    destUUID: { type: String, ref: 'Destination' },
-    completed: Boolean,
+const destWithStatus = new mongoose.Schema(
+    {
+        destUUID: { type: String, ref: 'Destination' },
+        completed: Boolean,
+    },
+    { toObject: { virtuals: true }, toJSON: { virtuals: true }, id: false }
+);
+
+destWithStatus.virtual('destination', {
+    ref: 'Destination',
+    localField: 'destUUID',
+    foreignField: 'uuid',
+    justOne: true,
 });
 
 const trecipeSchema = new mongoose.Schema(

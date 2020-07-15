@@ -113,15 +113,11 @@ paths:
       summary: Create new destination
       description: Create a new destination with given placeId
       requestBody:
-        description: Google place id for this destination
+        description: Destination data
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                placeId:
-                  type: string
-                  example: ChIJN1t_tDeuEmsRUsoyG83frY4
+              $ref: '#/components/schemas/CreateNewDestinationDTO'
       responses:
         201:
           description: Returns the newly created destination
@@ -147,6 +143,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Destination'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
   /destinations/{id}:
     get:
       tags:
@@ -161,8 +161,6 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
                   $ref: '#/components/schemas/Destination'
         404:
           $ref: '#/components/responses/NotFound'
@@ -326,6 +324,50 @@ components:
         - name
         - description
         - isPrivate
+    CreateNewDestinationDTO:
+      title: CreateNewDestinationDTO
+      type: object
+      properties:
+        name:
+          type: string
+          example: Sample destination
+        category:
+          type: array
+          items:
+            $ref: '#/components/schemas/DestinationCategory'
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+        formattedAddress:
+          type: string
+          example: 5, 48 Pirrama Rd, Pyrmont NSW 2009, Australia
+        formattedPhoneNumber:
+          type: string
+          example: +61 2 9374 4000
+        website:
+          type: string
+          example: https://www.google.com.au/about/careers/locations/sydney/
+        rating:
+          $ref: '#/components/schemas/Rating'
+        userRatings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rating'
+          example: [4.2, 3.0, 4.5]
+        description:
+          type: string
+          example: Description about this destination
+        placeId:
+          type: string
+          example: ChIJN1t_tDeuEmsRUsoyG83frY4
+        photoRefs:
+          type: array
+          items:
+            type: string
+          example: [CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU]
+      required:
+        - placeId
+        - name
+        - geometry
     Error:
       title: Error
       type: object
