@@ -56,7 +56,7 @@ class DestinationService {
                     logger.info(`populated destinations for trecipe with uuid: ${trecipeUuid}`);
                     return Promise.resolve(populatedTrecipe.destinations);
                 } else {
-                    logger.info(`failed to get destinations for trecipe with uuid: ${trecipeUuid}`);
+                    logger.warn(`failed to get destinations for trecipe with uuid: ${trecipeUuid}`);
                     return Promise.reject(new TrecipeNotFound(trecipeUuid));
                 }
             });
@@ -91,7 +91,7 @@ class DestinationService {
             .catch((err) =>
                 Promise.reject(
                     new InternalServerError({
-                        message: `Failed to get destination: ${err.toString()}`,
+                        message: `Failed to update destination: ${err.toString()}`,
                     })
                 )
             )

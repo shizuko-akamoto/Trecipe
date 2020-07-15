@@ -69,7 +69,7 @@ class TrecipeService {
             .catch((err) =>
                 Promise.reject(
                     new InternalServerError({
-                        message: `Failed to get trecipe: ${err.toString()}`,
+                        message: `Failed to delete trecipe: ${err.toString()}`,
                     })
                 )
             )
@@ -91,7 +91,7 @@ class TrecipeService {
             .catch((err) =>
                 Promise.reject(
                     new InternalServerError({
-                        message: `Failed to get trecipe: ${err.toString()}`,
+                        message: `Failed to update trecipe: ${err.toString()}`,
                     })
                 )
             )
