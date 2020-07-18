@@ -1,6 +1,9 @@
+import { DestinationCategory } from "client/src/redux/Destinations/types";
+import { Rating } from "./destination";
+
 export interface CreateNewDestinationDTO {
     name: string;
-    category: string[];
+    category: Array<DestinationCategory>;
     geometry: {
         lat: number;
         lng: number;
@@ -8,6 +11,6 @@ export interface CreateNewDestinationDTO {
     formattedAddress: string;
     formattedPhoneNumber: string;
     website: string;
-    rating: number;
+    rating: Rating;
     placeId: string;
 }

@@ -5,20 +5,21 @@ import { CardMenu } from '../../components/CardMenu/CardMenu';
 import { MenuItem } from '../../components/Menu/Menu';
 import { GMap } from './GoogleMap/Gmap';
 import { RootState } from '../../redux';
-import { newTrecipeModel, TrecipeModel } from '../../redux/TrecipeList/types';
-import { isUndefined } from 'lodash';
 import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
-import { createNewTrecipe, deleteTrecipe, updateTrecipe } from '../../redux/TrecipeList/action';
+import { deleteTrecipeRequest } from '../../redux/TrecipeList/action';
 import {
     getDestModelsByTrecipeId,
-    addDestination,
-    removeDestination,
+    addDestinationRequest,
+    removeDestinationRequest,
 } from '../../redux/Destinations/action';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
-import { DestinationModel } from '../../redux/Destinations/types';
+import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
+import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
+import Destination from '../../../../shared/models/destination';
+import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 
 export type MapProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -47,69 +48,87 @@ class Map extends React.Component<MapProps> {
     ];
 
     componentDidMount(): void {
-        // load destinations by trecipe id before rendering
-        this.props.getDestModelsByTrecipeId(this.props.trecipe.id);
+        // fetch trecipe by id and destinations by trecipe id
+        const trecipeId = this.props.match.params.trecipeId;
+        this.props.fetchTrecipe(trecipeId);
+        this.props.getDestModelsByTrecipeId(trecipeId);
     }
 
-    private onDestCompleteClick(destId: string, isCompleted: boolean) {
-        const trecipe: TrecipeModel = this.props.trecipe;
-        this.props.updateTrecipe(trecipe.id, {
-            completed: trecipe.completed.add(destId),
-        });
+    private onDestCompleteClick(destId: string) {
+        if (this.props.trecipe) {
+            const trecipe: Trecipe = this.props.trecipe;
+            this.props.updateTrecipe(trecipe.uuid, {
+                destinations: trecipe.destinations.map((dest) =>
+                    dest.destUUID === destId ? { destUUID: destId, completed: true } : dest
+                ),
+            });
+        }
     }
 
     private onDestDeleteClick(idToDelete: string) {
-        const trecipe: TrecipeModel = this.props.trecipe;
-        this.props.updateTrecipe(trecipe.id, {
-            destinations: trecipe.destinations.filter((destId) => destId !== idToDelete),
-        });
-        this.props.removeDestination(trecipe.id, idToDelete);
+        if (this.props.trecipe) {
+            this.props.removeDestination(this.props.trecipe, idToDelete);
+        }
     }
 
-    private onDestAddClick(destination: DestinationModel) {
-        const trecipe: TrecipeModel = this.props.trecipe;
-        this.props.updateTrecipe(trecipe.id, {
-            destinations: [...trecipe.destinations, destination.id],
-        });
-        this.props.addDestination(trecipe.id, destination);
+    private onDestAddClick(destination: CreateNewDestinationDTO) {
+        if (this.props.trecipe) {
+            this.props.addDestination(this.props.trecipe, destination);
+        }
     }
 
     private onTrecipeEditClick() {
-        this.props.showModal(
-            <TrecipePopup type={TrecipePopupType.Edit} trecipeId={this.props.trecipe.id} />
-        );
+        if (this.props.trecipe) {
+            this.props.showModal(
+                <TrecipePopup type={TrecipePopupType.Edit} trecipe={this.props.trecipe} />
+            );
+        }
     }
 
     private onTrecipeCopyClick() {
-        // copying everything except for id
-        const { id, ...copy } = this.props.trecipe;
-        this.props.createNewTrecipe(Object.assign(newTrecipeModel(), copy));
-        // TODO: Redirect to Map page of copied Trecipe
+        if (this.props.trecipe) {
+            // copying everything except for id
+            const { uuid, ...copy } = this.props.trecipe;
+            //this.props.createNewTrecipe(, copy));
+            // TODO: Redirect to Map page of copied Trecipe
+        }
     }
 
     private onTrecipeDeleteClick() {
-        this.props.deleteTrecipe(this.props.trecipe.id);
-        // TODO: Redirect back to My Trecipes page
+        if (this.props.trecipe) {
+            this.props.deleteTrecipe(this.props.trecipe.uuid);
+            // TODO: Redirect back to My Trecipes page
+        }
     }
 
     render() {
-        const trecipe = this.props.trecipe;
+        const trecipe: Trecipe | undefined = this.props.trecipe;
+        const destinations: Destination[] | undefined = this.props.destinations;
+        if (!trecipe || !destinations) {
+            return null;
+        }
+
+        const completed = new Set(
+            trecipe.destinations.flatMap((dest: DestWithStatus) =>
+                dest.completed ? [dest.destUUID] : []
+            )
+        );
         return (
             <div className="map-page-wrapper">
                 <div className="map-page-content">
                     <aside className="map-side-bar">
                         <div className="trecipe-header">
-                            <span>{this.props.trecipe.name}</span>
+                            <span>{trecipe.name}</span>
                             <CardMenu menuItems={this.trecipeEditMenuItems} />
                         </div>
                         <div>
                             <ul className="dest-card-list">
-                                {this.props.destinations.map((dest, index) => (
+                                {destinations.map((dest, index) => (
                                     <DestinationCard
                                         index={index}
-                                        key={dest.id}
-                                        destModel={dest}
-                                        isCompleted={trecipe.completed.has(dest.id)}
+                                        key={dest.uuid}
+                                        destination={dest}
+                                        isCompleted={completed.has(dest.uuid)}
                                         onClickDelete={this.onDestDeleteClick.bind(this)}
                                         onClickComplete={this.onDestCompleteClick.bind(this)}
                                     />
@@ -119,8 +138,8 @@ class Map extends React.Component<MapProps> {
                     </aside>
                     <div className="map-container">
                         <GMap
-                            destinations={this.props.destinations}
-                            completedDest={this.props.trecipe.completed}
+                            destinations={destinations}
+                            completedDest={completed}
                             onDestAdd={this.onDestAddClick.bind(this)}
                             onDestRemove={this.onDestDeleteClick.bind(this)}
                         />
@@ -136,19 +155,10 @@ const mapStateToProps = (
     ownProps: RouteComponentProps<{ trecipeId: string }>
 ) => {
     const trecipeId = ownProps.match.params.trecipeId;
-    const maybeTrecipeWithId = state.trecipeList.trecipes.find(
-        (trecipe: TrecipeModel) => trecipe.id === trecipeId
-    );
-    const maybeUnsortedDestModels = state.destinations.destsByTrecipeId.get(trecipeId);
-
-    const trecipeWithId = isUndefined(maybeTrecipeWithId) ? newTrecipeModel() : maybeTrecipeWithId;
-    const unsortedDestModels = isUndefined(maybeUnsortedDestModels) ? [] : maybeUnsortedDestModels;
+    const destinations = state.destinations.destsByTrecipeId.get(trecipeId);
     return {
-        // TODO: Proper Error handling (should show Error Not Found page if trecipe id is not found)
-        trecipe: trecipeWithId,
-        destinations: trecipeWithId.destinations.flatMap((destId) => {
-            return unsortedDestModels.filter((model) => destId === model.id);
-        }),
+        trecipe: state.trecipe.trecipe,
+        destinations: destinations,
     };
 };
 
@@ -156,12 +166,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
             showModal,
-            updateTrecipe,
-            deleteTrecipe,
-            createNewTrecipe,
+            updateTrecipe: updateTrecipeRequest,
+            deleteTrecipe: deleteTrecipeRequest,
             getDestModelsByTrecipeId,
-            addDestination,
-            removeDestination,
+            addDestination: addDestinationRequest,
+            removeDestination: removeDestinationRequest,
+            fetchTrecipe,
         },
         dispatch
     );

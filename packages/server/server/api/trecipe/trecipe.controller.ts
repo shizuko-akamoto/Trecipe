@@ -38,6 +38,8 @@ class TrecipeController implements Controller {
             collaborators: [],
             image: '',
             destinations: [],
+            createdAt: '',
+            updatedAt: '',
         };
         TrecipeService.createTrecipe(newTrecipe)
             .then((createdTrecipe: Trecipe) => {

@@ -285,6 +285,7 @@ components:
         - Accommodation
         - Attraction
         - Shopping
+        - Others
     Geometry:
       title: Geometry
       type: object
@@ -303,10 +304,10 @@ components:
     Rating:
       title: Rating
       type: number
-      format: float
-      minimum: 0.0
-      maximum: 5.0
-      example: 4.3
+      format: int64
+      minimum: 0
+      maximum: 5
+      example: 4
     CreateNewTrecipeDTO:
       title: CreateNewTrecipeDTO
       type: object

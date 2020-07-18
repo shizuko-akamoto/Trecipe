@@ -5,13 +5,13 @@ import { CardMenu } from '../../../components/CardMenu/CardMenu';
 import { MenuItem } from '../../../components/Menu/Menu';
 import { ProgressBar } from '../../../components/ProgressBar/ProgressBar';
 import { bindActionCreators, Dispatch } from 'redux';
-import { createNewTrecipe, deleteTrecipe } from '../../../redux/TrecipeList/action';
+import { createTrecipeRequest, deleteTrecipeRequest } from '../../../redux/TrecipeList/action';
 import { connect } from 'react-redux';
-import { newTrecipeModel, TrecipeModel } from '../../../redux/TrecipeList/types';
 import { showModal } from '../../../redux/Modal/action';
 import TrecipePopup, { TrecipePopupType } from '../../../components/TrecipePopup/TrecipePopup';
+import Trecipe from '../../../../../shared/models/trecipe';
 
-type TCProps = TrecipeModel & ReturnType<typeof mapDispatchToProps>;
+type TCProps = Trecipe & ReturnType<typeof mapDispatchToProps>;
 
 class TrecipeCard extends React.Component<TCProps> {
     private cardMenuItems: MenuItem[] = [
@@ -43,18 +43,18 @@ class TrecipeCard extends React.Component<TCProps> {
 
     private showTCEditPopup = () => {
         this.props.showModal(
-            <TrecipePopup type={TrecipePopupType.Edit} trecipeId={this.props.id} />
+            <TrecipePopup type={TrecipePopupType.Edit} trecipe={{ ...this.props }} />
         );
     };
 
     private duplicateTrecipe = () => {
         // copying everything except for id
-        const { id, ...copy } = this.props;
-        this.props.createNewTrecipe(Object.assign(newTrecipeModel(), copy));
+        const { name, description, isPrivate } = this.props;
+        //this.props.createNewTrecipe({name: name, description: description, isPrivate: isPrivate});
     };
 
     private deleteTrecipe = () => {
-        this.props.deleteTrecipe(this.props.id);
+        this.props.deleteTrecipe(this.props.uuid);
     };
 
     private onTCEditClick(e: React.MouseEvent) {
@@ -63,12 +63,13 @@ class TrecipeCard extends React.Component<TCProps> {
     }
 
     render() {
+        const completed = this.props.destinations.filter((dest) => dest.completed);
         return (
             <div className="trecipeCard">
                 <div
                     className="tcHeaderContainer"
                     style={{
-                        backgroundImage: this.props.imageSrc ? this.props.imageSrc : 'none',
+                        backgroundImage: this.props.image ? this.props.image : 'none',
                     }}>
                     <div className="tcHeader">
                         <label className="tcTitle">
@@ -85,8 +86,10 @@ class TrecipeCard extends React.Component<TCProps> {
                 </div>
                 <div className="tcBody">
                     <div className="tcMetaData">
-                        <div className="tcDate">{this.props.date}</div>
-                        <div className="tcAuthor">by: {this.props.author}</div>
+                        <div className="tcDate">
+                            {new Date(this.props.updatedAt).toLocaleString()}
+                        </div>
+                        <div className="tcAuthor">by: {this.props.owner}</div>
                     </div>
                     <div className="tcDescription">
                         <p>{this.props.description}</p>
@@ -94,7 +97,7 @@ class TrecipeCard extends React.Component<TCProps> {
                 </div>
                 <ProgressBar
                     total={this.props.destinations.length}
-                    completed={this.props.completed.size}
+                    completed={completed.length}
                     showText={false}
                     barStyle={{ borderRadius: '0 0 8px 8px' }}
                 />
@@ -106,8 +109,8 @@ class TrecipeCard extends React.Component<TCProps> {
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
-            createNewTrecipe,
-            deleteTrecipe,
+            createNewTrecipe: createTrecipeRequest,
+            deleteTrecipe: deleteTrecipeRequest,
             showModal,
         },
         dispatch

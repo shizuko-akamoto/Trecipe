@@ -2,7 +2,7 @@ import React, { Component, RefObject } from 'react';
 import { Image } from '../Image/Image';
 import './StaticMap.scss';
 import { staticMapStyle } from './mapHelper';
-import { DestinationModel } from '../../redux/Destinations/types';
+import Destination from '../../../../shared/models/destination';
 
 /**
  * MarkerColor
@@ -37,7 +37,7 @@ export interface StaticMapProps {
     height: number;
     mapScale: 1 | 2;
     markerSize: 'tiny' | 'small' | 'mid';
-    destinations: Array<DestinationModel>;
+    destinations: Array<Destination>;
     completedDests: Set<string>;
 }
 
@@ -125,7 +125,7 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
         });
 
         const markers = mapProps.destinations.map((dest) => {
-            return this.getMarker(dest, mapProps.completedDests.has(dest.id));
+            return this.getMarker(dest, mapProps.completedDests.has(dest.uuid));
         });
 
         const markersParams = this.getMarkerParams(markers);
@@ -142,11 +142,11 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
         return baseUrl.toString() + staticMapStyle;
     }
 
-    private getMarker(destination: DestinationModel, completed: boolean): Marker {
+    private getMarker(destination: Destination, completed: boolean): Marker {
         //TODO : update this when destination model is updated
         return {
-            lat: destination.lat,
-            long: destination.lng,
+            lat: destination.geometry.lat,
+            long: destination.geometry.lng,
             color: completed ? MarkerColor.Blue : MarkerColor.Grey,
         };
     }

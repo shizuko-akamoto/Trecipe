@@ -1,6 +1,6 @@
 import Controller from '../../common/controller';
 import { NextFunction, Request, Response, Router } from 'express';
-import Destination from '../../../../shared/models/destination';
+import Destination, { Rating } from '../../../../shared/models/destination';
 import { DestWithStatus } from '../../../../shared/models/trecipe';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import DestinationService from './destination.service';
@@ -24,10 +24,17 @@ class DestinationController implements Controller {
         const dest: CreateNewDestinationDTO = req.body;
         const newDest: Destination = {
             uuid: uuid(),
-            userRatings: [],
+            userRatings: [] as Rating[],
             photoRefs: [],
+            name: dest.name,
             description: '',
-            ...dest,
+            category: dest.category,
+            geometry: dest.geometry,
+            formattedPhoneNumber: dest.formattedPhoneNumber,
+            formattedAddress: dest.formattedAddress,
+            rating: dest.rating,
+            placeId: dest.placeId,
+            website: dest.website,
         };
         DestinationService.createDestination(newDest)
             .then((createdDest: Destination) => {

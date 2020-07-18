@@ -5,12 +5,13 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { isUndefined } from 'lodash';
 import { Button } from '../Button/Button';
 import { ToggleSwitch } from '../Toggle/Toggle';
-import { newTrecipeModel, TrecipeModel } from '../../redux/TrecipeList/types';
-import { RootState } from '../../redux';
-import { createNewTrecipe, updateTrecipe } from '../../redux/TrecipeList/action';
+import { createTrecipeRequest } from '../../redux/TrecipeList/action';
 import { hideModal } from '../../redux/Modal/action';
 import Modal from '../Modal/Modal';
 import { TrecipeException } from '../../exceptions/Exceptions';
+import Trecipe from '../../../../shared/models/trecipe';
+import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
+import { updateTrecipeRequest } from '../../redux/Trecipe/action';
 
 /**
  * Trecipe Popup Type
@@ -22,9 +23,7 @@ export enum TrecipePopupType {
     Add = 'Add',
 }
 
-export type TrecipePopupProps = ReturnType<typeof mapStateToProps> &
-    ReturnType<typeof mapDispatchToProps> &
-    TrecipePopupOwnProps;
+export type TrecipePopupProps = ReturnType<typeof mapDispatchToProps> & TrecipePopupOwnProps;
 
 /**
  * Trecipe Popup Own Props
@@ -33,7 +32,7 @@ export type TrecipePopupProps = ReturnType<typeof mapStateToProps> &
  */
 export interface TrecipePopupOwnProps {
     type: TrecipePopupType;
-    trecipeId?: string;
+    trecipe?: Trecipe;
 }
 
 /**
@@ -58,11 +57,19 @@ class TrecipePopup extends React.Component<TrecipePopupProps, TrecipePopupState>
 
     constructor(props: Readonly<TrecipePopupProps>) {
         super(props);
-        this.state = {
-            name: this.props.name,
-            description: this.props.description,
-        };
-        this.currLength = this.state.name.length;
+        if (this.props.trecipe) {
+            this.state = {
+                name: this.props.trecipe.name,
+                description: this.props.trecipe.description,
+            };
+            this.currLength = this.state.name.length;
+        } else {
+            this.state = {
+                name: '',
+                description: '',
+            };
+            this.currLength = 0;
+        }
     }
 
     /**
@@ -84,13 +91,12 @@ class TrecipePopup extends React.Component<TrecipePopupProps, TrecipePopupState>
 
     private handleTrecipeAction = (
         e: React.MouseEvent<HTMLElement>,
-        model: Partial<TrecipeModel>
+        trecipeData: CreateNewTrecipeDTO
     ) => {
         if (this.props.type === TrecipePopupType.Add) {
-            const newTrecipeModal: TrecipeModel = Object.assign(newTrecipeModel(), model);
-            this.props.createNewTrecipe(newTrecipeModal);
-        } else if (!isUndefined(this.props.trecipeId)) {
-            this.props.updateTrecipe(this.props.trecipeId, model);
+            this.props.createNewTrecipe(trecipeData);
+        } else if (!isUndefined(this.props.trecipe)) {
+            this.props.updateTrecipe(this.props.trecipe.uuid, trecipeData);
         } else {
             // trecipe id not given for Edit type popup
             throw new TrecipeException(`trecipe id undefined for ${this.props.type}`);
@@ -132,7 +138,11 @@ class TrecipePopup extends React.Component<TrecipePopupProps, TrecipePopupState>
                         <label>
                             Make Public
                             <ToggleSwitch
-                                defaultChecked={!this.props.isPrivate}
+                                defaultChecked={
+                                    this.props.type === TrecipePopupType.Edit && this.props.trecipe
+                                        ? !this.props.trecipe.isPrivate
+                                        : false
+                                }
                                 ref={this.toggleSwitchRef}
                             />
                         </label>
@@ -162,34 +172,15 @@ class TrecipePopup extends React.Component<TrecipePopupProps, TrecipePopupState>
     }
 }
 
-function mapStateToProps(state: RootState, ownProps: TrecipePopupOwnProps) {
-    let trecipeWithId = undefined;
-    if (ownProps.type === TrecipePopupType.Edit && !isUndefined(ownProps.trecipeId)) {
-        trecipeWithId = state.trecipeList.trecipes.find(
-            (trecipe: TrecipeModel) => trecipe.id === ownProps.trecipeId
-        );
-    }
-    // trecipeWithId is undefined for Add type or if no matching trecipe is found,
-    // initialize name, description to empty and privacy to private
-    const { name, description, isPrivate } = isUndefined(trecipeWithId)
-        ? { name: '', description: '', isPrivate: true }
-        : trecipeWithId;
-    return {
-        name: name,
-        description: description,
-        isPrivate: isPrivate,
-    };
-}
-
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
-            createNewTrecipe,
-            updateTrecipe,
+            createNewTrecipe: createTrecipeRequest,
+            updateTrecipe: updateTrecipeRequest,
             hideModal,
         },
         dispatch
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TrecipePopup);
+export default connect(null, mapDispatchToProps)(TrecipePopup);

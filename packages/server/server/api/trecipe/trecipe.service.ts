@@ -86,7 +86,7 @@ class TrecipeService {
 
     public updateTrecipeById(uuid: string, trecipeData: Trecipe): Promise<Trecipe> {
         return trecipeModel
-            .findOneAndUpdate({ uuid: uuid }, trecipeData)
+            .findOneAndUpdate({ uuid: uuid }, trecipeData, { new: true })
             .exec()
             .catch((err) =>
                 Promise.reject(

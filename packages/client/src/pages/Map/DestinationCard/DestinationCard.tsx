@@ -2,20 +2,23 @@ import React from 'react';
 import { CardMenu } from '../../../components/CardMenu/CardMenu';
 import { RatingBar } from '../../../components/Rating/RatingBar';
 import { DCProps } from '../../Trecipe/DestinationCard/DestinationCard';
-import { getIcon } from '../../../redux/Destinations/types';
 import './destinationCard.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isEmpty } from 'lodash';
+import { getIcon } from '../../../../../shared/models/destination';
 
 export class DestinationCard extends React.Component<DCProps> {
     render() {
-        const destModel = this.props.destModel;
+        const destModel = this.props.destination;
         return (
-            <div className="dest-card-item-wrapper" id={this.props.destModel.id}>
+            <div className="dest-card-item-wrapper" id={destModel.uuid}>
                 <div
                     className="dest-card-header-container"
                     style={{
-                        backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.5) 100%), 
-      url(${destModel.imgSrc})`,
+                        backgroundImage: isEmpty(destModel.photoRefs)
+                            ? 'none'
+                            : `linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.5) 100%),
+      url(${destModel.photoRefs[0]})`,
                     }}>
                     <div className="dest-card-header">
                         <span id="dest-card-title">
@@ -33,7 +36,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                         icon: 'check',
                                         onClick: () => {
                                             this.props.onClickComplete(
-                                                this.props.destModel.id,
+                                                destModel.uuid,
                                                 !this.props.isCompleted
                                             );
                                         },
@@ -44,7 +47,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                         text: 'Remove',
                                         icon: ['far', 'trash-alt'],
                                         onClick: () => {
-                                            this.props.onClickDelete(this.props.destModel.id);
+                                            this.props.onClickDelete(this.props.destination.uuid);
                                         },
                                     },
                                 ]}
@@ -59,14 +62,18 @@ export class DestinationCard extends React.Component<DCProps> {
                                 {destModel.category}
                                 <FontAwesomeIcon
                                     className="dest-category-icon"
-                                    icon={getIcon(destModel.category)}
+                                    // NOTE: category field will never be empty as we assign the "Others" category by default
+                                    icon={getIcon(destModel.category[0])}
                                 />
                             </h6>
-                            <h6 id="dest-location">{destModel.address}</h6>
+                            <h6 id="dest-location">{destModel.formattedAddress}</h6>
                         </span>
                         <RatingBar rating={destModel.rating} />
                     </div>
-                    <p id="dest-description">{destModel.description}</p>
+                    <p id="dest-description">
+                        {destModel.website}
+                        {destModel.formattedPhoneNumber}
+                    </p>
                 </div>
             </div>
         );

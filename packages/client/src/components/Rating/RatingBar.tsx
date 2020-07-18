@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './ratingBar.scss';
-import { Rating } from '../../redux/Destinations/types';
+import { Rating } from '../../../../shared/models/destination';
 
 export type RatingBarProps = {
     rating: Rating;
