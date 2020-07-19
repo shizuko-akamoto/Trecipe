@@ -50,7 +50,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                 <Image
                                     src={
                                         isEmpty(this.props.destination.photoRefs)
-                                            ? ''
+                                            ? null
                                             : this.props.destination.photoRefs[0]
                                     }
                                     imgStyle={{ borderRadius: '8px 0 0 8px' }}
