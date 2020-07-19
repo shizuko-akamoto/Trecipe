@@ -1,5 +1,4 @@
-import { DestinationCategory } from "client/src/redux/Destinations/types";
-import { Rating } from "./destination";
+import { DestinationCategory, Rating } from "./destination";
 
 export interface CreateNewDestinationDTO {
     name: string;

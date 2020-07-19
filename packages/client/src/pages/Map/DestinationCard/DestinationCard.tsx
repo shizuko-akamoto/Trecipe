@@ -15,10 +15,9 @@ export class DestinationCard extends React.Component<DCProps> {
                 <div
                     className="dest-card-header-container"
                     style={{
-                        backgroundImage: isEmpty(destModel.photoRefs)
-                            ? 'none'
-                            : `linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.5) 100%),
-      url(${destModel.photoRefs[0]})`,
+                        backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.5) 100%)${
+                            isEmpty(destModel.photoRefs) ? '' : `, url(${destModel.photoRefs[0]})`
+                        }`,
                     }}>
                     <div className="dest-card-header">
                         <span id="dest-card-title">
