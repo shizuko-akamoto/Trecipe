@@ -5,7 +5,11 @@ import { CardMenu } from '../../../components/CardMenu/CardMenu';
 import { MenuItem } from '../../../components/Menu/Menu';
 import { ProgressBar } from '../../../components/ProgressBar/ProgressBar';
 import { bindActionCreators, Dispatch } from 'redux';
-import { createTrecipeRequest, deleteTrecipeRequest } from '../../../redux/TrecipeList/action';
+import {
+    createTrecipeRequest,
+    deleteTrecipeRequest,
+    duplicateTrecipeRequest,
+} from '../../../redux/TrecipeList/action';
 import { connect } from 'react-redux';
 import { showModal } from '../../../redux/Modal/action';
 import TrecipePopup, { TrecipePopupType } from '../../../components/TrecipePopup/TrecipePopup';
@@ -48,9 +52,7 @@ class TrecipeCard extends React.Component<TCProps> {
     };
 
     private duplicateTrecipe = () => {
-        // copying everything except for id
-        const { name, description, isPrivate } = this.props;
-        //this.props.createNewTrecipe({name: name, description: description, isPrivate: isPrivate});
+        this.props.duplicateTrecipe(this.props.uuid);
     };
 
     private deleteTrecipe = () => {
@@ -111,6 +113,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         {
             createNewTrecipe: createTrecipeRequest,
             deleteTrecipe: deleteTrecipeRequest,
+            duplicateTrecipe: duplicateTrecipeRequest,
             showModal,
         },
         dispatch

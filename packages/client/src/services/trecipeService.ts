@@ -35,6 +35,21 @@ class TrecipeService {
     }
 
     /**
+     * Sends request to server to duplicate a trecipe with give id
+     * @param srcTrecipeId: id of trecipe to duplicate
+     * @returns a promise of copied trecipe if successful, otherwise a promise rejection
+     */
+    public duplicateTrecipe(srcTrecipeId: string): Promise<Trecipe> {
+        return API.post<Trecipe>(`${this.apiEndpoint}/copy`, null, {
+            params: {
+                id: srcTrecipeId,
+            },
+        }).then((res: AxiosResponse<Trecipe>) => {
+            return Promise.resolve(res.data);
+        });
+    }
+
+    /**
      * Sends a delete request to server for given trecipe uuid to delete
      * @param idToDelete: uuid of trecipe to be deleted
      * @returns a promise with the number of trecipe deleted if successful, otherwise a promise rejection
@@ -60,6 +75,11 @@ class TrecipeService {
         );
     }
 
+    /**
+     * Sends a request to get a trecipe by its id
+     * @param id: id of trecipe to retrieve
+     * @returns a promise with the retrieved trecipe if successful, otherwise a promise rejection
+     */
     public getTrecipe(id: string): Promise<Trecipe> {
         return API.get<Trecipe>(`${this.apiEndpoint}/${id}`).then((res: AxiosResponse<Trecipe>) => {
             return Promise.resolve(res.data);

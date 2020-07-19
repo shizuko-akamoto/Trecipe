@@ -46,6 +46,14 @@ export const createTrecipeRequest = (trecipeData: CreateNewTrecipeDTO): AppThunk
     };
 };
 
+export const duplicateTrecipeRequest = (srcTrecipeId: string): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        TrecipeService.duplicateTrecipe(srcTrecipeId).then((copiedTrecipe: Trecipe) => {
+            dispatch(addTrecipe(copiedTrecipe));
+        });
+    };
+};
+
 export const deleteTrecipeRequest = (idToDelete: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         TrecipeService.deleteTrecipe(idToDelete).then((deletedCount: number) => {

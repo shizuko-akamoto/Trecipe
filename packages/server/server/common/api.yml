@@ -49,6 +49,26 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
 
+  /trecipes/copy:
+    post:
+      tags:
+        - Trecipes
+      summary: Duplicates a trecipe
+      description: Duplicates a trecipe with given uuid
+      parameters:
+        - $ref: '#/components/parameters/queryTrecipeId'
+      responses:
+        201:
+          description: Returns the copy of trecipe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trecipe'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
   /trecipes/{id}:
     get:
       tags:

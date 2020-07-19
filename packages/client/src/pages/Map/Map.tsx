@@ -7,7 +7,7 @@ import { GMap } from './GoogleMap/Gmap';
 import { RootState } from '../../redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
-import { deleteTrecipeRequest } from '../../redux/TrecipeList/action';
+import { deleteTrecipeRequest, duplicateTrecipeRequest } from '../../redux/TrecipeList/action';
 import {
     getDestModelsByTrecipeId,
     addDestinationRequest,
@@ -87,9 +87,7 @@ class Map extends React.Component<MapProps> {
 
     private onTrecipeCopyClick() {
         if (this.props.trecipe) {
-            // copying everything except for id
-            const { uuid, ...copy } = this.props.trecipe;
-            //this.props.createNewTrecipe(, copy));
+            this.props.duplicateTrecipe(this.props.trecipe.uuid);
             // TODO: Redirect to Map page of copied Trecipe
         }
     }
@@ -168,6 +166,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             showModal,
             updateTrecipe: updateTrecipeRequest,
             deleteTrecipe: deleteTrecipeRequest,
+            duplicateTrecipe: duplicateTrecipeRequest,
             getDestModelsByTrecipeId,
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,

@@ -19,6 +19,7 @@ class TrecipeController implements Controller {
         this.router.get(`${this.path}/:id`, this.getTrecipeById.bind(this));
         this.router.delete(`${this.path}/:id`, this.deleteTrecipeById.bind(this));
         this.router.put(`${this.path}/:id`, this.updateTrecipeById.bind(this));
+        this.router.post(`${this.path}/copy`, this.duplicateTrecipe.bind(this));
     }
 
     private getAllTrecipes(req: Request, res: Response, next: NextFunction) {
@@ -72,6 +73,15 @@ class TrecipeController implements Controller {
         TrecipeService.updateTrecipeById(uuid, updateData)
             .then((updated: Trecipe) => {
                 res.status(200).json(updated);
+            })
+            .catch((err) => next(err));
+    }
+
+    private duplicateTrecipe(req: Request, res: Response, next: NextFunction) {
+        const uuid: string = req.query.id as string;
+        TrecipeService.duplicateTrecipe(uuid)
+            .then((copied: Trecipe) => {
+                res.status(201).json(copied);
             })
             .catch((err) => next(err));
     }
