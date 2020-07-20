@@ -7,8 +7,10 @@ import cookieParser from 'cookie-parser';
 import l from './logger';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import GridFsStorage, { ConnectionResult } from 'multer-gridfs-storage';
 
 import installValidator from './openapi';
+import multer from 'multer';
 
 const app = express();
 const exit = process.exit;
@@ -31,10 +33,13 @@ export default class ExpressServer {
         app.use(express.static(`${root}/public`));
 
         const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
-        mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        const connection = mongoose.connect(
+            `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`,
+            {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            }
+        );
         mongoose.connection.once('open', () => {
             l.info(`connected to MongoDB via Mongoose`);
         });
@@ -42,6 +47,35 @@ export default class ExpressServer {
             l.error(`unable to connect to Mongo via Mongoose`, err);
             exit(1);
         });
+
+        const storage = new GridFsStorage({
+            db: connection,
+            file: (req, file) => {
+                return new Promise((resolve, reject) => {
+                    GridFsStorage.generateBytes()
+                        .then((res: { filename: string }) => {
+                            const filenameWithExt = res.filename + path.extname(file.originalname);
+                            const fileInfo = {
+                                filename: filenameWithExt,
+                                bucketName: 'uploads',
+                            };
+                            resolve(fileInfo);
+                        })
+                        .catch((err) => reject(err));
+                });
+            },
+        });
+        storage
+            .ready()
+            .then((db: ConnectionResult) => {
+                l.info('gridfs storage setup successful');
+            })
+            .catch((err) => {
+                l.error('gridfs storage setup failed', err);
+                exit(1);
+            });
+        const upload = multer({ storage }).single('file');
+        app.use(upload);
     }
 
     router(routes: (app: Application) => void): ExpressServer {
