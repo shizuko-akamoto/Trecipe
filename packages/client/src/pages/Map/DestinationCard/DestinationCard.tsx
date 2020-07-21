@@ -69,10 +69,10 @@ export class DestinationCard extends React.Component<DCProps> {
                         </span>
                         <RatingBar rating={destModel.rating} />
                     </div>
-                    <p id="dest-description">
-                        {destModel.website}
-                        {destModel.formattedPhoneNumber}
-                    </p>
+                    <div className="dest-description">
+                        <p>{this.props.destination.formattedPhoneNumber}</p>
+                        <p>{this.props.destination.website}</p>
+                    </div>
                 </div>
             </div>
         );
