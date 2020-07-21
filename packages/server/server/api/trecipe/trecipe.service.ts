@@ -4,6 +4,7 @@ import logger from '../../common/logger';
 import { TrecipeNotFound } from './trecipe.error';
 import { InternalServerError } from 'express-openapi-validator/dist';
 import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
+import { uuid } from 'uuidv4';
 
 class TrecipeService {
     public getAll(): Promise<Array<Trecipe>> {
@@ -86,7 +87,7 @@ class TrecipeService {
 
     public updateTrecipeById(uuid: string, trecipeData: Trecipe): Promise<Trecipe> {
         return trecipeModel
-            .findOneAndUpdate({ uuid: uuid }, trecipeData)
+            .findOneAndUpdate({ uuid: uuid }, trecipeData, { new: true })
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -104,6 +105,54 @@ class TrecipeService {
                     return Promise.reject(new TrecipeNotFound(uuid));
                 }
             });
+    }
+
+    public duplicateTrecipe(srcTrecipeId: string): Promise<Trecipe | void> {
+        return trecipeModel
+            .findOne({ uuid: srcTrecipeId })
+            .exec()
+            .catch((err) =>
+                Promise.reject(
+                    new InternalServerError({
+                        message: `Failed to duplicate trecipe: ${err.toString()}`,
+                    })
+                )
+            )
+            .then((trecipeToCopy: Trecipe) => {
+                if (trecipeToCopy) {
+                    const copy: Trecipe = {
+                        uuid: uuid(),
+                        name: trecipeToCopy.name,
+                        description: trecipeToCopy.description,
+                        isPrivate: trecipeToCopy.isPrivate,
+                        owner: trecipeToCopy.owner,
+                        collaborators: trecipeToCopy.collaborators,
+                        image: trecipeToCopy.image,
+                        destinations: trecipeToCopy.destinations.map((dest) => {
+                            return {
+                                destUUID: dest.destUUID,
+                                completed: dest.completed,
+                            };
+                        }),
+                        createdAt: '',
+                        updatedAt: '',
+                    };
+                    return new trecipeModel(copy).save();
+                } else {
+                    return Promise.reject(new TrecipeNotFound(srcTrecipeId));
+                }
+            })
+            .then((copied: Trecipe) => {
+                logger.info(`duplicated trecipe with name: ${copied.name}, uuid: ${copied.uuid}`);
+                return Promise.resolve(copied);
+            })
+            .catch((err) =>
+                Promise.reject(
+                    new InternalServerError({
+                        message: `Failed to duplicate trecipe: ${err.toString()}`,
+                    })
+                )
+            );
     }
 }
 

@@ -9,7 +9,7 @@ import { TrecipeNotFound } from '../trecipe/trecipe.error';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 
 class DestinationService {
-    public createDestination(destData: CreateNewDestinationDTO) {
+    public createDestination(destData: Destination) {
         return destinationModel
             .findOne({ placeId: destData.placeId })
             .exec()
@@ -86,7 +86,7 @@ class DestinationService {
 
     public updateDestinationById(uuid: string, destData: Destination): Promise<Destination> {
         return destinationModel
-            .findOneAndUpdate({ uuid: uuid }, destData)
+            .findOneAndUpdate({ uuid: uuid }, destData, { new: true })
             .exec()
             .catch((err) =>
                 Promise.reject(
