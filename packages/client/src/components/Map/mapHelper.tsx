@@ -21,7 +21,7 @@ export class AutoComplete {
         this.sessionToken = new google.maps.places.AutocompleteSessionToken();
     }
 
-    getPredictions(input: string): any {
+    getPredictions(input: string) {
         let request: google.maps.places.AutocompletionRequest = {
             input: input,
             sessionToken: this.sessionToken,
