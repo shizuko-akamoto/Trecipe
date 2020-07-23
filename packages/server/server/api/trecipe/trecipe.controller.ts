@@ -4,6 +4,9 @@ import TrecipeService from './trecipe.service';
 import Trecipe from '../../../../shared/models/trecipe';
 import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
 import { uuid } from 'uuidv4';
+import { passportAuth } from '../../common/passport/passportUtils';
+import { User } from '../../../../shared/models/user';
+import UserService from '../user/user.service';
 
 class TrecipeController implements Controller {
     public readonly path = '/trecipes';
@@ -14,16 +17,17 @@ class TrecipeController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.get(this.path, this.getAllTrecipes.bind(this));
-        this.router.post(this.path, this.createTrecipe.bind(this));
-        this.router.get(`${this.path}/:id`, this.getTrecipeById.bind(this));
-        this.router.delete(`${this.path}/:id`, this.deleteTrecipeById.bind(this));
-        this.router.put(`${this.path}/:id`, this.updateTrecipeById.bind(this));
-        this.router.post(`${this.path}/copy`, this.duplicateTrecipe.bind(this));
+        this.router.get(this.path, passportAuth, this.getAllTrecipes.bind(this));
+        this.router.post(this.path, passportAuth, this.createTrecipe.bind(this));
+        this.router.get(`${this.path}/:id`, passportAuth, this.getTrecipeById.bind(this));
+        this.router.delete(`${this.path}/:id`, passportAuth, this.deleteTrecipeById.bind(this));
+        this.router.put(`${this.path}/:id`, passportAuth, this.updateTrecipeById.bind(this));
+        this.router.post(`${this.path}/copy`, passportAuth, this.duplicateTrecipe.bind(this));
     }
 
     private getAllTrecipes(req: Request, res: Response, next: NextFunction) {
-        TrecipeService.getAll()
+        const user = req.user as User;
+        TrecipeService.getAll(user)
             .then((trecipes: Array<Trecipe>) => {
                 res.status(200).json(trecipes);
             })
@@ -32,10 +36,11 @@ class TrecipeController implements Controller {
 
     private createTrecipe(req: Request, res: Response, next: NextFunction) {
         const createNewDTO: CreateNewTrecipeDTO = req.body;
+        const user = req.user as User;
         const newTrecipe: Trecipe = {
             ...createNewDTO,
             uuid: uuid(),
-            owner: '',
+            owner: `${user.username}`,
             collaborators: [],
             image: '',
             destinations: [],
@@ -44,14 +49,19 @@ class TrecipeController implements Controller {
         };
         TrecipeService.createTrecipe(newTrecipe)
             .then((createdTrecipe: Trecipe) => {
-                res.status(201).json(createdTrecipe);
+                UserService.updateUserByUsername(user.username, {
+                    trecipes: [...user.trecipes, newTrecipe.uuid],
+                }).then(() => {
+                    res.status(201).json(createdTrecipe);
+                });
             })
             .catch((err) => next(err));
     }
 
     private getTrecipeById(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.params.id;
-        TrecipeService.getTrecipeById(uuid)
+        const user = req.user as User;
+        TrecipeService.getTrecipeById(uuid, user)
             .then((foundTrecipe: Trecipe) => {
                 res.status(200).json(foundTrecipe);
             })
@@ -60,9 +70,16 @@ class TrecipeController implements Controller {
 
     private deleteTrecipeById(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.params.id;
-        TrecipeService.deleteTrecipeById(uuid)
+        const user = req.user as User;
+        TrecipeService.deleteTrecipeById(uuid, user)
             .then((deletedCount) => {
-                res.status(200).json({ deletedCount: deletedCount });
+                UserService.updateUserByUsername(user.username, {
+                    trecipes: user.trecipes.filter((trecipeId) => {
+                        return trecipeId !== uuid;
+                    }),
+                }).then(() => {
+                    res.status(200).json({ deletedCount: deletedCount });
+                });
             })
             .catch((err) => next(err));
     }
@@ -70,7 +87,8 @@ class TrecipeController implements Controller {
     private updateTrecipeById(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.params.id;
         const updateData: Trecipe = req.body;
-        TrecipeService.updateTrecipeById(uuid, updateData)
+        const user = req.user as User;
+        TrecipeService.updateTrecipeById(uuid, updateData, user)
             .then((updated: Trecipe) => {
                 res.status(200).json(updated);
             })
@@ -79,9 +97,14 @@ class TrecipeController implements Controller {
 
     private duplicateTrecipe(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.query.id as string;
-        TrecipeService.duplicateTrecipe(uuid)
+        const user = req.user as User;
+        TrecipeService.duplicateTrecipe(uuid, user)
             .then((copied: Trecipe) => {
-                res.status(201).json(copied);
+                UserService.updateUserByUsername(user.username, {
+                    trecipes: [...user.trecipes, copied.uuid],
+                }).then(() => {
+                    res.status(201).json(copied);
+                });
             })
             .catch((err) => next(err));
     }
