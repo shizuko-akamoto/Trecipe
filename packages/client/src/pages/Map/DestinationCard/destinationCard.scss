@@ -17,6 +17,7 @@
         background-size: 100%;
         background-position: center;
         background-repeat: no-repeat;
+        background-color: $light-gray;
         border-radius: 8px 8px 0 0;
         flex: 1 1 67%;
 
@@ -74,13 +75,15 @@
             }
         }
 
-        #dest-description {
+        .dest-description {
             color: $tc-black;
             font-size: $default-font-size;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin: 0;
-            padding: 0.5rem 0;
+
+            > * {
+                margin: 0 0 0.5rem;
+            }
         }
     }
 }

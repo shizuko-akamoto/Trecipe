@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { DestinationModel, DestinationCategory } from '../../../redux/Destinations/types';
 import { Marker, InfoWindow } from '@react-google-maps/api';
 import { DestInfoWindow } from './DestInfoWindow';
 import { UnreachableCaseException } from '../../../exceptions/Exceptions';
+import Destination, { DestinationCategory } from '../../../../../shared/models/destination';
 
 interface markerProps {
-    dest: DestinationModel;
+    dest: Destination;
     completed: boolean;
 }
 
@@ -65,7 +65,7 @@ export class HoverMarker extends Component<markerProps, markerState> {
     };
 
     private onClick = () => {
-        let elementToView = document.getElementById(this.props.dest.id);
+        let elementToView = document.getElementById(this.props.dest.uuid);
         elementToView?.scrollIntoView({
             behavior: 'smooth',
             block: 'end',
@@ -92,10 +92,11 @@ export class HoverMarker extends Component<markerProps, markerState> {
         const dest = this.props.dest;
         const completed = this.props.completed;
         const destLatLong = {
-            lat: dest.lat,
-            lng: dest.lng,
+            lat: dest.geometry.lat,
+            lng: dest.geometry.lng,
         };
-        const iconURL = this.getIconUrl(dest.category, completed);
+        // NOTE: Destination category will always be nonempty with Others category
+        const iconURL = this.getIconUrl(dest.category[0], completed);
         const showInfoWindow = this.state.isActive || this.state.onHover;
         return (
             <Marker
@@ -107,7 +108,7 @@ export class HoverMarker extends Component<markerProps, markerState> {
                 onClick={this.onClick}>
                 {showInfoWindow && (
                     <InfoWindow onDomReady={this.onDomReady} onCloseClick={this.toggleMarker}>
-                        <DestInfoWindow destModel={dest}></DestInfoWindow>
+                        <DestInfoWindow destination={dest} />
                     </InfoWindow>
                 )}
             </Marker>

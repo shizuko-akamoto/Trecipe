@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import MyTrecipes from './MyTrecipes/MyTrecipes';
 import { Header } from '../components/Header/Header';
 import { Footer } from '../components/Footer/Footer';
-import Trecipe from './Trecipe/Trecipe';
+import Trecipe from './Trecipe/TrecipePage';
 import Map from './Map/Map';
 import { LoadScript } from '@react-google-maps/api';
 

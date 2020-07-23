@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { GoogleMap } from '@react-google-maps/api';
-import { DestinationModel } from '../../../redux/Destinations/types';
 import { HoverMarker } from './HoverMarker';
 import './gmap.scss';
 import Spinner from '../../../components/Loading/Spinner';
 import { mapColorStyle } from '../../../components/Map/mapHelper';
 import { SearchBarPopup } from '../../../components/SearchBarPopup/SearchBarPopup';
 import { Legend } from './Legend';
+import { CreateNewDestinationDTO } from '../../../../../shared/models/createNewDestinationDTO';
+import Destination from '../../../../../shared/models/destination';
 
 const mapOptions = {
     center: {
@@ -32,9 +33,9 @@ const mapOptions = {
 };
 
 interface GMapProps {
-    destinations: Array<DestinationModel>;
+    destinations: Array<Destination>;
     completedDest: Set<string>;
-    onDestAdd: (destination: DestinationModel) => void;
+    onDestAdd: (destination: CreateNewDestinationDTO) => void;
     onDestRemove: (destinationId: string) => void;
 }
 
@@ -64,8 +65,8 @@ export class GMap extends Component<GMapProps, GMapState> {
         if (this.props.destinations.length !== 0) {
             this.props.destinations.forEach((dest) =>
                 mapBound.extend({
-                    lat: dest.lat,
-                    lng: dest.lng,
+                    lat: dest.geometry.lat,
+                    lng: dest.geometry.lng,
                 })
             );
 
@@ -74,20 +75,20 @@ export class GMap extends Component<GMapProps, GMapState> {
     };
 
     // Callback function for adding a destination
-    private newDestAdd = (destination: DestinationModel) => {
-        this.props.onDestAdd(destination);
+    private newDestAdd = (destData: CreateNewDestinationDTO) => {
+        this.props.onDestAdd(destData);
 
         // Pan and zoom the map to newly added destination
         if (this.state.map) {
             this.state.map.panTo({
-                lat: destination.lat,
-                lng: destination.lng,
+                lat: destData.geometry.lat,
+                lng: destData.geometry.lng,
             });
             this.state.map.setZoom(15);
         }
 
         // Scroll to the new destination card
-        let elementToView = document.getElementById(destination.id);
+        let elementToView = document.getElementById(destData.placeId);
         elementToView?.scrollIntoView({
             behavior: 'smooth',
             block: 'end',
@@ -108,9 +109,9 @@ export class GMap extends Component<GMapProps, GMapState> {
                     options={mapOptions.options}>
                     {this.props.destinations.map((dest) => (
                         <HoverMarker
-                            key={dest.id}
+                            key={dest.uuid}
                             dest={dest}
-                            completed={this.props.completedDest.has(dest.id)}
+                            completed={this.props.completedDest.has(dest.uuid)}
                         />
                     ))}
                 </GoogleMap>

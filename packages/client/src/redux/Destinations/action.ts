@@ -1,27 +1,63 @@
-import { DestinationModel, DestinationsActionTypes, newDestinationModel } from './types';
-import { typedAction } from '../util';
-import { AnyAction, Dispatch } from 'redux';
+import { DestinationsActionTypes } from './types';
+import { AppThunk, typedAction } from '../util';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { RootState } from '../index';
+import DestinationService from '../../services/destinationService';
+import Destination from '../../../../shared/models/destination';
+import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
+import { updateTrecipe as updateTrecipeInList } from '../TrecipeList/action';
+import Trecipe from '../../../../shared/models/trecipe';
+import TrecipeService from '../../services/trecipeService';
+import { updateTrecipe } from '../Trecipe/action';
 
-const mockDestinations: Array<DestinationModel> = [1, 2, 3, 4, 5, 6].map(() =>
-    newDestinationModel()
-);
-
-export const getDestModelsByTrecipeId = (trecipeId: string) => {
-    return (dispatch: Dispatch<AnyAction>) => {
-        setTimeout(() => {
-            dispatch(loadByTrecipeId(trecipeId, mockDestinations));
-        }, 500);
+export const getDestModelsByTrecipeId = (trecipeId: string): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        DestinationService.getDestinationsByTrecipeId(trecipeId).then(
+            (dests: Array<Destination>) => {
+                dispatch(loadByTrecipeId(trecipeId, dests));
+            }
+        );
     };
 };
 
-export const loadByTrecipeId = (trecipeId: string, destinations: Array<DestinationModel>) => {
+export const addDestinationRequest = (
+    trecipe: Trecipe,
+    destData: CreateNewDestinationDTO
+): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        DestinationService.createDestination(destData).then((dest: Destination) => {
+            dispatch(addDestination(trecipe.uuid, dest));
+            TrecipeService.updateTrecipe(trecipe.uuid, {
+                destinations: [...trecipe.destinations, { destUUID: dest.uuid, completed: false }],
+            }).then((updated: Trecipe) => {
+                dispatch(updateTrecipeInList(trecipe.uuid, updated));
+                dispatch(updateTrecipe(updated));
+            });
+        });
+    };
+};
+
+export const removeDestinationRequest = (trecipe: Trecipe, destIdToDelete: string): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        TrecipeService.updateTrecipe(trecipe.uuid, {
+            destinations: trecipe.destinations.filter((dest) => dest.destUUID !== destIdToDelete),
+        }).then((updated: Trecipe) => {
+            dispatch(updateTrecipeInList(trecipe.uuid, updated));
+            dispatch(updateTrecipe(updated));
+            dispatch(removeDestination(trecipe.uuid, destIdToDelete));
+        });
+    };
+};
+
+export const loadByTrecipeId = (trecipeId: string, destinations: Array<Destination>) => {
     return typedAction(DestinationsActionTypes.LOAD_DESTS_BY_TRECIPE_ID, {
         trecipeId: trecipeId,
         dests: destinations,
     });
 };
 
-export const addDestination = (trecipeId: string, destination: DestinationModel) => {
+export const addDestination = (trecipeId: string, destination: Destination) => {
     return typedAction(DestinationsActionTypes.ADD_DESTINATION, {
         trecipeId: trecipeId,
         dest: destination,

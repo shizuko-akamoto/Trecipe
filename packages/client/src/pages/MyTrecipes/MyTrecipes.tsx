@@ -7,12 +7,12 @@ import { FilterSelector } from './Filter/FilterSelector';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux';
-import { reloadTrecipes } from '../../redux/TrecipeList/action';
-import { TrecipeModel } from '../../redux/TrecipeList/types';
+import { fetchAllTrecipes } from '../../redux/TrecipeList/action';
 import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
+import Trecipe from '../../../../shared/models/trecipe';
 
 type MyTrecipesProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -22,8 +22,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
     private static contextFilters: string[] = ['All Trecipes', 'Completed', 'In Progress', 'To Do'];
 
     componentDidMount(): void {
-        // TODO: Commenting this out while backend is getting set up as this wipes out frontend redux data
-        //this.props.reloadTrecipes();
+        this.props.fetchAllTrecipes();
     }
 
     private renderAddPopup = () => {
@@ -67,9 +66,9 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
                         </div>
                     </div>
                     <div className="cards-wrapper">
-                        {this.props.trecipes.map((trecipe: TrecipeModel) => (
-                            <div className="card-item" key={trecipe.id}>
-                                <Link className="router-link" to={trecipe.id}>
+                        {this.props.trecipes.map((trecipe: Trecipe) => (
+                            <div className="card-item" key={trecipe.uuid}>
+                                <Link className="router-link" to={trecipe.uuid}>
                                     <TrecipeCard {...trecipe} />
                                 </Link>
                             </div>
@@ -88,7 +87,7 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
-            reloadTrecipes,
+            fetchAllTrecipes,
             showModal,
         },
         dispatch
