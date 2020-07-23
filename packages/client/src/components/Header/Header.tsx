@@ -15,7 +15,7 @@ export class Header extends React.Component<{}, {}> {
                     <NavBar
                         links={[
                             { text: 'About', path: '' },
-                            { text: 'My Trecipes', path: '/' },
+                            { text: 'My Trecipes', path: '/trecipes' },
                             { text: 'Account', path: '' },
                         ]}
                     />

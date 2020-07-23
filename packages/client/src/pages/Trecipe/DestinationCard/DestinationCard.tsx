@@ -20,7 +20,7 @@ export interface DCProps {
     index: number;
     destination: Destination;
     isCompleted: boolean;
-    onClickDelete: (destId: string) => void;
+    onClickDelete: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
     onClickComplete: (destId: string, isCompleted: boolean) => void;
     isInEdit?: boolean;
 }
@@ -105,8 +105,8 @@ export class DestinationCard extends React.Component<DCProps> {
                                 <button
                                     className="edit-option"
                                     id="dest-delete"
-                                    onClick={() =>
-                                        this.props.onClickDelete(this.props.destination.uuid)
+                                    onClick={(e) =>
+                                        this.props.onClickDelete(this.props.destination.uuid, e)
                                     }>
                                     <FontAwesomeIcon icon={['far', 'trash-alt']} />
                                 </button>

@@ -45,8 +45,11 @@ export class DestinationCard extends React.Component<DCProps> {
                                         id: 2,
                                         text: 'Remove',
                                         icon: ['far', 'trash-alt'],
-                                        onClick: () => {
-                                            this.props.onClickDelete(this.props.destination.uuid);
+                                        onClick: (e) => {
+                                            this.props.onClickDelete(
+                                                this.props.destination.uuid,
+                                                e
+                                            );
                                         },
                                     },
                                 ]}

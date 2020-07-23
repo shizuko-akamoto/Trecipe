@@ -30,7 +30,7 @@ export const updateTrecipeRequest = (trecipeId: string, updatedTrecipe: Partial<
             dispatch(loadTrecipe(updated));
             dispatch(updateTrecipeInList(trecipeId, updated));
             if (updatedTrecipe.destinations) {
-                getDestModelsByTrecipeId(trecipeId);
+                dispatch(getDestModelsByTrecipeId(trecipeId));
             }
         });
     };
