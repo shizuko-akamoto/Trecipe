@@ -227,6 +227,97 @@ paths:
               schema:
                 type: string
                 format: binary
+  /search/{keyword}:
+    get:
+      tags:
+        - Search
+      summary: Perform search on all data
+      parameters:
+        - in: path
+          name: keyword
+          required: true
+          schema:
+            type: string
+          description: The keyword to perform search
+        - in: query
+          name: offset
+          required: true
+          schema:
+            type: number
+            minimum: 0
+          description: Number of entries to skip
+        - in: query
+          name: limit
+          required: true
+          schema:
+            type: number
+            minimum: 1
+          description: Number of entries to retrieve
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+
+  /search/trecipes/{keyword}:
+    get:
+      tags:
+        - Search
+      summary: Perform search on trecipes
+      parameters:
+        - in: path
+          name: keyword
+          required: true
+          schema:
+            type: string
+          description: The keyword to perform search
+        - in: query
+          name: limit
+          required: true
+          schema:
+            type: number
+            minimum: 1
+          description: Number of entries to retrieve
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trecipe'
+
+  /search/destinations/{keyword}:
+    get:
+      tags:
+        - Search
+      summary: Perform search on destinations
+      parameters:
+        - in: path
+          name: keyword
+          required: true
+          schema:
+            type: string
+          description: The keyword to perform search
+        - in: query
+          name: limit
+          required: true
+          schema:
+            type: number
+            minimum: 1
+          description: Number of entries to retrieve
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Destination'
 
   /spec:
     get:
@@ -481,6 +572,43 @@ components:
           format: int32
         message:
           type: string
+    User:
+      title: User
+      type: object
+      properties:
+        username:
+          type: string
+          example: shumalll
+        displayName:
+          type: string
+          example: Display Name
+        email:
+          type: string
+          example: someone@email.com
+        password:
+          type: string
+          example: d1e8a70b5ccab1dc2f56bbf7e99f064a660c
+        trecipes:
+          type: array
+          items:
+            type: string
+          example: [123e4567-e89b-12d3-a456-426614174000, 243e4567-e89b-12d3-a456-42661417123]
+    SearchResult:
+      title: SearchResult
+      type: object
+      properties:
+        trecipeResult:
+          type: array
+          items:
+            $ref: '#/components/schemas/Trecipe'
+        destinationResult:
+          type: array
+          items:
+            $ref: '#/components/schemas/Destination'
+        userResult:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
   responses:
     NotFound:
       description: Entity not found
