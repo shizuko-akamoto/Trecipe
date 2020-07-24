@@ -184,6 +184,50 @@ paths:
                   $ref: '#/components/schemas/Destination'
         404:
           $ref: '#/components/responses/NotFound'
+
+  /upload:
+    post:
+      tags:
+        - Upload
+      summary: Uploads a file to server
+      requestBody:
+        description: File to upload
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        201:
+          description: File upload successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+  /upload/{filename}:
+    get:
+      tags:
+        - Upload
+      summary: Gets a file by its filename
+      parameters:
+        - in: path
+          name: filename
+          required: true
+          schema:
+            type: string
+          description: The filename to retreive
+      responses:
+        200:
+          description: Retreived file
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+
   /spec:
     get:
       tags:
@@ -345,6 +389,45 @@ components:
         - name
         - description
         - isPrivate
+    File:
+      title: File
+      type: object
+      properties:
+        fieldname:
+          type: string
+          example: file
+        originalname:
+          type: string
+          example: Screenshot 2020-07-09 01.23.41.png
+        encoding:
+          type: string
+          example: 7bit
+        mimetype:
+          type: string
+          example: image/png
+        id:
+          type: string
+        filename:
+          type: string
+          example: 238974618927364Screenshot 2020-07-09 01.23.41.png
+        bucketName:
+          type: string
+          example: uploads
+        chunkSize:
+          type: integer
+          example: 261170
+        size:
+          type: integer
+          example: 768613
+        md5:
+          type: string
+          example: c904ef66b72bd29a4e5229724c9fe975
+        uploadDate:
+          type: string
+          example: 2020-07-09T06:50:35.553+00:00
+        contentType:
+          type: string
+          example: image/png
     CreateNewDestinationDTO:
       title: CreateNewDestinationDTO
       type: object

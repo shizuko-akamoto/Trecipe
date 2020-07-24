@@ -78,7 +78,7 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
         this.autoComplete
             .getPredictions(searchInput)
             .then((predictions: Array<google.maps.places.AutocompletePrediction>) => {
-                // Connvert predictions into destinations and store them in state
+                // Convert predictions into destinations and store them in state
                 let newResult = predictions.map(
                     (prediction: google.maps.places.AutocompletePrediction) => {
                         return {

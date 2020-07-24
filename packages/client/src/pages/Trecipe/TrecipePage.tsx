@@ -20,7 +20,6 @@ import {
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import { SearchBarPopup } from '../../components/SearchBarPopup/SearchBarPopup';
 import { StaticMap } from '../../components/Map/StaticMap';
-import Background from '../MyTrecipes/TrecipeCard/BetterDefaultImage.png';
 import Modal from '../../components/Modal/Modal';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
@@ -201,6 +200,15 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         }
     }
 
+    private onCoverPhotoChange(updatedFilename: string) {
+        if (this.props.trecipe) {
+            const trecipe: Trecipe = this.props.trecipe;
+            this.props.updateTrecipe(trecipe.uuid, {
+                image: updatedFilename,
+            });
+        }
+    }
+
     render() {
         const trecipe: Trecipe | undefined = this.props.trecipe;
         const destinations: Destination[] | undefined = this.props.destinations;
@@ -217,7 +225,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                 <div>
                     <div className="tc-header-container">
                         <CoverPhoto
-                            imageSource={`url( ${Background})`}
+                            imageSource={trecipe.image}
                             buttons={[
                                 <Button
                                     key={editTrecipeBtnString}
@@ -225,7 +233,8 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                     icon="edit"
                                     onClick={this.onTrecipeEditClick.bind(this)}
                                 />,
-                            ]}>
+                            ]}
+                            onFileChange={this.onCoverPhotoChange.bind(this)}>
                             <div className="tc-header-text">
                                 <div className="tc-header-title">
                                     <h1 className="tc-header-name">{trecipe.name}</h1>
