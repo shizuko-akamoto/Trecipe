@@ -18,7 +18,7 @@ const exit = process.exit;
 export default class ExpressServer {
     private routes: (app: Application) => void;
     constructor() {
-        const root = path.normalize(__dirname + '/../..');
+        const root = path.normalize(__dirname + '/../../..');
         app.set('appPath', root + 'client');
         app.use(cors());
         app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || '100kb' }));
@@ -31,8 +31,10 @@ export default class ExpressServer {
         app.use(bodyParser.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
         app.use(cookieParser(process.env.SESSION_SECRET));
         if (process.env.NODE_ENV === 'production') {
+            l.info("root: " + root);
             app.use(express.static(`${root}/build`));
         } else {
+            l.info("root: " + root);
             app.use(express.static(`${root}/public`));
         }
 

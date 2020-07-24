@@ -16,11 +16,13 @@
     "dev:server": "yarn workspace server dev",
     "dev": "concurrently --kill-others-on-fail \"yarn start:client\" \"yarn start:server\"",
     "start": "yarn workspace server start",
+    "build:client": "yarn workspace client install && yarn workspace client build",
+    "build:server": "yarn workspace server compile",
     "lint": "yarn lint:client && yarn lint:server",
     "lint:client": "yarn workspace client lint",
     "lint:server": "yarn workspace server lint",
-    "copy-build": "npx copyfiles -u 3 \"./packages/client/build/**/*.*\" \"./packages/server/build\"",
-    "heroku-postbuild": "yarn workspace client install && yarn workspace client build && yarn copy-build"
+    "copy-build": "npx copyfiles -u 3 \"./packages/client/build/**/*.*\" \"./packages/server/dist/build\"",
+    "heroku-postbuild": "yarn build:client && yarn build:server && yarn copy-build"
   },
   "husky": {
     "hooks": {
