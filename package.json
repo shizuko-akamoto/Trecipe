@@ -17,7 +17,7 @@
     "dev": "concurrently --kill-others-on-fail \"yarn start:client\" \"yarn start:server\"",
     "start": "yarn workspace server start",
     "build:client": "yarn workspace client install && yarn workspace client build",
-    "build:server": "yarn workspace server compile",
+    "build:server": "yarn workspace server install && yarn workspace server compile",
     "lint": "yarn lint:client && yarn lint:server",
     "lint:client": "yarn workspace client lint",
     "lint:server": "yarn workspace server lint",
