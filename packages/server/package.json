@@ -13,6 +13,7 @@
     "test:debug": "mocha -r ts-node/register --inspect-brk test/**/*.ts --exit"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -20,17 +21,24 @@
     "envalid": "^6.0.2",
     "express": "^4.17.1",
     "express-openapi-validator": "^3.16.2",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.20",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
     "pino": "^6.3.2",
     "uuidv4": "^6.1.1",
     "multer": "^1.4.2",
     "multer-gridfs-storage": "^4.2.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/chai": "^4.2.11",
     "@types/express": "^4.17.6",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/mocha": "^7.0.2",
     "@types/mongoose": "^5.7.29",
+    "@types/passport": "^1.0.4",
+    "@types/passport-jwt": "^3.0.3",
     "@types/multer": "^1.4.3",
     "@types/multer-gridfs-storage": "^4.0.1",
     "@types/pino": "^6.3.0",

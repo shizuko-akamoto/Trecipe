@@ -143,7 +143,6 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
     }
 
     private getMarker(destination: Destination, completed: boolean): Marker {
-        //TODO : update this when destination model is updated
         return {
             lat: destination.geometry.lat,
             long: destination.geometry.lng,

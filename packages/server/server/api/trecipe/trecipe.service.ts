@@ -5,11 +5,12 @@ import { TrecipeNotFound } from './trecipe.error';
 import { InternalServerError } from 'express-openapi-validator/dist';
 import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
 import { uuid } from 'uuidv4';
+import { User } from '../../../../shared/models/user';
 
 class TrecipeService {
-    public getAll(): Promise<Array<Trecipe>> {
+    public getAll(user: User): Promise<Array<Trecipe>> {
         return trecipeModel
-            .find()
+            .find({ owner: user.username })
             .exec()
             .then((trecipes: Array<Trecipe>) => {
                 logger.info('fetch all trecipes');
@@ -41,9 +42,9 @@ class TrecipeService {
             );
     }
 
-    public getTrecipeById(uuid: string): Promise<Trecipe> {
+    public getTrecipeById(uuid: string, user: User): Promise<Trecipe> {
         return trecipeModel
-            .findOne({ uuid: uuid })
+            .findOne({ uuid: uuid, owner: user.username })
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -63,9 +64,9 @@ class TrecipeService {
             });
     }
 
-    public deleteTrecipeById(uuid: string): Promise<number> {
+    public deleteTrecipeById(uuid: string, user: User): Promise<number> {
         return trecipeModel
-            .deleteOne({ uuid: uuid })
+            .deleteOne({ uuid: uuid, owner: user.username })
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -85,9 +86,9 @@ class TrecipeService {
             });
     }
 
-    public updateTrecipeById(uuid: string, trecipeData: Trecipe): Promise<Trecipe> {
+    public updateTrecipeById(uuid: string, trecipeData: Trecipe, user: User): Promise<Trecipe> {
         return trecipeModel
-            .findOneAndUpdate({ uuid: uuid }, trecipeData, { new: true })
+            .findOneAndUpdate({ uuid: uuid, owner: user.username }, trecipeData, { new: true })
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -107,9 +108,9 @@ class TrecipeService {
             });
     }
 
-    public duplicateTrecipe(srcTrecipeId: string): Promise<Trecipe | void> {
+    public duplicateTrecipe(srcTrecipeId: string, user: User): Promise<Trecipe | void> {
         return trecipeModel
-            .findOne({ uuid: srcTrecipeId })
+            .findOne({ uuid: srcTrecipeId, owner: user.username })
             .exec()
             .catch((err) =>
                 Promise.reject(
