@@ -20,7 +20,7 @@ export default interface Trecipe {
     owner: string;
     isPrivate: boolean;
     collaborators: Array<string>;
-    image: string;
+    image: string | null;
     destinations: Array<DestWithStatus>;
     createdAt: string;
     updatedAt: string;

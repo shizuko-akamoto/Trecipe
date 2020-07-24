@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { showModal } from '../../../redux/Modal/action';
 import TrecipePopup, { TrecipePopupType } from '../../../components/TrecipePopup/TrecipePopup';
 import Trecipe from '../../../../../shared/models/trecipe';
+import { baseURL } from '../../../api';
 
 type TCProps = Trecipe & ReturnType<typeof mapDispatchToProps>;
 
@@ -67,7 +68,9 @@ class TrecipeCard extends React.Component<TCProps> {
                 <div
                     className="tcHeaderContainer"
                     style={{
-                        backgroundImage: this.props.image ? this.props.image : 'none',
+                        backgroundImage: this.props.image
+                            ? `url(${baseURL}upload/${this.props.image})`
+                            : 'none',
                     }}>
                     <div className="tcHeader">
                         <label className="tcTitle">

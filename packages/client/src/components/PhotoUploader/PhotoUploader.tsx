@@ -1,9 +1,10 @@
 import React from 'react';
 import '../CoverPhoto/coverPhoto.scss';
 import { Button } from '../Button/Button';
+import UploadService from '../../services/uploadService';
 
 export interface PhotoUploaderProps {
-    changeFileCallback(event: React.ChangeEvent<HTMLInputElement>): void;
+    changeFileCallback(filename: string): void;
 }
 
 class PhotoUploader extends React.Component<PhotoUploaderProps> {
@@ -25,6 +26,14 @@ class PhotoUploader extends React.Component<PhotoUploaderProps> {
         this.inputReference.current.click();
     }
 
+    onFileSelected(event: React.ChangeEvent<HTMLInputElement>) {
+        if (event.target.files && event.target.files[0].type.match(/image.*/)) {
+            UploadService.uploadFile(event.target.files[0]).then((filename) => {
+                this.props.changeFileCallback(filename);
+            });
+        }
+    }
+
     render() {
         return (
             <div>
@@ -33,7 +42,7 @@ class PhotoUploader extends React.Component<PhotoUploaderProps> {
                     type="file"
                     ref={this.inputReference}
                     accept="image/*"
-                    onChange={this.props.changeFileCallback}
+                    onChange={this.onFileSelected.bind(this)}
                 />
 
                 {/* Placeholder button */}

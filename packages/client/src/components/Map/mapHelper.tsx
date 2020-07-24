@@ -92,14 +92,19 @@ export const getDestModel = (
 
 // Get destination category based on the types return by the google's place API
 export const getDestCategory = (types: Array<string> | undefined): Array<DestinationCategory> => {
+    let categories: DestinationCategory[] = [];
     if (types) {
         for (const [key, value] of Object.entries(destTypes)) {
             if (intersection(types, value).length > 0) {
-                return [key as DestinationCategory];
+                categories.push(key as DestinationCategory);
             }
         }
     }
-    return [DestinationCategory.Others];
+    // if no category match is found, assign "Others" by default
+    if (categories.length === 0) {
+        categories = [DestinationCategory.Others];
+    }
+    return categories;
 };
 
 export const destTypes = {
@@ -136,6 +141,7 @@ export const destTypes = {
         'park',
         'tourist_attraction',
         'zoo',
+        'natural_feature',
     ],
 };
 
