@@ -37,9 +37,9 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "test:coverage": "react-scripts test --coverage --runInBand --watchAll=false",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "test:coverage": "react-app-rewired test --coverage --runInBand --watchAll=false",
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.{js,ts,tsx}\" --fix && prettier \"src/**/*.{js,ts,tsx,css,scss,json,md}\" --write"
   },
@@ -76,5 +76,6 @@
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ]
-  }
+  },
+  "proxy": "http://localhost:7000"
 }

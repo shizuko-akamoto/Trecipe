@@ -30,7 +30,11 @@ export default class ExpressServer {
         );
         app.use(bodyParser.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
         app.use(cookieParser(process.env.SESSION_SECRET));
-        app.use(express.static(`${root}/public`));
+        if (process.env.NODE_ENV === 'production') {
+            app.use(express.static(`${root}/build`));
+        } else {
+            app.use(express.static(`${root}/public`));
+        }
 
         const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
         const connection = mongoose.connect(
