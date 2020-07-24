@@ -1,0 +1,25 @@
+@import '../../../components/variables';
+
+.legend-wrapper {
+    font-family: $default-font-family;
+    font-size: $default-font-size;
+    background-color: $tc-white;
+    border-radius: 8px;
+    border: 1px solid $bright-gray;
+    padding: 8px;
+    color: $mid-gray;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .legend {
+        display: flex;
+        flex-direction: row;
+
+        .legend-icon {
+            margin-right: 4px;
+        }
+    }
+
+}

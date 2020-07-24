@@ -175,5 +175,13 @@
                 }
             }
         }
+
+        .static-map-legend {
+            position: absolute;
+            width: 8rem;
+            top: 8px;
+            right: 8px;
+            z-index: 75;
+        }
     }
 }
