@@ -24,8 +24,14 @@ import {
     faExternalLinkAlt,
     faMapMarkedAlt,
     faMapMarker,
+    faPhone,
 } from '@fortawesome/free-solid-svg-icons';
-import { faQuestionCircle, faStar, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import {
+    faQuestionCircle,
+    faStar,
+    faTrashAlt,
+    faWindowMaximize,
+} from '@fortawesome/free-regular-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 library.add(
@@ -57,4 +63,6 @@ library.add(
     faExternalLinkAlt,
     faMapMarkedAlt,
     faMapMarker,
+    faPhone,
+    faWindowMaximize
 );

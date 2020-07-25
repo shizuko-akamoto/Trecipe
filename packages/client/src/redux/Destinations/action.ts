@@ -21,6 +21,14 @@ export const getDestModelsByTrecipeId = (trecipeId: string): AppThunk => {
     };
 };
 
+export const getDestinationById = (destId: string): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        DestinationService.getDestinationById(destId).then((dest: Destination) => {
+            dispatch(loadDestination(dest));
+        });
+    };
+};
+
 export const addDestinationRequest = (
     trecipe: Trecipe,
     destData: CreateNewDestinationDTO
@@ -71,6 +79,15 @@ export const removeDestination = (trecipeId: string, destinationId: string) => {
     });
 };
 
+export const loadDestination = (destination: Destination) => {
+    return typedAction(DestinationsActionTypes.LOAD_DESTINATION, {
+        dest: destination,
+    });
+};
+
 export type DestinationsAction = ReturnType<
-    typeof loadByTrecipeId | typeof addDestination | typeof removeDestination
+    | typeof loadByTrecipeId
+    | typeof addDestination
+    | typeof removeDestination
+    | typeof loadDestination
 >;

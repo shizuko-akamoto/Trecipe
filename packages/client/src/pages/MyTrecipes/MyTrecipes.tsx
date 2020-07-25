@@ -68,7 +68,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
                     <div className="cards-wrapper">
                         {this.props.trecipes.map((trecipe: Trecipe) => (
                             <div className="card-item" key={trecipe.uuid}>
-                                <Link className="router-link" to={trecipe.uuid}>
+                                <Link className="router-link" to={`${trecipe.uuid}`}>
                                     <TrecipeCard {...trecipe} />
                                 </Link>
                             </div>
