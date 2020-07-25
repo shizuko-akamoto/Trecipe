@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import './login.scss';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Button } from '../../components/Button/Button';
 import { StaticContext } from 'react-router';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { RootState } from '../../redux';
@@ -49,7 +48,8 @@ class Login extends React.Component<LoginProps, LoginState> {
         this.setState({ displayName: e.target.value });
     };
 
-    private login = () => {
+    private login = (e: MouseEvent<HTMLElement>) => {
+        e.preventDefault();
         const user = {
             email: this.state.email,
             password: this.state.password,
@@ -57,10 +57,8 @@ class Login extends React.Component<LoginProps, LoginState> {
         this.props.login(user);
     };
 
-    private toggleSignup = () => {
-        this.setState({ signup: true });
-    };
-    private createAccount = () => {
+    private createAccount = (e: MouseEvent<HTMLElement>) => {
+        e.preventDefault();
         const newUser = {
             email: this.state.email,
             password: this.state.password,
@@ -69,9 +67,8 @@ class Login extends React.Component<LoginProps, LoginState> {
         };
         this.props.signup(newUser);
     };
-
-    private goBack = () => {
-        this.setState({ signup: false });
+    private toggleLogin = (isLogin: boolean) => {
+        this.setState({ signup: !isLogin });
     };
 
     private getValue = () => {
@@ -88,69 +85,89 @@ class Login extends React.Component<LoginProps, LoginState> {
         if (this.props.user.isAuthenticated) {
             return <Redirect to={from} />;
         }
+
+        // TODO cleanup
+        let usernameError = false;
+        let emailError = false;
+        let passwordError = false;
+        let credentialError = false;
+        this.props.user.errors.forEach(error => {
+            // TODO switch
+            if (error.path === ".body.email") {
+                emailError = true;
+            } else if (error.path === ".body.password") {
+                passwordError = true;
+            } else if (error.path === ".body.username") {
+                usernameError = true;
+            } else if (error.message === "Email or password is incorrect") {
+                credentialError = true;
+            }
+        })
+
         return (
             <div className="login-wrapper">
-                <div className="login-content">
-                    <h1 className="title">{this.state.signup ? 'SIGNUP' : 'LOGIN'}</h1>
-                    <input
-                        id="email"
-                        className="input"
-                        maxLength={50}
-                        placeholder="Email"
-                        value={this.state.email ? this.state.email : ''}
-                        onChange={this.handleEmailChange}
-                    />
-                    <input
-                        id="password"
-                        type="password"
-                        className="input"
-                        maxLength={50}
-                        placeholder="Password"
-                        value={this.state.password ? this.state.password : ''}
-                        onChange={this.handlePasswordChange}
-                    />
-                    {this.state.signup && (
-                        <input
-                            id="username"
-                            type="text"
-                            className="input"
-                            maxLength={50}
-                            placeholder="Username"
-                            value={this.state.username ? this.state.username : ''}
-                            onChange={this.handleUsernameChange}
-                        />
-                    )}
-                    {this.state.signup && (
-                        <input
-                            id="displayName"
-                            type="text"
-                            className="input"
-                            maxLength={50}
-                            placeholder="Display Name"
-                            value={this.state.displayName ? this.state.displayName : ''}
-                            onChange={this.handleDisplayNameChange}
-                        />
-                    )}
-                    <div className="login-buttons">
-                        {!this.state.signup && <Button text="LOGIN" onClick={this.login} />}
-                        {!this.state.signup && <Button text="SIGNUP" onClick={this.toggleSignup} />}
-                        {this.state.signup && (
-                            <Button text="CREATE ACCOUNT" onClick={this.createAccount} />
-                        )}
-                        {this.state.signup && <Button text="←" onClick={this.goBack} />}
+                <div className="login-window">
+                    <div className="login-nav">
+                        <ul>
+                            <li className={`${this.state.signup? "" : "active"}`} id="login" onClick={() => this.toggleLogin(true)}>Login</li>
+                            <li className={`nav-left ${this.state.signup? "active" : ""}`} id="signup" onClick={() => this.toggleLogin(false)}>Sign up</li>
+                        </ul>
                     </div>
-                    <div>
-                        <u>User redux store</u>
-                    </div>
-                    <div>isAuthenticated: {this.props.user.isAuthenticated.toString()}</div>
-                    {this.props.user.errors.length > 0 && (
-                        <>
-                            <div>Path: {this.props.user.errors[0].path}</div>
-                            <div>Error: {this.props.user.errors[0].message}</div>
-                        </>
-                    )}
+                    <div className="form">
+                        <form className={`form-login ${this.state.signup? "" : "active"}`} action="">
+                            <label htmlFor="email">Email</label>
+                            <input type="email" name="email" id="email" 
+                                value={this.state.email ? this.state.email : ''} 
+                                onChange={this.handleEmailChange}
+                                className={emailError? "input-error" : ""}
+                                />
+                            {/* TODO cleanup this ugly error */}
+                            <div className={`error${emailError? " active" : ""}`}>Incorrect email format</div>
 
-                    <div>{this.getValue()}</div>
+                            <label htmlFor="password">Password</label>
+                            <input type="password" name="password" id="password" 
+                                value={this.state.password ? this.state.password : ''}
+                                onChange={this.handlePasswordChange}
+                                className={credentialError || passwordError ? "input-error" : ""}
+                                />
+                            <div className={`error${credentialError || passwordError ? " active" : ""}`}>Incorrect credential</div>
+                            
+                            <button onClick={this.login}>Login</button>
+                        </form>
+                        <form className={`form-signup ${this.state.signup? "active" : ""}`} action="">
+                            <label htmlFor="username">Username</label>
+                            <input type="text" name="username" id="username" 
+                                value={this.state.username ? this.state.username : ''}
+                                onChange={this.handleUsernameChange}
+                                className={usernameError? "input-error" : ""}
+                                />
+                            <div className={`error${usernameError? " active" : ""}`}>May only contain alphanumericals</div>
+
+                            <label htmlFor="name">Name</label>
+                            <input type="text" name="name" id="name" 
+                                value={this.state.displayName ? this.state.displayName : ''}
+                                onChange={this.handleDisplayNameChange}
+                                />
+
+                            <label htmlFor="email">Email</label>
+                            <input type="email" name="email" id="email" 
+                                value={this.state.email ? this.state.email : ''} 
+                                onChange={this.handleEmailChange}
+                                className={emailError? "input-error" : ""}
+                                />
+                            <div className={`error${emailError? " active" : ""}`}>Incorrect email format</div>
+
+                            <label htmlFor="password">Password</label>
+                            <input type="password" name="password" id="password" 
+                                value={this.state.password ? this.state.password : ''}
+                                onChange={this.handlePasswordChange}
+                                className={passwordError? "input-error" : ""}
+                                />
+                            <div className={`error${passwordError? " active" : ""}`}>Minimum 8 characters</div>
+
+                            <button onClick={this.createAccount}>Sign up</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         );
