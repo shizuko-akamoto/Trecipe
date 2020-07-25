@@ -2,6 +2,8 @@
 
 CPSC 436I Project: Team2 
 
+Trecipe lets you explore destinations all around the world, and mix and match different ingredients to build your next dream vacation. See what other travel experts have come up with and even integrate their trecipes into your own.
+
 ## Project description
 
 Trecipe helps travellers to discover wonderful destinations and put together their dream bucket list trip. Users will be able to create and store their travel bucket list on Trecipe. A destination can be searched based on the categories, country, and even review. Once a destination is added to a bucket list, users can track their progress and view all the destination on a map. A bucket list can also be made public for other users to discover it. To enable these activies, we will make use of data such as a bucket list (name, timestamp of creation, last modified timestamp, owner's id, privacy setting, destination ids, collaborator ids, and which destinations are checked off), destination info (destination id to retreive info from external API), and user information (name, password, id, email).
