@@ -5,6 +5,7 @@ import { OpenApiValidator } from 'express-openapi-validator';
 
 export default function (app: Application, routes: (app: Application) => void): Promise<void> {
     const apiSpec = path.join(__dirname, 'api.yml');
+    const root = path.normalize(__dirname + '/../../..');
     const validateResponses = !!(
         process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION &&
         process.env.OPENAPI_ENABLE_RESPONSE_VALIDATION.toLowerCase() === 'true'

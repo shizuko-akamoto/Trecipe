@@ -14,7 +14,7 @@
   "scripts": {
     "dev:client": "yarn workspace client start",
     "dev:server": "yarn workspace server dev",
-    "dev": "concurrently --kill-others-on-fail \"yarn start:client\" \"yarn start:server\"",
+    "dev": "concurrently --kill-others-on-fail \"yarn dev:client\" \"yarn dev:server\"",
     "start": "yarn workspace server start",
     "build:client": "yarn workspace client install && yarn workspace client build",
     "build:server": "yarn workspace server install && yarn workspace server compile",

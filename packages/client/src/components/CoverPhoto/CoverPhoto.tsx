@@ -17,7 +17,7 @@ export class CoverPhoto extends React.Component<CoverPhotoProps> {
                     style={{
                         backgroundImage: this.props.imageSource
                             ? `linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 35%), 
-                     url(${baseURL}upload/${this.props.imageSource})`
+                     url(${baseURL}/upload/${this.props.imageSource})`
                             : `none`,
                     }}>
                     {this.props.children}

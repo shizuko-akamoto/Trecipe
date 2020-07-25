@@ -1,5 +1,5 @@
 import Destination from '../../../shared/models/destination';
-import API from '../api';
+import API, { baseURL } from "../api";
 import { AxiosResponse } from 'axios';
 import { CreateNewDestinationDTO } from '../../../shared/models/createNewDestinationDTO';
 
@@ -13,7 +13,7 @@ class DestinationService {
     private apiEndpoint = 'destinations';
 
     public getDestinationsByTrecipeId(trecipeId: string): Promise<Array<Destination>> {
-        return API.get<GetDestinationsResponse>(this.apiEndpoint, {
+        return API.get<GetDestinationsResponse>(`${baseURL}/${this.apiEndpoint}`, {
             params: {
                 id: trecipeId,
             },
@@ -27,7 +27,7 @@ class DestinationService {
     }
 
     public createDestination(destData: CreateNewDestinationDTO): Promise<Destination> {
-        return API.post<Destination>(this.apiEndpoint, destData).then(
+        return API.post<Destination>(`${baseURL}/${this.apiEndpoint}`, destData).then(
             (res: AxiosResponse<Destination>) => {
                 return Promise.resolve(res.data);
             }

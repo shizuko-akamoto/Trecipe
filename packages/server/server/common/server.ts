@@ -30,11 +30,11 @@ export default class ExpressServer {
         );
         app.use(bodyParser.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
         app.use(cookieParser(process.env.SESSION_SECRET));
+
+        // if in prod, we serve react app, otherwise we serve swagger ui
         if (process.env.NODE_ENV === 'production') {
-            l.info("root: " + root);
             app.use(express.static(`${root}/build`));
         } else {
-            l.info("root: " + root);
             app.use(express.static(`${root}/public`));
         }
 

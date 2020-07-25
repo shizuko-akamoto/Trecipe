@@ -1,4 +1,4 @@
-import API from '../api';
+import API, { baseURL } from "../api";
 import { AxiosResponse } from 'axios';
 
 interface FileResponse {
@@ -19,7 +19,7 @@ class UploadService {
     public uploadFile(file: File): Promise<string> {
         let data = new FormData();
         data.append('file', file);
-        return API.post<{ file: FileResponse }>(this.apiEndpoint, data)
+        return API.post<{ file: FileResponse }>(`${baseURL}/${this.apiEndpoint}`, data)
             .then((res: AxiosResponse<{ file: FileResponse }>) => {
                 return Promise.resolve(res.data.file.filename);
             })
