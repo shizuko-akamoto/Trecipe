@@ -1,6 +1,5 @@
 import React, { ReactNodeArray } from 'react';
 import PhotoUploader from '../PhotoUploader/PhotoUploader';
-import { baseURL } from '../../api';
 
 export interface CoverPhotoProps {
     imageSource: string | null;
@@ -17,7 +16,7 @@ export class CoverPhoto extends React.Component<CoverPhotoProps> {
                     style={{
                         backgroundImage: this.props.imageSource
                             ? `linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 35%), 
-                     url(${baseURL}upload/${this.props.imageSource})`
+                     url(upload/${this.props.imageSource})`
                             : `none`,
                     }}>
                     {this.props.children}
