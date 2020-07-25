@@ -155,6 +155,24 @@ class TrecipeService {
                 )
             );
     }
+
+    public getAssociatedTrecipes(destUUID: string, limit: number) {
+        return trecipeModel
+            .find({ 'destinations.destUUID': destUUID, isPrivate: false })
+            .limit(limit)
+            .exec()
+            .catch((err) =>
+                Promise.reject(
+                    new InternalServerError({
+                        message: `Failed to get associated trecipes: ${err.toString()}`,
+                    })
+                )
+            )
+            .then((associated: Array<Trecipe>) => {
+                logger.info(`got associated trecipes (count: ${associated.length})`);
+                return Promise.resolve(associated);
+            });
+    }
 }
 
 export default new TrecipeService();

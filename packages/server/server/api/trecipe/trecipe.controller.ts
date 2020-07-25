@@ -23,6 +23,11 @@ class TrecipeController implements Controller {
         this.router.delete(`${this.path}/:id`, passportAuth, this.deleteTrecipeById.bind(this));
         this.router.put(`${this.path}/:id`, passportAuth, this.updateTrecipeById.bind(this));
         this.router.post(`${this.path}/copy`, passportAuth, this.duplicateTrecipe.bind(this));
+        this.router.get(
+            `${this.path}/associated`,
+            passportAuth,
+            this.getAssociatedTrecipes.bind(this)
+        );
     }
 
     private getAllTrecipes(req: Request, res: Response, next: NextFunction) {
@@ -105,6 +110,16 @@ class TrecipeController implements Controller {
                 }).then(() => {
                     res.status(201).json(copied);
                 });
+            })
+            .catch((err) => next(err));
+    }
+
+    private getAssociatedTrecipes(req: Request, res: Response, next: NextFunction) {
+        const destUUID: string = req.query.destId as string;
+        const limit: number = parseInt(req.query.limit as string);
+        TrecipeService.getAssociatedTrecipes(destUUID, limit)
+            .then((associated: Array<Trecipe>) => {
+                res.status(200).json(associated);
             })
             .catch((err) => next(err));
     }

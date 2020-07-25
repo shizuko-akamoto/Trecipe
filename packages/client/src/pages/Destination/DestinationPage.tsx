@@ -143,6 +143,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
         if (!destination) {
             return null;
         } else {
+            const nearbys = this.state.nearbyDestinations.slice(0, 5);
             return (
                 <div>
                     <div className="dest-page-header-container">
@@ -210,7 +211,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                         </span>
                                     )}
                                     <h1 className="dest-page-title">Explore Nearby</h1>
-                                    {this.state.nearbyDestinations.map((dest) => (
+                                    {nearbys.map((dest) => (
                                         <div className="nearby-dest-item">
                                             <DestInfoWindow key={dest.placeId} destination={dest} />
                                         </div>
@@ -218,10 +219,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                 </div>
                                 <div className="dest-map-wrapper">
                                     <StaticMap
-                                        destinations={[
-                                            destination,
-                                            ...this.state.nearbyDestinations,
-                                        ]}
+                                        destinations={[destination, ...nearbys]}
                                         completedDests={new Set<string>([destination.uuid])}
                                         height={20}
                                     />
