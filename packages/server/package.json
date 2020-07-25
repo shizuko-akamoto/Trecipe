@@ -26,14 +26,14 @@
     "express": "^4.17.1",
     "express-openapi-validator": "^3.16.2",
     "mongoose": "^5.9.20",
-    "pino": "^6.3.2",
-    "pino-pretty": "^4.0.0",
-    "uuidv4": "^6.1.1",
     "multer": "^1.4.2",
     "multer-gridfs-storage": "^4.2.0",
+    "pino": "^6.3.2",
+    "pino-pretty": "^4.0.0",
     "shelljs": "^0.8.4",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "uuidv4": "^6.1.1"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
@@ -46,6 +46,6 @@
   "author": "Carmine DiMascio <cdimascio@gmail.com> (https://github.com/cdimascio)",
   "engines": {
     "node": "12.x",
-    "yarn": "1.22.x"
+    "yarn": "^1.19.x"
   }
 }
