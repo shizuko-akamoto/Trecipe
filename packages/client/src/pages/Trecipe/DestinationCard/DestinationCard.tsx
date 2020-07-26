@@ -21,7 +21,7 @@ export interface DCProps {
     destination: Destination;
     isCompleted: boolean;
     onClickDelete: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
-    onClickComplete: (destId: string, isCompleted: boolean) => void;
+    onClickComplete: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
     isInEdit?: boolean;
 }
 
@@ -78,14 +78,16 @@ export class DestinationCard extends React.Component<DCProps> {
                                 className={`check-edit-wrapper ${
                                     this.props.isInEdit ? 'in-edit' : ''
                                 }`}>
-                                <div className="completed-checkbox">
+                                <div
+                                    className="completed-checkbox"
+                                    onClick={(e) => e.stopPropagation()}>
                                     <input
                                         type="checkbox"
                                         id={this.props.destination.uuid + '-completed'}
-                                        onChange={() =>
+                                        onClick={(e) =>
                                             this.props.onClickComplete(
                                                 this.props.destination.uuid,
-                                                !this.props.isCompleted
+                                                e
                                             )
                                         }
                                         checked={this.props.isCompleted}

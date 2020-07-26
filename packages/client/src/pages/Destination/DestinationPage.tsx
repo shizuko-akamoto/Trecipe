@@ -15,6 +15,9 @@ import { getDestCategory } from '../../components/Map/mapHelper';
 import { DestInfoWindow } from '../../components/DestinationInfo/DestInfoWindow';
 import Review from './Review/review';
 import { isEmpty } from 'lodash';
+import { fetchAssociatedTrecipesRequest } from '../../redux/TrecipeList/action';
+import Trecipe from '../../../../shared/models/trecipe';
+import TrecipeCard from '../MyTrecipes/TrecipeCard/TrecipeCard';
 
 export type DestinationProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -43,6 +46,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
 
     componentDidMount(): void {
         const destId = this.props.match.params.destId;
+        //this.props.fetchAssociatedTrecipesRequest(destId, 5);
         if (this.props.destination && this.props.destination.uuid === destId) {
             this.initializeDestDetail(this.props.destination);
             this.initializeNearbyDestinations(this.props.destination);
@@ -143,6 +147,9 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
         if (!destination) {
             return null;
         } else {
+            // display up to 5 nearby locations and reviews
+            const nearbys = this.state.nearbyDestinations.slice(0, 5);
+            const reviews = this.state.reviews.slice(0, 5);
             return (
                 <div>
                     <div className="dest-page-header-container">
@@ -202,6 +209,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                                 fixedWidth
                                             />
                                             <a
+                                                className="router-link"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 href={destination.website}>
@@ -210,7 +218,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                         </span>
                                     )}
                                     <h1 className="dest-page-title">Explore Nearby</h1>
-                                    {this.state.nearbyDestinations.map((dest) => (
+                                    {nearbys.map((dest) => (
                                         <div className="nearby-dest-item">
                                             <DestInfoWindow key={dest.placeId} destination={dest} />
                                         </div>
@@ -218,24 +226,34 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                 </div>
                                 <div className="dest-map-wrapper">
                                     <StaticMap
-                                        destinations={[
-                                            destination,
-                                            ...this.state.nearbyDestinations,
-                                        ]}
+                                        destinations={[destination, ...nearbys]}
                                         completedDests={new Set<string>([destination.uuid])}
                                         height={20}
                                     />
-                                    {!isEmpty(this.state.reviews) && (
+                                    {!isEmpty(reviews) && (
                                         <h1 className="dest-page-title">Reviews</h1>
                                     )}
                                     <div className="dest-ratings">
-                                        {this.state.reviews.map((review) => (
+                                        {reviews.map((review) => (
                                             <Review review={review} />
                                         ))}
                                     </div>
                                 </div>
                             </div>
-                            <div className="associated-trecipes-wrapper"></div>
+                            {!isEmpty(this.props.associatedTrecipes) && (
+                                <div className="associated-trecipes-wrapper">
+                                    <h1 className="dest-page-title">Explore Trecipes</h1>
+                                    <ul className="associated-trecipes-list">
+                                        {this.props.associatedTrecipes.map((trecipe: Trecipe) => (
+                                            <li
+                                                key={trecipe.uuid}
+                                                className="associated-trecipe-item">
+                                                <TrecipeCard {...trecipe} />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -248,6 +266,7 @@ const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{ destI
     const destId = ownProps.match.params.destId;
     const destination = state.destinations.dests.find((dest) => dest.uuid === destId);
     return {
+        associatedTrecipes: state.trecipeList.trecipes,
         destination: destination,
     };
 };
@@ -256,6 +275,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
             getDestinationById,
+            fetchAssociatedTrecipesRequest,
         },
         dispatch
     );

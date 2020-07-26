@@ -69,6 +69,31 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
 
+  /trecipes/associated:
+    get:
+      tags:
+        - Trecipes
+      summary: Gets trecipes that contain destination of given dest uuid
+      description: Gets up to "limit" number of trecipes containing destination of given dest uuid
+      parameters:
+        - $ref: '#/components/parameters/queryDestId'
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: true
+          description: The max number of trecipes to be returned
+      responses:
+        200:
+          description: Returns the list of trecipes containing the destination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trecipe'
+        500:
+          $ref: '#/components/responses/InternalServerError'
   /trecipes/{id}:
     get:
       tags:
@@ -252,6 +277,15 @@ components:
       name: id
       in: query
       description: Trecipe uuid
+      example: 123e4567-e89b-12d3-a456-426614174000
+      required: true
+      schema:
+        type: string
+        format: uuid
+    queryDestId:
+      name: destId
+      in: query
+      description: Destination uuid
       example: 123e4567-e89b-12d3-a456-426614174000
       required: true
       schema:

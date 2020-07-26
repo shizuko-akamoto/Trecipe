@@ -85,6 +85,17 @@ class TrecipeService {
             return Promise.resolve(res.data);
         });
     }
+
+    public fetchAssociatedTrecipes(destId: string, limit: number): Promise<Array<Trecipe>> {
+        return API.get<Array<Trecipe>>(`${this.apiEndpoint}/associated`, {
+            params: {
+                destId: destId,
+                limit: limit,
+            },
+        }).then((res: AxiosResponse<Array<Trecipe>>) => {
+            return Promise.resolve(res.data);
+        });
+    }
 }
 
 export default new TrecipeService();

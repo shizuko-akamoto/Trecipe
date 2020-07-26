@@ -64,6 +64,14 @@ export const deleteTrecipeRequest = (idToDelete: string): AppThunk => {
     };
 };
 
+export const fetchAssociatedTrecipesRequest = (destId: string, limit: number): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        TrecipeService.fetchAssociatedTrecipes(destId, limit).then((trecipes: Array<Trecipe>) => {
+            dispatch(loadTrecipes(trecipes));
+        });
+    };
+};
+
 export type TrecipeListAction = ReturnType<
     typeof addTrecipe | typeof deleteTrecipe | typeof updateTrecipe | typeof loadTrecipes
 >;

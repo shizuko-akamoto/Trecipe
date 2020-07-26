@@ -68,8 +68,18 @@
             border-radius: 8px;
             padding: 1rem;
             margin-right: 0.5rem;
+            margin-bottom: auto;
             .dest-info-item {
                 margin-bottom: 0.5rem;
+
+                .router-link {
+                    text-decoration: none;
+                    border-bottom: 1px solid $tc-white;
+                    &:hover {
+                        border-bottom-color: $powder-blue;
+                    }
+                    transition: border-bottom-color 0.3s ease-out;
+                }
             }
 
             .nearby-dest-item {
@@ -86,6 +96,22 @@
 
         .dest-ratings > * {
             margin-bottom: 0.5rem;
+        }
+    }
+
+    .associated-trecipes-wrapper {
+        display: flex;
+        flex-direction: column;
+        .associated-trecipes-list {
+            list-style: none;
+            padding: 0;
+            display: inline-flex;
+            overflow-x: auto;
+
+            .associated-trecipe-item {
+                width: 25rem;
+                margin-right: 0.5rem;
+            }
         }
     }
 }
