@@ -46,7 +46,11 @@ class RatingPopup extends React.Component<RatingPopupProps, RatingPopupState> {
     }
 
     private onRatingChange(rating: any) {
-        // this.props.onClickHandler(this.props.dest.uuid, false,{userId: this.props.userId, trecipeId: this.props.trecipeId, rating});
+        this.props.onClickHandler(this.props.dest.uuid, false, {
+            userId: this.props.userId,
+            trecipeId: this.props.trecipeId,
+            rating,
+        });
         this.props.hideModal();
     }
 
