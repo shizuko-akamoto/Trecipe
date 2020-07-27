@@ -8,12 +8,12 @@ export class UserNotFound extends NotFound {
 }
 
 export class DuplicateUserError extends HttpError {
-    constructor() {
+    constructor(duplicate: string) {
         super({
             status: 409,
             path: 'users',
             name: 'User conflict',
-            message: 'Username or email already existed',
+            message: `${duplicate} already existed`,
         });
     }
 }

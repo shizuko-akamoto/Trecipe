@@ -8,9 +8,9 @@ class UserService {
     public createUser(userData: User): Promise<User> {
         const newUser = new userModel(userData);
         return this.checkDuplicateUser(userData)
-            .then((isDuplicate: boolean) => {
+            .then((isDuplicate: string | null) => {
                 if (isDuplicate) {
-                    return Promise.reject(new DuplicateUserError());
+                    return Promise.reject(new DuplicateUserError(isDuplicate));
                 } else {
                     return newUser.save();
                 }
@@ -44,11 +44,28 @@ class UserService {
             });
     }
 
-    public checkDuplicateUser(userData: User): Promise<boolean> {
+    public checkDuplicateUser(userData: User): Promise<string | null> {
         return userModel
-            .findOne({ $or: [{ email: userData.email }, { username: userData.username }] })
+            .findOne({ email: userData.email })
             .collation({ locale: 'en', strength: 2 })
             .exec()
+            .then((user: User) => {
+                if (user) {
+                    return Promise.resolve('Email');
+                } else {
+                    return userModel
+                        .findOne({ username: userData.username })
+                        .collation({ locale: 'en', strength: 2 })
+                        .exec()
+                        .then((user: User) => {
+                            if (user) {
+                                return Promise.resolve('Username');
+                            } else {
+                                return Promise.resolve(null);
+                            }
+                        });
+                }
+            })
             .catch((err) => {
                 logger.warn(`Failed to find user`);
                 return Promise.reject(
@@ -56,13 +73,6 @@ class UserService {
                         message: `Failed to find user: ${err.toString()}`,
                     })
                 );
-            })
-            .then((user: User) => {
-                if (user) {
-                    return Promise.resolve(true);
-                } else {
-                    return Promise.resolve(false);
-                }
             });
     }
 
