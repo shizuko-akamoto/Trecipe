@@ -4,7 +4,7 @@ import { Menu, MenuItem } from '../Menu/Menu';
 
 /**
  * CardMenuProps
- * menuItem: List of menu items (each with onClick callback) to display in menu
+ * menuItem: List of menu items (eachc with onClick callback) to display in menu
  */
 export interface CardMenuProps {
     menuItems: MenuItem[];

@@ -2,6 +2,7 @@ import Destination from '../../../shared/models/destination';
 import API from '../api';
 import { AxiosResponse } from 'axios';
 import { CreateNewDestinationDTO } from '../../../shared/models/createNewDestinationDTO';
+import { UpdateDestinationRatingDTO } from '../../../shared/models/updateDestinationRatingDTO';
 
 type GetDestinationsResponse = Array<{
     destUUID: string;
@@ -28,6 +29,17 @@ class DestinationService {
 
     public createDestination(destData: CreateNewDestinationDTO): Promise<Destination> {
         return API.post<Destination>(this.apiEndpoint, destData).then(
+            (res: AxiosResponse<Destination>) => {
+                return Promise.resolve(res.data);
+            }
+        );
+    }
+
+    public updateDestinationRating(
+        destId: string,
+        updateRatingData: UpdateDestinationRatingDTO
+    ): Promise<Destination> {
+        return API.post<Destination>(`${this.apiEndpoint}/rate/${destId}`, updateRatingData).then(
             (res: AxiosResponse<Destination>) => {
                 return Promise.resolve(res.data);
             }

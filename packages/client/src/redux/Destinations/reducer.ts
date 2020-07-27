@@ -30,6 +30,21 @@ export function destinationsReducer(
             return {
                 destsByTrecipeId: state.destsByTrecipeId.set(action.payload.trecipeId, result),
             };
+        case DestinationsActionTypes.UPDATE_DESTINATION:
+            let updateDests = state.destsByTrecipeId.get(action.payload.trecipeId);
+            const updateResult = updateDests
+                ? updateDests.map((dest: Destination) =>
+                      dest.uuid === action.payload.destination.uuid
+                          ? action.payload.destination
+                          : dest
+                  )
+                : [];
+            return {
+                destsByTrecipeId: state.destsByTrecipeId.set(
+                    action.payload.trecipeId,
+                    updateResult
+                ),
+            };
         default:
             return state;
     }

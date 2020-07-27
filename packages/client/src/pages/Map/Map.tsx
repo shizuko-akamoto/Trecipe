@@ -54,12 +54,14 @@ class Map extends React.Component<MapProps> {
         this.props.getDestModelsByTrecipeId(trecipeId);
     }
 
-    private onDestCompleteClick(destId: string) {
+    private onDestCompleteClick(destination: Destination) {
         if (this.props.trecipe) {
             const trecipe: Trecipe = this.props.trecipe;
             this.props.updateTrecipe(trecipe.uuid, {
                 destinations: trecipe.destinations.map((dest) =>
-                    dest.destUUID === destId ? { destUUID: destId, completed: true } : dest
+                    dest.destUUID === destination.uuid
+                        ? { destUUID: destination.uuid, completed: true }
+                        : dest
                 ),
             });
         }

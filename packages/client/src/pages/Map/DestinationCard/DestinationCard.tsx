@@ -35,7 +35,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                         icon: 'check',
                                         onClick: () => {
                                             this.props.onClickComplete(
-                                                destModel.uuid,
+                                                destModel,
                                                 !this.props.isCompleted
                                             );
                                         },

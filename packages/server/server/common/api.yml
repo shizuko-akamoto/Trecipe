@@ -147,6 +147,27 @@ paths:
                 $ref: '#/components/schemas/Destination'
         500:
           $ref: '#/components/responses/InternalServerError'
+  /destinations/rate/{id}:
+    post:
+      tags:
+        - Destinations
+      summary: Rate a destination
+      description: Update the user rating of a destination
+      requestBody:
+        description: Rating Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDestinationRatingDTO'
+      responses:
+        200:
+          description: Returns the updated destination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Destination'
+        500:
+          $ref: '#/components/responses/InternalServerError'
     get:
       tags:
         - Destinations
@@ -328,8 +349,7 @@ components:
         userRatings:
           type: array
           items:
-            $ref: '#/components/schemas/Rating'
-          example: [4.2, 3.0, 4.5]
+            $ref: '#/components/schemas/UserRating'
         description:
           type: string
           example: Description about this destination
@@ -455,8 +475,7 @@ components:
         userRatings:
           type: array
           items:
-            $ref: '#/components/schemas/Rating'
-          example: [4.2, 3.0, 4.5]
+            $ref: '#/components/schemas/UserRating'
         description:
           type: string
           example: Description about this destination
@@ -472,6 +491,28 @@ components:
         - placeId
         - name
         - geometry
+    UpdateDestinationRatingDTO:
+      title: updateDestinationRatingDTO
+      type: object
+      properties:
+        userId:
+          type: string
+        trecipeId:
+          type: string
+        rating:
+          $ref: '#/components/schemas/Rating'
+      required:
+        - userId
+        - trecipeId
+        - rating
+    UserRating:
+      title: UserRating
+      type: object
+      properties:
+        userId:
+          type: string
+        rating:
+          $ref: '#/components/schemas/Rating'
     Error:
       title: Error
       type: object

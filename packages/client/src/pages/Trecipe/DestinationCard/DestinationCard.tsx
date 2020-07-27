@@ -6,6 +6,7 @@ import { RatingBar } from '../../../components/Rating/RatingBar';
 import { Draggable } from 'react-beautiful-dnd';
 import Destination, { getIcon } from '../../../../../shared/models/destination';
 import { isEmpty } from 'lodash';
+import destination from '../../../../../shared/models/destination';
 
 /**
  * DCProps
@@ -21,7 +22,7 @@ export interface DCProps {
     destination: Destination;
     isCompleted: boolean;
     onClickDelete: (destId: string) => void;
-    onClickComplete: (destId: string, isCompleted: boolean) => void;
+    onClickComplete: (destId: destination, isCompleted: boolean) => void;
     isInEdit?: boolean;
 }
 
@@ -84,7 +85,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                         id={this.props.destination.uuid + '-completed'}
                                         onChange={() =>
                                             this.props.onClickComplete(
-                                                this.props.destination.uuid,
+                                                this.props.destination,
                                                 !this.props.isCompleted
                                             )
                                         }

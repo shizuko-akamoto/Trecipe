@@ -15,6 +15,7 @@ import { Link, withRouter } from 'react-router-dom';
 import {
     addDestinationRequest,
     getDestModelsByTrecipeId,
+    rateDestinationRequest,
     removeDestinationRequest,
 } from '../../redux/Destinations/action';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
@@ -26,6 +27,8 @@ import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { Legend } from '../Map/GoogleMap/Legend';
+import RatingPopup from '../../components/RatingPopup/RatingPopup';
+import { UpdateDestinationRatingDTO } from '../../../../shared/models/updateDestinationRatingDTO';
 
 /**
  * TrecipeProps
@@ -190,9 +193,37 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         }
     }
 
-    private onDestCompleteClick(id: string) {
+    private onDestCompleteClick(destination: Destination) {
         if (this.props.trecipe) {
             const trecipe: Trecipe = this.props.trecipe;
+            if (
+                trecipe.destinations.find(
+                    (dest) => dest.destUUID === destination.uuid && !dest.completed
+                )
+            ) {
+                this.props.showModal(
+                    <RatingPopup
+                        onClickHandler={this.updateTrecipeDestOnComplete.bind(this)}
+                        dest={destination}
+                        trecipeId={this.props.trecipe.uuid}
+                        // TODO Use real user ID after we have authentication
+                        userId="potato1"
+                    />
+                );
+            }
+        }
+    }
+
+    private updateTrecipeDestOnComplete(
+        id: string,
+        skip: boolean,
+        updateDestinationRatingDTO: UpdateDestinationRatingDTO
+    ) {
+        if (this.props.trecipe) {
+            const trecipe: Trecipe = this.props.trecipe;
+            if (!skip) {
+                this.props.rateDestination(id, updateDestinationRatingDTO);
+            }
             this.props.updateTrecipe(trecipe.uuid, {
                 destinations: trecipe.destinations.map((dest) =>
                     dest.destUUID === id ? { destUUID: id, completed: true } : dest
@@ -357,6 +388,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         {
             showModal,
             updateTrecipe: updateTrecipeRequest,
+            rateDestination: rateDestinationRequest,
             getDestModelsByTrecipeId,
             fetchTrecipe,
             addDestinationRequest,
