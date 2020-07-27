@@ -292,6 +292,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                                     <Link
                                                         className="router-link"
                                                         to={`/destinations/${dest.placeId}`}
+                                                        target="_blank"
                                                         key={dest.uuid}>
                                                         <DestinationCard
                                                             key={dest.uuid}

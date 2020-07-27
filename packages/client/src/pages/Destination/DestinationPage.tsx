@@ -177,20 +177,25 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                             <div className="dest-details">
                                 <div className="dest-info">
                                     <h1 className="dest-page-title">Location and Contact</h1>
-                                    {destination.category.map((item) => (
-                                        <span className="dest-info-item" key={item}>
-                                            <FontAwesomeIcon icon={getIcon(item)} />
-                                            {item}
-                                        </span>
-                                    ))}
+                                    <span className="dest-info-item">
+                                        <FontAwesomeIcon
+                                            icon={getIcon(destination.category[0])}
+                                            fixedWidth
+                                        />
+                                        <p className="info-text">
+                                            {destination.category.join(', ')}
+                                        </p>
+                                    </span>
                                     <span className="dest-info-item">
                                         <FontAwesomeIcon icon="map-marker-alt" fixedWidth />
-                                        {destination.formattedAddress}
+                                        <p className="info-text">{destination.formattedAddress}</p>
                                     </span>
                                     {destination.formattedPhoneNumber && (
                                         <span className="dest-info-item">
                                             <FontAwesomeIcon icon="phone" fixedWidth />
-                                            {destination.formattedPhoneNumber}
+                                            <p className="info-text">
+                                                {destination.formattedPhoneNumber}
+                                            </p>
                                         </span>
                                     )}
                                     {destination.website && (
@@ -200,7 +205,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                                 fixedWidth
                                             />
                                             <a
-                                                className="router-link"
+                                                className="router-link info-text"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 href={destination.website}>
