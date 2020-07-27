@@ -16,7 +16,7 @@ export class Header extends React.Component<{}, {}> {
                         links={[
                             { text: 'About', path: '' },
                             { text: 'My Trecipes', path: '/' },
-                            { text: 'Account', path: '' },
+                            { text: 'Login', path: '/user/login' }, //TODO: temporary
                         ]}
                     />
                 </div>
