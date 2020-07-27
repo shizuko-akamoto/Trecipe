@@ -47,13 +47,16 @@ class TrecipeController implements Controller {
             createdAt: '',
             updatedAt: '',
         };
+        let createResponse: Trecipe = null;
         TrecipeService.createTrecipe(newTrecipe)
             .then((createdTrecipe: Trecipe) => {
-                UserService.updateUserByUsername(user.username, {
+                createResponse = createdTrecipe;
+                return UserService.updateUserByUsername(user.username, {
                     trecipes: [...user.trecipes, newTrecipe.uuid],
-                }).then(() => {
-                    res.status(201).json(createdTrecipe);
-                });
+                })
+            })
+            .then(() => {
+                res.status(201).json(createResponse);
             })
             .catch((err) => next(err));
     }
@@ -71,15 +74,18 @@ class TrecipeController implements Controller {
     private deleteTrecipeById(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.params.id;
         const user = req.user as User;
+        let deleteResponse: number = null;
         TrecipeService.deleteTrecipeById(uuid, user)
             .then((deletedCount) => {
-                UserService.updateUserByUsername(user.username, {
+                deleteResponse = deletedCount;
+                return UserService.updateUserByUsername(user.username, {
                     trecipes: user.trecipes.filter((trecipeId) => {
                         return trecipeId !== uuid;
                     }),
-                }).then(() => {
-                    res.status(200).json({ deletedCount: deletedCount });
-                });
+                })
+            })
+            .then(() => {
+                res.status(200).json({ deletedCount: deleteResponse });
             })
             .catch((err) => next(err));
     }
@@ -98,13 +104,16 @@ class TrecipeController implements Controller {
     private duplicateTrecipe(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.query.id as string;
         const user = req.user as User;
+        let copyResponse: Trecipe = null;
         TrecipeService.duplicateTrecipe(uuid, user)
             .then((copied: Trecipe) => {
-                UserService.updateUserByUsername(user.username, {
+                copyResponse = copied;
+                return UserService.updateUserByUsername(user.username, {
                     trecipes: [...user.trecipes, copied.uuid],
-                }).then(() => {
-                    res.status(201).json(copied);
-                });
+                })
+            })
+            .then(() => {
+                res.status(201).json(copyResponse);
             })
             .catch((err) => next(err));
     }
