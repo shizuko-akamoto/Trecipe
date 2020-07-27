@@ -13,7 +13,7 @@ class DestinationService {
     private apiEndpoint = 'destinations';
 
     public getDestinationsByTrecipeId(trecipeId: string): Promise<Array<Destination>> {
-        return API.get<GetDestinationsResponse>(this.apiEndpoint, {
+        return API.get<GetDestinationsResponse>(`${this.apiEndpoint}/in`, {
             params: {
                 id: trecipeId,
             },
@@ -36,6 +36,20 @@ class DestinationService {
 
     public getDestinationById(destId: string): Promise<Destination> {
         return API.get<Destination>(`${this.apiEndpoint}/${destId}`)
+            .then((res: AxiosResponse<Destination>) => {
+                return Promise.resolve(res.data);
+            })
+            .catch((err) => {
+                return Promise.reject(err);
+            });
+    }
+
+    public getDestinationByPlaceId(placeId: string): Promise<Destination> {
+        return API.get<Destination>(this.apiEndpoint, {
+            params: {
+                placeId: placeId,
+            },
+        })
             .then((res: AxiosResponse<Destination>) => {
                 return Promise.resolve(res.data);
             })

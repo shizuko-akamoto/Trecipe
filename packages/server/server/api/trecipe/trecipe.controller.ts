@@ -88,9 +88,9 @@ class TrecipeController implements Controller {
     }
 
     private getAssociatedTrecipes(req: Request, res: Response, next: NextFunction) {
-        const destUUID: string = req.query.destId as string;
-        const limit: number = parseInt(req.query.limit as string);
-        TrecipeService.getAssociatedTrecipes(destUUID, limit)
+        const placeId: string = req.query.placeId as string;
+        const limit: number = req.query.limit ? parseInt(req.query.limit as string) : 0;
+        TrecipeService.getAssociatedTrecipes(placeId, limit)
             .then((associated: Array<Trecipe>) => {
                 res.status(200).json(associated);
             })

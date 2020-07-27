@@ -9,7 +9,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
 import { deleteTrecipeRequest, duplicateTrecipeRequest } from '../../redux/TrecipeList/action';
 import {
-    getDestModelsByTrecipeId,
+    getDestinationsByTrecipeId,
     addDestinationRequest,
     removeDestinationRequest,
 } from '../../redux/Destinations/action';
@@ -67,7 +67,7 @@ class Map extends React.Component<MapProps> {
 
     private onDestDeleteClick(idToDelete: string) {
         if (this.props.trecipe) {
-            this.props.removeDestination(this.props.trecipe, idToDelete);
+            this.props.removeDestination(this.props.trecipe, { destId: idToDelete });
         }
     }
 
@@ -167,7 +167,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             updateTrecipe: updateTrecipeRequest,
             deleteTrecipe: deleteTrecipeRequest,
             duplicateTrecipe: duplicateTrecipeRequest,
-            getDestModelsByTrecipeId,
+            getDestModelsByTrecipeId: getDestinationsByTrecipeId,
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,
             fetchTrecipe,

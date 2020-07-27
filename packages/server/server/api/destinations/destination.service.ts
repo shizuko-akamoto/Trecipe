@@ -84,6 +84,28 @@ class DestinationService {
             });
     }
 
+    public getDestinationByPlaceId(placeId: string): Promise<Destination> {
+        return destinationModel
+            .findOne({ placeId: placeId })
+            .exec()
+            .catch((err) =>
+                Promise.reject(
+                    new InternalServerError({
+                        message: `Failed to get destination: ${err.toString()}`,
+                    })
+                )
+            )
+            .then((destination: Destination) => {
+                if (destination) {
+                    logger.info(`got destination with uuid ${placeId}`);
+                    return Promise.resolve(destination);
+                } else {
+                    logger.warn(`failed to get destination with uuid ${placeId}`);
+                    return Promise.reject(new DestinationNotFound(placeId));
+                }
+            });
+    }
+
     public updateDestinationById(uuid: string, destData: Destination): Promise<Destination> {
         return destinationModel
             .findOneAndUpdate({ uuid: uuid }, destData, { new: true })

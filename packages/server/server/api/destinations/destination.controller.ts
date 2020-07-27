@@ -16,7 +16,8 @@ class DestinationController implements Controller {
 
     private initializeRoutes() {
         this.router.post(this.path, this.createDestination.bind(this));
-        this.router.get(this.path, this.getDestinationsByTrecipeId.bind(this));
+        this.router.get(this.path, this.getDestinationByPlaceId.bind(this));
+        this.router.get(`${this.path}/in`, this.getDestinationsByTrecipeId.bind(this));
         this.router.get(`${this.path}/:id`, this.getDestinationById.bind(this));
     }
 
@@ -48,6 +49,15 @@ class DestinationController implements Controller {
         DestinationService.getDestinationsByTrecipeId(trecipeUUID)
             .then((destsWithStatus: Array<DestWithStatus>) => {
                 res.status(200).json(destsWithStatus);
+            })
+            .catch((err) => next(err));
+    }
+
+    private getDestinationByPlaceId(req: Request, res: Response, next: NextFunction) {
+        const placeId: string = req.query.placeId as string;
+        DestinationService.getDestinationByPlaceId(placeId)
+            .then((dest: Destination) => {
+                res.status(200).json(dest);
             })
             .catch((err) => next(err));
     }

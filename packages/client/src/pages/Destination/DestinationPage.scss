@@ -105,13 +105,23 @@
         .associated-trecipes-list {
             list-style: none;
             padding: 0;
-            display: inline-flex;
-            overflow-x: auto;
+            display: flex;
+            overflow-x: scroll;
+            width: 100%;
 
             .associated-trecipe-item {
-                width: 25rem;
-                margin-right: 0.5rem;
+                &:nth-of-type(1) {
+                    margin-left: 0;
+                }
+
+                flex-shrink: 0;
+                width: 23rem;
+                margin-left: 1rem;
             }
+        }
+
+        ::-webkit-scrollbar {
+            width: 0;
         }
     }
 }

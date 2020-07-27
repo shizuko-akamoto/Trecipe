@@ -86,10 +86,10 @@ class TrecipeService {
         });
     }
 
-    public fetchAssociatedTrecipes(destId: string, limit: number): Promise<Array<Trecipe>> {
+    public fetchAssociatedTrecipes(placeId: string, limit?: number): Promise<Array<Trecipe>> {
         return API.get<Array<Trecipe>>(`${this.apiEndpoint}/associated`, {
             params: {
-                destId: destId,
+                placeId: placeId,
                 limit: limit,
             },
         }).then((res: AxiosResponse<Array<Trecipe>>) => {

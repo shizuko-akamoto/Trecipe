@@ -20,7 +20,7 @@ const Pages = () => {
                     libraries={libraries}>
                     <Route path="/trecipes" exact component={MyTrecipes} />
                     <Route path="/trecipes/:trecipeId" exact component={TrecipePage} />
-                    <Route path="/destinations/:destId" exact component={DestinationPage} />
+                    <Route path="/destinations/:placeId" exact component={DestinationPage} />
                     <Route path="/map/:trecipeId" component={Map} />
                 </LoadScript>
             </Switch>

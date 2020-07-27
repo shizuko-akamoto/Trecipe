@@ -5,7 +5,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '../index';
 import { Action } from 'redux';
 import TrecipeService from '../../services/trecipeService';
-import { getDestModelsByTrecipeId } from '../Destinations/action';
+import { getDestinationsByTrecipeId } from '../Destinations/action';
 import { updateTrecipe as updateTrecipeInList } from '../TrecipeList/action';
 
 export const loadTrecipe = (trecipe: Trecipe) => {
@@ -30,7 +30,7 @@ export const updateTrecipeRequest = (trecipeId: string, updatedTrecipe: Partial<
             dispatch(loadTrecipe(updated));
             dispatch(updateTrecipeInList(trecipeId, updated));
             if (updatedTrecipe.destinations) {
-                dispatch(getDestModelsByTrecipeId(trecipeId));
+                dispatch(getDestinationsByTrecipeId(trecipeId));
             }
         });
     };

@@ -5,6 +5,8 @@ import { TrecipeNotFound } from './trecipe.error';
 import { InternalServerError } from 'express-openapi-validator/dist';
 import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
 import { uuid } from 'uuidv4';
+import DestinationService from '../destinations/destination.service';
+import Destination from '../../../../shared/models/destination';
 
 class TrecipeService {
     public getAll(): Promise<Array<Trecipe>> {
@@ -155,11 +157,18 @@ class TrecipeService {
             );
     }
 
-    public getAssociatedTrecipes(destUUID: string, limit: number) {
-        return trecipeModel
-            .find({ 'destinations.destUUID': destUUID, isPrivate: false })
-            .limit(limit)
-            .exec()
+    public getAssociatedTrecipes(placeId: string, limit: number) {
+        return DestinationService.getDestinationByPlaceId(placeId)
+            .then((destination: Destination) => {
+                if (destination) {
+                    return trecipeModel
+                        .find({ 'destinations.destUUID': destination.uuid, isPrivate: false })
+                        .limit(limit)
+                        .exec();
+                } else {
+                    return Promise.resolve([] as Array<Trecipe>);
+                }
+            })
             .catch((err) =>
                 Promise.reject(
                     new InternalServerError({

@@ -91,6 +91,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                             )
                                         }
                                         checked={this.props.isCompleted}
+                                        readOnly
                                     />
                                     <label
                                         htmlFor={this.props.destination.uuid + '-completed'}

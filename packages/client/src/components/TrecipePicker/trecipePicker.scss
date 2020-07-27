@@ -1,0 +1,78 @@
+@import '../../components/variables';
+@import '../../components/mixins';
+
+.trecipe-picker {
+    width: 21.5rem;
+    height: 21.5rem;
+    text-align: left;
+    margin: 15px 25px;
+    font-family: $default-font-family;
+    overflow: hidden;
+    ::-webkit-scrollbar {
+        width: 0;
+    }
+
+    .picker-title {
+        @include title-border-bottom($powder-blue, $crayola-yellow);
+        font-size: $subtitle-font-size;
+        width: fit-content;
+        font-style: normal;
+        color: $indigo-dye;
+    }
+
+    .trecipe-list-wrapper {
+        font-size: $default-font-size;
+        font-family: $default-font-family;
+        box-sizing: border-box;
+        height: 80%;
+
+        .trecipe-list {
+            height: 100%;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            overflow-y: auto;
+            cursor: pointer;
+
+            .trecipe-item {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                padding: 1rem 0;
+
+                .item-info {
+                    display: flex;
+                    justify-content: start;
+                    width: 80%;
+
+                    .trecipe-name {
+                        margin: 0;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        font-size: $default-font-size;
+                        text-overflow: ellipsis;
+                    }
+
+                    .privacy-icon {
+                        margin-left: 0.5rem;
+                        color: $silver-gray;
+                    }
+                }
+
+                .trecipe-check {
+                    &.checked {
+                        opacity: 100%;
+                    }
+
+                    opacity: 0;
+                    margin-right: 0.5rem;
+                }
+
+                &:hover {
+                    transition: background-color 0.3s ease;
+                    background-color: rgba($indigo-dye, 0.04);
+                }
+            }
+        }
+    }
+}

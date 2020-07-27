@@ -76,12 +76,11 @@ paths:
       summary: Gets trecipes that contain destination of given dest uuid
       description: Gets up to "limit" number of trecipes containing destination of given dest uuid
       parameters:
-        - $ref: '#/components/parameters/queryDestId'
+        - $ref: '#/components/parameters/queryPlaceId'
         - in: query
           name: limit
           schema:
             type: integer
-          required: true
           description: The max number of trecipes to be returned
       responses:
         200:
@@ -175,18 +174,16 @@ paths:
     get:
       tags:
         - Destinations
-      summary: Get destinations by trecipe uuid
-      description: Get all destinations in a trecipe with specified uuid
+      summary: Get destinations by place id
+      description: Get all destinations in a trecipe with specified place id
       parameters:
-        - $ref: '#/components/parameters/queryTrecipeId'
+        - $ref: '#/components/parameters/queryPlaceId'
       responses:
         200:
-          description: Returns an array of destinations in trecipe of given uuid
+          description: Returns destination with specified place id
           content:
             application/json:
               schema:
-                type: array
-                items:
                   $ref: '#/components/schemas/Destination'
         404:
           $ref: '#/components/responses/NotFound'
@@ -209,6 +206,27 @@ paths:
                   $ref: '#/components/schemas/Destination'
         404:
           $ref: '#/components/responses/NotFound'
+  /destinations/in:
+    get:
+      tags:
+        - Destinations
+      summary: Get destinations by trecipe uuid
+      description: Get all destinations in a trecipe with specified uuid
+      parameters:
+        - $ref: '#/components/parameters/queryTrecipeId'
+      responses:
+        200:
+          description: Returns an array of destinations in trecipe of given uuid
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Destination'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /upload:
     post:
@@ -282,15 +300,14 @@ components:
       schema:
         type: string
         format: uuid
-    queryDestId:
-      name: destId
+    queryPlaceId:
+      name: placeId
       in: query
-      description: Destination uuid
-      example: 123e4567-e89b-12d3-a456-426614174000
+      description: Destination place id (used for Google Place API)
+      example: ChIJN1t_tDeuEmsRUsoyG83frY4
       required: true
       schema:
         type: string
-        format: uuid
   schemas:
     Trecipe:
       title: Trecipe

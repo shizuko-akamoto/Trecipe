@@ -83,7 +83,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    trecipes: state.trecipeList.trecipes,
+    trecipes: state.trecipeList.myTrecipes,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => {

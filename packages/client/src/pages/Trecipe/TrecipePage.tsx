@@ -14,7 +14,7 @@ import { RouteComponentProps } from 'react-router';
 import { Link, withRouter } from 'react-router-dom';
 import {
     addDestinationRequest,
-    getDestModelsByTrecipeId,
+    getDestinationsByTrecipeId,
     removeDestinationRequest,
 } from '../../redux/Destinations/action';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
@@ -150,7 +150,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
 
     private onDestRemoved(idToDelete: string): void {
         if (this.props.trecipe) {
-            this.props.removeDestinationRequest(this.props.trecipe, idToDelete);
+            this.props.removeDestinationRequest(this.props.trecipe, { destId: idToDelete });
         }
     }
 
@@ -291,7 +291,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                                 {this.getDestinationsList().map((dest, index) => (
                                                     <Link
                                                         className="router-link"
-                                                        to={`/destinations/${dest.uuid}`}
+                                                        to={`/destinations/${dest.placeId}`}
                                                         key={dest.uuid}>
                                                         <DestinationCard
                                                             key={dest.uuid}
@@ -359,7 +359,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         {
             showModal,
             updateTrecipe: updateTrecipeRequest,
-            getDestModelsByTrecipeId,
+            getDestModelsByTrecipeId: getDestinationsByTrecipeId,
             fetchTrecipe,
             addDestinationRequest,
             removeDestinationRequest,
