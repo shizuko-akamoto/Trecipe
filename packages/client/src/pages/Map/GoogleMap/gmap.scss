@@ -1,4 +1,3 @@
-// Override the google's infoWindow padding
 .gmap-wrapper {
     width: 100%;
     height: 100%;
@@ -8,6 +7,13 @@
     position: absolute;
     width: 35%;
     min-width: 20rem;
-    top: 0.5rem;
-    right: 0.5rem;
+    top: 8px;
+    right: 8px;
+}
+
+.gmap-legend {
+    position: absolute;
+    width: 8rem;
+    bottom: 28px;
+    left: 8px;
 }
