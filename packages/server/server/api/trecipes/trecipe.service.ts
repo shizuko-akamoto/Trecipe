@@ -158,14 +158,15 @@ class TrecipeService {
             );
     }
 
-    public getAssociatedTrecipes(placeId: string, limit: number) {
+    public getAssociatedTrecipes(placeId: string, limit: number, owner?: User) {
         return DestinationService.getDestinationByPlaceId(placeId)
             .then((destination: Destination) => {
+                // if owner is defined, return associated trecipes for that owner, otherwise, return all public associated trecipes
+                const filter = owner
+                    ? { 'destinations.destUUID': destination.uuid, owner: owner.username }
+                    : { 'destinations.destUUID': destination.uuid, isPrivate: false };
                 if (destination) {
-                    return trecipeModel
-                        .find({ 'destinations.destUUID': destination.uuid, isPrivate: false })
-                        .limit(limit)
-                        .exec();
+                    return trecipeModel.find(filter).limit(limit).exec();
                 } else {
                     return Promise.resolve([] as Array<Trecipe>);
                 }

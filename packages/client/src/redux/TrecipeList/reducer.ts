@@ -36,6 +36,11 @@ export function trecipeListReducer(
                 ...state,
                 associatedTrecipes: action.payload.trecipes,
             };
+        case TrecipeListActionTypes.LOAD_MY_ASSOCIATED_TRECIPE:
+            return {
+                ...state,
+                myAssociatedTrecipes: action.payload.trecipes,
+            };
         default:
             return state;
     }

@@ -86,8 +86,15 @@ class TrecipeService {
         });
     }
 
-    public fetchAssociatedTrecipes(placeId: string, limit?: number): Promise<Array<Trecipe>> {
-        return API.get<Array<Trecipe>>(`${this.apiEndpoint}/associated`, {
+    public fetchAssociatedTrecipes(
+        placeId: string,
+        limit?: number,
+        onlyOwned?: boolean
+    ): Promise<Array<Trecipe>> {
+        const endpoint = onlyOwned
+            ? `${this.apiEndpoint}/my-associated`
+            : `${this.apiEndpoint}/associated`;
+        return API.get<Array<Trecipe>>(endpoint, {
             params: {
                 placeId: placeId,
                 limit: limit,

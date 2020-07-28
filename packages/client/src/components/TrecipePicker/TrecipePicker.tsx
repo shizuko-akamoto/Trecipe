@@ -3,7 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { fetchAllTrecipes, fetchAssociatedTrecipesRequest } from '../../redux/TrecipeList/action';
+import {
+    fetchAllTrecipes,
+    fetchAssociatedTrecipesRequest,
+    fetchMyAssociatedTrecipesRequest,
+} from '../../redux/TrecipeList/action';
 import Trecipe from '../../../../shared/models/trecipe';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './trecipePicker.scss';
@@ -87,7 +91,7 @@ const mapStateToProps = (state: RootState) => {
     return {
         trecipes: state.trecipeList.myTrecipes,
         checkedTrecipes: new Set(
-            state.trecipeList.associatedTrecipes.map((trecipe) => trecipe.uuid)
+            state.trecipeList.myAssociatedTrecipes.map((trecipe) => trecipe.uuid)
         ),
     };
 };
@@ -96,7 +100,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
             fetchAllTrecipes,
-            fetchCheckedTrecipes: fetchAssociatedTrecipesRequest,
+            fetchCheckedTrecipes: fetchMyAssociatedTrecipesRequest,
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,
             hideModal,

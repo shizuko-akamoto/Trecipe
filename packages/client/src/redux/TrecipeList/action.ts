@@ -37,6 +37,12 @@ export const loadAssociatedTrecipes = (trecipes: Array<Trecipe>) => {
     });
 };
 
+export const loadMyAssociatedTrecipes = (trecipes: Array<Trecipe>) => {
+    return typedAction(TrecipeListActionTypes.LOAD_MY_ASSOCIATED_TRECIPE, {
+        trecipes: trecipes,
+    });
+};
+
 /**----- Sends trecipe requests to server and dispatches trecipe actions with results -----**/
 
 export const fetchAllTrecipes = (): AppThunk => {
@@ -90,10 +96,21 @@ export const fetchAssociatedTrecipesRequest = (placeId: string, limit?: number):
     };
 };
 
+export const fetchMyAssociatedTrecipesRequest = (placeId: string, limit?: number): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        TrecipeService.fetchAssociatedTrecipes(placeId, limit, true).then(
+            (trecipes: Array<Trecipe>) => {
+                dispatch(loadMyAssociatedTrecipes(trecipes));
+            }
+        );
+    };
+};
+
 export type TrecipeListAction = ReturnType<
     | typeof addTrecipe
     | typeof deleteTrecipe
     | typeof updateTrecipe
     | typeof loadTrecipes
     | typeof loadAssociatedTrecipes
+    | typeof loadMyAssociatedTrecipes
 >;

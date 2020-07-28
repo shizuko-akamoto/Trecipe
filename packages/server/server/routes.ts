@@ -1,5 +1,5 @@
 import { Application } from 'express';
-import TrecipeController from './api/trecipe/trecipe.controller';
+import TrecipeController from './api/trecipes/trecipe.controller';
 import Controller from './common/controller';
 import DestinationController from './api/destinations/destination.controller';
 import UserController from './api/user/user.controller';
