@@ -6,6 +6,9 @@ import { Action } from 'redux';
 import TrecipeService from '../../services/trecipeService';
 import Trecipe from '../../../../shared/models/trecipe';
 import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
+import UserService from '../../services/userService';
+import { UserResponse } from '../../../../shared/models/user';
+import { setUser } from '../User/action';
 
 export const addTrecipe = (newTrecipe: Trecipe) => {
     return typedAction(TrecipeListActionTypes.ADD_TRECIPE, newTrecipe);
@@ -42,6 +45,9 @@ export const createTrecipeRequest = (trecipeData: CreateNewTrecipeDTO): AppThunk
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         TrecipeService.createTrecipe(trecipeData).then((createdTrecipe: Trecipe) => {
             dispatch(addTrecipe(createdTrecipe));
+            UserService.getUser().then((updatedUser: UserResponse) => {
+                dispatch(setUser(updatedUser.user));
+            });
         });
     };
 };
@@ -50,6 +56,9 @@ export const duplicateTrecipeRequest = (srcTrecipeId: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         TrecipeService.duplicateTrecipe(srcTrecipeId).then((copiedTrecipe: Trecipe) => {
             dispatch(addTrecipe(copiedTrecipe));
+            UserService.getUser().then((updatedUser: UserResponse) => {
+                dispatch(setUser(updatedUser.user));
+            });
         });
     };
 };
@@ -59,6 +68,9 @@ export const deleteTrecipeRequest = (idToDelete: string): AppThunk => {
         TrecipeService.deleteTrecipe(idToDelete).then((deletedCount: number) => {
             if (deletedCount > 0) {
                 dispatch(deleteTrecipe(idToDelete));
+                UserService.getUser().then((updatedUser: UserResponse) => {
+                    dispatch(setUser(updatedUser.user));
+                });
             }
         });
     };

@@ -1,10 +1,23 @@
 import React from 'react';
 import './spinner.scss';
+import { PositionProperty } from 'csstype';
 
-class Spinner extends React.Component {
+/**
+ * Spinner Props
+ * positionStyle: Position css property
+ */
+export interface SpinnerProps {
+    positionStyle: PositionProperty;
+}
+
+class Spinner extends React.Component<SpinnerProps> {
+    static defaultProps = {
+        positionStyle: 'relative',
+    };
+
     render() {
         return (
-            <div className="spinner-wrapper">
+            <div className="spinner-wrapper" style={{ position: this.props.positionStyle }}>
                 <div className="spinner"></div>
             </div>
         );

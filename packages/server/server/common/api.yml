@@ -4,20 +4,24 @@ info:
   description: trecipe backend
   version: 1.0.0
 servers:
-- url: /api/v1
-  description: Dev server
+  - url: /api/v1
+    description: Dev server
 tags:
-- name: Trecipes
-  description: Trecipe endpoints
+  - name: Trecipes
+    description: Trecipe endpoints
+  - name: Users
+    description: User endpoints
 paths:
   /trecipes:
     get:
       tags:
-      - Trecipes
+        - Trecipes
       summary: Fetch all trecipes
       description: Fetch all trecipes either owned or shared with current user
+      security:
+        - cookieAuth: []
       responses:
-        200:
+        '200':
           description: Returns all trecipes owned or shared with current user
           content:
             application/json:
@@ -25,76 +29,82 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Trecipe'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
     post:
       tags:
-      - Trecipes
+        - Trecipes
       summary: Create a new trecipe
-      description: Create a new trecipe with given name, description, and privacy setting
+      description: 'Create a new trecipe with given name, description, and privacy setting'
+      security:
+        - cookieAuth: []
       requestBody:
-        description: New Trecipe's name, description, privacy setting
+        description: 'New Trecipe''s name, description, privacy setting'
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateNewTrecipeDTO'
         required: true
       responses:
-        201:
+        '201':
           description: Returns the newly created trecipe
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trecipe'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
-
   /trecipes/copy:
     post:
       tags:
         - Trecipes
       summary: Duplicates a trecipe
       description: Duplicates a trecipe with given uuid
+      security:
+        - cookieAuth: []
       parameters:
         - $ref: '#/components/parameters/queryTrecipeId'
       responses:
-        201:
+        '201':
           description: Returns the copy of trecipe
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trecipe'
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
-
-  /trecipes/{id}:
+  '/trecipes/{id}':
     get:
       tags:
-      - Trecipes
+        - Trecipes
       summary: Gets a trecipe by uuid
       description: Gets a trecipe by uuid
+      security:
+        - cookieAuth: []
       parameters:
-      - $ref: '#/components/parameters/pathId'
+        - $ref: '#/components/parameters/pathId'
       responses:
-        200:
+        '200':
           description: Returns the trecipe with the specified uuid
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trecipe'
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
     put:
       tags:
-      - Trecipes
+        - Trecipes
       summary: Updates a trecipe by uuid
       description: Updates a trecipe of given uuid by updated trecipe model
+      security:
+        - cookieAuth: []
       parameters:
-      - $ref: '#/components/parameters/pathId'
+        - $ref: '#/components/parameters/pathId'
       requestBody:
         description: Updated trecipe model
         content:
@@ -103,28 +113,30 @@ paths:
               $ref: '#/components/schemas/Trecipe'
         required: true
       responses:
-        200:
+        '200':
           description: Returns the updated trecipe
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Trecipe'
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
     delete:
       tags:
         - Trecipes
       summary: Deletes a trecipe by uuid
+      security:
+        - cookieAuth: []
       parameters:
         - $ref: '#/components/parameters/pathId'
       responses:
-        200:
+        '200':
           $ref: '#/components/responses/Deleted'
-        404:
+        '404':
           $ref: '#/components/responses/NotFound'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
   /destinations:
     post:
@@ -139,14 +151,51 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateNewDestinationDTO'
       responses:
-        201:
+        '201':
           description: Returns the newly created destination
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Destination'
-        500:
+        '500':
           $ref: '#/components/responses/InternalServerError'
+    get:
+      tags:
+        - Destinations
+      summary: Get destinations by trecipe uuid
+      description: Get all destinations in a trecipe with specified uuid
+      parameters:
+        - $ref: '#/components/parameters/queryTrecipeId'
+      responses:
+        '200':
+          description: Returns an array of destinations in trecipe of given uuid
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Destination'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/destinations/{id}':
+    get:
+      tags:
+        - Destinations
+      summary: Get destination by uuid
+      description: Get destination by uuid
+      parameters:
+        - $ref: '#/components/parameters/pathId'
+      responses:
+        '200':
+          description: Returns the destination given by uuid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Destination'
+        '404':
+          $ref: '#/components/responses/NotFound'
   /destinations/rate/{id}:
     post:
       tags:
@@ -168,43 +217,6 @@ paths:
                 $ref: '#/components/schemas/Destination'
         500:
           $ref: '#/components/responses/InternalServerError'
-    get:
-      tags:
-        - Destinations
-      summary: Get destinations by trecipe uuid
-      description: Get all destinations in a trecipe with specified uuid
-      parameters:
-        - $ref: '#/components/parameters/queryTrecipeId'
-      responses:
-        200:
-          description: Returns an array of destinations in trecipe of given uuid
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Destination'
-        404:
-          $ref: '#/components/responses/NotFound'
-        500:
-          $ref: '#/components/responses/InternalServerError'
-  /destinations/{id}:
-    get:
-      tags:
-        - Destinations
-      summary: Get destination by uuid
-      description: Get destination by uuid
-      parameters:
-        - $ref: '#/components/parameters/pathId'
-      responses:
-        200:
-          description: Returns the destination given by uuid
-          content:
-            application/json:
-              schema:
-                  $ref: '#/components/schemas/Destination'
-        404:
-          $ref: '#/components/responses/NotFound'
 
   /upload:
     post:
@@ -252,12 +264,112 @@ paths:
   /spec:
     get:
       tags:
-      - Specification
+        - Specification
       responses:
-        200:
+        '200':
           description: Return the API specification
           content: {}
-
+  /users:
+    get:
+      summary: Get the current user
+      description: 'Return the current user based on the token in cookie'
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Returns the current authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+      tags:
+        - Users
+    put:
+      summary: Updates a user by username
+      description: 'Updates a user of given username by updated user model'
+      security:
+        - cookieAuth: []
+      requestBody:
+        description: Updated user model
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Returns the updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+      tags:
+        - Users
+  /users/signup:
+    post:
+      summary: Create a new user
+      description: 'Create a new user using email, password, username, and display name'
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNewUserDTO'
+      responses:
+        '201':
+          description: Returns the new user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+      tags:
+        - Users
+  /users/login:
+    post:
+      summary: User login
+      description: 'Login using email and password, then set the cookie'
+      requestBody:
+        description: User data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginDTO'
+      responses:
+        '200':
+          description: >
+            Successfully authenticated. The session ID is returned in a cookie
+            named `access_token`. You need to include this cookie in subsequent
+            requests.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: access_token=abcde12345; HttpOnly; SameSite;
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+      tags:
+        - Users
+  /users/logout:
+    post:
+      summary: User logout
+      description: 'Logout and clear the cookie'
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Returns the current authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+      tags:
+        - Users
 components:
   parameters:
     pathId:
@@ -279,6 +391,36 @@ components:
         type: string
         format: uuid
   schemas:
+    User:
+      title: User
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: sample@email.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 64
+          example: Nl354RwP_9UKbQ_5Psy40texXePv4o
+        username:
+          type: string
+          pattern: '^[a-zA-Z0-9]{1,64}$'
+          example: sampleUsername
+        displayName:
+          type: string
+          minLength: 1
+          example: John Doe
+        profilePic:
+          type: string
+          example: Nl354RwP_9UKbQ_5Psy40texXePv4o
+        trecipes:
+          type: array
+          items:
+            type: string
+          example: []
     Trecipe:
       title: Trecipe
       type: object
@@ -300,10 +442,10 @@ components:
           type: boolean
           example: true
         collaborators:
-            type: array
-            items:
-              type: string
-            example: []
+          type: array
+          items:
+            type: string
+          example: []
         image:
           type: string
         destinations:
@@ -337,19 +479,23 @@ components:
           $ref: '#/components/schemas/Geometry'
         formattedAddress:
           type: string
-          example: 5, 48 Pirrama Rd, Pyrmont NSW 2009, Australia
+          example: '5, 48 Pirrama Rd, Pyrmont NSW 2009, Australia'
         formattedPhoneNumber:
           type: string
           example: +61 2 9374 4000
         website:
           type: string
-          example: https://www.google.com.au/about/careers/locations/sydney/
+          example: 'https://www.google.com.au/about/careers/locations/sydney/'
         rating:
           $ref: '#/components/schemas/Rating'
         userRatings:
           type: array
           items:
             $ref: '#/components/schemas/UserRating'
+          example:
+            - 4.2
+            - 3
+            - 4.5
         description:
           type: string
           example: Description about this destination
@@ -360,7 +506,31 @@ components:
           type: array
           items:
             type: string
-          example: [CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU]
+          example:
+            - >-
+              CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU
+    UpdateDestinationRatingDTO:
+      title: updateDestinationRatingDTO
+      type: object
+      properties:
+        userId:
+          type: string
+        trecipeId:
+          type: string
+        rating:
+          $ref: '#/components/schemas/Rating'
+      required:
+        - userId
+        - trecipeId
+        - rating
+    UserRating:
+      title: UserRating
+      type: object
+      properties:
+        userId:
+          type: string
+        rating:
+          $ref: '#/components/schemas/Rating'
     DestinationCategory:
       title: DestinationCategory
       type: string
@@ -463,19 +633,23 @@ components:
           $ref: '#/components/schemas/Geometry'
         formattedAddress:
           type: string
-          example: 5, 48 Pirrama Rd, Pyrmont NSW 2009, Australia
+          example: '5, 48 Pirrama Rd, Pyrmont NSW 2009, Australia'
         formattedPhoneNumber:
           type: string
           example: +61 2 9374 4000
         website:
           type: string
-          example: https://www.google.com.au/about/careers/locations/sydney/
+          example: 'https://www.google.com.au/about/careers/locations/sydney/'
         rating:
           $ref: '#/components/schemas/Rating'
         userRatings:
           type: array
           items:
             $ref: '#/components/schemas/UserRating'
+          example:
+            - 4.2
+            - 3
+            - 4.5
         description:
           type: string
           example: Description about this destination
@@ -486,33 +660,82 @@ components:
           type: array
           items:
             type: string
-          example: [CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU]
+          example:
+            - >-
+              CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU
       required:
         - placeId
         - name
         - geometry
-    UpdateDestinationRatingDTO:
-      title: updateDestinationRatingDTO
+    CreateNewUserDTO:
+      title: CreateNewUserDTO
       type: object
       properties:
-        userId:
+        username:
           type: string
-        trecipeId:
+          pattern: '^[a-zA-Z0-9]{1,64}$'
+          example: sampleUsername
+        displayName:
           type: string
-        rating:
-          $ref: '#/components/schemas/Rating'
+          minLength: 1
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: sample@email.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 64
+          example: Nl354RwP_9UKbQ_5Psy40texXePv4o
       required:
-        - userId
-        - trecipeId
-        - rating
-    UserRating:
-      title: UserRating
+        - username
+        - displayName
+        - email
+        - password
+    LoginDTO:
+      title: LoginDTO
       type: object
       properties:
-        userId:
+        email:
           type: string
-        rating:
-          $ref: '#/components/schemas/Rating'
+          format: email
+          example: sample@email.com
+        password:
+          type: string
+          format: password
+          minLength: 8
+          maxLength: 64
+          example: Nl354RwP_9UKbQ_5Psy40texXePv4o
+      required:
+        - email
+        - password
+    UserResponse:
+      title: UserResponse
+      type: object
+      properties:
+        isAuthenticated:
+          type: boolean
+          readOnly: true
+          example: false
+        user:
+          type: object
+          properties:
+            username:
+              type: string
+              example: sampleUsername
+            displayName:
+              type: string
+              example: John Doe
+            profilePic:
+              type: string
+              example: Nl354RwP_9UKbQ_5Psy40texXePv4o
+            trecipes:
+              type: array
+              items:
+                type: string
+              example: []
     Error:
       title: Error
       type: object
@@ -545,3 +768,14 @@ components:
               deletedCount:
                 type: integer
                 format: int64
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: access_token
