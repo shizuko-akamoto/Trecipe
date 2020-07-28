@@ -165,9 +165,10 @@ class Login extends React.Component<LoginProps, LoginState> {
                             action="">
                             <label htmlFor="login-email">Email</label>
                             <input
-                                type="email"
+                                type="text"
                                 name="login-email"
                                 id="login-email"
+                                placeholder="Enter your email here"
                                 value={this.state.email ? this.state.email : ''}
                                 onChange={this.handleEmailChange}
                                 className={errors.emailError ? 'input-error' : ''}
@@ -182,6 +183,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                                 type="password"
                                 name="login-password"
                                 id="login-password"
+                                placeholder="Enter your password here"
                                 value={this.state.password ? this.state.password : ''}
                                 onChange={this.handlePasswordChange}
                                 maxLength={64}
@@ -202,6 +204,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                                 type="text"
                                 name="username"
                                 id="username"
+                                placeholder="Enter your username here"
                                 value={this.state.username ? this.state.username : ''}
                                 onChange={this.handleUsernameChange}
                                 maxLength={64}
@@ -214,11 +217,12 @@ class Login extends React.Component<LoginProps, LoginState> {
                                     : 'Username already existed'}
                             </div>
 
-                            <label htmlFor="name">Name</label>
+                            <label htmlFor="name">Display name</label>
                             <input
                                 type="text"
                                 name="name"
                                 id="name"
+                                placeholder="Enter your display name here"
                                 value={this.state.displayName ? this.state.displayName : ''}
                                 onChange={this.handleDisplayNameChange}
                                 className={errors.displayNameError ? 'input-error' : ''}
@@ -230,9 +234,10 @@ class Login extends React.Component<LoginProps, LoginState> {
 
                             <label htmlFor="email">Email</label>
                             <input
-                                type="email"
+                                type="text"
                                 name="email"
                                 id="email"
+                                placeholder="Enter your email here"
                                 value={this.state.email ? this.state.email : ''}
                                 onChange={this.handleEmailChange}
                                 className={signupEmailError ? 'input-error' : ''}
@@ -249,6 +254,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                                 type="password"
                                 name="password"
                                 id="password"
+                                placeholder="Enter your password here"
                                 value={this.state.password ? this.state.password : ''}
                                 onChange={this.handlePasswordChange}
                                 maxLength={64}
