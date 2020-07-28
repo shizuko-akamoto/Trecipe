@@ -68,6 +68,7 @@ export const removeDestinationRequest = (
 ): AppThunk => {
     let updateTrecipePromise: Promise<Trecipe>;
     if (idToDelete.placeId) {
+        // to remove destination by place id, first get corresponding destination uuid, then update trecipe
         updateTrecipePromise = DestinationService.getDestinationByPlaceId(idToDelete.placeId).then(
             (destToDelete: Destination) => {
                 return TrecipeService.updateTrecipe(trecipe.uuid, {
@@ -78,6 +79,7 @@ export const removeDestinationRequest = (
             }
         );
     } else if (idToDelete.destId) {
+        // remove destination by destination uuid
         updateTrecipePromise = TrecipeService.updateTrecipe(trecipe.uuid, {
             destinations: trecipe.destinations.filter(
                 (dest) => dest.destUUID !== idToDelete.destId

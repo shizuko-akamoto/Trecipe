@@ -22,10 +22,23 @@ import { showModal } from '../../redux/Modal/action';
 import TrecipePicker from '../../components/TrecipePicker/TrecipePicker';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 
+/**
+ * Destination props
+ * placeId: place id of destination to display
+ *          Since we want to be able to display places from Google as well as places from our database, using place id instead of uuid
+ * associatedTrecipes: from redux store, list of all public trecipes containing this destination
+ */
 export type DestinationProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
     RouteComponentProps<{ placeId: string }>;
 
+/**
+ * Destination state
+ * nearbyDestinations: destinations nearby from Google Place API
+ * destination: destination model
+ * photos: photos of this destination from Google Place API
+ * review: reviews from Google Place API
+ */
 export interface DestinationState {
     nearbyDestinations: Array<Destination>;
     destination: Destination | undefined;
@@ -34,13 +47,17 @@ export interface DestinationState {
 }
 
 class DestinationPage extends React.Component<DestinationProps, DestinationState> {
+    private static SAVE_DESTINATION_BUTTON = 'Save';
+
     private map: google.maps.Map;
     private mapService: google.maps.places.PlacesService;
 
     constructor(props: DestinationProps) {
         super(props);
         this.map = new google.maps.Map(document.createElement('div'));
+        // service used for calling Google Place API
         this.mapService = new google.maps.places.PlacesService(this.map);
+        // until fetch from Google Place API completes, those field will be empty/undefined
         this.state = {
             nearbyDestinations: [],
             destination: undefined,
@@ -51,7 +68,9 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
 
     componentDidMount(): void {
         const placeId = this.props.match.params.placeId;
+        // retrieve public trecipes containing this destination
         this.props.fetchAssociatedTrecipesRequest(placeId, 10);
+        // use place id to fetch place details from Google
         this.initializeDestDetail(placeId);
     }
 
@@ -100,19 +119,6 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
         }
     }
 
-    private getDestModel(place: google.maps.places.PlaceResult) {
-        return {
-            ...getDestModel(place),
-            uuid: '',
-            userRatings: [],
-            description: '',
-            photoRefs: place.photos
-                ? place.photos.map((photo) => photo.getUrl({ maxHeight: 100 }))
-                : [],
-            rating: place.rating ? (Math.max(5, Math.round(place.rating)) as Rating) : 0,
-        };
-    }
-
     private initializeDestDetail(placeId: string) {
         let request: google.maps.places.PlaceDetailsRequest = {
             placeId: placeId,
@@ -141,7 +147,19 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
         }
     }
 
-    private static SAVE_DESTINATION_BUTTON = 'Save';
+    private getDestModel(place: google.maps.places.PlaceResult) {
+        return {
+            ...getDestModel(place),
+            uuid: '',
+            userRatings: [],
+            description: '',
+            photoRefs: place.photos
+                ? place.photos.map((photo) => photo.getUrl({ maxHeight: 100 }))
+                : [],
+            rating: place.rating ? (Math.max(5, Math.round(place.rating)) as Rating) : 0,
+        };
+    }
+
     render() {
         const destination: Destination | undefined = this.state.destination;
         if (!destination) {

@@ -69,7 +69,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         // load destinations by trecipe id before rendering
         const trecipeId = this.props.match.params.trecipeId;
         this.props.fetchTrecipe(trecipeId);
-        this.props.getDestModelsByTrecipeId(trecipeId);
+        this.props.getDestinationsByTrecipeId(trecipeId);
     }
 
     private onDestDragEnd(result: DropResult, provided: ResponderProvided) {
@@ -364,7 +364,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         {
             showModal,
             updateTrecipe: updateTrecipeRequest,
-            getDestModelsByTrecipeId: getDestinationsByTrecipeId,
+            getDestinationsByTrecipeId,
             fetchTrecipe,
             addDestinationRequest,
             removeDestinationRequest,

@@ -2,6 +2,12 @@ import React, { ReactNodeArray } from 'react';
 import PhotoUploader from '../PhotoUploader/PhotoUploader';
 import { baseURL } from '../../api';
 
+/**
+ * CoverPhoto props
+ * imageSource: if src is null, nothing will be displayed, otherwise will fetch image to display from given url
+ * buttons (optional): any buttons we want to display on top right of cover photo
+ * onFileChange (optional): when defined, file upload gets enabled
+ */
 export interface CoverPhotoProps {
     imageSource: string | null;
     buttons?: ReactNodeArray;

@@ -22,6 +22,10 @@ import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { hideModal } from '../../redux/Modal/action';
 
+/**
+ * Trecipe Picker own props
+ * destination: the destination model to save
+ */
 export interface TrecipePickerOwnProps {
     destination: Destination;
 }
@@ -32,7 +36,9 @@ export type TrecipePickerProps = ReturnType<typeof mapStateToProps> &
 
 class TrecipePicker extends React.Component<TrecipePickerProps> {
     componentDidMount(): void {
+        // fetches all trecipes owned by the user
         this.props.fetchAllTrecipes();
+        // fetches all user's trecipes containing this destination
         this.props.fetchCheckedTrecipes(this.props.destination.placeId);
     }
 
@@ -41,6 +47,8 @@ class TrecipePicker extends React.Component<TrecipePickerProps> {
         if (!trecipe) {
             return;
         }
+        // if trecipe is already checked (ie. destination is saved already), clicking it will request remove destination,
+        // otherwise, request add destination
         if (this.props.checkedTrecipes.has(trecipeId)) {
             this.props.removeDestination(trecipe, { placeId: this.props.destination.placeId });
         } else {

@@ -51,7 +51,7 @@ class Map extends React.Component<MapProps> {
         // fetch trecipe by id and destinations by trecipe id
         const trecipeId = this.props.match.params.trecipeId;
         this.props.fetchTrecipe(trecipeId);
-        this.props.getDestModelsByTrecipeId(trecipeId);
+        this.props.getDestinationsByTrecipeId(trecipeId);
     }
 
     private onDestCompleteClick(destId: string) {
@@ -173,7 +173,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             updateTrecipe: updateTrecipeRequest,
             deleteTrecipe: deleteTrecipeRequest,
             duplicateTrecipe: duplicateTrecipeRequest,
-            getDestModelsByTrecipeId: getDestinationsByTrecipeId,
+            getDestinationsByTrecipeId,
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,
             fetchTrecipe,
