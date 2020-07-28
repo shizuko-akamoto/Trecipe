@@ -23,6 +23,7 @@ import {
     faBinoculars,
     faExternalLinkAlt,
     faMapMarkedAlt,
+    faExclamationTriangle,
     faMapMarker,
     faPhone,
 } from '@fortawesome/free-solid-svg-icons';
@@ -64,5 +65,6 @@ library.add(
     faMapMarkedAlt,
     faMapMarker,
     faPhone,
-    faWindowMaximize
+    faWindowMaximize,
+    faExclamationTriangle
 );

@@ -13,3 +13,21 @@
         content: '';
     }
 }
+
+@mixin animated-underline($baseColor) {
+    position: relative;
+    transition: 0.3s;
+    &::after {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        content: '';
+        width: 0;
+        height: 2px;
+        background-color: $baseColor;
+        transition: 0.3s;
+    }
+    &:hover::after {
+        width: 100%;
+    }
+}

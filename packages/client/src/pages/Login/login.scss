@@ -1,53 +1,167 @@
 @import '../../components/variables.scss';
+@import '../../components/mixins';
 
-// TODO: these are placeholder
+// Inspired by https://codemyui.com/css-only-transition-for-sign-in-to-register/
 
 .login-wrapper {
-    box-sizing: border-box;
-    background-color: white;
-    //margin: auto auto 21.875rem;
-    //padding: 1rem 0 10rem 0;
-    min-height: 80vh;
-    box-shadow: 0 1.5rem 1.5rem 0 rgba(0, 0, 0, 0.08);
-    display: flex;
-    justify-content: center;
-
-    .title {
-        text-align: center;
-        font-family: $default-font-family;
+    & * {
+        box-sizing: border-box;
+        transition: all 0.25s ease;
     }
 
-    .login-content {
-        width: 20rem;
-        display: flex;
-        flex-direction: column;
+    height: 40rem;
+    width: 100%;
+    padding: 60px 0;
+    background-size: cover;
+    background-image: linear-gradient(rgba($tc-white, 1) 0%, rgba($tc-white, 0) 30%),
+        url('boat-4899802_1920.jpg');
 
-        .input {
-            font-family: $default-font-family;
-            font-size: $input-font-size;
-            border: 1px solid $silver-gray;
-            padding-left: 10px;
-            padding-right: 10px;
-            margin-bottom: 0.5rem;
-            margin-top: 0rem;
-            border-radius: 8px;
+    .login-window {
+        height: 35rem;
+        max-width: 30rem;
+        padding: 2rem;
+        margin: 0 auto;
+        background-color: rgba($tc-white, 0.9);
+        border-radius: 0.5rem;
+        overflow: hidden;
 
-            &::placeholder {
-                color: $bright-gray;
+        .login-nav {
+            width: 100%;
+
+            ul {
+                height: 2rem;
+                padding: 0;
+                margin: 0 0 2rem 0;
+            }
+
+            li {
+                display: inline;
+                padding: 0 0.6rem 0.3rem 0.6rem;
+                font-size: $subtitle-font-size;
+                text-align: left;
+                text-transform: uppercase;
+                color: rgba($indigo-dye, 0.9);
+                text-decoration: none;
+                cursor: pointer;
+                @include animated-underline($powder-blue);
+                &:after {
+                    height: 2.5px;
+                }
+
+                &.active {
+                    &:after {
+                        width: 100%;
+                    }
+                }
+
+                &.nav-right {
+                    float: right;
+                }
             }
         }
 
-        input {
-            height: 2.5rem;
-        }
-
-        .login-buttons {
-            margin-top: 1rem;
-
-            .button {
-                margin-bottom: 0.3rem;
+        .form {
+            form {
                 width: 100%;
-                justify-content: center;
+                height: 27rem;
+                color: $tc-black;
+                font-size: $default-font-size;
+
+                label {
+                    display: block;
+                    padding-left: 0.625rem;
+                    margin-bottom: 0.625rem;
+                    text-transform: uppercase;
+                }
+
+                input {
+                    display: block;
+                    width: 100%;
+                    height: 2.5rem;
+                    padding: 0 2rem 0 0.625rem;
+                    background: rgba($tc-white, 0);
+                    color: $tc-black;
+                    border: 1px solid $silver-gray;
+                    border-radius: 0.5rem;
+
+                    &:focus {
+                        outline: none;
+                        background: rgba($tc-white, 0.5);
+                    }
+
+                    &.input-error {
+                        border: 1px solid red;
+                    }
+                }
+
+                button {
+                    width: 100%;
+                    height: 2.5rem;
+                    margin: 1.25rem 0 0.625rem 0;
+                    text-transform: uppercase;
+                    text-align: center;
+                    color: $tc-white;
+                    font-weight: bold;
+                    border: none;
+                    border-radius: 0.5rem;
+                    background-color: rgba($indigo-dye, 1);
+
+                    &:hover {
+                        cursor: pointer;
+                        background-color: rgba($indigo-dye, 0.8);
+                    }
+
+                    &:focus {
+                        outline: none;
+                    }
+                }
+
+                .error {
+                    display: block;
+                    color: red;
+                    position: relative;
+                    text-align: right;
+                    visibility: hidden;
+
+                    &.active {
+                        visibility: visible;
+                    }
+                }
+                .error-icon-wrapper {
+                    position: relative;
+                    visibility: hidden;
+
+                    .error-icon {
+                        position: absolute;
+                        bottom: 0.5rem;
+                        right: 0.625rem;
+                    }
+
+                    &.active {
+                        visibility: visible;
+                    }
+                }
+            }
+
+            .form-login {
+                transform: translateX(-100%);
+                opacity: 0;
+
+                &.active {
+                    transform: none;
+                    opacity: 1;
+                }
+            }
+
+            .form-signup {
+                transform: translateX(100%);
+                opacity: 0;
+                margin-top: -27rem;
+
+                &.active {
+                    transform: none;
+                    opacity: 1;
+                }
             }
         }
     }
