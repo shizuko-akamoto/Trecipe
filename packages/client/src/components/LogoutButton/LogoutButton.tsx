@@ -6,6 +6,8 @@ import { RootState } from '../../redux';
 import { logout } from '../../redux/User/action';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
+// TODO: remove this file if this is not needed for responsive design
+
 type LogoutButtonProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
     RouteComponentProps;

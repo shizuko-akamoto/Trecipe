@@ -1,0 +1,11 @@
+@import '../../components/variables';
+
+.avatar-wrapper {
+    .icon-button {
+        color: $mid-gray;
+
+        :hover {
+            color: $tc-black;
+        }
+    }
+}

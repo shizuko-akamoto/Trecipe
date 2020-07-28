@@ -10,7 +10,7 @@ export type RatingBarProps = {
 export class RatingBar extends React.Component<RatingBarProps> {
     render() {
         return (
-            <div className='rating-bar'>
+            <div className="rating-bar">
                 {/*render "rating" number of solid stars*/}
                 {Array.from(Array(this.props.rating).keys()).map((index) => (
                     <FontAwesomeIcon key={index} className="star-filled" icon={['fas', 'star']} />
