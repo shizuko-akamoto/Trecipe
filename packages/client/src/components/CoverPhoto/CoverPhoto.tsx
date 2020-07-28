@@ -1,6 +1,5 @@
 import React, { ReactNodeArray } from 'react';
 import PhotoUploader from '../PhotoUploader/PhotoUploader';
-import { baseURL } from '../../api';
 
 /**
  * CoverPhoto props

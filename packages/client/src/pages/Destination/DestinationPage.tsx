@@ -11,7 +11,7 @@ import { StaticMap } from '../../components/Map/StaticMap';
 import Destination, { getIcon, Rating } from '../../../../shared/models/destination';
 import { getDestinationById } from '../../redux/Destinations/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { getDestCategory, getDestModel } from '../../components/Map/mapHelper';
+import { getDestModel } from '../../components/Map/mapHelper';
 import { DestInfoWindow } from '../../components/DestinationInfo/DestInfoWindow';
 import Review from './Review/review';
 import { isEmpty } from 'lodash';

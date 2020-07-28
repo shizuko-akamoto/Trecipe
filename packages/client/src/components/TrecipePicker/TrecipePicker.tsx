@@ -3,23 +3,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import {
-    fetchAllTrecipes,
-    fetchAssociatedTrecipesRequest,
-    fetchMyAssociatedTrecipesRequest,
-} from '../../redux/TrecipeList/action';
+import { fetchAllTrecipes, fetchMyAssociatedTrecipesRequest } from '../../redux/TrecipeList/action';
 import Trecipe from '../../../../shared/models/trecipe';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './trecipePicker.scss';
-import {
-    addDestination,
-    addDestinationRequest,
-    getDestinationByPlaceId,
-    removeDestination,
-    removeDestinationRequest,
-} from '../../redux/Destinations/action';
+import { addDestinationRequest, removeDestinationRequest } from '../../redux/Destinations/action';
 import Destination from '../../../../shared/models/destination';
-import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { hideModal } from '../../redux/Modal/action';
 
 /**
