@@ -5,7 +5,7 @@ import { Button } from '../../components/Button/Button';
 import { RootState } from '../../redux';
 import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
 import { StaticMap } from '../../components/Map/StaticMap';
 import Destination, { getIcon, Rating } from '../../../../shared/models/destination';
@@ -216,14 +216,19 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                     <h1 className="dest-page-title">Explore Nearby</h1>
                                     {nearbys.map((dest) => (
                                         <div className="nearby-dest-item" key={dest.placeId}>
-                                            <DestInfoWindow destination={dest} />
+                                            <Link
+                                                to={`/destinations/${dest.placeId}`}
+                                                target="_blank"
+                                                className="router-link">
+                                                <DestInfoWindow destination={dest} />
+                                            </Link>
                                         </div>
                                     ))}
                                 </div>
                                 <div className="dest-map-wrapper">
                                     <StaticMap
                                         destinations={[destination, ...nearbys]}
-                                        height={20}
+                                        height={isEmpty(reviews) ? 50 : 20}
                                     />
                                     {!isEmpty(reviews) && (
                                         <h1 className="dest-page-title">Reviews</h1>

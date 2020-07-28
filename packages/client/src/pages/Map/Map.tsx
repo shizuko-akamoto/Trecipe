@@ -14,7 +14,7 @@ import {
     removeDestinationRequest,
 } from '../../redux/Destinations/action';
 import { connect } from 'react-redux';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
@@ -122,14 +122,20 @@ class Map extends React.Component<MapProps> {
                         <div>
                             <ul className="dest-card-list">
                                 {destinations.map((dest, index) => (
-                                    <DestinationCard
-                                        index={index}
-                                        key={dest.uuid}
-                                        destination={dest}
-                                        isCompleted={completed.has(dest.uuid)}
-                                        onClickDelete={this.onDestDeleteClick.bind(this)}
-                                        onClickComplete={this.onDestCompleteClick.bind(this)}
-                                    />
+                                    <Link
+                                        className="router-link"
+                                        to={`/destinations/${dest.placeId}`}
+                                        target="_blank"
+                                        key={dest.uuid}>
+                                        <DestinationCard
+                                            index={index}
+                                            key={dest.uuid}
+                                            destination={dest}
+                                            isCompleted={completed.has(dest.uuid)}
+                                            onClickDelete={this.onDestDeleteClick.bind(this)}
+                                            onClickComplete={this.onDestCompleteClick.bind(this)}
+                                        />
+                                    </Link>
                                 ))}
                             </ul>
                         </div>

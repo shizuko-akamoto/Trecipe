@@ -3,6 +3,7 @@ import { Marker, InfoWindow } from '@react-google-maps/api';
 import { DestInfoWindow } from '../../../components/DestinationInfo/DestInfoWindow';
 import { UnreachableCaseException } from '../../../exceptions/Exceptions';
 import Destination, { DestinationCategory } from '../../../../../shared/models/destination';
+import { Link } from 'react-router-dom';
 
 interface markerProps {
     dest: Destination;
@@ -108,7 +109,12 @@ export class HoverMarker extends Component<markerProps, markerState> {
                 onClick={this.onClick}>
                 {showInfoWindow && (
                     <InfoWindow onDomReady={this.onDomReady} onCloseClick={this.toggleMarker}>
-                        <DestInfoWindow destination={dest} />
+                        <Link
+                            className="router-link"
+                            to={`/destinations/${dest.placeId}`}
+                            target="_blank">
+                            <DestInfoWindow destination={dest} />
+                        </Link>
                     </InfoWindow>
                 )}
             </Marker>
