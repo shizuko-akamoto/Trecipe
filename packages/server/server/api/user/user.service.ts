@@ -45,35 +45,30 @@ class UserService {
     }
 
     public checkDuplicateUser(userData: User): Promise<string | null> {
-        return userModel
-            .findOne({ email: userData.email })
+        const duplicateEmail = userModel.findOne({ email: userData.email })
             .collation({ locale: 'en', strength: 2 })
-            .exec()
-            .then((user: User) => {
-                if (user) {
-                    return Promise.resolve('Email');
-                } else {
-                    return userModel
-                        .findOne({ username: userData.username })
-                        .collation({ locale: 'en', strength: 2 })
-                        .exec()
-                        .then((user: User) => {
-                            if (user) {
-                                return Promise.resolve('Username');
-                            } else {
-                                return Promise.resolve(null);
-                            }
-                        });
-                }
-            })
-            .catch((err) => {
-                logger.warn(`Failed to find user`);
-                return Promise.reject(
+            .exec();
+        const duplicateUsername = userModel.findOne({ username: userData.username })
+            .collation({ locale: 'en', strength: 2 })
+            .exec();
+
+        return Promise.all([duplicateEmail, duplicateUsername]).then(([byEmail, byUsername]: [User, User]) => {
+            if (byEmail) {
+                return Promise.resolve('Email');
+            } else if (byUsername) {
+                return Promise.resolve('Username');
+            } else {
+                return Promise.resolve(null);
+            }
+        })
+        .catch((err) => {
+            logger.warn(`Failed to find user`);
+            return Promise.reject(
                     new InternalServerError({
                         message: `Failed to find user: ${err.toString()}`,
                     })
-                );
-            });
+            );
+        });
     }
 
     public getUserByEmail(email: string): Promise<User> {

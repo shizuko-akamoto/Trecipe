@@ -13,7 +13,7 @@
     width: 100%;
     padding: 60px 0;
     background-size: cover;
-    background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 30%),
+    background-image: linear-gradient(rgba($tc-white, 1) 0%, rgba($tc-white, 0) 30%),
         url('boat-4899802_1920.jpg');
 
     .login-window {
@@ -21,7 +21,7 @@
         max-width: 30rem;
         padding: 2rem;
         margin: 0 auto;
-        background-color: rgba(255, 255, 255, 0.9);
+        background-color: rgba($tc-white, 0.9);
         border-radius: 0.5rem;
         overflow: hidden;
 
@@ -40,7 +40,7 @@
                 font-size: $subtitle-font-size;
                 text-align: left;
                 text-transform: uppercase;
-                color: rgba(13, 59, 104, 0.9);
+                color: rgba($indigo-dye, 0.9);
                 text-decoration: none;
                 cursor: pointer;
                 @include animated-underline($powder-blue);
@@ -79,14 +79,14 @@
                     width: 100%;
                     height: 2.5rem;
                     padding: 0 2rem 0 0.625rem;
-                    background: rgba(255, 255, 255, 0);
+                    background: rgba($tc-white, 0);
                     color: $tc-black;
                     border: 1px solid $silver-gray;
                     border-radius: 0.5rem;
 
                     &:focus {
                         outline: none;
-                        background: rgba(255, 255, 255, 0.5);
+                        background: rgba($tc-white, 0.5);
                     }
 
                     &.input-error {
@@ -104,11 +104,11 @@
                     font-weight: bold;
                     border: none;
                     border-radius: 0.5rem;
-                    background-color: rgba(13, 59, 104, 1);
+                    background-color: rgba($indigo-dye, 1);
 
                     &:hover {
                         cursor: pointer;
-                        background-color: rgba(13, 59, 104, 0.8);
+                        background-color: rgba($indigo-dye, 0.8);
                     }
 
                     &:focus {
