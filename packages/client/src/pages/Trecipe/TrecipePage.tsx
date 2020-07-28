@@ -24,7 +24,7 @@ import { StaticMap } from '../../components/Map/StaticMap';
 import Modal from '../../components/Modal/Modal';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
-import Destination from '../../../../shared/models/destination';
+import Destination, { Rating } from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { Legend } from '../Map/GoogleMap/Legend';
 import RatingPopup from '../../components/RatingPopup/RatingPopup';
@@ -201,15 +201,20 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                     (dest) => dest.destUUID === destination.uuid && !dest.completed
                 )
             ) {
-                this.props.showModal(
-                    <RatingPopup
-                        onClickHandler={this.updateTrecipeDestOnComplete.bind(this)}
-                        dest={destination}
-                        trecipeId={this.props.trecipe.uuid}
-                        // TODO Use real user ID after we have authentication
-                        userId="potato1"
-                    />
-                );
+                if (this.props.user.username) {
+                    this.props.showModal(
+                        <RatingPopup
+                            onClickHandler={this.updateTrecipeDestOnComplete.bind(this)}
+                            dest={destination}
+                            trecipeId={this.props.trecipe.uuid}
+                            userId={this.props.user.username}
+                        />
+                    );
+                } else {
+                    // TODO Throw unauthenticated error!
+                    // For now pass a stub here
+                    this.updateTrecipeDestOnComplete(destination.uuid, true, undefined);
+                }
             }
         }
     }
@@ -217,11 +222,11 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     private updateTrecipeDestOnComplete(
         id: string,
         skip: boolean,
-        updateDestinationRatingDTO: UpdateDestinationRatingDTO
+        updateDestinationRatingDTO: UpdateDestinationRatingDTO | undefined
     ) {
         if (this.props.trecipe) {
             const trecipe: Trecipe = this.props.trecipe;
-            if (!skip) {
+            if (!skip && updateDestinationRatingDTO) {
                 this.props.rateDestination(id, updateDestinationRatingDTO);
             }
             this.props.updateTrecipe(trecipe.uuid, {
@@ -377,9 +382,11 @@ const mapStateToProps = (
 ) => {
     const trecipeId = ownProps.match.params.trecipeId;
     const destinations = state.destinations.destsByTrecipeId.get(trecipeId);
+    const user = state.user.user;
     return {
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
+        user: user,
     };
 };
 
