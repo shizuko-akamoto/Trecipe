@@ -96,10 +96,10 @@ class DestinationService {
             )
             .then((destination: Destination) => {
                 if (destination) {
-                    logger.info(`got destination with uuid ${placeId}`);
+                    logger.info(`got destination with placeId ${placeId}`);
                     return Promise.resolve(destination);
                 } else {
-                    logger.warn(`failed to get destination with uuid ${placeId}`);
+                    logger.warn(`failed to get destination with placeId ${placeId}`);
                     return Promise.reject(new DestinationNotFound(placeId));
                 }
             });

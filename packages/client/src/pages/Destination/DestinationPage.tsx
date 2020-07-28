@@ -60,6 +60,13 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
         prevState: Readonly<DestinationState>,
         snapshot?: any
     ): void {
+        // when we're looking at new destination, refetch destination details and associated trecipes
+        const placeId = this.props.match.params.placeId;
+        if (prevProps.match.params.placeId !== placeId) {
+            this.props.fetchAssociatedTrecipesRequest(placeId, 10);
+            this.initializeDestDetail(placeId);
+        }
+        // if destination in state has been defined, or when destination place id changes, refetch nearby destinations
         if (
             (!prevState.destination && this.state.destination) ||
             (prevState.destination &&
@@ -218,7 +225,6 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                         <div className="nearby-dest-item" key={dest.placeId}>
                                             <Link
                                                 to={`/destinations/${dest.placeId}`}
-                                                target="_blank"
                                                 className="router-link">
                                                 <DestInfoWindow destination={dest} />
                                             </Link>

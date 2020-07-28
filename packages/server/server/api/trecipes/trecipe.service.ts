@@ -8,6 +8,7 @@ import { uuid } from 'uuidv4';
 import DestinationService from '../destinations/destination.service';
 import Destination from '../../../../shared/models/destination';
 import { User } from '../../../../shared/models/user';
+import { DestinationNotFound } from '../destinations/destination.error';
 
 class TrecipeService {
     public getAll(user: User): Promise<Array<Trecipe>> {
@@ -165,11 +166,10 @@ class TrecipeService {
                 const filter = owner
                     ? { 'destinations.destUUID': destination.uuid, owner: owner.username }
                     : { 'destinations.destUUID': destination.uuid, isPrivate: false };
-                if (destination) {
-                    return trecipeModel.find(filter).limit(limit).exec();
-                } else {
-                    return Promise.resolve([] as Array<Trecipe>);
-                }
+                return trecipeModel.find(filter).limit(limit).exec();
+            })
+            .catch((err: DestinationNotFound) => {
+                return Promise.resolve([] as Array<Trecipe>);
             })
             .catch((err) =>
                 Promise.reject(
