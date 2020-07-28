@@ -50,7 +50,7 @@ export class Button extends Component<ButtonProps, ButtonState> {
                 <button
                     className={
                         this.props.text === '' && !isUndefined(this.props.icon)
-                            ? 'iconButton'
+                            ? 'icon-button'
                             : 'button'
                     }
                     onClick={this.props.onClick}
