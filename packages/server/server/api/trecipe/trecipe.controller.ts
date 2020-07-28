@@ -53,7 +53,7 @@ class TrecipeController implements Controller {
                 createResponse = createdTrecipe;
                 return UserService.updateUserByUsername(user.username, {
                     trecipes: [...user.trecipes, newTrecipe.uuid],
-                })
+                });
             })
             .then(() => {
                 res.status(201).json(createResponse);
@@ -82,7 +82,7 @@ class TrecipeController implements Controller {
                     trecipes: user.trecipes.filter((trecipeId) => {
                         return trecipeId !== uuid;
                     }),
-                })
+                });
             })
             .then(() => {
                 res.status(200).json({ deletedCount: deleteResponse });
@@ -110,7 +110,7 @@ class TrecipeController implements Controller {
                 copyResponse = copied;
                 return UserService.updateUserByUsername(user.username, {
                     trecipes: [...user.trecipes, copied.uuid],
-                })
+                });
             })
             .then(() => {
                 res.status(201).json(copyResponse);

@@ -23,6 +23,7 @@ import {
     faBinoculars,
     faExternalLinkAlt,
     faMapMarkedAlt,
+    faExclamationTriangle,
     faMapMarker,
 } from '@fortawesome/free-solid-svg-icons';
 import { faQuestionCircle, faStar, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
@@ -56,5 +57,6 @@ library.add(
     faBinoculars,
     faExternalLinkAlt,
     faMapMarkedAlt,
-    faMapMarker,
+    faExclamationTriangle,
+    faMapMarker
 );
