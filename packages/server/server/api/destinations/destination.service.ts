@@ -6,7 +6,6 @@ import { InternalServerError } from 'express-openapi-validator/dist';
 import trecipeModel from '../trecipe/trecipe.model';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { TrecipeNotFound } from '../trecipe/trecipe.error';
-import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 
 class DestinationService {
     public createDestination(destData: Destination) {

@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser';
 import l from './logger';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import passport from 'passport';
+import { setupPassport } from './passport/passportUtils';
 import GridFsStorage, { ConnectionResult } from 'multer-gridfs-storage';
 
 import installValidator from './openapi';
@@ -20,7 +22,12 @@ export default class ExpressServer {
     constructor() {
         const root = path.normalize(__dirname + '/../..');
         app.set('appPath', root + 'client');
-        app.use(cors());
+        app.use(
+            cors({
+                origin: true,
+                credentials: true,
+            })
+        );
         app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || '100kb' }));
         app.use(
             bodyParser.urlencoded({
@@ -31,6 +38,8 @@ export default class ExpressServer {
         app.use(bodyParser.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
         app.use(cookieParser(process.env.SESSION_SECRET));
         app.use(express.static(`${root}/public`));
+        app.use(passport.initialize());
+        setupPassport(passport);
 
         const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
         const connection = mongoose.connect(

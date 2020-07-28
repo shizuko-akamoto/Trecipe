@@ -25,6 +25,7 @@ import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
+import { Legend } from '../Map/GoogleMap/Legend';
 import { baseURL } from '../../api';
 
 /**
@@ -330,6 +331,9 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                         destinations={this.props.destinations}
                                         completedDests={completed}
                                     />
+                                    <div className="static-map-legend">
+                                        <Legend />
+                                    </div>
                                     <div className="static-map-overlay">
                                         <Button icon="external-link-alt" text="Expand View" />
                                     </div>

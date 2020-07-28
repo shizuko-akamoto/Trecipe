@@ -75,13 +75,15 @@
             }
         }
 
-        #dest-description {
+        .dest-description {
             color: $tc-black;
             font-size: $default-font-size;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin: 0;
-            padding: 0.5rem 0;
+
+            > * {
+                margin: 0 0 0.5rem;
+            }
         }
     }
 }
