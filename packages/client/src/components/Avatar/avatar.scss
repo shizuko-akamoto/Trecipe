@@ -4,8 +4,12 @@
     .icon-button {
         color: $mid-gray;
 
-        :hover {
+        &:hover {
             color: $tc-black;
+        }
+
+        &:focus {
+            outline: none;
         }
     }
 }
