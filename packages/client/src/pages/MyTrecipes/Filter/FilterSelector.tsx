@@ -3,8 +3,15 @@ import './filterButtons.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
+export enum FilterSelectorTypes {
+    ANY = 'Any',
+    PRIVATE = 'Private',
+    PUBLIC = 'Public',
+}
+
 export interface FilterSelectorProps {
-    listItem: Array<{ text: string; icon: IconProp }>;
+    listItem: Array<{ text: string; icon: IconProp; selectorType: FilterSelectorTypes }>;
+    onClick: (type: FilterSelectorTypes) => void;
 }
 
 export interface FilterSelectorState {
@@ -54,6 +61,7 @@ export class FilterSelector extends React.Component<FilterSelectorProps, FilterS
 
     toggleSelected(event: any) {
         this.setState({ listOpen: false, selected: event.target.innerText });
+        this.props.onClick(event.target.innerText as FilterSelectorTypes);
     }
 
     render() {
