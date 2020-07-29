@@ -18,16 +18,18 @@ Our stretch goals include adding collaborators to any bucket list, viewing popul
 * Hover over each destination pin on map to see destination digest, and click to see a page with full detail
 ### Standard requirements (will most likely complete)
 * Support for user/account system
-* Support filtering by different categories (eg. food, accomodation, attraction, etc) when viewing destinations on map
+* ~Support filtering by different categories (eg. food, accomodation, attraction, etc) when viewing destinations on map~ 
+(Decided that since people are unlikely to put too many destinations in a trecipe, remove this as standard requirement)
 * Allow user to perform search on bucket/destinations using name or keyword
 * Implement various other bucket operations (duplicate, favorite)
 * Checking off destination in a bucket changes the bucket progress and progress is reflected on the UI
-* Allow user to rate a destination upon checking off
+* ~Allow user to rate a destination upon checking off~(Moved to stretch)
 * Privacy setting that allows the user to hide/show specific buckets 
 ### Stretch requirements (plan to complete 1!)
 * Add collaborator to bucket list (access control)
 *	Display popular bucket list on homepage (highest star/favorite, etc)
-* Allow	full review of destination (blog-style) upon check-off
+* ~Allow	full review of destination (blog-style) upon check-off~ (Converted to simpler rating style below)
+* Allow user to rate a destination upon checking off
 
 ## Tasks breakdown
 Tasks have been broken-down into issues in this repository. [See Issues!](https://github.com/shizuko-akamoto/Trecipe/issues)

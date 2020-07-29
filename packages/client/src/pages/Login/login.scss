@@ -13,7 +13,7 @@
     width: 100%;
     padding: 60px 0;
     background-size: cover;
-    background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 30%),
+    background-image: linear-gradient(rgba($tc-white, 1) 0%, rgba($tc-white, 0) 30%),
         url('boat-4899802_1920.jpg');
 
     .login-window {
@@ -21,7 +21,7 @@
         max-width: 30rem;
         padding: 2rem;
         margin: 0 auto;
-        background-color: rgba(10, 10, 10, 0.8);
+        background-color: rgba($tc-white, 0.9);
         border-radius: 0.5rem;
         overflow: hidden;
 
@@ -40,24 +40,22 @@
                 font-size: $subtitle-font-size;
                 text-align: left;
                 text-transform: uppercase;
-                color: rgba(255, 255, 255, 0.5);
+                color: rgba($indigo-dye, 0.9);
                 text-decoration: none;
                 cursor: pointer;
+                @include animated-underline($powder-blue);
+                &:after {
+                    height: 2.5px;
+                }
 
                 &.active {
-                    color: $tc-white;
-                    @include title-border-bottom($powder-blue, $powder-blue);
                     &:after {
-                        border-top: none;
+                        width: 100%;
                     }
                 }
 
                 &.nav-right {
                     float: right;
-                }
-
-                &:hover {
-                    color: rgba(255, 255, 255, 0.75);
                 }
             }
         }
@@ -66,7 +64,7 @@
             form {
                 width: 100%;
                 height: 27rem;
-                color: $tc-white;
+                color: $tc-black;
                 font-size: $default-font-size;
 
                 label {
@@ -81,14 +79,14 @@
                     width: 100%;
                     height: 2.5rem;
                     padding: 0 2rem 0 0.625rem;
-                    background: rgba(255, 255, 255, 0.2);
-                    color: $tc-white;
-                    border: none;
+                    background: rgba($tc-white, 0);
+                    color: $tc-black;
+                    border: 1px solid $silver-gray;
                     border-radius: 0.5rem;
 
                     &:focus {
                         outline: none;
-                        background: rgba(255, 255, 255, 0.3);
+                        background: rgba($tc-white, 0.5);
                     }
 
                     &.input-error {
@@ -102,15 +100,15 @@
                     margin: 1.25rem 0 0.625rem 0;
                     text-transform: uppercase;
                     text-align: center;
-                    color: #ffffff;
+                    color: $tc-white;
                     font-weight: bold;
                     border: none;
                     border-radius: 0.5rem;
-                    background-color: rgba(47, 158, 255, 0.7);
+                    background-color: rgba($indigo-dye, 1);
 
                     &:hover {
                         cursor: pointer;
-                        background-color: rgba(47, 158, 255, 1);
+                        background-color: rgba($indigo-dye, 0.8);
                     }
 
                     &:focus {
