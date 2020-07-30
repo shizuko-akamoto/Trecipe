@@ -1,24 +1,28 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './trecipeCard.scss';
-import { CardMenu } from '../../../components/CardMenu/CardMenu';
-import { MenuItem } from '../../../components/Menu/Menu';
-import { ProgressBar } from '../../../components/ProgressBar/ProgressBar';
+import { CardMenu } from '../CardMenu/CardMenu';
+import { MenuItem } from '../Menu/Menu';
+import { ProgressBar } from '../ProgressBar/ProgressBar';
 import { bindActionCreators, Dispatch } from 'redux';
 import {
     createTrecipeRequest,
     deleteTrecipeRequest,
     duplicateTrecipeRequest,
-} from '../../../redux/TrecipeList/action';
+} from '../../redux/TrecipeList/action';
 import { connect } from 'react-redux';
-import { showModal } from '../../../redux/Modal/action';
-import TrecipePopup, { TrecipePopupType } from '../../../components/TrecipePopup/TrecipePopup';
-import Trecipe from '../../../../../shared/models/trecipe';
-import { baseURL } from '../../../api';
+import { showModal } from '../../redux/Modal/action';
+import TrecipePopup, { TrecipePopupType } from '../TrecipePopup/TrecipePopup';
+import Trecipe from '../../../../shared/models/trecipe';
+import { baseURL } from '../../api';
 
 type TCProps = Trecipe & ReturnType<typeof mapDispatchToProps>;
 
 class TrecipeCard extends React.Component<TCProps> {
+    public static defaultProps: Partial<TCProps> = {
+        isReadOnly: false, // should change to true later
+    };
+
     private cardMenuItems: MenuItem[] = [
         {
             id: 1,
@@ -79,14 +83,18 @@ class TrecipeCard extends React.Component<TCProps> {
                     <div className="tcHeader">
                         <label className="tcTitle">
                             {this.props.name}
-                            <FontAwesomeIcon
-                                icon={this.props.isPrivate ? 'lock' : 'lock-open'}
-                                className="tcPrivacy"
-                            />
+                            {!this.props.isReadOnly && (
+                                <FontAwesomeIcon
+                                    icon={this.props.isPrivate ? 'lock' : 'lock-open'}
+                                    className="tcPrivacy"
+                                />
+                            )}
                         </label>
-                        <div className="tcEdit" onClick={(e) => this.onTCEditClick(e)}>
-                            <CardMenu menuItems={this.cardMenuItems} />
-                        </div>
+                        {!this.props.isReadOnly && (
+                            <div className="tcEdit" onClick={(e) => this.onTCEditClick(e)}>
+                                <CardMenu menuItems={this.cardMenuItems} />
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="tcBody">

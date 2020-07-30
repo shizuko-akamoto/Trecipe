@@ -5,13 +5,7 @@ import User from 'server/server/api/user/user.interface';
 import Trecipe from '../../../shared/models/trecipe';
 import { AutoComplete, getDestModel } from '../components/Map/mapHelper';
 import { CreateNewDestinationDTO } from '../../../shared/models/createNewDestinationDTO';
-
-export interface SearchResultModel {
-    trecipeResult: Trecipe[];
-    destinationResult: Destination[];
-    userResult: User[];
-    googleDestinationResult: CreateNewDestinationDTO[];
-}
+import { SearchResultModel } from '../../../shared/models/searchResult';
 
 class searchService {
     private searchEndpoint = 'search';

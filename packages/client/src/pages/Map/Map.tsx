@@ -126,6 +126,7 @@ class Map extends React.Component<MapProps> {
                                         index={index}
                                         key={dest.uuid}
                                         destination={dest}
+                                        isReadOnly={false}
                                         isCompleted={completed.has(dest.uuid)}
                                         onClickDelete={this.onDestDeleteClick.bind(this)}
                                         onClickComplete={this.onDestCompleteClick.bind(this)}

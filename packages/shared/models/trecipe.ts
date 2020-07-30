@@ -18,6 +18,7 @@ export default interface Trecipe {
     name: string;
     description: string;
     owner: string;
+    isReadOnly?: boolean;
     isPrivate: boolean;
     collaborators: Array<string>;
     image: string | null;
