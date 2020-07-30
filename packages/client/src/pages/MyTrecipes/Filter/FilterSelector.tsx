@@ -60,8 +60,8 @@ export class FilterSelector extends React.Component<FilterSelectorProps, FilterS
     }
 
     toggleSelected(event: any) {
-        this.setState({ listOpen: false, selected: event.target.innerText });
-        this.props.onClick(event.target.innerText as FilterSelectorTypes);
+        this.setState({ listOpen: false, selected: event.currentTarget.innerText });
+        this.props.onClick(event.currentTarget.innerText as FilterSelectorTypes);
     }
 
     render() {

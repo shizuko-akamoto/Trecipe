@@ -26,23 +26,17 @@ interface FilterWithState {
 export interface MyTrecipesState {
     filterStates: Array<FilterWithState>;
     privacyState: FilterSelectorTypes;
-    filteredTrecipesWithProgress: Array<Trecipe>;
-    filteredTrecipesWithPrivacy: Array<Trecipe>;
 }
 
 class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
-    private static contextFilters: string[] = ['All Trecipes', 'Completed', 'In Progress', 'To Do'];
-
     constructor(props: Readonly<MyTrecipesProps>) {
         super(props);
-        let filterStates: Array<FilterWithState> = MyTrecipes.contextFilters.map((name) =>
+        let filterStates: Array<FilterWithState> = Object.values(FilterButtonTypes).map((name) =>
             name === FilterButtonTypes.ALL
                 ? { filterName: name, selected: true }
                 : { filterName: name, selected: false }
         );
         this.state = {
-            filteredTrecipesWithProgress: [],
-            filteredTrecipesWithPrivacy: [],
             filterStates: filterStates,
             privacyState: FilterSelectorTypes.ANY,
         };
@@ -52,60 +46,39 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
         this.props.fetchAllTrecipes();
     }
 
-    componentDidUpdate(
-        prevProps: Readonly<MyTrecipesProps>,
-        prevState: Readonly<MyTrecipesState>,
-        snapshot?: any
-    ) {
-        if (prevProps.trecipes !== this.props.trecipes) {
-            this.setState({
-                filteredTrecipesWithProgress: this.props.trecipes,
-                filteredTrecipesWithPrivacy: this.props.trecipes,
-            });
-        }
-    }
-
     private renderAddPopup = () => {
         this.props.showModal(<TrecipePopup type={TrecipePopupType.Add} />);
     };
 
     private handleFilterOnClick(filterType: FilterButtonTypes, selected: boolean) {
         if (filterType === FilterButtonTypes.ALL && selected) {
-            this.setState(
-                (state) => ({
-                    filterStates: state.filterStates.map((filter) =>
-                        filter.filterName === filterType.valueOf()
-                            ? { filterName: filter.filterName, selected: selected }
-                            : { filterName: filter.filterName, selected: false }
-                    ),
-                }),
-                this.filterTrecipeByProgress
-            );
+            this.setState((state) => ({
+                filterStates: state.filterStates.map((filter) =>
+                    filter.filterName === filterType.valueOf()
+                        ? { filterName: filter.filterName, selected: selected }
+                        : { filterName: filter.filterName, selected: false }
+                ),
+            }));
         } else {
-            this.setState(
-                (state) => ({
-                    filterStates: state.filterStates.map((filter) =>
-                        filter.filterName === filterType.valueOf()
-                            ? { filterName: filter.filterName, selected: selected }
-                            : filter.filterName === FilterButtonTypes.ALL
-                            ? { filterName: filter.filterName, selected: false }
-                            : filter
-                    ),
-                }),
-                this.filterTrecipeByProgress
-            );
+            this.setState((state) => ({
+                filterStates: state.filterStates.map((filter) =>
+                    filter.filterName === filterType.valueOf()
+                        ? { filterName: filter.filterName, selected: selected }
+                        : filter.filterName === FilterButtonTypes.ALL
+                        ? { filterName: filter.filterName, selected: false }
+                        : filter
+                ),
+            }));
         }
     }
 
-    private filterTrecipeByProgress() {
+    private filterTrecipes(): Array<Trecipe> {
+        let trecipes = this.props.trecipes;
         let allFilter = this.state.filterStates.find(
             (filter) => filter.filterName === FilterButtonTypes.ALL
         );
-        if (allFilter && allFilter.selected) {
-            this.setState({ filteredTrecipesWithProgress: this.props.trecipes });
-        } else {
-            let newTrecipeList: Array<Trecipe>;
-            newTrecipeList = this.state.filterStates.reduce(
+        if (!(allFilter && allFilter.selected)) {
+            trecipes = this.state.filterStates.reduce(
                 (acc: Array<Trecipe>, filter: FilterWithState) => {
                     if (filter.selected) {
                         switch (filter.filterName) {
@@ -136,19 +109,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
                 },
                 []
             );
-            this.setState(
-                { filteredTrecipesWithProgress: newTrecipeList },
-                this.filterTrecipeByPrivacy
-            );
         }
-    }
-
-    private onPrivacySelectorChange(type: FilterSelectorTypes) {
-        this.setState({ privacyState: type }, this.filterTrecipeByPrivacy);
-    }
-
-    private filterTrecipeByPrivacy() {
-        let trecipes = this.state.filteredTrecipesWithProgress;
         switch (this.state.privacyState) {
             case FilterSelectorTypes.PUBLIC:
                 trecipes = trecipes.filter((trecipe) => !trecipe.isPrivate);
@@ -157,8 +118,11 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
                 trecipes = trecipes.filter((trecipe) => trecipe.isPrivate);
                 break;
         }
+        return trecipes;
+    }
 
-        this.setState({ filteredTrecipesWithPrivacy: trecipes });
+    private onPrivacySelectorChange(type: FilterSelectorTypes) {
+        this.setState({ privacyState: type });
     }
 
     private static isCompletedTrecipe(trecipe: Trecipe): boolean {
@@ -227,7 +191,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
                         </div>
                     </div>
                     <div className="cards-wrapper">
-                        {this.state.filteredTrecipesWithPrivacy.map((trecipe: Trecipe) => (
+                        {this.filterTrecipes().map((trecipe: Trecipe) => (
                             <div className="card-item" key={trecipe.uuid}>
                                 <Link className="router-link" to={trecipe.uuid}>
                                     <TrecipeCard {...trecipe} />
