@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
 import Destination, { getIcon } from '../../../../../shared/models/destination';
 
-// Todo: Ask shiz!
 export interface DCProps {
     index: number;
     destination: Destination;
