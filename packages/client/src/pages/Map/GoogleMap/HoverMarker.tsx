@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Marker, InfoWindow } from '@react-google-maps/api';
-import { DestInfoWindow } from '../../../components/DestinationInfo/DestInfoWindow';
+import { DestInfoWindow } from '../DestinationInfo/DestInfoWindow';
 import { UnreachableCaseException } from '../../../exceptions/Exceptions';
 import Destination, { DestinationCategory } from '../../../../../shared/models/destination';
 import { Link } from 'react-router-dom';

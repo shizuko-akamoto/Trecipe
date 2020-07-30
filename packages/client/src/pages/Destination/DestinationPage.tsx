@@ -12,7 +12,7 @@ import Destination, { getIcon, Rating } from '../../../../shared/models/destinat
 import { getDestinationById } from '../../redux/Destinations/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDestModel } from '../../components/Map/mapHelper';
-import { DestInfoWindow } from '../../components/DestinationInfo/DestInfoWindow';
+import { DestInfoWindow } from '../Map/DestinationInfo/DestInfoWindow';
 import Review from './Review/review';
 import { isEmpty } from 'lodash';
 import { fetchAssociatedTrecipesRequest } from '../../redux/TrecipeList/action';
@@ -21,6 +21,7 @@ import TrecipeCard from '../MyTrecipes/TrecipeCard/TrecipeCard';
 import { showModal } from '../../redux/Modal/action';
 import TrecipePicker from '../../components/TrecipePicker/TrecipePicker';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
+import { NearbyDestCard } from './NearbyDestCard/NearbyDestCard';
 
 /**
  * Destination props
@@ -239,12 +240,15 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                         </span>
                                     )}
                                     <h1 className="dest-page-title">Explore Nearby</h1>
-                                    {nearbys.map((dest) => (
+                                    {nearbys.map((dest, index) => (
                                         <div className="nearby-dest-item" key={dest.placeId}>
                                             <Link
                                                 to={`/destinations/${dest.placeId}`}
                                                 className="router-link">
-                                                <DestInfoWindow destination={dest} />
+                                                <NearbyDestCard
+                                                    destination={dest}
+                                                    index={index + 1}
+                                                />
                                             </Link>
                                         </div>
                                     ))}

@@ -310,6 +310,25 @@ paths:
               schema:
                 type: string
                 format: binary
+  /photos/{photoRef}:
+    get:
+      tags:
+        - Photos
+      summary: Gets a photo from google place service using a photo reference string
+      parameters:
+        - in: path
+          name: photoRef
+          required: true
+          schema:
+            type: string
+            description: photo reference string
+      responses:
+        200:
+          description: Fetched image
+          content:
+            image/*:
+              schema:
+                type: string
 
   /spec:
     get:

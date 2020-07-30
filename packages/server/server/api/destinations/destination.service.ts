@@ -15,7 +15,7 @@ class DestinationService {
             .then((res) => {
                 if (res) {
                     logger.info(`destination with placeId: ${res.placeId} already exists`);
-                    return Promise.resolve(res);
+                    return this.updateDestinationById(res.uuid, destData);
                 } else {
                     const newDestination = new destinationModel(destData);
                     return newDestination.save();

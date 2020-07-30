@@ -1,9 +1,10 @@
 import React from 'react';
 import './destInfoWindow.scss';
-import { Image } from '../Image/Image';
-import { RatingBar } from '../Rating/RatingBar';
-import Destination from '../../../../shared/models/destination';
+import Destination from '../../../../../shared/models/destination';
 import { isEmpty } from 'lodash';
+import { baseURL } from '../../../api';
+import { RatingBar } from '../../../components/Rating/RatingBar';
+import { Image } from '../../../components/Image/Image';
 
 interface InfoWindowProps {
     destination: Destination;
@@ -18,7 +19,7 @@ export class DestInfoWindow extends React.Component<InfoWindowProps> {
                         src={
                             isEmpty(this.props.destination.photoRefs)
                                 ? null
-                                : this.props.destination.photoRefs[0]
+                                : `${baseURL}photos/${this.props.destination.photoRefs[0]}`
                         }
                         imgStyle={{ borderRadius: '8px 0 0 8px' }}
                     />
