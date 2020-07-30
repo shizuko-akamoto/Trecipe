@@ -5,6 +5,7 @@ import { Header } from '../components/Header/Header';
 import { Footer } from '../components/Footer/Footer';
 import Trecipe from './Trecipe/TrecipePage';
 import Map from './Map/Map';
+import SearchResult from './SearchResult/SearchResult';
 import { LoadScript } from '@react-google-maps/api';
 
 const libraries = ['places'];
@@ -13,15 +14,17 @@ const Pages = () => {
     return (
         <div>
             <Header />
-            <Switch>
-                <LoadScript
-                    googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
-                    libraries={libraries}>
+            <LoadScript
+                googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
+                libraries={libraries}>
+                <Switch>
                     <Route path="/" exact component={MyTrecipes} />
-                    <Route path="/:trecipeId" exact component={Trecipe} />
+                    <Route path="/search" component={SearchResult} />
+                    <Route path="/:trecipeId" component={Trecipe} />
                     <Route path="/map/:trecipeId" component={Map} />
-                </LoadScript>
-            </Switch>
+                </Switch>
+            </LoadScript>
+
             <Footer />
         </div>
     );

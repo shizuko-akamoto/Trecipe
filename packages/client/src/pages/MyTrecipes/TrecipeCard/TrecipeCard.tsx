@@ -19,6 +19,10 @@ import { baseURL } from '../../../api';
 type TCProps = Trecipe & ReturnType<typeof mapDispatchToProps>;
 
 class TrecipeCard extends React.Component<TCProps> {
+    public static defaultProps: Partial<TCProps> = {
+        isReadOnly: false, // should change to true later
+    };
+
     private cardMenuItems: MenuItem[] = [
         {
             id: 1,
@@ -79,14 +83,18 @@ class TrecipeCard extends React.Component<TCProps> {
                     <div className="tcHeader">
                         <label className="tcTitle">
                             {this.props.name}
-                            <FontAwesomeIcon
-                                icon={this.props.isPrivate ? 'lock' : 'lock-open'}
-                                className="tcPrivacy"
-                            />
+                            {!this.props.isReadOnly && (
+                                <FontAwesomeIcon
+                                    icon={this.props.isPrivate ? 'lock' : 'lock-open'}
+                                    className="tcPrivacy"
+                                />
+                            )}
                         </label>
-                        <div className="tcEdit" onClick={(e) => this.onTCEditClick(e)}>
-                            <CardMenu menuItems={this.cardMenuItems} />
-                        </div>
+                        {!this.props.isReadOnly && (
+                            <div className="tcEdit" onClick={(e) => this.onTCEditClick(e)}>
+                                <CardMenu menuItems={this.cardMenuItems} />
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="tcBody">

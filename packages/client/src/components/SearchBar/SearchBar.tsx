@@ -196,7 +196,9 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
                         onChange={this.handleOnSearchInputChange.bind(this)}
                     />
                     <button type="submit" className="search-button">
-                        <FontAwesomeIcon icon="search" fixedWidth />
+                        <Link className="router-link" to={`/search?q=${this.state.searchKey}`}>
+                            <FontAwesomeIcon icon="search" fixedWidth />
+                        </Link>
                     </button>
                 </form>
                 {this.renderSearchResults()}

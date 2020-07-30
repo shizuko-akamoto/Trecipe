@@ -1,11 +1,22 @@
 import React from 'react';
 import { CardMenu } from '../../../components/CardMenu/CardMenu';
 import { RatingBar } from '../../../components/Rating/RatingBar';
-import { DCProps } from '../../Trecipe/DestinationCard/DestinationCard';
+// import { DCProps } from '../../Trecipe/DestinationCard/DestinationCard';
 import './destinationCard.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
-import { getIcon } from '../../../../../shared/models/destination';
+import Destination, { getIcon } from '../../../../../shared/models/destination';
+
+// Todo: Ask shiz!
+export interface DCProps {
+    index: number;
+    destination: Destination;
+    isReadOnly: boolean;
+    isCompleted?: boolean;
+    onClickDelete?: (destId: string) => void;
+    onClickComplete?: (destId: string, isCompleted: boolean) => void;
+    isInEdit?: boolean;
+}
 
 export class DestinationCard extends React.Component<DCProps> {
     render() {
@@ -34,10 +45,12 @@ export class DestinationCard extends React.Component<DCProps> {
                                         text: 'Complete',
                                         icon: 'check',
                                         onClick: () => {
-                                            this.props.onClickComplete(
-                                                destModel.uuid,
-                                                !this.props.isCompleted
-                                            );
+                                            if (this.props.onClickComplete) {
+                                                this.props.onClickComplete(
+                                                    destModel.uuid,
+                                                    !this.props.isCompleted
+                                                );
+                                            }
                                         },
                                         disabled: this.props.isCompleted,
                                     },
@@ -46,7 +59,11 @@ export class DestinationCard extends React.Component<DCProps> {
                                         text: 'Remove',
                                         icon: ['far', 'trash-alt'],
                                         onClick: () => {
-                                            this.props.onClickDelete(this.props.destination.uuid);
+                                            if (this.props.onClickDelete) {
+                                                this.props.onClickDelete(
+                                                    this.props.destination.uuid
+                                                );
+                                            }
                                         },
                                     },
                                 ]}
