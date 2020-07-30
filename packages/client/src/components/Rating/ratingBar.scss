@@ -1,6 +1,10 @@
 @import '../../components/variables';
 @import '../../components/mixins';
 
+.rating-bar {
+    white-space: nowrap;
+}
+
 .star-filled,
 .star-open {
     color: $crayola-yellow;

@@ -1,13 +1,20 @@
 import React from 'react';
 import { Button } from '../Button/Button';
 import { Menu, MenuItem } from '../Menu/Menu';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 /**
  * CardMenuProps
  * menuItem: List of menu items (each with onClick callback) to display in menu
+ * icon: Icon of the button that toggles the menu
+ * buttonSize: Size (rem) of the button that toggles the menu
+ * menuHeight: Height (rem) of each individual menu item
  */
 export interface CardMenuProps {
     menuItems: MenuItem[];
+    icon: IconProp;
+    buttonSize: number;
+    menuHeight: number;
 }
 
 /**
@@ -20,6 +27,11 @@ export interface CardMenuState {
 }
 
 export class CardMenu extends React.Component<CardMenuProps, CardMenuState> {
+    public static defaultProps: Partial<CardMenuProps> = {
+        icon: 'ellipsis-h',
+        buttonSize: 1.8,
+        menuHeight: 2.5,
+    };
     state: CardMenuState = { originElement: null };
 
     handleClose = () => {
@@ -36,17 +48,18 @@ export class CardMenu extends React.Component<CardMenuProps, CardMenuState> {
     };
 
     render() {
+        const { menuItems, icon, buttonSize, menuHeight } = this.props;
         return (
-            <div className="cardMenu">
-                <Button onClick={this.handleClick} icon="ellipsis-h" fontSize={1.8} text="" />
+            <div className="card-menu">
+                <Button onClick={this.handleClick} icon={icon} fontSize={buttonSize} text="" />
                 {Boolean(this.state.originElement) && (
                     <Menu
-                        menuItems={this.props.menuItems}
+                        menuItems={menuItems}
                         originElement={this.state.originElement as HTMLElement}
                         onClose={this.handleClose}
                         position="left"
                         width={10}
-                        buttonHeight={2.5}
+                        buttonHeight={menuHeight}
                     />
                 )}
             </div>
