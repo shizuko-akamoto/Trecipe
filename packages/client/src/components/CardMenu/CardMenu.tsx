@@ -6,6 +6,9 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 /**
  * CardMenuProps
  * menuItem: List of menu items (each with onClick callback) to display in menu
+ * icon: Icon of the button that toggles the menu
+ * buttonSize: Size (rem) of the button that toggles the menu
+ * menuHeight: Height (rem) of each individual menu item
  */
 export interface CardMenuProps {
     menuItems: MenuItem[];
