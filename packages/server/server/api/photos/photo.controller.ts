@@ -18,17 +18,19 @@ class PhotoController {
 
     private getPhoto(req: Request, res: Response, next: NextFunction) {
         const photoRef = req.params.photoRef;
-        const { maxHeight, maxWidth } = req.body;
+        const { maxHeight, maxWidth } = req.query;
         const url = new URL('https://maps.googleapis.com/maps/api/place/photo');
         const urlParams = new URLSearchParams({
             photoreference: `${photoRef}`,
             key: `${process.env.GOOGLE_MAPS_API_KEY}`,
         });
-        urlParams.append('maxheight', '500');
         if (maxHeight) {
             urlParams.append('maxheight', maxHeight.toString());
         } else if (maxWidth) {
             urlParams.append('maxwidth', maxWidth.toString());
+        } else {
+            // if no max size is given, set to default, 500px
+            urlParams.append('maxheight', '500');
         }
         url.search = `?${urlParams.toString()}`;
         logger.info(`Making google place photo request with photo reference: ${url.toString()}`);

@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
-import { StaticMap } from '../../components/Map/StaticMap';
+import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
 import Destination, { getIcon, Rating } from '../../../../shared/models/destination';
 import { getDestinationById } from '../../redux/Destinations/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -161,6 +161,23 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
         };
     }
 
+    private getMarkers(dest: Destination, nearbys: Array<Destination>): Array<Marker> {
+        const nearbyMarkers: Marker[] = nearbys.map((nearbyDest, index) => {
+            return {
+                lat: nearbyDest.geometry.lat,
+                long: nearbyDest.geometry.lng,
+                color: MarkerColor.Grey,
+                label: `${index + 1}`,
+            };
+        });
+        const destMarker: Marker = {
+            lat: dest.geometry.lat,
+            long: dest.geometry.lng,
+            color: MarkerColor.Blue,
+        };
+        return [destMarker, ...nearbyMarkers];
+    }
+
     render() {
         const destination: Destination | undefined = this.state.destination;
         if (!destination) {
@@ -255,7 +272,8 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                 </div>
                                 <div className="dest-map-wrapper">
                                     <StaticMap
-                                        destinations={[destination, ...nearbys]}
+                                        markers={this.getMarkers(destination, nearbys)}
+                                        markerSize={'mid'}
                                         height={isEmpty(reviews) ? 50 : 20}
                                     />
                                     {!isEmpty(reviews) && (

@@ -6,7 +6,6 @@ import { RatingBar } from '../../../components/Rating/RatingBar';
 import { Draggable } from 'react-beautiful-dnd';
 import Destination, { getIcon } from '../../../../../shared/models/destination';
 import { isEmpty } from 'lodash';
-import { getPhotoURL } from '../../../services/googlePhotoApi';
 import { baseURL } from '../../../api';
 
 /**

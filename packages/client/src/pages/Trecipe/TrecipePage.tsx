@@ -19,7 +19,7 @@ import {
 } from '../../redux/Destinations/action';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import { SearchBarPopup } from '../../components/SearchBarPopup/SearchBarPopup';
-import { StaticMap } from '../../components/Map/StaticMap';
+import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
 import Modal from '../../components/Modal/Modal';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
@@ -211,6 +211,14 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         }
     }
 
+    private getMarker(destination: Destination, completed: boolean): Marker {
+        return {
+            lat: destination.geometry.lat,
+            long: destination.geometry.lng,
+            color: completed ? MarkerColor.Blue : MarkerColor.Grey,
+        };
+    }
+
     render() {
         const trecipe: Trecipe | undefined = this.props.trecipe;
         const destinations: Destination[] | undefined = this.props.destinations;
@@ -328,8 +336,9 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                             <div className="trecipe-map-wrapper">
                                 <Link to={`/map/${trecipe.uuid}`}>
                                     <StaticMap
-                                        destinations={this.props.destinations}
-                                        completedDests={completed}
+                                        markers={destinations.map((dest) =>
+                                            this.getMarker(dest, completed.has(dest.uuid))
+                                        )}
                                     />
                                     <div className="static-map-legend">
                                         <Legend />

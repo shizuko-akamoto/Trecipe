@@ -322,6 +322,16 @@ paths:
           schema:
             type: string
             description: photo reference string
+        - in: query
+          name: maxHeight
+          schema:
+            type: integer
+            description: maximum height in px of fetched image (range between 1 and 1600)
+        - in: query
+          name: maxWidth
+          schema:
+            type: integer
+            description: maximum width in px of fetched image (range between 1 and 1600)
       responses:
         200:
           description: Fetched image
@@ -329,6 +339,8 @@ paths:
             image/*:
               schema:
                 type: string
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /spec:
     get:
