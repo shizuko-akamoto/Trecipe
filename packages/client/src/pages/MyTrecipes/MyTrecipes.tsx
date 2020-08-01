@@ -126,7 +126,10 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
     }
 
     private static isCompletedTrecipe(trecipe: Trecipe): boolean {
-        return trecipe.destinations.reduce((acc: boolean, dest) => acc && dest.completed, true);
+        return (
+            trecipe.destinations.reduce((acc: boolean, dest) => acc && dest.completed, true) &&
+            trecipe.destinations.length !== 0
+        );
     }
 
     private static isInProgressTrecipe(trecipe: Trecipe): boolean {
