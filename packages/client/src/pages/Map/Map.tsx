@@ -54,7 +54,8 @@ class Map extends React.Component<MapProps> {
         this.props.getDestinationsByTrecipeId(trecipeId);
     }
 
-    private onDestCompleteClick(destId: string) {
+    private onDestCompleteClick(destId: string, e: React.MouseEvent) {
+        e.preventDefault();
         if (this.props.trecipe) {
             const trecipe: Trecipe = this.props.trecipe;
             this.props.updateTrecipe(trecipe.uuid, {

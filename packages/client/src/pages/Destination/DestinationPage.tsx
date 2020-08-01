@@ -7,12 +7,11 @@ import { RouteComponentProps } from 'react-router';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
-import { StaticMap } from '../../components/Map/StaticMap';
+import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
 import Destination, { getIcon, Rating } from '../../../../shared/models/destination';
 import { getDestinationById } from '../../redux/Destinations/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDestModel } from '../../components/Map/mapHelper';
-import { DestInfoWindow } from '../../components/DestinationInfo/DestInfoWindow';
 import Review from './Review/review';
 import { isEmpty } from 'lodash';
 import { fetchAssociatedTrecipesRequest } from '../../redux/TrecipeList/action';
@@ -21,6 +20,7 @@ import TrecipeCard from '../MyTrecipes/TrecipeCard/TrecipeCard';
 import { showModal } from '../../redux/Modal/action';
 import TrecipePicker from '../../components/TrecipePicker/TrecipePicker';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
+import { NearbyDestCard } from './NearbyDestCard/NearbyDestCard';
 
 /**
  * Destination props
@@ -153,11 +153,29 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
             uuid: '',
             userRatings: [],
             description: '',
+            // since we have access to actual PlacePhoto objects to get photo URL from, we'll use that to fetch photo from
+            // client bypassing the server.
             photoRefs: place.photos
                 ? place.photos.map((photo) => photo.getUrl({ maxHeight: 100 }))
                 : [],
-            rating: place.rating ? (Math.min(5, Math.round(place.rating)) as Rating) : 0,
         };
+    }
+
+    private getMarkers(dest: Destination, nearbys: Array<Destination>): Array<Marker> {
+        const nearbyMarkers: Marker[] = nearbys.map((nearbyDest, index) => {
+            return {
+                lat: nearbyDest.geometry.lat,
+                long: nearbyDest.geometry.lng,
+                color: MarkerColor.Grey,
+                label: `${index + 1}`,
+            };
+        });
+        const destMarker: Marker = {
+            lat: dest.geometry.lat,
+            long: dest.geometry.lng,
+            color: MarkerColor.Blue,
+        };
+        return [destMarker, ...nearbyMarkers];
     }
 
     render() {
@@ -243,19 +261,23 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                         </span>
                                     )}
                                     <h1 className="dest-page-title">Explore Nearby</h1>
-                                    {nearbys.map((dest) => (
+                                    {nearbys.map((dest, index) => (
                                         <div className="nearby-dest-item" key={dest.placeId}>
                                             <Link
                                                 to={`/destinations/${dest.placeId}`}
                                                 className="router-link">
-                                                <DestInfoWindow destination={dest} />
+                                                <NearbyDestCard
+                                                    destination={dest}
+                                                    index={index + 1}
+                                                />
                                             </Link>
                                         </div>
                                     ))}
                                 </div>
                                 <div className="dest-map-wrapper">
                                     <StaticMap
-                                        destinations={[destination, ...nearbys]}
+                                        markers={this.getMarkers(destination, nearbys)}
+                                        markerSize={'mid'}
                                         height={isEmpty(reviews) ? 50 : 20}
                                     />
                                     {!isEmpty(reviews) && (

@@ -76,7 +76,7 @@ export default class ExpressServer {
         });
         storage
             .ready()
-            .then((db: ConnectionResult) => {
+            .then(() => {
                 l.info('gridfs storage setup successful');
             })
             .catch((err) => {

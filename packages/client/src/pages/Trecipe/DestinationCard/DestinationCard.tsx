@@ -6,6 +6,7 @@ import { RatingBar } from '../../../components/Rating/RatingBar';
 import { Draggable } from 'react-beautiful-dnd';
 import Destination, { getIcon } from '../../../../../shared/models/destination';
 import { isEmpty } from 'lodash';
+import { baseURL } from '../../../api';
 
 /**
  * DCProps
@@ -51,7 +52,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                     src={
                                         isEmpty(this.props.destination.photoRefs)
                                             ? null
-                                            : this.props.destination.photoRefs[0]
+                                            : `${baseURL}photos/${this.props.destination.photoRefs[0]}`
                                     }
                                     imgStyle={{ borderRadius: '8px 0 0 8px' }}
                                 />

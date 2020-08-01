@@ -70,5 +70,5 @@ library.add(
     faExclamationTriangle,
     faUserCircle,
     faSignOutAlt,
-    faMapMarker,
+    faMapMarker
 );

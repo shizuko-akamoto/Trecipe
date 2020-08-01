@@ -62,6 +62,7 @@
 
         .dest-info {
             flex-basis: 30%;
+            min-width: 230px;
             display: flex;
             flex-direction: column;
             border: 1px solid $light-gray;

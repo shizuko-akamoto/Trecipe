@@ -7,7 +7,7 @@
     "start": "node dist/index.js",
     "compile": "ts-node build.ts && tsc",
     "dev": "nodemon server/index.ts | pino-pretty",
-    "dev:debug": "nodemon --exec 'node -r ts-node/register --inspect-brk' server/index.ts | pino-pretty",
+    "dev:debug": "nodemon --exec \"node -r ts-node/register --inspect-brk\" server/index.ts | pino-pretty",
     "lint": "eslint -c .eslintrc.js \"{server, test}/**/*.{js,ts,tsx}\" --fix && prettier \"{server, test}/**/*.{js,ts,tsx,json,md}\" --write",
     "test": "mocha -r ts-node/register test/**/*.ts --exit",
     "test:debug": "mocha -r ts-node/register --inspect-brk test/**/*.ts --exit"
@@ -28,7 +28,8 @@
     "pino": "^6.3.2",
     "uuidv4": "^6.1.1",
     "multer": "^1.4.2",
-    "multer-gridfs-storage": "^4.2.0"
+    "multer-gridfs-storage": "^4.2.0",
+    "axios": "^0.19.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
