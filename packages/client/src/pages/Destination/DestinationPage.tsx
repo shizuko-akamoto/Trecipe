@@ -12,7 +12,6 @@ import Destination, { getIcon, Rating } from '../../../../shared/models/destinat
 import { getDestinationById } from '../../redux/Destinations/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDestModel } from '../../components/Map/mapHelper';
-import { DestInfoWindow } from '../Map/DestinationInfo/DestInfoWindow';
 import Review from './Review/review';
 import { isEmpty } from 'lodash';
 import { fetchAssociatedTrecipesRequest } from '../../redux/TrecipeList/action';
