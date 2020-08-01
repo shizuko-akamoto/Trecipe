@@ -9,15 +9,18 @@ export function trecipeListReducer(
     switch (action.type) {
         case TrecipeListActionTypes.ADD_TRECIPE:
             return {
-                trecipes: state.trecipes.concat(action.payload),
+                ...state,
+                myTrecipes: state.myTrecipes.concat(action.payload),
             };
         case TrecipeListActionTypes.DELETE_TRECIPE:
             return {
-                trecipes: state.trecipes.filter((tc: Trecipe) => tc.uuid !== action.payload),
+                ...state,
+                myTrecipes: state.myTrecipes.filter((tc: Trecipe) => tc.uuid !== action.payload),
             };
         case TrecipeListActionTypes.UPDATE_TRECIPE:
             return {
-                trecipes: state.trecipes.map((tc: Trecipe) => {
+                ...state,
+                myTrecipes: state.myTrecipes.map((tc: Trecipe) => {
                     return tc.uuid === action.payload.id
                         ? { ...tc, ...action.payload.updated }
                         : tc;
@@ -25,7 +28,18 @@ export function trecipeListReducer(
             };
         case TrecipeListActionTypes.LOAD_TRECIPE:
             return {
-                trecipes: action.payload.trecipes,
+                ...state,
+                myTrecipes: action.payload.trecipes,
+            };
+        case TrecipeListActionTypes.LOAD_ASSOCIATED_TRECIPE:
+            return {
+                ...state,
+                associatedTrecipes: action.payload.trecipes,
+            };
+        case TrecipeListActionTypes.LOAD_MY_ASSOCIATED_TRECIPE:
+            return {
+                ...state,
+                myAssociatedTrecipes: action.payload.trecipes,
             };
         default:
             return state;

@@ -6,12 +6,15 @@ import { RootState } from '../index';
 import DestinationService from '../../services/destinationService';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
-import { updateTrecipe as updateTrecipeInList } from '../TrecipeList/action';
+import {
+    fetchAssociatedTrecipesRequest,
+    updateTrecipe as updateTrecipeInList,
+} from '../TrecipeList/action';
 import Trecipe from '../../../../shared/models/trecipe';
 import TrecipeService from '../../services/trecipeService';
 import { updateTrecipe } from '../Trecipe/action';
 
-export const getDestModelsByTrecipeId = (trecipeId: string): AppThunk => {
+export const getDestinationsByTrecipeId = (trecipeId: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         DestinationService.getDestinationsByTrecipeId(trecipeId).then(
             (dests: Array<Destination>) => {
@@ -21,31 +24,75 @@ export const getDestModelsByTrecipeId = (trecipeId: string): AppThunk => {
     };
 };
 
+export const getDestinationById = (destId: string): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        DestinationService.getDestinationById(destId).then((dest: Destination) => {
+            dispatch(loadDestination(dest));
+        });
+    };
+};
+
+export const getDestinationByPlaceId = (placeId: string): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        DestinationService.getDestinationByPlaceId(placeId).then((dest: Destination) => {
+            dispatch(loadDestination(dest));
+        });
+    };
+};
+
 export const addDestinationRequest = (
     trecipe: Trecipe,
     destData: CreateNewDestinationDTO
 ): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        DestinationService.createDestination(destData).then((dest: Destination) => {
+        const createDestPromise = DestinationService.createDestination(destData);
+        const updateTrecipePromise = createDestPromise.then((dest: Destination) => {
             dispatch(addDestination(trecipe.uuid, dest));
-            TrecipeService.updateTrecipe(trecipe.uuid, {
+            return TrecipeService.updateTrecipe(trecipe.uuid, {
                 destinations: [...trecipe.destinations, { destUUID: dest.uuid, completed: false }],
-            }).then((updated: Trecipe) => {
-                dispatch(updateTrecipeInList(trecipe.uuid, updated));
-                dispatch(updateTrecipe(updated));
             });
         });
+        return Promise.all([createDestPromise, updateTrecipePromise]).then(
+            ([createdDest, updatedTrecipe]: [Destination, Trecipe]) => {
+                dispatch(updateTrecipeInList(trecipe.uuid, updatedTrecipe));
+                dispatch(updateTrecipe(updatedTrecipe));
+                dispatch(fetchAssociatedTrecipesRequest(createdDest.placeId, 10));
+            }
+        );
     };
 };
 
-export const removeDestinationRequest = (trecipe: Trecipe, destIdToDelete: string): AppThunk => {
+export const removeDestinationRequest = (
+    trecipe: Trecipe,
+    idToDelete: { destId?: string; placeId?: string }
+): AppThunk => {
+    let updateTrecipePromise: Promise<Trecipe>;
+    if (idToDelete.placeId) {
+        // to remove destination by place id, first get corresponding destination uuid, then update trecipe
+        updateTrecipePromise = DestinationService.getDestinationByPlaceId(idToDelete.placeId).then(
+            (destToDelete: Destination) => {
+                return TrecipeService.updateTrecipe(trecipe.uuid, {
+                    destinations: trecipe.destinations.filter(
+                        (dest) => dest.destUUID !== destToDelete.uuid
+                    ),
+                });
+            }
+        );
+    } else if (idToDelete.destId) {
+        // remove destination by destination uuid
+        updateTrecipePromise = TrecipeService.updateTrecipe(trecipe.uuid, {
+            destinations: trecipe.destinations.filter(
+                (dest) => dest.destUUID !== idToDelete.destId
+            ),
+        });
+    }
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        TrecipeService.updateTrecipe(trecipe.uuid, {
-            destinations: trecipe.destinations.filter((dest) => dest.destUUID !== destIdToDelete),
-        }).then((updated: Trecipe) => {
+        updateTrecipePromise.then((updated: Trecipe) => {
             dispatch(updateTrecipeInList(trecipe.uuid, updated));
             dispatch(updateTrecipe(updated));
-            dispatch(removeDestination(trecipe.uuid, destIdToDelete));
+            if (idToDelete.destId) dispatch(removeDestination(trecipe.uuid, idToDelete.destId));
+            if (idToDelete.placeId)
+                dispatch(fetchAssociatedTrecipesRequest(idToDelete.placeId, 10));
         });
     };
 };
@@ -71,6 +118,15 @@ export const removeDestination = (trecipeId: string, destinationId: string) => {
     });
 };
 
+export const loadDestination = (destination: Destination) => {
+    return typedAction(DestinationsActionTypes.LOAD_DESTINATION, {
+        dest: destination,
+    });
+};
+
 export type DestinationsAction = ReturnType<
-    typeof loadByTrecipeId | typeof addDestination | typeof removeDestination
+    | typeof loadByTrecipeId
+    | typeof addDestination
+    | typeof removeDestination
+    | typeof loadDestination
 >;

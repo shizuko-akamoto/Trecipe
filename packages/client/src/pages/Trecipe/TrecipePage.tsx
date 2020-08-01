@@ -14,7 +14,7 @@ import { RouteComponentProps } from 'react-router';
 import { Link, withRouter } from 'react-router-dom';
 import {
     addDestinationRequest,
-    getDestModelsByTrecipeId,
+    getDestinationsByTrecipeId,
     removeDestinationRequest,
 } from '../../redux/Destinations/action';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
@@ -26,6 +26,7 @@ import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { Legend } from '../Map/GoogleMap/Legend';
+import { baseURL } from '../../api';
 
 /**
  * TrecipeProps
@@ -68,7 +69,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         // load destinations by trecipe id before rendering
         const trecipeId = this.props.match.params.trecipeId;
         this.props.fetchTrecipe(trecipeId);
-        this.props.getDestModelsByTrecipeId(trecipeId);
+        this.props.getDestinationsByTrecipeId(trecipeId);
     }
 
     private onDestDragEnd(result: DropResult, provided: ResponderProvided) {
@@ -150,7 +151,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
 
     private onDestRemoved(idToDelete: string): void {
         if (this.props.trecipe) {
-            this.props.removeDestinationRequest(this.props.trecipe, idToDelete);
+            this.props.removeDestinationRequest(this.props.trecipe, { destId: idToDelete });
         }
     }
 
@@ -172,7 +173,6 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                     return { destUUID: dest.uuid, completed: completed.has(dest.uuid) };
                 }),
             });
-            this.props.getDestModelsByTrecipeId(trecipe.uuid);
         } else {
             this.setState({ destinationsInEdit: this.props.destinations });
         }
@@ -180,7 +180,8 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         this.toggleEdit(); // toggle edit button
     }
 
-    private onDestDeleteClick(idToDelete: string) {
+    private onDestDeleteClick(idToDelete: string, e: React.MouseEvent<HTMLElement>) {
+        e.preventDefault();
         if (this.state.isInEdit) {
             this.setState((state) => ({
                 destinationsInEdit: state.destinationsInEdit.filter(
@@ -226,7 +227,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                 <div>
                     <div className="tc-header-container">
                         <CoverPhoto
-                            imageSource={trecipe.image}
+                            imageSource={`${baseURL}upload/${trecipe.image}`}
                             buttons={[
                                 <Button
                                     key={editTrecipeBtnString}
@@ -289,19 +290,25 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                                 {...provided.droppableProps}
                                                 ref={provided.innerRef}>
                                                 {this.getDestinationsList().map((dest, index) => (
-                                                    <DestinationCard
-                                                        key={dest.uuid}
-                                                        destination={dest}
-                                                        isCompleted={completed.has(dest.uuid)}
-                                                        index={index}
-                                                        onClickDelete={this.onDestDeleteClick.bind(
-                                                            this
-                                                        )}
-                                                        onClickComplete={this.onDestCompleteClick.bind(
-                                                            this
-                                                        )}
-                                                        isInEdit={this.state.isInEdit}
-                                                    />
+                                                    <Link
+                                                        className="router-link"
+                                                        to={`/destinations/${dest.placeId}`}
+                                                        target="_blank"
+                                                        key={dest.uuid}>
+                                                        <DestinationCard
+                                                            key={dest.uuid}
+                                                            destination={dest}
+                                                            isCompleted={completed.has(dest.uuid)}
+                                                            index={index}
+                                                            onClickDelete={this.onDestDeleteClick.bind(
+                                                                this
+                                                            )}
+                                                            onClickComplete={this.onDestCompleteClick.bind(
+                                                                this
+                                                            )}
+                                                            isInEdit={this.state.isInEdit}
+                                                        />
+                                                    </Link>
                                                 ))}
                                                 {provided.placeholder}
                                             </ul>
@@ -357,7 +364,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         {
             showModal,
             updateTrecipe: updateTrecipeRequest,
-            getDestModelsByTrecipeId,
+            getDestinationsByTrecipeId,
             fetchTrecipe,
             addDestinationRequest,
             removeDestinationRequest,

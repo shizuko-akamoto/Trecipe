@@ -33,11 +33,8 @@ export class DestinationCard extends React.Component<DCProps> {
                                         id: 1,
                                         text: 'Complete',
                                         icon: 'check',
-                                        onClick: () => {
-                                            this.props.onClickComplete(
-                                                destModel.uuid,
-                                                !this.props.isCompleted
-                                            );
+                                        onClick: (e) => {
+                                            this.props.onClickComplete(destModel.uuid, e);
                                         },
                                         disabled: this.props.isCompleted,
                                     },
@@ -45,8 +42,11 @@ export class DestinationCard extends React.Component<DCProps> {
                                         id: 2,
                                         text: 'Remove',
                                         icon: ['far', 'trash-alt'],
-                                        onClick: () => {
-                                            this.props.onClickDelete(this.props.destination.uuid);
+                                        onClick: (e) => {
+                                            this.props.onClickDelete(
+                                                this.props.destination.uuid,
+                                                e
+                                            );
                                         },
                                     },
                                 ]}

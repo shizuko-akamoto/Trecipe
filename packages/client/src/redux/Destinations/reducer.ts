@@ -9,6 +9,7 @@ export function destinationsReducer(
     switch (action.type) {
         case DestinationsActionTypes.LOAD_DESTS_BY_TRECIPE_ID:
             return {
+                ...state,
                 destsByTrecipeId: state.destsByTrecipeId.set(
                     action.payload.trecipeId,
                     action.payload.dests
@@ -17,6 +18,7 @@ export function destinationsReducer(
         case DestinationsActionTypes.ADD_DESTINATION:
             let prevDests = state.destsByTrecipeId.get(action.payload.trecipeId);
             return {
+                ...state,
                 destsByTrecipeId: state.destsByTrecipeId.set(
                     action.payload.trecipeId,
                     prevDests ? [...prevDests, action.payload.dest] : []
@@ -28,7 +30,13 @@ export function destinationsReducer(
                 ? dests.filter((dest: Destination) => dest.uuid !== action.payload.destinationId)
                 : [];
             return {
+                ...state,
                 destsByTrecipeId: state.destsByTrecipeId.set(action.payload.trecipeId, result),
+            };
+        case DestinationsActionTypes.LOAD_DESTINATION:
+            return {
+                ...state,
+                dests: state.dests.concat(action.payload.dest),
             };
         default:
             return state;
