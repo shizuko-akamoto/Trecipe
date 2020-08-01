@@ -1,7 +1,6 @@
 import React from 'react';
 import './navBar.scss';
 import { Link } from 'react-router-dom';
-import LogoutButton from '../LogoutButton/LogoutButton';
 
 export interface LinkProps {
     text: string;
@@ -20,7 +19,6 @@ export class NavBar extends React.Component<NavigationProps, {}> {
                         {link.text}
                     </Link>
                 ))}
-                <LogoutButton /> {/* TODO: temporary */}
             </nav>
         );
     }
