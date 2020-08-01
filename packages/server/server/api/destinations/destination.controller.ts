@@ -72,7 +72,6 @@ class DestinationController implements Controller {
                     userId: req.body.userId,
                     rating: req.body.rating,
                 });
-                logger.info(dest);
                 DestinationService.updateDestinationById(req.params.id, dest).then(
                     (dest: Destination) => {
                         res.status(200).json(dest);

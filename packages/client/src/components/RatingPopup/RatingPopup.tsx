@@ -59,7 +59,7 @@ class RatingPopup extends React.Component<RatingPopupProps, RatingPopupState> {
             <Modal>
                 <div className="ratingPopup">
                     <div className="contents">
-                        <h1 className="title">{'Rate Your Experience'}</h1>
+                        <h1 className="title">{'Rate your experience'}</h1>
                         <label className="destination-address">
                             {' '}
                             {this.props.dest.formattedAddress}{' '}
@@ -71,7 +71,7 @@ class RatingPopup extends React.Component<RatingPopupProps, RatingPopupState> {
                                 onChange={this.onRatingChange.bind(this)}
                                 size={30}
                                 activeColor="#ffe66d"
-                                emptyIcon={<FontAwesomeIcon icon={['fas', 'star']} />}
+                                emptyIcon={<FontAwesomeIcon icon={['far', 'star']} />}
                                 filledIcon={<FontAwesomeIcon icon={['fas', 'star']} />}
                             />
                         </div>

@@ -6,7 +6,7 @@ const userRating = new mongoose.Schema(
         userId: { type: String, ref: 'User' },
         rating: Number,
     },
-    { toObject: { virtuals: true }, toJSON: { virtuals: true }, id: false }
+    { id: false, timestamps: true }
 );
 
 const destinationSchema = new mongoose.Schema(
