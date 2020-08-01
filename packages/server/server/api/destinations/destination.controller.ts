@@ -18,8 +18,12 @@ class DestinationController implements Controller {
     private initializeRoutes() {
         this.router.post(this.path, passportAuth, this.createDestination.bind(this));
         this.router.get(this.path, this.getDestinationByPlaceId.bind(this));
-        this.router.get(`${this.path}/in`, this.getDestinationsByTrecipeId.bind(this));
-        this.router.get(`${this.path}/:id`, passportAuth, this.getDestinationById.bind(this));
+        this.router.get(
+            `${this.path}/in`,
+            passportAuth,
+            this.getDestinationsByTrecipeId.bind(this)
+        );
+        this.router.get(`${this.path}/:id`, this.getDestinationById.bind(this));
     }
 
     private createDestination(req: Request, res: Response, next: NextFunction) {
