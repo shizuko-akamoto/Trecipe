@@ -24,7 +24,7 @@ class Review extends React.Component<ReviewProps> {
                                 review.time * 1000
                             ).toLocaleString()}`}
                         </span>
-                        <RatingBar rating={Math.max(5, Math.round(review.rating)) as Rating} />
+                        <RatingBar rating={Math.min(5, Math.round(review.rating)) as Rating} />
                     </div>
                 </div>
                 <p className="review-text">{review.text}</p>

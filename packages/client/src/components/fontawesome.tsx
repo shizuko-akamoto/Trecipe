@@ -24,6 +24,7 @@ import {
     faExternalLinkAlt,
     faMapMarkedAlt,
     faExclamationTriangle,
+    faSignOutAlt,
     faMapMarker,
     faPhone,
 } from '@fortawesome/free-solid-svg-icons';
@@ -32,6 +33,7 @@ import {
     faStar,
     faTrashAlt,
     faWindowMaximize,
+    faUserCircle,
 } from '@fortawesome/free-regular-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
@@ -63,8 +65,10 @@ library.add(
     faBinoculars,
     faExternalLinkAlt,
     faMapMarkedAlt,
-    faMapMarker,
     faPhone,
     faWindowMaximize,
-    faExclamationTriangle
+    faExclamationTriangle,
+    faUserCircle,
+    faSignOutAlt,
+    faMapMarker
 );
