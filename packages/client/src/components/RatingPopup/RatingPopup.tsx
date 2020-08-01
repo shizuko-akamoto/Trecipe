@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 import './ratingPopup.scss';
 // @ts-ignore
 import ReactStars from 'react-rating-stars-component';
@@ -77,7 +77,7 @@ class RatingPopup extends React.Component<RatingPopupProps, RatingPopupState> {
                         </div>
                     </div>
                     <div className="btn">
-                        <Button onClick={this.closeRatingPopup} text={'Skip'} />
+                        <Button onClick={this.closeRatingPopup.bind(this)} text={'Skip'} />
                     </div>
                 </div>
             </Modal>
