@@ -153,10 +153,11 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
             uuid: '',
             userRatings: [],
             description: '',
+            // since we have access to actual PlacePhoto objects to get photo URL from, we'll use that to fetch photo from
+            // client bypassing the server.
             photoRefs: place.photos
                 ? place.photos.map((photo) => photo.getUrl({ maxHeight: 100 }))
                 : [],
-            rating: place.rating ? (Math.min(5, Math.round(place.rating)) as Rating) : 0,
         };
     }
 

@@ -19,7 +19,9 @@ export class NearbyDestCard extends React.Component<NearbyDestCardProps> {
                         src={
                             isEmpty(this.props.destination.photoRefs)
                                 ? null
-                                : this.props.destination.photoRefs[0]
+                                : // for nearby destinations, photoRefs store URLs that we can directly use to fetch
+                                  // photos from client side
+                                  this.props.destination.photoRefs[0]
                         }
                         imgStyle={{ borderRadius: '8px 0 0 8px' }}
                     />
