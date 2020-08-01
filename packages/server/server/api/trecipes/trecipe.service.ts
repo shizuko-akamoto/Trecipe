@@ -168,8 +168,12 @@ class TrecipeService {
                     : { 'destinations.destUUID': destination.uuid, isPrivate: false };
                 return trecipeModel.find(filter).limit(limit).exec();
             })
-            .catch((err: DestinationNotFound) => {
-                return Promise.resolve([] as Array<Trecipe>);
+            .catch((err) => {
+                if (err instanceof DestinationNotFound) {
+                    return Promise.resolve([] as Array<Trecipe>);
+                } else {
+                    throw err;
+                }
             })
             .catch((err) =>
                 Promise.reject(

@@ -109,6 +109,8 @@ paths:
         - Trecipes
       summary: Gets user's trecipes that contain destination of given place id
       description: Gets up to "limit" number of trecipes containing destination of given place id
+      security:
+        - cookieAuth: []
       parameters:
         - $ref: '#/components/parameters/queryPlaceId'
         - in: query
@@ -196,6 +198,8 @@ paths:
         - Destinations
       summary: Create new destination
       description: Create a new destination with given placeId
+      security:
+        - cookieAuth: []
       requestBody:
         description: Destination data
         content:
@@ -252,6 +256,8 @@ paths:
         - Destinations
       summary: Get destinations by trecipe uuid
       description: Get all destinations in a trecipe with specified uuid
+      security:
+        - cookieAuth: []
       parameters:
         - $ref: '#/components/parameters/queryTrecipeId'
       responses:

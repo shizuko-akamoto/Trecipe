@@ -73,6 +73,10 @@
                 margin-bottom: 0.5rem;
                 display: flex;
 
+                svg {
+                    flex-shrink: 0;
+                }
+
                 .info-text {
                     margin: 0 0 0 0.5rem;
                 }
@@ -111,7 +115,7 @@
             list-style: none;
             padding: 0;
             display: flex;
-            overflow-x: scroll;
+            overflow-x: auto;
             width: 100%;
 
             .associated-trecipe-item {

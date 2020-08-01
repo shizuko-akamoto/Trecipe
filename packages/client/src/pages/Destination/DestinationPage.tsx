@@ -156,7 +156,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
             photoRefs: place.photos
                 ? place.photos.map((photo) => photo.getUrl({ maxHeight: 100 }))
                 : [],
-            rating: place.rating ? (Math.max(5, Math.round(place.rating)) as Rating) : 0,
+            rating: place.rating ? (Math.min(5, Math.round(place.rating)) as Rating) : 0,
         };
     }
 
@@ -177,14 +177,18 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                     ? null
                                     : this.state.photos[0].getUrl({ maxHeight: 600 })
                             }
-                            buttons={[
-                                <Button
-                                    key={DestinationPage.SAVE_DESTINATION_BUTTON}
-                                    text={DestinationPage.SAVE_DESTINATION_BUTTON}
-                                    icon={['far', 'star']}
-                                    onClick={this.openTrecipePicker.bind(this)}
-                                />,
-                            ]}>
+                            buttons={
+                                this.props.isAuthenticated
+                                    ? [
+                                          <Button
+                                              key={DestinationPage.SAVE_DESTINATION_BUTTON}
+                                              text={DestinationPage.SAVE_DESTINATION_BUTTON}
+                                              icon={['far', 'star']}
+                                              onClick={this.openTrecipePicker.bind(this)}
+                                          />,
+                                      ]
+                                    : []
+                            }>
                             <div className="dest-page-header-text">
                                 <h1 className="dest-name">{destination.name}</h1>
                             </div>
@@ -290,6 +294,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{ placeId: string }>) => {
     return {
         associatedTrecipes: state.trecipeList.associatedTrecipes,
+        isAuthenticated: state.user.isAuthenticated,
     };
 };
 

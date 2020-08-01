@@ -5,6 +5,7 @@ import { DestWithStatus } from '../../../../shared/models/trecipe';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import DestinationService from './destination.service';
 import { uuid } from 'uuidv4';
+import { passportAuth } from '../../common/passport/passportUtils';
 
 class DestinationController implements Controller {
     public readonly path = '/destinations';
@@ -15,10 +16,10 @@ class DestinationController implements Controller {
     }
 
     private initializeRoutes() {
-        this.router.post(this.path, this.createDestination.bind(this));
+        this.router.post(this.path, passportAuth, this.createDestination.bind(this));
         this.router.get(this.path, this.getDestinationByPlaceId.bind(this));
         this.router.get(`${this.path}/in`, this.getDestinationsByTrecipeId.bind(this));
-        this.router.get(`${this.path}/:id`, this.getDestinationById.bind(this));
+        this.router.get(`${this.path}/:id`, passportAuth, this.getDestinationById.bind(this));
     }
 
     private createDestination(req: Request, res: Response, next: NextFunction) {
