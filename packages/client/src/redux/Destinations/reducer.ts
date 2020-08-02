@@ -38,6 +38,22 @@ export function destinationsReducer(
                 ...state,
                 dests: state.dests.concat(action.payload.dest),
             };
+        case DestinationsActionTypes.UPDATE_DESTINATION:
+            let updateDests = state.destsByTrecipeId.get(action.payload.trecipeId);
+            const updateResult = updateDests
+                ? updateDests.map((dest: Destination) =>
+                      dest.uuid === action.payload.destination.uuid
+                          ? action.payload.destination
+                          : dest
+                  )
+                : [];
+            return {
+                ...state,
+                destsByTrecipeId: state.destsByTrecipeId.set(
+                    action.payload.trecipeId,
+                    updateResult
+                ),
+            };
         default:
             return state;
     }

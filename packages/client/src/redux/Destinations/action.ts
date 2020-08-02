@@ -13,6 +13,7 @@ import {
 import Trecipe from '../../../../shared/models/trecipe';
 import TrecipeService from '../../services/trecipeService';
 import { updateTrecipe } from '../Trecipe/action';
+import { UpdateDestinationRatingDTO } from '../../../../shared/models/updateDestinationRatingDTO';
 
 export const getDestinationsByTrecipeId = (trecipeId: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
@@ -97,6 +98,19 @@ export const removeDestinationRequest = (
     };
 };
 
+export const rateDestinationRequest = (
+    destIdForUpdate: string,
+    updateRatingData: UpdateDestinationRatingDTO
+): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        DestinationService.updateDestinationRating(destIdForUpdate, updateRatingData).then(
+            (updated: Destination) => {
+                dispatch(updateDestination(updateRatingData.trecipeId, updated));
+            }
+        );
+    };
+};
+
 export const loadByTrecipeId = (trecipeId: string, destinations: Array<Destination>) => {
     return typedAction(DestinationsActionTypes.LOAD_DESTS_BY_TRECIPE_ID, {
         trecipeId: trecipeId,
@@ -118,6 +132,13 @@ export const removeDestination = (trecipeId: string, destinationId: string) => {
     });
 };
 
+export const updateDestination = (trecipeId: string, destination: Destination) => {
+    return typedAction(DestinationsActionTypes.UPDATE_DESTINATION, {
+        trecipeId: trecipeId,
+        destination: destination,
+    });
+};
+
 export const loadDestination = (destination: Destination) => {
     return typedAction(DestinationsActionTypes.LOAD_DESTINATION, {
         dest: destination,
@@ -128,5 +149,6 @@ export type DestinationsAction = ReturnType<
     | typeof loadByTrecipeId
     | typeof addDestination
     | typeof removeDestination
+    | typeof updateDestination
     | typeof loadDestination
 >;

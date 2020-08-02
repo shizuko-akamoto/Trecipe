@@ -1,6 +1,6 @@
 import Controller from '../../common/controller';
 import { NextFunction, Request, Response, Router } from 'express';
-import Destination, { Rating } from '../../../../shared/models/destination';
+import Destination, { Rating, UserRating } from '../../../../shared/models/destination';
 import { DestWithStatus } from '../../../../shared/models/trecipe';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import DestinationService from './destination.service';
@@ -19,6 +19,7 @@ class DestinationController implements Controller {
 
     private initializeRoutes() {
         this.router.post(this.path, passportAuth, this.createDestination.bind(this));
+        this.router.post(`${this.path}/rate/:id`, this.updateDestinationUserRating.bind(this));
         this.router.get(this.path, this.getDestinationByPlaceId.bind(this));
         this.router.get(
             `${this.path}/in`,
@@ -56,7 +57,7 @@ class DestinationController implements Controller {
                 logger.info(photoRefs);
                 const newDest: Destination = {
                     uuid: uuid(),
-                    userRatings: [] as Rating[],
+                    userRatings: [] as UserRating[],
                     photoRefs: photoRefs,
                     name: dest.name,
                     description: '',
@@ -98,6 +99,25 @@ class DestinationController implements Controller {
         DestinationService.getDestinationById(req.params.id)
             .then((dest: Destination) => {
                 res.status(200).json(dest);
+            })
+            .catch((err) => next(err));
+    }
+
+    private updateDestinationUserRating(req: Request, res: Response, next: NextFunction) {
+        DestinationService.getDestinationById(req.params.id)
+            .then((dest: Destination) => {
+                const newRatingArray = dest.userRatings.filter(
+                    (rating) => rating.userId != req.body.userId
+                );
+                dest.userRatings = newRatingArray.concat({
+                    userId: req.body.userId,
+                    rating: req.body.rating,
+                });
+                DestinationService.updateDestinationById(req.params.id, dest).then(
+                    (dest: Destination) => {
+                        res.status(200).json(dest);
+                    }
+                );
             })
             .catch((err) => next(err));
     }

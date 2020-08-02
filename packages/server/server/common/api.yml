@@ -250,6 +250,27 @@ paths:
                 $ref: '#/components/schemas/Destination'
         '404':
           $ref: '#/components/responses/NotFound'
+  /destinations/rate/{id}:
+    post:
+      tags:
+        - Destinations
+      summary: Rate a destination
+      description: Update the user rating of a destination
+      requestBody:
+        description: Rating Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDestinationRatingDTO'
+      responses:
+        200:
+          description: Returns the updated destination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Destination'
+        500:
+          $ref: '#/components/responses/InternalServerError'
   '/destinations/in':
     get:
       tags:
@@ -586,7 +607,7 @@ components:
         userRatings:
           type: array
           items:
-            $ref: '#/components/schemas/Rating'
+            $ref: '#/components/schemas/UserRating'
           example:
             - 4.2
             - 3
@@ -604,6 +625,28 @@ components:
           example:
             - >-
               CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU
+    UpdateDestinationRatingDTO:
+      title: updateDestinationRatingDTO
+      type: object
+      properties:
+        userId:
+          type: string
+        trecipeId:
+          type: string
+        rating:
+          $ref: '#/components/schemas/Rating'
+      required:
+        - userId
+        - trecipeId
+        - rating
+    UserRating:
+      title: UserRating
+      type: object
+      properties:
+        userId:
+          type: string
+        rating:
+          $ref: '#/components/schemas/Rating'
     DestinationCategory:
       title: DestinationCategory
       type: string
@@ -718,7 +761,7 @@ components:
         userRatings:
           type: array
           items:
-            $ref: '#/components/schemas/Rating'
+            $ref: '#/components/schemas/UserRating'
           example:
             - 4.2
             - 3

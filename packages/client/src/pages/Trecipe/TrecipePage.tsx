@@ -15,6 +15,7 @@ import { Link, withRouter } from 'react-router-dom';
 import {
     addDestinationRequest,
     getDestinationsByTrecipeId,
+    rateDestinationRequest,
     removeDestinationRequest,
 } from '../../redux/Destinations/action';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
@@ -23,10 +24,12 @@ import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
 import Modal from '../../components/Modal/Modal';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
-import Destination from '../../../../shared/models/destination';
+import Destination, { Rating } from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { Legend } from '../Map/GoogleMap/Legend';
 import { baseURL } from '../../api';
+import RatingPopup from '../../components/RatingPopup/RatingPopup';
+import { UpdateDestinationRatingDTO } from '../../../../shared/models/updateDestinationRatingDTO';
 
 /**
  * TrecipeProps
@@ -191,9 +194,42 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         }
     }
 
-    private onDestCompleteClick(id: string) {
+    private onDestCompleteClick(destination: Destination) {
         if (this.props.trecipe) {
             const trecipe: Trecipe = this.props.trecipe;
+            if (
+                trecipe.destinations.find(
+                    (dest) => dest.destUUID === destination.uuid && !dest.completed
+                )
+            ) {
+                if (this.props.user.username) {
+                    this.props.showModal(
+                        <RatingPopup
+                            onClickHandler={this.updateTrecipeDestOnComplete.bind(this)}
+                            dest={destination}
+                            trecipeId={this.props.trecipe.uuid}
+                            userId={this.props.user.username}
+                        />
+                    );
+                } else {
+                    // TODO Throw unauthenticated error!
+                    // For now pass a stub here
+                    this.updateTrecipeDestOnComplete(destination.uuid, true, undefined);
+                }
+            }
+        }
+    }
+
+    private updateTrecipeDestOnComplete(
+        id: string,
+        skip: boolean,
+        updateDestinationRatingDTO: UpdateDestinationRatingDTO | undefined
+    ) {
+        if (this.props.trecipe) {
+            const trecipe: Trecipe = this.props.trecipe;
+            if (!skip && updateDestinationRatingDTO) {
+                this.props.rateDestination(id, updateDestinationRatingDTO);
+            }
             this.props.updateTrecipe(trecipe.uuid, {
                 destinations: trecipe.destinations.map((dest) =>
                     dest.destUUID === id ? { destUUID: id, completed: true } : dest
@@ -362,9 +398,11 @@ const mapStateToProps = (
 ) => {
     const trecipeId = ownProps.match.params.trecipeId;
     const destinations = state.destinations.destsByTrecipeId.get(trecipeId);
+    const user = state.user.user;
     return {
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
+        user: user,
     };
 };
 
@@ -374,6 +412,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             showModal,
             updateTrecipe: updateTrecipeRequest,
             getDestinationsByTrecipeId,
+            rateDestination: rateDestinationRequest,
             fetchTrecipe,
             addDestinationRequest,
             removeDestinationRequest,
