@@ -88,16 +88,13 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
 
     private fetchSearchResults(searchKey: string, searchFilter: SearchFilter): void {
         new Promise<Array<SearchResultEntry>>(function (resolve, reject) {
-            /** TODO: Modify logic here to make HTTP call to backend for fetching search results.
-             *  Right now, it just returns dummy list of strings based on current search filter selected.
-             */
             let result: SearchResultEntry[] = [];
             if (_.isEqual(searchFilter, SearchFilter.Trecipe)) {
                 searchService.performTrecipeSearch(searchKey).then((searchResult) => {
                     result = searchResult.map((value) => {
                         return {
                             name: value.name,
-                            href: '/' + value.uuid,
+                            href: `/${value.uuid}`,
                             info: value.owner,
                             uuid: value.uuid,
                         };
@@ -142,7 +139,6 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
                     <ul className="results-list">
                         {results.map((result) => (
                             // temporarily using result as key. Change to some id later
-                            // TODO: replace with valid href
                             <li className="results-entry" key={result.uuid}>
                                 <Link to={result.href}>{result.name}</Link>
                             </li>

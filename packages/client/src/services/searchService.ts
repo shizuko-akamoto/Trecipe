@@ -1,7 +1,6 @@
 import API from '../api';
 import { AxiosResponse } from 'axios';
 import Destination from '../../../shared/models/destination';
-import User from 'server/server/api/user/user.interface';
 import Trecipe from '../../../shared/models/trecipe';
 import { AutoComplete, getDestModel } from '../components/Map/mapHelper';
 import { CreateNewDestinationDTO } from '../../../shared/models/createNewDestinationDTO';
@@ -75,7 +74,7 @@ class searchService {
     public performSearch(keyword: string, offset: number): Promise<SearchResultModel> {
         let backendPromise = API.get(`${this.searchEndpoint}/${keyword}`, {
             params: {
-                limit: 5,
+                limit: 10,
                 // if user wants to load more, we should increment offset
                 offset: offset,
             },

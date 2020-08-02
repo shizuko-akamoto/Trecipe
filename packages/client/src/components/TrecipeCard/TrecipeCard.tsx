@@ -20,7 +20,7 @@ type TCProps = Trecipe & ReturnType<typeof mapDispatchToProps>;
 
 class TrecipeCard extends React.Component<TCProps> {
     public static defaultProps: Partial<TCProps> = {
-        isReadOnly: false, // should change to true later
+        isReadOnly: true,
     };
 
     private cardMenuItems: MenuItem[] = [
