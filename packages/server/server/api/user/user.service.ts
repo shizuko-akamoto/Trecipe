@@ -8,9 +8,9 @@ class UserService {
     public createUser(userData: User): Promise<User> {
         const newUser = new userModel(userData);
         return this.checkDuplicateUser(userData)
-            .then((isDuplicate: boolean) => {
+            .then((isDuplicate: string | null) => {
                 if (isDuplicate) {
-                    return Promise.reject(new DuplicateUserError());
+                    return Promise.reject(new DuplicateUserError(isDuplicate));
                 } else {
                     return newUser.save();
                 }
@@ -44,11 +44,26 @@ class UserService {
             });
     }
 
-    public checkDuplicateUser(userData: User): Promise<boolean> {
-        return userModel
-            .findOne({ $or: [{ email: userData.email }, { username: userData.username }] })
+    public checkDuplicateUser(userData: User): Promise<string | null> {
+        const duplicateEmail = userModel
+            .findOne({ email: userData.email })
             .collation({ locale: 'en', strength: 2 })
-            .exec()
+            .exec();
+        const duplicateUsername = userModel
+            .findOne({ username: userData.username })
+            .collation({ locale: 'en', strength: 2 })
+            .exec();
+
+        return Promise.all([duplicateEmail, duplicateUsername])
+            .then(([byEmail, byUsername]: [User, User]) => {
+                if (byEmail) {
+                    return Promise.resolve('Email');
+                } else if (byUsername) {
+                    return Promise.resolve('Username');
+                } else {
+                    return Promise.resolve(null);
+                }
+            })
             .catch((err) => {
                 logger.warn(`Failed to find user`);
                 return Promise.reject(
@@ -56,13 +71,6 @@ class UserService {
                         message: `Failed to find user: ${err.toString()}`,
                     })
                 );
-            })
-            .then((user: User) => {
-                if (user) {
-                    return Promise.resolve(true);
-                } else {
-                    return Promise.resolve(false);
-                }
             });
     }
 

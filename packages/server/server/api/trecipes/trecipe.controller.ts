@@ -19,10 +19,16 @@ class TrecipeController implements Controller {
     private initializeRoutes() {
         this.router.get(this.path, passportAuth, this.getAllTrecipes.bind(this));
         this.router.post(this.path, passportAuth, this.createTrecipe.bind(this));
+        this.router.get(`${this.path}/associated`, this.getAssociatedTrecipes.bind(this));
+        this.router.get(
+            `${this.path}/my-associated`,
+            passportAuth,
+            this.getMyAssociatedTrecipes.bind(this)
+        );
+        this.router.post(`${this.path}/copy`, passportAuth, this.duplicateTrecipe.bind(this));
         this.router.get(`${this.path}/:id`, passportAuth, this.getTrecipeById.bind(this));
         this.router.delete(`${this.path}/:id`, passportAuth, this.deleteTrecipeById.bind(this));
         this.router.put(`${this.path}/:id`, passportAuth, this.updateTrecipeById.bind(this));
-        this.router.post(`${this.path}/copy`, passportAuth, this.duplicateTrecipe.bind(this));
     }
 
     private getAllTrecipes(req: Request, res: Response, next: NextFunction) {
@@ -114,6 +120,27 @@ class TrecipeController implements Controller {
             })
             .then(() => {
                 res.status(201).json(copyResponse);
+            })
+            .catch((err) => next(err));
+    }
+
+    private getMyAssociatedTrecipes(req: Request, res: Response, next: NextFunction) {
+        const placeId: string = req.query.placeId as string;
+        const limit: number = req.query.limit ? parseInt(req.query.limit as string) : 0;
+        const user = req.user as User;
+        TrecipeService.getAssociatedTrecipes(placeId, limit, user)
+            .then((associated: Array<Trecipe>) => {
+                res.status(200).json(associated);
+            })
+            .catch((err) => next(err));
+    }
+
+    private getAssociatedTrecipes(req: Request, res: Response, next: NextFunction) {
+        const placeId: string = req.query.placeId as string;
+        const limit: number = req.query.limit ? parseInt(req.query.limit as string) : 0;
+        TrecipeService.getAssociatedTrecipes(placeId, limit)
+            .then((associated: Array<Trecipe>) => {
+                res.status(200).json(associated);
             })
             .catch((err) => next(err));
     }

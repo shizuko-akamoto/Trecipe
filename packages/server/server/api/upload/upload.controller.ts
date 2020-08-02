@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import mongoose from 'mongoose';
-import { BadRequest, NotFound } from 'express-openapi-validator/dist';
+import { NotFound } from 'express-openapi-validator/dist';
 import logger from '../../common/logger';
 
 class UploadController {

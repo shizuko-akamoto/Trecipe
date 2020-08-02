@@ -11,6 +11,10 @@ tags:
     description: Trecipe endpoints
   - name: Users
     description: User endpoints
+  - name: Destinations
+    description: Destination endpoints
+  - name: Upload
+    description: Upload endpoints
 paths:
   /trecipes:
     get:
@@ -74,6 +78,56 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/trecipes/associated':
+    get:
+      tags:
+        - Trecipes
+      summary: Gets all public trecipes that contain destination of given place id
+      description: Gets up to "limit" number of public trecipes containing destination of given place id
+      parameters:
+        - $ref: '#/components/parameters/queryPlaceId'
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The max number of trecipes to be returned
+      responses:
+        200:
+          description: Returns the list of trecipes containing the destination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trecipe'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  '/trecipes/my-associated':
+    get:
+      tags:
+        - Trecipes
+      summary: Gets user's trecipes that contain destination of given place id
+      description: Gets up to "limit" number of trecipes containing destination of given place id
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/queryPlaceId'
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The max number of trecipes to be returned
+      responses:
+        200:
+          description: Returns the list of trecipes containing the destination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trecipe'
+        500:
           $ref: '#/components/responses/InternalServerError'
   '/trecipes/{id}':
     get:
@@ -144,6 +198,8 @@ paths:
         - Destinations
       summary: Create new destination
       description: Create a new destination with given placeId
+      security:
+        - cookieAuth: []
       requestBody:
         description: Destination data
         content:
@@ -162,18 +218,16 @@ paths:
     get:
       tags:
         - Destinations
-      summary: Get destinations by trecipe uuid
-      description: Get all destinations in a trecipe with specified uuid
+      summary: Get destination by place id
+      description: Get all destinations in a trecipe with specified place id
       parameters:
-        - $ref: '#/components/parameters/queryTrecipeId'
+        - $ref: '#/components/parameters/queryPlaceId'
       responses:
         '200':
-          description: Returns an array of destinations in trecipe of given uuid
+          description: Returns destination with specified place id
           content:
             application/json:
               schema:
-                type: array
-                items:
                   $ref: '#/components/schemas/Destination'
         '404':
           $ref: '#/components/responses/NotFound'
@@ -216,6 +270,29 @@ paths:
               schema:
                 $ref: '#/components/schemas/Destination'
         500:
+          $ref: '#/components/responses/InternalServerError'
+  '/destinations/in':
+    get:
+      tags:
+        - Destinations
+      summary: Get destinations by trecipe uuid
+      description: Get all destinations in a trecipe with specified uuid
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/queryTrecipeId'
+      responses:
+        '200':
+          description: Returns an array of destinations in trecipe of given uuid
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Destination'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
           $ref: '#/components/responses/InternalServerError'
 
   /upload:
@@ -260,6 +337,37 @@ paths:
               schema:
                 type: string
                 format: binary
+  /photos/{photoRef}:
+    get:
+      tags:
+        - Photos
+      summary: Gets a photo from google place service using a photo reference string
+      parameters:
+        - in: path
+          name: photoRef
+          required: true
+          schema:
+            type: string
+            description: photo reference string
+        - in: query
+          name: maxHeight
+          schema:
+            type: integer
+            description: maximum height in px of fetched image (range between 1 and 1600)
+        - in: query
+          name: maxWidth
+          schema:
+            type: integer
+            description: maximum width in px of fetched image (range between 1 and 1600)
+      responses:
+        200:
+          description: Fetched image
+          content:
+            image/*:
+              schema:
+                type: string
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /spec:
     get:
@@ -390,6 +498,14 @@ components:
       schema:
         type: string
         format: uuid
+    queryPlaceId:
+      name: placeId
+      in: query
+      description: Destination place id (used for Google Place API)
+      example: ChIJN1t_tDeuEmsRUsoyG83frY4
+      required: true
+      schema:
+        type: string
   schemas:
     User:
       title: User

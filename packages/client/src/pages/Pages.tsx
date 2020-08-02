@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import MyTrecipes from './MyTrecipes/MyTrecipes';
-import { Header } from '../components/Header/Header';
+import Header from '../components/Header/Header';
 import { Footer } from '../components/Footer/Footer';
-import Trecipe from './Trecipe/TrecipePage';
+import TrecipePage from './Trecipe/TrecipePage';
 import Map from './Map/Map';
+import DestinationPage from './Destination/DestinationPage';
 import { LoadScript } from '@react-google-maps/api';
 import Login from './Login/Login';
 import PrivateRoute from '../components/Route/PrivateRoute';
@@ -28,8 +29,9 @@ const Pages = (props: PagesProps) => {
                     googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
                     libraries={libraries}>
                     <PrivateRoute path="/" exact component={MyTrecipes} />
-                    <PrivateRoute path="/:trecipeId" exact component={Trecipe} />
+                    <PrivateRoute path="/:trecipeId" exact component={TrecipePage} />
                     <PrivateRoute path="/map/:trecipeId" component={Map} />
+                    <Route path="/destinations/:placeId" exact component={DestinationPage} />
                     <Route path="/user/login" exact component={Login} />
                 </LoadScript>
             </Switch>

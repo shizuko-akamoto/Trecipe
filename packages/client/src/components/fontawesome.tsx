@@ -23,9 +23,18 @@ import {
     faBinoculars,
     faExternalLinkAlt,
     faMapMarkedAlt,
+    faExclamationTriangle,
+    faSignOutAlt,
     faMapMarker,
+    faPhone,
 } from '@fortawesome/free-solid-svg-icons';
-import { faQuestionCircle, faStar, faTrashAlt } from '@fortawesome/free-regular-svg-icons';
+import {
+    faQuestionCircle,
+    faStar,
+    faTrashAlt,
+    faWindowMaximize,
+    faUserCircle,
+} from '@fortawesome/free-regular-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 library.add(
@@ -56,5 +65,10 @@ library.add(
     faBinoculars,
     faExternalLinkAlt,
     faMapMarkedAlt,
-    faMapMarker,
+    faPhone,
+    faWindowMaximize,
+    faExclamationTriangle,
+    faUserCircle,
+    faSignOutAlt,
+    faMapMarker
 );

@@ -85,6 +85,24 @@ class TrecipeService {
             return Promise.resolve(res.data);
         });
     }
+
+    public fetchAssociatedTrecipes(
+        placeId: string,
+        limit?: number,
+        onlyOwned?: boolean
+    ): Promise<Array<Trecipe>> {
+        const endpoint = onlyOwned
+            ? `${this.apiEndpoint}/my-associated`
+            : `${this.apiEndpoint}/associated`;
+        return API.get<Array<Trecipe>>(endpoint, {
+            params: {
+                placeId: placeId,
+                limit: limit,
+            },
+        }).then((res: AxiosResponse<Array<Trecipe>>) => {
+            return Promise.resolve(res.data);
+        });
+    }
 }
 
 export default new TrecipeService();

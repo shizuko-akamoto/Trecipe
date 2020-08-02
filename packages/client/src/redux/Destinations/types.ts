@@ -5,10 +5,12 @@ import Destination from '../../../../shared/models/destination';
  */
 export type DestinationsState = {
     destsByTrecipeId: Map<string, Array<Destination>>;
+    dests: Array<Destination>;
 };
 
 export const initialState = {
     destsByTrecipeId: new Map<string, Array<Destination>>(),
+    dests: [] as Array<Destination>,
 };
 
 export enum DestinationsActionTypes {
@@ -16,4 +18,5 @@ export enum DestinationsActionTypes {
     ADD_DESTINATION = '@destination/ADD_DESTINATION',
     REMOVE_DESTINATION = '@destination/REMOVE_DESTINATION',
     UPDATE_DESTINATION = '@destination/UPDATE_DESTINATION',
+    LOAD_DESTINATION = '@destination/LOAD_DESTINATION',
 }
