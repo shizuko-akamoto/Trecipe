@@ -3,20 +3,20 @@ import { User } from '../../../../shared/models/user';
 export type UserState = {
     user: Partial<User>;
     isAuthenticated: boolean;
-    loading: boolean;
-    errors: Array<any>;
 };
 
 export const initialState: UserState = {
     user: {},
     isAuthenticated: false,
-    loading: true,
-    errors: [],
 };
 
-export enum UserActionTypes {
-    SET_USER = '@user/SET_USER',
+export enum UserActionCategory {
     SET_AUTH = '@user/SET_AUTH',
-    SET_LOADING = '@user/SET_LOADING',
-    SET_ERROR = '@user/SET_ERROR',
+}
+
+export enum UserActionTypes {
+    SET_AUTH_REQUEST = '@user/SET_AUTH_REQUEST',
+    SET_AUTH_SUCCESS = '@user/SET_AUTH_SUCCESS',
+    SET_AUTH_FAILURE = '@user/SET_AUTH_FAILURE',
+    SET_USER = '@user/SET_USER',
 }

@@ -47,6 +47,7 @@
         }
 
         .cards-wrapper {
+            position: relative;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax($tc-min-width, 1fr));
             grid-gap: 1rem;

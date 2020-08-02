@@ -2,6 +2,10 @@ import React from 'react';
 import './spinner.scss';
 import { PositionProperty } from 'csstype';
 
+export enum SpinnerStyle {
+    Default,
+    ChaseDot,
+}
 /**
  * Spinner Props
  * positionStyle: Position css property
@@ -18,7 +22,7 @@ class Spinner extends React.Component<SpinnerProps> {
     render() {
         return (
             <div className="spinner-wrapper" style={{ position: this.props.positionStyle }}>
-                <div className="spinner"></div>
+                <div className="spinner" />
             </div>
         );
     }

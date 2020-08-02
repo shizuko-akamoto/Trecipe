@@ -14,11 +14,14 @@ import Trecipe from '../../../../shared/models/trecipe';
 import TrecipeService from '../../services/trecipeService';
 import { updateTrecipe } from '../Trecipe/action';
 
+/**----- Sends destination requests to server and dispatches destination actions with results -----**/
+
 export const getDestinationsByTrecipeId = (trecipeId: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        dispatch({ type: DestinationsActionTypes.FETCH_DESTS_BY_TRECIPE_ID_REQUEST });
         DestinationService.getDestinationsByTrecipeId(trecipeId).then(
             (dests: Array<Destination>) => {
-                dispatch(loadByTrecipeId(trecipeId, dests));
+                dispatch(fetchByTrecipeId(trecipeId, dests));
             }
         );
     };
@@ -26,16 +29,18 @@ export const getDestinationsByTrecipeId = (trecipeId: string): AppThunk => {
 
 export const getDestinationById = (destId: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        dispatch({ type: DestinationsActionTypes.FETCH_DESTINATION_REQUEST });
         DestinationService.getDestinationById(destId).then((dest: Destination) => {
-            dispatch(loadDestination(dest));
+            dispatch(fetchDestination(dest));
         });
     };
 };
 
 export const getDestinationByPlaceId = (placeId: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        dispatch({ type: DestinationsActionTypes.FETCH_DESTINATION_REQUEST });
         DestinationService.getDestinationByPlaceId(placeId).then((dest: Destination) => {
-            dispatch(loadDestination(dest));
+            dispatch(fetchDestination(dest));
         });
     };
 };
@@ -47,7 +52,6 @@ export const addDestinationRequest = (
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         const createDestPromise = DestinationService.createDestination(destData);
         const updateTrecipePromise = createDestPromise.then((dest: Destination) => {
-            dispatch(addDestination(trecipe.uuid, dest));
             return TrecipeService.updateTrecipe(trecipe.uuid, {
                 destinations: [...trecipe.destinations, { destUUID: dest.uuid, completed: false }],
             });
@@ -87,6 +91,7 @@ export const removeDestinationRequest = (
         });
     }
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        dispatch({ type: DestinationsActionTypes.REMOVE_DESTINATION_REQUEST });
         updateTrecipePromise.then((updated: Trecipe) => {
             dispatch(updateTrecipeInList(trecipe.uuid, updated));
             dispatch(updateTrecipe(updated));
@@ -97,36 +102,36 @@ export const removeDestinationRequest = (
     };
 };
 
-export const loadByTrecipeId = (trecipeId: string, destinations: Array<Destination>) => {
-    return typedAction(DestinationsActionTypes.LOAD_DESTS_BY_TRECIPE_ID, {
+export const fetchByTrecipeId = (trecipeId: string, destinations: Array<Destination>) => {
+    return typedAction(DestinationsActionTypes.FETCH_DESTS_BY_TRECIPE_ID_SUCCESS, {
         trecipeId: trecipeId,
         dests: destinations,
     });
 };
 
 export const addDestination = (trecipeId: string, destination: Destination) => {
-    return typedAction(DestinationsActionTypes.ADD_DESTINATION, {
+    return typedAction(DestinationsActionTypes.ADD_DESTINATION_SUCCESS, {
         trecipeId: trecipeId,
         dest: destination,
     });
 };
 
 export const removeDestination = (trecipeId: string, destinationId: string) => {
-    return typedAction(DestinationsActionTypes.REMOVE_DESTINATION, {
+    return typedAction(DestinationsActionTypes.REMOVE_DESTINATION_SUCCESS, {
         trecipeId: trecipeId,
         destinationId: destinationId,
     });
 };
 
-export const loadDestination = (destination: Destination) => {
-    return typedAction(DestinationsActionTypes.LOAD_DESTINATION, {
+export const fetchDestination = (destination: Destination) => {
+    return typedAction(DestinationsActionTypes.FETCH_DESTINATION_SUCCESS, {
         dest: destination,
     });
 };
 
 export type DestinationsAction = ReturnType<
-    | typeof loadByTrecipeId
+    | typeof fetchByTrecipeId
     | typeof addDestination
     | typeof removeDestination
-    | typeof loadDestination
+    | typeof fetchDestination
 >;

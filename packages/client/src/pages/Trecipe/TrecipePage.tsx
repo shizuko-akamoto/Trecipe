@@ -27,6 +27,10 @@ import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { Legend } from '../Map/GoogleMap/Legend';
 import { baseURL } from '../../api';
+import { createLoadingSelector } from '../../redux/Loading/selector';
+import { DestinationsActionCategory } from '../../redux/Destinations/types';
+import Spinner, { SpinnerStyle } from '../../components/Loading/Spinner';
+import OverlaySpinner from '../../components/Loading/OverlaySpinner';
 
 /**
  * TrecipeProps
@@ -69,7 +73,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         // load destinations by trecipe id before rendering
         const trecipeId = this.props.match.params.trecipeId;
         this.props.fetchTrecipe(trecipeId);
-        this.props.getDestinationsByTrecipeId(trecipeId);
+        this.props.fetchDestinations(trecipeId);
     }
 
     private onDestDragEnd(result: DropResult, provided: ResponderProvided) {
@@ -145,13 +149,13 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
 
     private onDestAdded(destination: CreateNewDestinationDTO): void {
         if (this.props.trecipe) {
-            this.props.addDestinationRequest(this.props.trecipe, destination);
+            this.props.addDestination(this.props.trecipe, destination);
         }
     }
 
     private onDestRemoved(idToDelete: string): void {
         if (this.props.trecipe) {
-            this.props.removeDestinationRequest(this.props.trecipe, { destId: idToDelete });
+            this.props.removeDestination(this.props.trecipe, { destId: idToDelete });
         }
     }
 
@@ -224,7 +228,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         const destinations: Destination[] | undefined = this.props.destinations;
         const editTrecipeBtnString = 'Edit Trecipe';
         if (!trecipe || !destinations) {
-            return null;
+            return <Spinner positionStyle="static" />;
         } else {
             const completed = new Set(
                 trecipe.destinations.flatMap((dest: DestWithStatus) =>
@@ -289,7 +293,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                 showText={true}
                                 barStyle={{ height: '1rem' }}
                             />
-                            <div>
+                            <div className="destination-card-list">
                                 <DragDropContext onDragEnd={this.onDestDragEnd.bind(this)}>
                                     <Droppable droppableId="droppable">
                                         {(provided) => (
@@ -331,6 +335,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                         <FontAwesomeIcon id="show-more-icon" icon="chevron-down" />
                                     </button>
                                 )}
+                                {this.props.isDestsLoading && <OverlaySpinner />}
                             </div>
                             <h1 className="trecipe-page-title">See places on the map</h1>
                             <div className="trecipe-map-wrapper">
@@ -356,6 +361,12 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     }
 }
 
+const loadingSelector = createLoadingSelector([
+    DestinationsActionCategory.ADD_DESTINATION,
+    DestinationsActionCategory.REMOVE_DESTINATION,
+    DestinationsActionCategory.FETCH_DESTS_BY_TRECIPE_ID,
+]);
+
 const mapStateToProps = (
     state: RootState,
     ownProps: RouteComponentProps<{ trecipeId: string }>
@@ -365,6 +376,7 @@ const mapStateToProps = (
     return {
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
+        isDestsLoading: loadingSelector(state),
     };
 };
 
@@ -373,10 +385,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
         {
             showModal,
             updateTrecipe: updateTrecipeRequest,
-            getDestinationsByTrecipeId,
             fetchTrecipe,
-            addDestinationRequest,
-            removeDestinationRequest,
+            fetchDestinations: getDestinationsByTrecipeId,
+            addDestination: addDestinationRequest,
+            removeDestination: removeDestinationRequest,
         },
         dispatch
     );

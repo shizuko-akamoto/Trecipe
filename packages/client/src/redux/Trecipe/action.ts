@@ -7,6 +7,7 @@ import { Action } from 'redux';
 import TrecipeService from '../../services/trecipeService';
 import { getDestinationsByTrecipeId } from '../Destinations/action';
 import { updateTrecipe as updateTrecipeInList } from '../TrecipeList/action';
+import { TrecipeListActionTypes } from '../TrecipeList/types';
 
 export const loadTrecipe = (trecipe: Trecipe) => {
     return typedAction(TrecipeActionTypes.LOAD_TRECIPE, trecipe);
@@ -26,6 +27,7 @@ export const fetchTrecipe = (id: string): AppThunk => {
 
 export const updateTrecipeRequest = (trecipeId: string, updatedTrecipe: Partial<Trecipe>) => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        dispatch({ type: TrecipeListActionTypes.UPDATE_TRECIPE_REQUEST });
         TrecipeService.updateTrecipe(trecipeId, updatedTrecipe).then((updated: Trecipe) => {
             dispatch(loadTrecipe(updated));
             dispatch(updateTrecipeInList(trecipeId, updated));

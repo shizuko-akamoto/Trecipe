@@ -9,7 +9,6 @@ import { withRouter, Link } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
 import Destination, { getIcon, Rating } from '../../../../shared/models/destination';
-import { getDestinationById } from '../../redux/Destinations/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDestModel } from '../../components/Map/mapHelper';
 import Review from './Review/review';
@@ -21,6 +20,9 @@ import { showModal } from '../../redux/Modal/action';
 import TrecipePicker from '../../components/TrecipePicker/TrecipePicker';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { NearbyDestCard } from './NearbyDestCard/NearbyDestCard';
+import { createLoadingSelector } from '../../redux/Loading/selector';
+import { TrecipeListActionCategory } from '../../redux/TrecipeList/types';
+import Spinner from '../../components/Loading/Spinner';
 
 /**
  * Destination props
@@ -44,6 +46,8 @@ export interface DestinationState {
     destination: Destination | undefined;
     photos: Array<google.maps.places.PlacePhoto>;
     reviews: Array<google.maps.places.PlaceReview>;
+    isLoadingDestination: boolean;
+    isLoadingNearbys: boolean;
 }
 
 class DestinationPage extends React.Component<DestinationProps, DestinationState> {
@@ -63,6 +67,8 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
             destination: undefined,
             photos: [],
             reviews: [],
+            isLoadingDestination: true,
+            isLoadingNearbys: true,
         };
     }
 
@@ -103,6 +109,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
             radius: 500,
         };
 
+        this.setState({ isLoadingNearbys: true });
         this.mapService.nearbySearch(request, this.processNearbySearchResults.bind(this));
     }
 
@@ -115,11 +122,15 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                 nearbyDestinations: results.map((place: google.maps.places.PlaceResult) =>
                     this.getDestModel(place)
                 ),
+                isLoadingNearbys: false,
             });
         }
     }
 
     private initializeDestDetail(placeId: string) {
+        this.setState({
+            isLoadingDestination: true,
+        });
         let request: google.maps.places.PlaceDetailsRequest = {
             placeId: placeId,
             fields: ['ALL'],
@@ -136,6 +147,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                 destination: this.getDestModel(result),
                 photos: result.photos ? result.photos : [],
                 reviews: result.reviews ? result.reviews : [],
+                isLoadingDestination: false,
             });
         }
     }
@@ -180,8 +192,13 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
 
     render() {
         const destination: Destination | undefined = this.state.destination;
-        if (!destination) {
-            return null;
+        if (
+            !destination ||
+            this.state.isLoadingDestination ||
+            this.state.isLoadingNearbys ||
+            this.props.isLoading
+        ) {
+            return <Spinner positionStyle="static" />;
         } else {
             // display up to 5 nearby locations and reviews
             const nearbys = this.state.nearbyDestinations.slice(0, 5);
@@ -313,17 +330,21 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
     }
 }
 
+const loadingSelector = createLoadingSelector([
+    TrecipeListActionCategory.FETCH_ASSOCIATED_TRECIPES,
+]);
+
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{ placeId: string }>) => {
     return {
         associatedTrecipes: state.trecipeList.associatedTrecipes,
         isAuthenticated: state.user.isAuthenticated,
+        isLoading: loadingSelector(state),
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
-            getDestinationById,
             fetchAssociatedTrecipesRequest,
             showModal,
         },
