@@ -281,11 +281,13 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                     )}
                                     <h1 className="dest-page-title">Ratings</h1>
                                     <span className="dest-info-item">
-                                        <p className="rating-text">Trecipe</p>
+                                        <span className="rating-icon">Trecipe</span>
                                         <RatingBar rating={this.getUserRating()} />
                                     </span>
                                     <span className="dest-info-item">
-                                        <p className="rating-text">Google</p>
+                                        <span className="rating-icon">
+                                            <FontAwesomeIcon icon={['fab', 'google']} fixedWidth />
+                                        </span>
                                         <RatingBar
                                             rating={
                                                 this.state.destination === undefined

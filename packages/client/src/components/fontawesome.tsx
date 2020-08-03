@@ -35,7 +35,7 @@ import {
     faWindowMaximize,
     faUserCircle,
 } from '@fortawesome/free-regular-svg-icons';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 library.add(
     faPlusCircle,
@@ -70,5 +70,6 @@ library.add(
     faExclamationTriangle,
     faUserCircle,
     faSignOutAlt,
-    faMapMarker
+    faMapMarker,
+    faGoogle
 );
