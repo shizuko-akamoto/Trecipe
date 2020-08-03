@@ -35,9 +35,13 @@ export const getDestinationById = (destId: string): AppThunk => {
 
 export const getDestinationByPlaceId = (placeId: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        DestinationService.getDestinationByPlaceId(placeId).then((dest: Destination) => {
-            dispatch(loadDestination(dest));
-        });
+        DestinationService.getDestinationByPlaceId(placeId)
+            .then((dest: Destination) => {
+                dispatch(loadDestination(dest));
+            })
+            .catch((e: any) => {
+                // Silently ignore here;
+            });
     };
 };
 

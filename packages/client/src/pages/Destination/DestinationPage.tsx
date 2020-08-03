@@ -8,8 +8,8 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
-import Destination, { getIcon, Rating } from '../../../../shared/models/destination';
-import { getDestinationById } from '../../redux/Destinations/action';
+import Destination, { getIcon, Rating, UserRating } from '../../../../shared/models/destination';
+import { getDestinationById, getDestinationByPlaceId } from '../../redux/Destinations/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDestModel } from '../../components/Map/mapHelper';
 import Review from './Review/review';
@@ -21,6 +21,7 @@ import { showModal } from '../../redux/Modal/action';
 import TrecipePicker from '../../components/TrecipePicker/TrecipePicker';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { NearbyDestCard } from './NearbyDestCard/NearbyDestCard';
+import { RatingBar } from '../../components/Rating/RatingBar';
 
 /**
  * Destination props
@@ -70,6 +71,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
         const placeId = this.props.match.params.placeId;
         // retrieve public trecipes containing this destination
         this.props.fetchAssociatedTrecipesRequest(placeId, 10);
+        this.props.getDestinationByPlaceId(placeId);
         // use place id to fetch place details from Google
         this.initializeDestDetail(placeId);
     }
@@ -148,10 +150,15 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
     }
 
     private getDestModel(place: google.maps.places.PlaceResult) {
+        let userRating: UserRating[] = [];
+        let dests = this.props.destinations.dests.filter((dest) => dest.placeId === place.place_id);
+        if (dests.length !== 0) {
+            userRating = dests[0].userRatings;
+        }
         return {
             ...getDestModel(place),
             uuid: '',
-            userRatings: [],
+            userRatings: userRating,
             description: '',
             // since we have access to actual PlacePhoto objects to get photo URL from, we'll use that to fetch photo from
             // client bypassing the server.
@@ -176,6 +183,18 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
             color: MarkerColor.Blue,
         };
         return [destMarker, ...nearbyMarkers];
+    }
+
+    private getUserRating() {
+        if (this.state.destination && this.state.destination?.userRatings.length !== 0) {
+            return Math.floor(
+                this.state.destination.userRatings.reduce((acc: number, rating) => {
+                    return (acc + rating.rating) as number;
+                }, 0) / this.state.destination.userRatings.length
+            ) as Rating;
+        }
+
+        return 0 as Rating;
     }
 
     render() {
@@ -260,6 +279,21 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                             </a>
                                         </span>
                                     )}
+                                    <h1 className="dest-page-title">Ratings</h1>
+                                    <span className="dest-info-item">
+                                        <p className="rating-text">Trecipe</p>
+                                        <RatingBar rating={this.getUserRating()} />
+                                    </span>
+                                    <span className="dest-info-item">
+                                        <p className="rating-text">Google</p>
+                                        <RatingBar
+                                            rating={
+                                                this.state.destination === undefined
+                                                    ? (0 as Rating)
+                                                    : (this.state.destination.rating as Rating)
+                                            }
+                                        />
+                                    </span>
                                     <h1 className="dest-page-title">Explore Nearby</h1>
                                     {nearbys.map((dest, index) => (
                                         <div className="nearby-dest-item" key={dest.placeId}>
@@ -315,6 +349,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
 
 const mapStateToProps = (state: RootState, ownProps: RouteComponentProps<{ placeId: string }>) => {
     return {
+        destinations: state.destinations,
         associatedTrecipes: state.trecipeList.associatedTrecipes,
         isAuthenticated: state.user.isAuthenticated,
     };
@@ -324,6 +359,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
             getDestinationById,
+            getDestinationByPlaceId,
             fetchAssociatedTrecipesRequest,
             showModal,
         },
