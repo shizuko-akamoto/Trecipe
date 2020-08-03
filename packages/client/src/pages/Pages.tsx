@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import MyTrecipes from './MyTrecipes/MyTrecipes';
 import Header from '../components/Header/Header';
 import { Footer } from '../components/Footer/Footer';
@@ -14,6 +14,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { NotFound } from './NotFound/NotFound';
 import Landing from './Landing/Landing';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from './Error/ErrorFallback';
 
 const libraries = ['places'];
 
@@ -25,21 +27,23 @@ const Pages = (props: PagesProps) => {
     });
     return (
         <div>
-            <Header />
-            <LoadScript
-                googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
-                libraries={libraries}>
-                <Switch>
-                    <Route path="/" exact component={Landing} />
-                    <PrivateRoute path="/mytrecipes" exact component={MyTrecipes} />
-                    <PrivateRoute path="/trecipes/:trecipeId" exact component={TrecipePage} />
-                    <PrivateRoute path="/map/:trecipeId" exact component={Map} />
-                    <Route path="/destinations/:placeId" exact component={DestinationPage} />
-                    <Route path="/user/login" exact component={Login} />
-                    <Route component={NotFound} />
-                </Switch>
-            </LoadScript>
-            <Footer />
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Header />
+                <LoadScript
+                    googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
+                    libraries={libraries}>
+                    <Switch>
+                        <Route path="/" exact component={Landing} />
+                        <PrivateRoute path="/mytrecipes" exact component={MyTrecipes} />
+                        <PrivateRoute path="/trecipes/:trecipeId" exact component={TrecipePage} />
+                        <PrivateRoute path="/map/:trecipeId" exact component={Map} />
+                        <Route path="/destinations/:placeId" exact component={DestinationPage} />
+                        <Route path="/user/login" exact component={Login} />
+                        <Route component={NotFound} />
+                    </Switch>
+                </LoadScript>
+                <Footer />
+            </ErrorBoundary>
         </div>
     );
 };

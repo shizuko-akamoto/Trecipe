@@ -9,7 +9,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import passport from 'passport';
 import { setupPassport } from './passport/passportUtils';
-import GridFsStorage, { ConnectionResult } from 'multer-gridfs-storage';
+import GridFsStorage from 'multer-gridfs-storage';
 
 import installValidator from './openapi';
 import multer from 'multer';
