@@ -187,7 +187,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
 
     private getUserRating() {
         if (this.state.destination && this.state.destination?.userRatings.length !== 0) {
-            return Math.floor(
+            return Math.round(
                 this.state.destination.userRatings.reduce((acc: number, rating) => {
                     return (acc + rating.rating) as number;
                 }, 0) / this.state.destination.userRatings.length
