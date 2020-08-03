@@ -10,6 +10,7 @@ import { fetchAssociatedTrecipesRequest } from '../TrecipeList/action';
 import Trecipe from '../../../../shared/models/trecipe';
 import TrecipeService from '../../services/trecipeService';
 import { updateTrecipe } from '../Trecipe/action';
+import { UpdateDestinationRatingDTO } from '../../../../shared/models/updateDestinationRatingDTO';
 import { toast } from 'react-toastify';
 
 /**----- Sends destination requests to server and dispatches destination actions with results -----**/
@@ -142,6 +143,19 @@ export const removeDestinationRequest = (
     };
 };
 
+export const rateDestinationRequest = (
+    destIdForUpdate: string,
+    updateRatingData: UpdateDestinationRatingDTO
+): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        DestinationService.updateDestinationRating(destIdForUpdate, updateRatingData).then(
+            (updated: Destination) => {
+                dispatch(updateDestination(updateRatingData.trecipeId, updated));
+            }
+        );
+    };
+};
+
 export const fetchByTrecipeId = (trecipeId: string, destinations: Array<Destination>) => {
     return typedAction(DestinationsActionTypes.FETCH_DESTS_BY_TRECIPE_ID_SUCCESS, {
         trecipeId: trecipeId,
@@ -163,6 +177,13 @@ export const removeDestination = (trecipeId: string, destinationId: string) => {
     });
 };
 
+export const updateDestination = (trecipeId: string, destination: Destination) => {
+    return typedAction(DestinationsActionTypes.UPDATE_DESTINATION, {
+        trecipeId: trecipeId,
+        destination: destination,
+    });
+};
+
 export const fetchDestinationByPlaceId = (destination: Destination) => {
     return typedAction(DestinationsActionTypes.FETCH_DESTINATION_BY_PLACE_ID_SUCCESS, {
         dest: destination,
@@ -173,5 +194,6 @@ export type DestinationsAction = ReturnType<
     | typeof fetchByTrecipeId
     | typeof addDestination
     | typeof removeDestination
+    | typeof updateDestination
     | typeof fetchDestinationByPlaceId
 >;

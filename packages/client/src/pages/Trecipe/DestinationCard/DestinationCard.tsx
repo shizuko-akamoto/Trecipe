@@ -7,6 +7,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import Destination, { getIcon } from '../../../../../shared/models/destination';
 import { isEmpty } from 'lodash';
 import { baseURL } from '../../../api';
+import destination from '../../../../../shared/models/destination';
 
 /**
  * DCProps
@@ -22,7 +23,7 @@ export interface DCProps {
     destination: Destination;
     isCompleted: boolean;
     onClickDelete: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
-    onClickComplete: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
+    onClickComplete: (destId: destination, e: React.MouseEvent<HTMLElement>) => void;
     isInEdit?: boolean;
 }
 
@@ -86,10 +87,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                         type="checkbox"
                                         id={this.props.destination.uuid + '-completed'}
                                         onClick={(e) =>
-                                            this.props.onClickComplete(
-                                                this.props.destination.uuid,
-                                                e
-                                            )
+                                            this.props.onClickComplete(this.props.destination, e)
                                         }
                                         checked={this.props.isCompleted}
                                         readOnly

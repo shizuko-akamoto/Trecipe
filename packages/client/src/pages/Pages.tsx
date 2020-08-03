@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import MyTrecipes from './MyTrecipes/MyTrecipes';
 import Header from '../components/Header/Header';
 import { Footer } from '../components/Footer/Footer';
