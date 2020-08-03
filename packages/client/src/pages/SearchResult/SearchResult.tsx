@@ -9,7 +9,6 @@ import { fetchResultRequest } from '../../redux/SearchResult/action';
 import Trecipe from '../../../../shared/models/trecipe';
 import Destination from '../../../../shared/models/destination';
 import { DestinationCard } from '../Map/DestinationCard/DestinationCard';
-import { DestinationsState } from '../../redux/Destinations/types';
 
 type SearchResultProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &

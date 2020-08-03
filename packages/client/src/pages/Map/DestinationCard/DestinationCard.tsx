@@ -1,7 +1,6 @@
 import React from 'react';
 import { CardMenu } from '../../../components/CardMenu/CardMenu';
 import { RatingBar } from '../../../components/Rating/RatingBar';
-// import { DCProps } from '../../Trecipe/DestinationCard/DestinationCard';
 import './destinationCard.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
