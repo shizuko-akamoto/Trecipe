@@ -20,6 +20,10 @@ import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { fetchTrecipeRequest, updateTrecipeRequest } from '../../redux/Trecipe/action';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
+import { createErrorMessageSelector } from '../../redux/Error/selector';
+import { DestinationsActionCategory } from '../../redux/Destinations/types';
+import { TrecipeActionCategory } from '../../redux/Trecipe/types';
+import { toast } from 'react-toastify';
 
 export type MapProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &

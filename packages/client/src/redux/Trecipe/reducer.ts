@@ -3,7 +3,7 @@ import { TrecipeAction } from './action';
 
 export function trecipeReducer(state = initialState, action: TrecipeAction): TrecipeState {
     switch (action.type) {
-        case TrecipeActionTypes.LOAD_TRECIPE_SUCCESS:
+        case TrecipeActionTypes.FETCH_TRECIPE_SUCCESS:
             return {
                 trecipe: action.payload,
             };

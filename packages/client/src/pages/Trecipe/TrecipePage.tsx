@@ -28,10 +28,15 @@ import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDest
 import { Legend } from '../Map/GoogleMap/Legend';
 import { baseURL } from '../../api';
 import { createLoadingSelector } from '../../redux/Loading/selector';
-import { DestinationsActionCategory } from '../../redux/Destinations/types';
+import {
+    DestinationsActionCategory,
+    DestinationsActionTypes,
+} from '../../redux/Destinations/types';
 import Spinner from '../../components/Loading/Spinner';
 import OverlaySpinner from '../../components/Loading/OverlaySpinner';
 import { TrecipeActionCategory } from '../../redux/Trecipe/types';
+import { createErrorMessageSelector } from '../../redux/Error/selector';
+import { toast } from 'react-toastify';
 
 /**
  * TrecipeProps
@@ -161,11 +166,12 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     }
 
     private onDestEditClick() {
-        // if exiting from editing, update TrecipeModel with the changes to destination,
-        // else if entering editing, reset destinationsInEdit state to store's destinations
         if (!this.props.trecipe || !this.props.destinations) {
             return;
         }
+
+        // if exiting from editing, update TrecipeModel with the changes to destination,
+        // else if entering editing, reset destinationsInEdit state to store's destinations
         if (this.state.isInEdit) {
             const trecipe: Trecipe = this.props.trecipe;
             const completed = new Set(
@@ -336,7 +342,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                         <FontAwesomeIcon id="show-more-icon" icon="chevron-down" />
                                     </button>
                                 )}
-                                {this.props.isDestsLoading && <OverlaySpinner size={100} />}
+                                {this.props.isDestsLoading && <OverlaySpinner size={50} />}
                             </div>
                             <h1 className="trecipe-page-title">See places on the map</h1>
                             <div className="trecipe-map-wrapper">
@@ -369,7 +375,7 @@ const destLoadingSelector = createLoadingSelector([
 ]);
 
 const trecipeLoadingSelector = createLoadingSelector([
-    TrecipeActionCategory.LOAD_TRECIPE,
+    TrecipeActionCategory.FETCH_TRECIPE,
     TrecipeActionCategory.UPDATE_TRECIPE,
 ]);
 

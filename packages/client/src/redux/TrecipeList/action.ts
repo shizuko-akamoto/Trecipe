@@ -54,7 +54,14 @@ export const fetchMyTrecipesRequest = (): AppThunk => {
                 dispatch(fetchMyTrecipes(trecipes));
             })
             .catch((err) => {
-                dispatch({ type: TrecipeListActionTypes.FETCH_MY_TRECIPES_FAILURE, payload: err });
+                dispatch(
+                    typedAction(TrecipeListActionTypes.FETCH_MY_TRECIPES_FAILURE, {
+                        reason: err.toString(),
+                    })
+                );
+                toast(`Failed to fetch my trecipes [${err.toString()}]`, {
+                    type: toast.TYPE.ERROR,
+                });
             });
     };
 };
@@ -62,67 +69,144 @@ export const fetchMyTrecipesRequest = (): AppThunk => {
 export const createTrecipeRequest = (trecipeData: CreateNewTrecipeDTO): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         dispatch({ type: TrecipeListActionTypes.CREATE_TRECIPE_REQUEST });
-        TrecipeService.createTrecipe(trecipeData).then((createdTrecipe: Trecipe) => {
-            dispatch(createTrecipe(createdTrecipe));
-            toast(`${createdTrecipe.name} created successfully!`, {
-                type: toast.TYPE.INFO,
+        TrecipeService.createTrecipe(trecipeData)
+            .then((createdTrecipe: Trecipe) => {
+                dispatch(createTrecipe(createdTrecipe));
+                toast(`${createdTrecipe.name} created successfully!`, {
+                    type: toast.TYPE.INFO,
+                });
+                UserService.getUser()
+                    .then((updatedUser: UserResponse) => {
+                        dispatch(setUser(updatedUser.user));
+                    })
+                    .catch((err) =>
+                        toast(`Failed to get user [${err.toString()}]`, {
+                            type: toast.TYPE.ERROR,
+                        })
+                    );
+            })
+            .catch((err) => {
+                dispatch(
+                    typedAction(TrecipeListActionTypes.CREATE_TRECIPE_FAILURE, {
+                        reason: err.toString(),
+                    })
+                );
+                toast(`Failed to create trecipe [${err.toString()}]`, {
+                    type: toast.TYPE.ERROR,
+                });
             });
-            UserService.getUser().then((updatedUser: UserResponse) => {
-                dispatch(setUser(updatedUser.user));
-            });
-        });
     };
 };
 
 export const duplicateTrecipeRequest = (srcTrecipeId: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         dispatch({ type: TrecipeListActionTypes.CREATE_TRECIPE_REQUEST });
-        TrecipeService.duplicateTrecipe(srcTrecipeId).then((copiedTrecipe: Trecipe) => {
-            dispatch(createTrecipe(copiedTrecipe));
-            toast(`${copiedTrecipe.name} created successfully!`, {
-                type: toast.TYPE.INFO,
+        TrecipeService.duplicateTrecipe(srcTrecipeId)
+            .then((copiedTrecipe: Trecipe) => {
+                dispatch(createTrecipe(copiedTrecipe));
+                toast(`${copiedTrecipe.name} copied successfully!`, {
+                    type: toast.TYPE.INFO,
+                });
+                UserService.getUser()
+                    .then((updatedUser: UserResponse) => {
+                        dispatch(setUser(updatedUser.user));
+                    })
+                    .catch((err) =>
+                        toast(`Failed to get user [${err.toString()}]`, {
+                            type: toast.TYPE.ERROR,
+                        })
+                    );
+            })
+            .catch((err) => {
+                dispatch(
+                    typedAction(TrecipeListActionTypes.CREATE_TRECIPE_FAILURE, {
+                        reason: err.toString(),
+                    })
+                );
+                toast(`Failed to copy trecipe [${err.toString()}]`, {
+                    type: toast.TYPE.ERROR,
+                });
             });
-            UserService.getUser().then((updatedUser: UserResponse) => {
-                dispatch(setUser(updatedUser.user));
-            });
-        });
     };
 };
 
 export const deleteTrecipeRequest = (idToDelete: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         dispatch({ type: TrecipeListActionTypes.DELETE_TRECIPE_REQUEST });
-        TrecipeService.deleteTrecipe(idToDelete).then((deletedCount: number) => {
-            if (deletedCount > 0) {
-                dispatch(deleteTrecipe(idToDelete));
-                toast(`Trecipe deleted successfully!`, {
-                    type: toast.TYPE.INFO,
-                });
-                UserService.getUser().then((updatedUser: UserResponse) => {
-                    dispatch(setUser(updatedUser.user));
-                });
-            }
-        });
+        TrecipeService.deleteTrecipe(idToDelete)
+            .then((deletedCount: number) => {
+                if (deletedCount > 0) {
+                    dispatch(deleteTrecipe(idToDelete));
+                    toast(`Trecipe deleted successfully!`, {
+                        type: toast.TYPE.INFO,
+                    });
+                    UserService.getUser()
+                        .then((updatedUser: UserResponse) => {
+                            dispatch(setUser(updatedUser.user));
+                        })
+                        .catch((err) =>
+                            toast(`Failed to get user [${err.toString()}]`, {
+                                type: toast.TYPE.ERROR,
+                            })
+                        );
+                } else {
+                    const errMsg: string = `Failed to delete trecipe`;
+                    dispatch(
+                        typedAction(TrecipeListActionTypes.DELETE_TRECIPE_FAILURE, {
+                            reason: errMsg,
+                        })
+                    );
+                    toast(errMsg, { type: toast.TYPE.WARNING });
+                }
+            })
+            .catch((err) => {
+                dispatch(
+                    typedAction(TrecipeListActionTypes.DELETE_TRECIPE_FAILURE, {
+                        reason: err.toString(),
+                    })
+                );
+                toast(`Failed to delete trecipe [${err.toString()}]`, { type: toast.TYPE.ERROR });
+            });
     };
 };
 
 export const fetchAssociatedTrecipesRequest = (placeId: string, limit?: number): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         dispatch({ type: TrecipeListActionTypes.FETCH_ASSOCIATED_TRECIPES_REQUEST });
-        TrecipeService.fetchAssociatedTrecipes(placeId, limit).then((trecipes: Array<Trecipe>) => {
-            dispatch(fetchAssociatedTrecipes(trecipes));
-        });
+        TrecipeService.fetchAssociatedTrecipes(placeId, limit)
+            .then((trecipes: Array<Trecipe>) => {
+                dispatch(fetchAssociatedTrecipes(trecipes));
+            })
+            .catch((err) => {
+                dispatch(
+                    typedAction(TrecipeListActionTypes.FETCH_ASSOCIATED_TRECIPES_FAILURE, {
+                        reason: err.toString(),
+                    })
+                );
+                toast(`Failed to fetch associated trecipes [${err.toString()}]`, {
+                    type: toast.TYPE.ERROR,
+                });
+            });
     };
 };
 
 export const fetchMyAssociatedTrecipesRequest = (placeId: string, limit?: number): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         dispatch({ type: TrecipeListActionTypes.FETCH_MY_ASSOCIATED_TRECIPES_REQUEST });
-        TrecipeService.fetchAssociatedTrecipes(placeId, limit, true).then(
-            (trecipes: Array<Trecipe>) => {
+        TrecipeService.fetchAssociatedTrecipes(placeId, limit, true)
+            .then((trecipes: Array<Trecipe>) => {
                 dispatch(fetchMyAssociatedTrecipes(trecipes));
-            }
-        );
+            })
+            .catch((err) => {
+                dispatch(
+                    typedAction(TrecipeListActionTypes.FETCH_MY_ASSOCIATED_TRECIPES_FAILURE, {
+                        reason: err.toString(),
+                    })
+                );
+                toast(`Failed to fetch my associated trecipes [${err.toString()}]`, {
+                    type: toast.TYPE.ERROR,
+                });
+            });
     };
 };
 

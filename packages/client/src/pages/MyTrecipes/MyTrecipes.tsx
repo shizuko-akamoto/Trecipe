@@ -81,7 +81,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
                                 </div>
                             ))}
                             {/*When updating trecipes, we want to use a spinner overlay instead for smoother experience*/}
-                            {this.props.isUpdating && <OverlaySpinner />}
+                            {this.props.isUpdating && <OverlaySpinner size={50} />}
                         </div>
                     )}
                 </div>

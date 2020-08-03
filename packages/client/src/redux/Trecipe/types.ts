@@ -9,17 +9,17 @@ export const initialState: TrecipeState = {
 };
 
 export enum TrecipeActionCategory {
-    LOAD_TRECIPE = '@trecipe/LOAD_TRECIPE',
+    FETCH_TRECIPE = '@trecipe/FETCH_TRECIPE',
     UPDATE_TRECIPE = '@trecipe/UPDATE_TRECIPE',
 }
 
 export enum TrecipeActionTypes {
-    LOAD_TRECIPE_REQUEST = '@trecipe/LOAD_TRECIPE_REQUEST',
+    FETCH_TRECIPE_REQUEST = '@trecipe/FETCH_TRECIPE_REQUEST',
     UPDATE_TRECIPE_REQUEST = '@trecipe/UPDATE_TRECIPE_REQUEST',
 
-    LOAD_TRECIPE_SUCCESS = '@trecipe/LOAD_TRECIPE_SUCCESS',
+    FETCH_TRECIPE_SUCCESS = '@trecipe/FETCH_TRECIPE_SUCCESS',
     UPDATE_TRECIPE_SUCCESS = '@trecipe/UPDATE_TRECIPE_SUCCESS',
 
-    LOAD_TRECIPE_FAILURE = '@trecipe/LOAD_TRECIPE_FAILURE',
+    FETCH_TRECIPE_FAILURE = '@trecipe/FETCH_TRECIPE_FAILURE',
     UPDATE_TRECIPE_FAILURE = '@trecipe/UPDATE_TRECIPE_FAILURE',
 }

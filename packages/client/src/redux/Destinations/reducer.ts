@@ -33,7 +33,7 @@ export function destinationsReducer(
                 ...state,
                 destsByTrecipeId: state.destsByTrecipeId.set(action.payload.trecipeId, result),
             };
-        case DestinationsActionTypes.FETCH_DESTINATION_SUCCESS:
+        case DestinationsActionTypes.FETCH_DESTINATION_BY_PLACE_ID_SUCCESS:
             return {
                 ...state,
                 dests: state.dests.concat(action.payload.dest),
