@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
-import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
+import { fetchTrecipeRequest, updateTrecipeRequest } from '../../redux/Trecipe/action';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 
@@ -66,9 +66,15 @@ class Map extends React.Component<MapProps> {
         }
     }
 
-    private onDestDeleteClick(idToDelete: string) {
+    private onDestCardDeleteClick(idToDelete: string) {
         if (this.props.trecipe) {
             this.props.removeDestination(this.props.trecipe, { destId: idToDelete });
+        }
+    }
+
+    private onDestRemoveClick(idToDelete: string) {
+        if (this.props.trecipe) {
+            this.props.removeDestination(this.props.trecipe, { placeId: idToDelete });
         }
     }
 
@@ -133,7 +139,7 @@ class Map extends React.Component<MapProps> {
                                             key={dest.uuid}
                                             destination={dest}
                                             isCompleted={completed.has(dest.uuid)}
-                                            onClickDelete={this.onDestDeleteClick.bind(this)}
+                                            onClickDelete={this.onDestCardDeleteClick.bind(this)}
                                             onClickComplete={this.onDestCompleteClick.bind(this)}
                                         />
                                     </Link>
@@ -146,7 +152,7 @@ class Map extends React.Component<MapProps> {
                             destinations={destinations}
                             completedDest={completed}
                             onDestAdd={this.onDestAddClick.bind(this)}
-                            onDestRemove={this.onDestDeleteClick.bind(this)}
+                            onDestRemove={this.onDestRemoveClick.bind(this)}
                         />
                     </div>
                 </div>
@@ -177,7 +183,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             getDestinationsByTrecipeId,
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,
-            fetchTrecipe,
+            fetchTrecipe: fetchTrecipeRequest,
         },
         dispatch
     );

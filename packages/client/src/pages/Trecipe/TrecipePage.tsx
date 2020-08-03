@@ -22,15 +22,16 @@ import { SearchBarPopup } from '../../components/SearchBarPopup/SearchBarPopup';
 import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
 import Modal from '../../components/Modal/Modal';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
-import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
+import { fetchTrecipeRequest, updateTrecipeRequest } from '../../redux/Trecipe/action';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { Legend } from '../Map/GoogleMap/Legend';
 import { baseURL } from '../../api';
 import { createLoadingSelector } from '../../redux/Loading/selector';
 import { DestinationsActionCategory } from '../../redux/Destinations/types';
-import Spinner, { SpinnerStyle } from '../../components/Loading/Spinner';
+import Spinner from '../../components/Loading/Spinner';
 import OverlaySpinner from '../../components/Loading/OverlaySpinner';
+import { TrecipeActionCategory } from '../../redux/Trecipe/types';
 
 /**
  * TrecipeProps
@@ -155,7 +156,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
 
     private onDestRemoved(idToDelete: string): void {
         if (this.props.trecipe) {
-            this.props.removeDestination(this.props.trecipe, { destId: idToDelete });
+            this.props.removeDestination(this.props.trecipe, { placeId: idToDelete });
         }
     }
 
@@ -335,7 +336,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                         <FontAwesomeIcon id="show-more-icon" icon="chevron-down" />
                                     </button>
                                 )}
-                                {this.props.isDestsLoading && <OverlaySpinner />}
+                                {this.props.isDestsLoading && <OverlaySpinner size={100} />}
                             </div>
                             <h1 className="trecipe-page-title">See places on the map</h1>
                             <div className="trecipe-map-wrapper">
@@ -361,10 +362,15 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     }
 }
 
-const loadingSelector = createLoadingSelector([
+const destLoadingSelector = createLoadingSelector([
     DestinationsActionCategory.ADD_DESTINATION,
     DestinationsActionCategory.REMOVE_DESTINATION,
     DestinationsActionCategory.FETCH_DESTS_BY_TRECIPE_ID,
+]);
+
+const trecipeLoadingSelector = createLoadingSelector([
+    TrecipeActionCategory.LOAD_TRECIPE,
+    TrecipeActionCategory.UPDATE_TRECIPE,
 ]);
 
 const mapStateToProps = (
@@ -376,7 +382,8 @@ const mapStateToProps = (
     return {
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
-        isDestsLoading: loadingSelector(state),
+        isDestsLoading: destLoadingSelector(state),
+        isTrecipeLoading: trecipeLoadingSelector(state),
     };
 };
 
@@ -384,8 +391,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
             showModal,
+            fetchTrecipe: fetchTrecipeRequest,
             updateTrecipe: updateTrecipeRequest,
-            fetchTrecipe,
             fetchDestinations: getDestinationsByTrecipeId,
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,

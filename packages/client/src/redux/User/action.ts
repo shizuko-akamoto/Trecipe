@@ -9,7 +9,6 @@ import { AxiosError } from 'axios';
 
 export const login = (userData: LoginDTO): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        dispatch(setLoading());
         UserService.login(userData)
             .then((response: UserResponse) => {
                 dispatch(setAuthenticated(response.isAuthenticated));
@@ -25,7 +24,6 @@ export const login = (userData: LoginDTO): AppThunk => {
 
 export const signup = (userData: CreateUserDTO): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        dispatch(setLoading());
         UserService.signup(userData)
             .then(() => {
                 dispatch(
@@ -45,7 +43,6 @@ export const signup = (userData: CreateUserDTO): AppThunk => {
 
 export const logout = (cb?: () => void): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        dispatch(setLoading());
         UserService.logout()
             .then((response: UserResponse) => {
                 dispatch(setAuthenticated(response.isAuthenticated));
@@ -62,34 +59,35 @@ export const logout = (cb?: () => void): AppThunk => {
 
 export const getUser = () => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        dispatch(setLoading());
         UserService.getUser()
             .then((response: UserResponse) => {
                 dispatch(setAuthenticated(response.isAuthenticated));
                 dispatch(setUser(response.user));
+                dispatch(setLoading(false));
             })
             .catch((err: AxiosError) => {
                 if (err.response) {
                     dispatch(setError(err.response.data.errors));
                 }
+                dispatch(setLoading(false));
             });
     };
 };
 
 export const setError = (data: Array<any>) => {
-    return typedAction(UserActionTypes.SET_AUTH_FAILURE, data);
+    return typedAction(UserActionTypes.SET_ERROR, data);
 };
 
 export const setUser = (data: Partial<User>) => {
     return typedAction(UserActionTypes.SET_USER, data);
 };
 
-export const setLoading = () => {
-    return typedAction(UserActionTypes.SET_AUTH_REQUEST);
+export const setLoading = (data: boolean) => {
+    return typedAction(UserActionTypes.SET_LOADING, data);
 };
 
 export const setAuthenticated = (data: boolean) => {
-    return typedAction(UserActionTypes.SET_AUTH_SUCCESS, data);
+    return typedAction(UserActionTypes.SET_AUTH, data);
 };
 
 export type UserAction = ReturnType<

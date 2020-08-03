@@ -1,4 +1,4 @@
-import { DestinationsActionTypes } from './types';
+import { DestinationsActionCategory, DestinationsActionTypes } from './types';
 import { AppThunk, typedAction } from '../util';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
@@ -56,9 +56,11 @@ export const addDestinationRequest = (
                 destinations: [...trecipe.destinations, { destUUID: dest.uuid, completed: false }],
             });
         });
+
+        dispatch(typedAction(DestinationsActionTypes.ADD_DESTINATION_REQUEST));
         return Promise.all([createDestPromise, updateTrecipePromise]).then(
             ([createdDest, updatedTrecipe]: [Destination, Trecipe]) => {
-                dispatch(updateTrecipeInList(trecipe.uuid, updatedTrecipe));
+                dispatch(addDestination(trecipe.uuid, createdDest));
                 dispatch(updateTrecipe(updatedTrecipe));
                 dispatch(fetchAssociatedTrecipesRequest(createdDest.placeId, 10));
             }
@@ -70,34 +72,38 @@ export const removeDestinationRequest = (
     trecipe: Trecipe,
     idToDelete: { destId?: string; placeId?: string }
 ): AppThunk => {
-    let updateTrecipePromise: Promise<Trecipe>;
+    let removeDestPromise: Promise<[string, Trecipe]>;
     if (idToDelete.placeId) {
         // to remove destination by place id, first get corresponding destination uuid, then update trecipe
-        updateTrecipePromise = DestinationService.getDestinationByPlaceId(idToDelete.placeId).then(
+        removeDestPromise = DestinationService.getDestinationByPlaceId(idToDelete.placeId).then(
             (destToDelete: Destination) => {
-                return TrecipeService.updateTrecipe(trecipe.uuid, {
-                    destinations: trecipe.destinations.filter(
-                        (dest) => dest.destUUID !== destToDelete.uuid
-                    ),
+                return new Promise(function (resolve, reject) {
+                    TrecipeService.updateTrecipe(trecipe.uuid, {
+                        destinations: trecipe.destinations.filter(
+                            (dest) => dest.destUUID !== destToDelete.uuid
+                        ),
+                    }).then((updated: Trecipe) => resolve([destToDelete.uuid, updated]));
                 });
             }
         );
     } else if (idToDelete.destId) {
         // remove destination by destination uuid
-        updateTrecipePromise = TrecipeService.updateTrecipe(trecipe.uuid, {
-            destinations: trecipe.destinations.filter(
-                (dest) => dest.destUUID !== idToDelete.destId
-            ),
+        removeDestPromise = new Promise(function (resolve, reject) {
+            TrecipeService.updateTrecipe(trecipe.uuid, {
+                destinations: trecipe.destinations.filter(
+                    (dest) => dest.destUUID !== idToDelete.destId
+                ),
+            }).then((updated: Trecipe) => resolve([idToDelete.destId as string, updated]));
         });
     }
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         dispatch({ type: DestinationsActionTypes.REMOVE_DESTINATION_REQUEST });
-        updateTrecipePromise.then((updated: Trecipe) => {
-            dispatch(updateTrecipeInList(trecipe.uuid, updated));
+        removeDestPromise.then(([removedDestId, updated]: [string, Trecipe]) => {
             dispatch(updateTrecipe(updated));
-            if (idToDelete.destId) dispatch(removeDestination(trecipe.uuid, idToDelete.destId));
-            if (idToDelete.placeId)
+            dispatch(removeDestination(trecipe.uuid, removedDestId));
+            if (idToDelete.placeId) {
                 dispatch(fetchAssociatedTrecipesRequest(idToDelete.placeId, 10));
+            }
         });
     };
 };

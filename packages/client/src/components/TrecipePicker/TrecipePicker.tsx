@@ -14,6 +14,9 @@ import './trecipePicker.scss';
 import { addDestinationRequest, removeDestinationRequest } from '../../redux/Destinations/action';
 import Destination from '../../../../shared/models/destination';
 import { hideModal } from '../../redux/Modal/action';
+import { createLoadingSelector } from '../../redux/Loading/selector';
+import { TrecipeListActionCategory } from '../../redux/TrecipeList/types';
+import OverlaySpinner from '../Loading/OverlaySpinner';
 
 /**
  * Trecipe Picker own props
@@ -81,6 +84,7 @@ class TrecipePicker extends React.Component<TrecipePickerProps> {
                                 </li>
                             ))}
                         </ul>
+                        {this.props.isLoading && <OverlaySpinner />}
                     </div>
                 </div>
             </Modal>
@@ -88,12 +92,18 @@ class TrecipePicker extends React.Component<TrecipePickerProps> {
     }
 }
 
+const loadingSelector = createLoadingSelector([
+    TrecipeListActionCategory.FETCH_MY_TRECIPES,
+    TrecipeListActionCategory.FETCH_MY_ASSOCIATED_TRECIPES,
+]);
+
 const mapStateToProps = (state: RootState) => {
     return {
         trecipes: state.trecipeList.myTrecipes,
         checkedTrecipes: new Set(
             state.trecipeList.myAssociatedTrecipes.map((trecipe) => trecipe.uuid)
         ),
+        isLoading: loadingSelector(state),
     };
 };
 

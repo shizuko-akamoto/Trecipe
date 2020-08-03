@@ -8,7 +8,17 @@ export function userReducer(state = initialState, action: UserAction): UserState
                 ...state,
                 user: action.payload,
             };
-        case UserActionTypes.SET_AUTH_SUCCESS:
+        case UserActionTypes.SET_LOADING:
+            return {
+                ...state,
+                loading: action.payload,
+            };
+        case UserActionTypes.SET_ERROR:
+            return {
+                ...state,
+                errors: action.payload,
+            };
+        case UserActionTypes.SET_AUTH:
             return {
                 ...state,
                 isAuthenticated: action.payload,

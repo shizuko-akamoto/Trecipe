@@ -3,9 +3,6 @@ import { connect } from 'react-redux';
 import { RootState } from '../../redux';
 import { RouteProps, Route, Redirect } from 'react-router-dom';
 import Spinner from '../Loading/Spinner';
-import { createLoadingSelector } from '../../redux/Loading/selector';
-import { DestinationsActionCategory } from '../../redux/Destinations/types';
-import { UserActionCategory, UserActionTypes } from '../../redux/User/types';
 
 type PrivateRouteProps = ReturnType<typeof mapStateToProps> & RouteProps;
 
@@ -41,12 +38,10 @@ class PrivateRoute extends React.Component<PrivateRouteProps> {
     }
 }
 
-const loadingSelector = createLoadingSelector([UserActionCategory.SET_AUTH]);
-
 const mapStateToProps = (state: RootState) => {
     return {
         authenticated: state.user.isAuthenticated,
-        loading: loadingSelector(state),
+        loading: state.user.loading,
     };
 };
 

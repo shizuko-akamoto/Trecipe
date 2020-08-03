@@ -2,10 +2,6 @@ import React from 'react';
 import './spinner.scss';
 import { PositionProperty } from 'csstype';
 
-export enum SpinnerStyle {
-    Default,
-    ChaseDot,
-}
 /**
  * Spinner Props
  * positionStyle: Position css property
