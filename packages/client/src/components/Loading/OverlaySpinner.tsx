@@ -1,6 +1,5 @@
 import React from 'react';
 import './spinner.scss';
-import { ColorProperty } from 'csstype';
 /**
  * Spinner Props
  * positionStyle: Position css property
@@ -21,6 +20,7 @@ class OverlaySpinner extends React.Component<SpinnerProps> {
             <div
                 className="overlay-spinner-wrapper"
                 style={{ backgroundColor: this.props.backgroundColor }}>
+                {/*Refereed to spinner provided by https://github.com/tobiasahlin/SpinKit*/}
                 <div
                     className="sk-chase"
                     style={{ width: `${this.props.size}px`, height: `${this.props.size}px` }}>

@@ -20,10 +20,8 @@ import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { fetchTrecipeRequest, updateTrecipeRequest } from '../../redux/Trecipe/action';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
-import { createErrorMessageSelector } from '../../redux/Error/selector';
-import { DestinationsActionCategory } from '../../redux/Destinations/types';
-import { TrecipeActionCategory } from '../../redux/Trecipe/types';
-import { toast } from 'react-toastify';
+import { isEmpty } from 'lodash';
+import { EmptyText } from '../../components/EmptyText/EmptyText';
 
 export type MapProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -130,7 +128,11 @@ class Map extends React.Component<MapProps> {
                             <span>{trecipe.name}</span>
                             <CardMenu menuItems={this.trecipeEditMenuItems} />
                         </div>
-                        <div>
+                        {isEmpty(destinations) ? (
+                            <div className="empty-text-wrapper">
+                                <EmptyText />
+                            </div>
+                        ) : (
                             <ul className="dest-card-list">
                                 {destinations.map((dest, index) => (
                                     <Link
@@ -149,7 +151,7 @@ class Map extends React.Component<MapProps> {
                                     </Link>
                                 ))}
                             </ul>
-                        </div>
+                        )}
                     </aside>
                     <div className="map-container">
                         <GMap

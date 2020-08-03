@@ -14,9 +14,9 @@ import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import Trecipe from '../../../../shared/models/trecipe';
 import { createLoadingSelector } from '../../redux/Loading/selector';
-import Spinner from '../../components/Loading/Spinner';
 import { TrecipeListActionCategory } from '../../redux/TrecipeList/types';
 import OverlaySpinner from '../../components/Loading/OverlaySpinner';
+import FullScreenLoader from '../../components/Loading/FullScreenLoader';
 
 type MyTrecipesProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -70,12 +70,12 @@ class MyTrecipes extends React.Component<MyTrecipesProps, {}> {
                         </div>
                     </div>
                     {this.props.isLoading ? (
-                        <Spinner positionStyle="static" />
+                        <FullScreenLoader />
                     ) : (
                         <div className="cards-wrapper">
                             {this.props.trecipes.map((trecipe: Trecipe) => (
                                 <div className="card-item" key={trecipe.uuid}>
-                                    <Link className="router-link" to={trecipe.uuid}>
+                                    <Link className="router-link" to={`trecipes/${trecipe.uuid}`}>
                                         <TrecipeCard {...trecipe} />
                                     </Link>
                                 </div>

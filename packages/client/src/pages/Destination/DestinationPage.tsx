@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
-import Destination, { getIcon, Rating } from '../../../../shared/models/destination';
+import Destination, { getIcon } from '../../../../shared/models/destination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDestModel } from '../../components/Map/mapHelper';
 import Review from './Review/review';
@@ -22,7 +22,8 @@ import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDest
 import { NearbyDestCard } from './NearbyDestCard/NearbyDestCard';
 import { createLoadingSelector } from '../../redux/Loading/selector';
 import { TrecipeListActionCategory } from '../../redux/TrecipeList/types';
-import Spinner from '../../components/Loading/Spinner';
+import { toast } from 'react-toastify';
+import FullScreenLoader from '../../components/Loading/FullScreenLoader';
 
 /**
  * Destination props
@@ -124,6 +125,12 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                 ),
                 isLoadingNearbys: false,
             });
+        } else {
+            this.setState({
+                nearbyDestinations: [] as Destination[],
+                isLoadingNearbys: false,
+            });
+            toast(`Failed to request Google Place Nearby Search`, { type: toast.TYPE.ERROR });
         }
     }
 
@@ -149,6 +156,14 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                 reviews: result.reviews ? result.reviews : [],
                 isLoadingDestination: false,
             });
+        } else {
+            this.setState({
+                destination: undefined,
+                photos: [] as google.maps.places.PlacePhoto[],
+                reviews: [] as google.maps.places.PlaceReview[],
+                isLoadingDestination: false,
+            });
+            toast(`Failed to request Google Place Details`, { type: toast.TYPE.ERROR });
         }
     }
 
@@ -198,7 +213,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
             this.state.isLoadingNearbys ||
             this.props.isLoading
         ) {
-            return <Spinner positionStyle="static" />;
+            return <FullScreenLoader />;
         } else {
             // display up to 5 nearby locations and reviews
             const nearbys = this.state.nearbyDestinations.slice(0, 5);

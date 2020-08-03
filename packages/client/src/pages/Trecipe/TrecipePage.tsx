@@ -28,15 +28,12 @@ import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDest
 import { Legend } from '../Map/GoogleMap/Legend';
 import { baseURL } from '../../api';
 import { createLoadingSelector } from '../../redux/Loading/selector';
-import {
-    DestinationsActionCategory,
-    DestinationsActionTypes,
-} from '../../redux/Destinations/types';
-import Spinner from '../../components/Loading/Spinner';
+import { DestinationsActionCategory } from '../../redux/Destinations/types';
 import OverlaySpinner from '../../components/Loading/OverlaySpinner';
 import { TrecipeActionCategory } from '../../redux/Trecipe/types';
-import { createErrorMessageSelector } from '../../redux/Error/selector';
-import { toast } from 'react-toastify';
+import { isEmpty } from 'lodash';
+import { EmptyText } from '../../components/EmptyText/EmptyText';
+import FullScreenLoader from '../../components/Loading/FullScreenLoader';
 
 /**
  * TrecipeProps
@@ -235,7 +232,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         const destinations: Destination[] | undefined = this.props.destinations;
         const editTrecipeBtnString = 'Edit Trecipe';
         if (!trecipe || !destinations) {
-            return <Spinner positionStyle="static" />;
+            return <FullScreenLoader />;
         } else {
             const completed = new Set(
                 trecipe.destinations.flatMap((dest: DestWithStatus) =>
@@ -301,39 +298,47 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                 barStyle={{ height: '1rem' }}
                             />
                             <div className="destination-card-list">
-                                <DragDropContext onDragEnd={this.onDestDragEnd.bind(this)}>
-                                    <Droppable droppableId="droppable">
-                                        {(provided) => (
-                                            <ul
-                                                className="destination-cards"
-                                                {...provided.droppableProps}
-                                                ref={provided.innerRef}>
-                                                {this.getDestinationsList().map((dest, index) => (
-                                                    <Link
-                                                        className="router-link"
-                                                        to={`/destinations/${dest.placeId}`}
-                                                        target="_blank"
-                                                        key={dest.uuid}>
-                                                        <DestinationCard
-                                                            key={dest.uuid}
-                                                            destination={dest}
-                                                            isCompleted={completed.has(dest.uuid)}
-                                                            index={index}
-                                                            onClickDelete={this.onDestDeleteClick.bind(
-                                                                this
-                                                            )}
-                                                            onClickComplete={this.onDestCompleteClick.bind(
-                                                                this
-                                                            )}
-                                                            isInEdit={this.state.isInEdit}
-                                                        />
-                                                    </Link>
-                                                ))}
-                                                {provided.placeholder}
-                                            </ul>
-                                        )}
-                                    </Droppable>
-                                </DragDropContext>
+                                {isEmpty(this.getDestinationsList()) ? (
+                                    <EmptyText />
+                                ) : (
+                                    <DragDropContext onDragEnd={this.onDestDragEnd.bind(this)}>
+                                        <Droppable droppableId="droppable">
+                                            {(provided) => (
+                                                <ul
+                                                    className="destination-cards"
+                                                    {...provided.droppableProps}
+                                                    ref={provided.innerRef}>
+                                                    {this.getDestinationsList().map(
+                                                        (dest, index) => (
+                                                            <Link
+                                                                className="router-link"
+                                                                to={`/destinations/${dest.placeId}`}
+                                                                target="_blank"
+                                                                key={dest.uuid}>
+                                                                <DestinationCard
+                                                                    key={dest.uuid}
+                                                                    destination={dest}
+                                                                    isCompleted={completed.has(
+                                                                        dest.uuid
+                                                                    )}
+                                                                    index={index}
+                                                                    onClickDelete={this.onDestDeleteClick.bind(
+                                                                        this
+                                                                    )}
+                                                                    onClickComplete={this.onDestCompleteClick.bind(
+                                                                        this
+                                                                    )}
+                                                                    isInEdit={this.state.isInEdit}
+                                                                />
+                                                            </Link>
+                                                        )
+                                                    )}
+                                                    {provided.placeholder}
+                                                </ul>
+                                            )}
+                                        </Droppable>
+                                    </DragDropContext>
+                                )}
                                 {this.canExpand() && (
                                     <button
                                         className="show-more-btn"

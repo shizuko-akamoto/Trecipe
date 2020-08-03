@@ -5,7 +5,6 @@ import { RootState } from '../../redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import {
     fetchMyAssociatedTrecipesRequest,
-    fetchMyTrecipes,
     fetchMyTrecipesRequest,
 } from '../../redux/TrecipeList/action';
 import Trecipe from '../../../../shared/models/trecipe';

@@ -12,6 +12,8 @@ import PrivateRoute from '../components/Route/PrivateRoute';
 import { getUser } from '../redux/User/action';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import { NotFound } from './NotFound/NotFound';
+import Landing from './Landing/Landing';
 
 const libraries = ['places'];
 
@@ -24,17 +26,19 @@ const Pages = (props: PagesProps) => {
     return (
         <div>
             <Header />
-            <Switch>
-                <LoadScript
-                    googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
-                    libraries={libraries}>
-                    <PrivateRoute path="/" exact component={MyTrecipes} />
-                    <PrivateRoute path="/:trecipeId" exact component={TrecipePage} />
-                    <PrivateRoute path="/map/:trecipeId" component={Map} />
+            <LoadScript
+                googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
+                libraries={libraries}>
+                <Switch>
+                    <Route path="/" exact component={Landing} />
+                    <PrivateRoute path="/mytrecipes" exact component={MyTrecipes} />
+                    <PrivateRoute path="/trecipes/:trecipeId" exact component={TrecipePage} />
+                    <PrivateRoute path="/map/:trecipeId" exact component={Map} />
                     <Route path="/destinations/:placeId" exact component={DestinationPage} />
                     <Route path="/user/login" exact component={Login} />
-                </LoadScript>
-            </Switch>
+                    <Route component={NotFound} />
+                </Switch>
+            </LoadScript>
             <Footer />
         </div>
     );

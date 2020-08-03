@@ -1,0 +1,38 @@
+@import '../../components/variables';
+@import '../../components/mixins';
+
+.not-found-wrapper {
+    height: 100vh;
+    background-color: $tc-white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: $default-font-family;
+    text-align: center;
+
+    .island-image {
+        height: 30vh;
+        width: auto;
+    }
+
+    .error {
+        font-size: $huge-font-size;
+        color: $powder-blue;
+        margin-bottom: 0;
+    }
+
+    .error-msg {
+        font-size: $title-font-size;
+        color: $mid-gray;
+    }
+
+    .go-back-msg {
+        font-size: $subtitle-font-size;
+        color: $mid-gray;
+    }
+
+    .home-link {
+        color: $powder-blue;
+        @include animated-underline($crayola-yellow);
+    }
+}

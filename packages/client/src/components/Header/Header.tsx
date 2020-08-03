@@ -10,10 +10,10 @@ type HeaderProps = ReturnType<typeof mapStateToProps>;
 
 class Header extends React.Component<HeaderProps, {}> {
     render() {
-        const linkArray = [{ text: 'About', path: '' }];
+        const linkArray = [{ text: 'About', path: '/' }];
         linkArray.push(
             this.props.isAuthenticated
-                ? { text: 'My Trecipes', path: '/' }
+                ? { text: 'My Trecipes', path: '/mytrecipes' }
                 : { text: 'Login', path: '/user/login' }
         );
         return (
