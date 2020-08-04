@@ -299,7 +299,10 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                             <li
                                                 key={trecipe.uuid}
                                                 className="associated-trecipe-item">
-                                                <TrecipeCard {...trecipe} />
+                                                <TrecipeCard
+                                                    trecipe={{ ...trecipe }}
+                                                    isReadOnly={true}
+                                                />
                                             </li>
                                         ))}
                                     </ul>

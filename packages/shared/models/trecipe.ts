@@ -24,5 +24,4 @@ export default interface Trecipe {
     destinations: Array<DestWithStatus>;
     createdAt: string;
     updatedAt: string;
-    isReadOnly?: boolean;
 }

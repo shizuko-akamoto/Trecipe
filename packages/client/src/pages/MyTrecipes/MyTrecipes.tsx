@@ -197,7 +197,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
                         {this.filterTrecipes().map((trecipe: Trecipe) => (
                             <div className="card-item" key={trecipe.uuid}>
                                 <Link className="router-link" to={trecipe.uuid}>
-                                    <TrecipeCard {...trecipe} />
+                                    <TrecipeCard trecipe={{ ...trecipe }} isReadOnly={false} />
                                 </Link>
                             </div>
                         ))}

@@ -107,10 +107,10 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
                         return {
                             name: value.name,
                             // TODO implement destination page so we could pass props to generate a new page.
-                            href: 'placeholder',
+                            href: `/destinations/${value.placeId}`,
                             info:
                                 typeof value.formattedAddress === 'undefined'
-                                    ? 'N/A'
+                                    ? ''
                                     : value.formattedAddress,
                             uuid: value.placeId,
                         };
@@ -138,7 +138,6 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
                 <div className="results-container">
                     <ul className="results-list">
                         {results.map((result) => (
-                            // temporarily using result as key. Change to some id later
                             <li className="results-entry" key={result.uuid}>
                                 <Link to={result.href}>{result.name}</Link>
                             </li>

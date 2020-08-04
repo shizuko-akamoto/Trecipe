@@ -35,7 +35,10 @@ class SearchResult extends React.Component<SearchResultProps, {}> {
                                 {this.props.results?.trecipeResult.map((trecipe: Trecipe) => (
                                     <li className="card-item" key={trecipe.uuid}>
                                         <Link className="router-link" to={trecipe.uuid}>
-                                            <TrecipeCard {...trecipe} isReadOnly={true} />
+                                            <TrecipeCard
+                                                trecipe={{ ...trecipe }}
+                                                isReadOnly={true}
+                                            />
                                         </Link>
                                     </li>
                                 ))}
