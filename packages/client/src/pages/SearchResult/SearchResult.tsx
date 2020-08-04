@@ -50,7 +50,9 @@ class SearchResult extends React.Component<SearchResultProps, {}> {
                                 {this.props.results?.destinationResult.map(
                                     (destination: Destination, index) => (
                                         <li className="card-item" key={destination.uuid}>
-                                            <Link className="router-link" to={destination.uuid}>
+                                            <Link
+                                                className="router-link"
+                                                to={`/destinations/${destination.placeId}`}>
                                                 <DestinationCard
                                                     key={destination.uuid}
                                                     destination={destination}
