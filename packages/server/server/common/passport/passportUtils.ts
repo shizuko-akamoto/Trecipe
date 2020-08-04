@@ -14,9 +14,8 @@ export const passportAuth = passport.authenticate('jwt', { session: false, failW
 // Setup passport to extract jwt token from cookie
 export function setupPassport(passport: PassportStatic): void {
     const pathToPublicKey = path.join(__dirname, 'id_rsa_pub.pem');
-    logger.log(`reading public key: ${pathToPublicKey}`);
+    logger.info(`reading public key: ${pathToPublicKey}`);
     const PUB_KEY = fs.readFileSync(pathToPublicKey, 'utf8');
-    logger.log(PUB_KEY);
 
     const cookieExtractor = (req: Request) => {
         return req && req.cookies ? req.cookies['access_token'] : null;
@@ -60,13 +59,18 @@ export function signJwt(user: User): Promise<string> {
     };
 
     return new Promise<string>((resolve, reject) => {
-        Jwt.sign(JwtPayload, process.env.PRIVATE_KEY, JwtOptions, (err, token) => {
-            if (err) {
-                logger.warn(`JWT sign failed: ${err.message}`);
-                return reject(err);
+        Jwt.sign(
+            JwtPayload,
+            process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+            JwtOptions,
+            (err, token) => {
+                if (err) {
+                    logger.warn(`JWT sign failed: ${err.message}`);
+                    return reject(err);
+                }
+                logger.info(`JWT sign success`);
+                resolve(token);
             }
-            logger.info(`JWT sign success`);
-            resolve(token);
-        });
+        );
     });
 }
