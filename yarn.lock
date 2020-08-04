@@ -1825,14 +1825,6 @@
     "@types/mongodb" "*"
     "@types/node" "*"
 
-"@types/mongoose@^5.7.29":
-  version "5.7.34"
-  resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.7.34.tgz#37d226fbb00b91319ca70014d0240d09a7164187"
-  integrity sha512-AGzGNS+/eu6IAaMU38wis5ZWlePJhIIo9BKr2/qgkZylgWmX/eO21vNl7QWEstXb80r3US2ZwEnFYjBWIDXfBQ==
-  dependencies:
-    "@types/mongodb" "*"
-    "@types/node" "*"
-
 "@types/multer-gridfs-storage@^4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@types/multer-gridfs-storage/-/multer-gridfs-storage-4.0.1.tgz#7d83488322248daf2dfefeaac5edac7402421ba3"
