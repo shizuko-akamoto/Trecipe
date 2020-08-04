@@ -411,6 +411,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
 
 const destLoadingSelector = createLoadingSelector([
     DestinationsActionCategory.ADD_DESTINATION,
+    DestinationsActionCategory.UPDATE_DESTINATION,
     DestinationsActionCategory.REMOVE_DESTINATION,
     DestinationsActionCategory.FETCH_DESTS_BY_TRECIPE_ID,
 ]);

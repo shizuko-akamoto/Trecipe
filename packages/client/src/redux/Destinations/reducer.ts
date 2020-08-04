@@ -38,7 +38,7 @@ export function destinationsReducer(
                 ...state,
                 dests: state.dests.concat(action.payload.dest),
             };
-        case DestinationsActionTypes.UPDATE_DESTINATION:
+        case DestinationsActionTypes.UPDATE_DESTINATION_SUCCESS:
             let updateDests = state.destsByTrecipeId.get(action.payload.trecipeId);
             const updateResult = updateDests
                 ? updateDests.map((dest: Destination) =>

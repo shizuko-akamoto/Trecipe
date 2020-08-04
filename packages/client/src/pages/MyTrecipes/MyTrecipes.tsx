@@ -148,58 +148,58 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
     render() {
         return (
             <div className="mytrecipes-wrapper">
-                <div className="content">
-                    <h1 className="page-title">My Trecipes</h1>
-                    <div className="buttons-wrapper">
-                        <ul className="context-filters">
-                            {this.state.filterStates.map((filter) => (
-                                <li className="filter-item" key={filter.filterName}>
-                                    <FilterButton
-                                        text={filter.filterName}
-                                        icon="check"
-                                        fontSize={1}
-                                        filterType={filter.filterName as FilterButtonTypes}
-                                        selected={filter.selected}
-                                        onClick={() => {
-                                            return;
-                                        }}
-                                        filterOnClick={this.handleFilterOnClick.bind(this)}
-                                        defaultDisabled={false}
-                                    />
-                                </li>
-                            ))}
-                            <FilterSelector
-                                listItem={[
-                                    {
-                                        text: 'Any',
-                                        icon: 'border-all' as IconProp,
-                                        selectorType: FilterSelectorTypes.ANY,
-                                    },
-                                    {
-                                        text: 'Public',
-                                        icon: 'lock-open' as IconProp,
-                                        selectorType: FilterSelectorTypes.PUBLIC,
-                                    },
-                                    {
-                                        text: 'Private',
-                                        icon: 'lock' as IconProp,
-                                        selectorType: FilterSelectorTypes.PRIVATE,
-                                    },
-                                ]}
-                                onClick={this.onPrivacySelectorChange.bind(this)}
-                            />
-                        </ul>
-                        <div className="new-trecipe-button">
-                            <Button
-                                text="Create New"
-                                icon="plus-circle"
-                                onClick={this.renderAddPopup}
-                            />
+                {this.props.isLoading ? (
+                    <FullScreenLoader />
+                ) : (
+                    <div className="content">
+                        <h1 className="page-title">My Trecipes</h1>
+                        <div className="buttons-wrapper">
+                            <ul className="context-filters">
+                                {this.state.filterStates.map((filter) => (
+                                    <li className="filter-item" key={filter.filterName}>
+                                        <FilterButton
+                                            text={filter.filterName}
+                                            icon="check"
+                                            fontSize={1}
+                                            filterType={filter.filterName as FilterButtonTypes}
+                                            selected={filter.selected}
+                                            onClick={() => {
+                                                return;
+                                            }}
+                                            filterOnClick={this.handleFilterOnClick.bind(this)}
+                                            defaultDisabled={false}
+                                        />
+                                    </li>
+                                ))}
+                                <FilterSelector
+                                    listItem={[
+                                        {
+                                            text: 'Any',
+                                            icon: 'border-all' as IconProp,
+                                            selectorType: FilterSelectorTypes.ANY,
+                                        },
+                                        {
+                                            text: 'Public',
+                                            icon: 'lock-open' as IconProp,
+                                            selectorType: FilterSelectorTypes.PUBLIC,
+                                        },
+                                        {
+                                            text: 'Private',
+                                            icon: 'lock' as IconProp,
+                                            selectorType: FilterSelectorTypes.PRIVATE,
+                                        },
+                                    ]}
+                                    onClick={this.onPrivacySelectorChange.bind(this)}
+                                />
+                            </ul>
+                            <div className="new-trecipe-button">
+                                <Button
+                                    text="Create New"
+                                    icon="plus-circle"
+                                    onClick={this.renderAddPopup}
+                                />
+                            </div>
                         </div>
-                    </div>
-                    {this.props.isLoading ? (
-                        <FullScreenLoader />
-                    ) : (
                         <div className="cards-wrapper">
                             {this.filterTrecipes().map((trecipe: Trecipe) => (
                                 <div className="card-item" key={trecipe.uuid}>
@@ -211,8 +211,8 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
                             {/*When updating trecipes, we want to use a spinner overlay instead for smoother experience*/}
                             {this.props.isUpdating && <OverlaySpinner size={50} />}
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         );
     }
