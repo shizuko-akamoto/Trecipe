@@ -17,6 +17,8 @@ import { createLoadingSelector } from '../../redux/Loading/selector';
 import { TrecipeListActionCategory } from '../../redux/TrecipeList/types';
 import OverlaySpinner from '../../components/Loading/OverlaySpinner';
 import FullScreenLoader from '../../components/Loading/FullScreenLoader';
+import { EmptyTrecipes } from '../../components/EmptyText/EmptyTrecipes';
+import { isEmpty } from 'lodash';
 
 type MyTrecipesProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -201,13 +203,21 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
                             </div>
                         </div>
                         <div className="cards-wrapper">
-                            {this.filterTrecipes().map((trecipe: Trecipe) => (
-                                <div className="card-item" key={trecipe.uuid}>
-                                    <Link className="router-link" to={`trecipes/${trecipe.uuid}`}>
-                                        <TrecipeCard {...trecipe} />
-                                    </Link>
+                            {isEmpty(this.filterTrecipes()) ? (
+                                <EmptyTrecipes />
+                            ) : (
+                                <div className="card-grids">
+                                    {this.filterTrecipes().map((trecipe: Trecipe) => (
+                                        <div className="card-item" key={trecipe.uuid}>
+                                            <Link
+                                                className="router-link"
+                                                to={`trecipes/${trecipe.uuid}`}>
+                                                <TrecipeCard {...trecipe} />
+                                            </Link>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                            )}
                             {/*When updating trecipes, we want to use a spinner overlay instead for smoother experience*/}
                             {this.props.isUpdating && <OverlaySpinner size={50} />}
                         </div>

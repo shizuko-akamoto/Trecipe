@@ -21,7 +21,7 @@ import { fetchTrecipeRequest, updateTrecipeRequest } from '../../redux/Trecipe/a
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { isEmpty } from 'lodash';
-import { EmptyText } from '../../components/EmptyText/EmptyText';
+import { EmptyDestinations } from '../../components/EmptyText/EmptyDestinations';
 
 export type MapProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -70,15 +70,24 @@ class Map extends React.Component<MapProps> {
         }
     }
 
+    /**
+     * Callback method when delete trecipe button on Destination card is clicked
+     * @param idToDelete: destination uuid
+     */
     private onDestCardDeleteClick(idToDelete: string) {
         if (this.props.trecipe) {
             this.props.removeDestination(this.props.trecipe, { destId: idToDelete });
         }
     }
 
-    private onDestRemoveClick(idToDelete: string) {
+    /**
+     * Callback method when delete is called from search bar popup
+     * NOTE: difference between this "onDestCardDeleteClick" is the id provided
+     * @param placeIdToDelete: place id from Google Place api
+     */
+    private onDestRemoveClick(placeIdToDelete: string) {
         if (this.props.trecipe) {
-            this.props.removeDestination(this.props.trecipe, { placeId: idToDelete });
+            this.props.removeDestination(this.props.trecipe, { placeId: placeIdToDelete });
         }
     }
 
@@ -132,7 +141,7 @@ class Map extends React.Component<MapProps> {
                         </div>
                         {isEmpty(destinations) ? (
                             <div className="empty-text-wrapper">
-                                <EmptyText />
+                                <EmptyDestinations />
                             </div>
                         ) : (
                             <ul className="dest-card-list">
@@ -147,6 +156,7 @@ class Map extends React.Component<MapProps> {
                                             key={dest.uuid}
                                             destination={dest}
                                             isCompleted={completed.has(dest.uuid)}
+                                            // for DC, delete by destination uuid
                                             onClickDelete={this.onDestCardDeleteClick.bind(this)}
                                             onClickComplete={this.onDestCompleteClick.bind(this)}
                                         />
@@ -160,6 +170,7 @@ class Map extends React.Component<MapProps> {
                             destinations={destinations}
                             completedDest={completed}
                             onDestAdd={this.onDestAddClick.bind(this)}
+                            // Since GMap deals with place ids instead of destination uuid, callback takes in placeId
                             onDestRemove={this.onDestRemoveClick.bind(this)}
                         />
                     </div>

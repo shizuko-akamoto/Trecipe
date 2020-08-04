@@ -27,6 +27,7 @@ const Pages = (props: PagesProps) => {
     });
     return (
         <div>
+            {/*ErrorBoundary used to catch any exception thrown directly from children's component lifecycle*/}
             <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <Header />
                 <LoadScript

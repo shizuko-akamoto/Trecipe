@@ -10,9 +10,9 @@ export function errorReducer(state = initialState, action: any) {
     const [, requestName, requestState] = matches;
     return {
         ...state,
-        // Store errorMessage
-        // e.g. stores errorMessage when receiving GET_TODOS_FAILURE
-        //      else clear errorMessage when receiving GET_TODOS_REQUEST
+        // Store error reason
+        // e.g. stores error reason when receiving FETCH_TRECIPE_FAILURE
+        //      else clear error reason when receiving FETCH_TRECIPE_REQUEST
         [requestName]: requestState === 'FAILURE' ? payload.reason : '',
     };
 }

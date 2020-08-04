@@ -1,10 +1,11 @@
 import React, { RefObject } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './searchBarPopup.scss';
-import _ from 'lodash';
+import { debounce, isEmpty, isArray } from 'lodash';
 import { AutoComplete, getDestModel } from '../Map/mapHelper';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import OverlaySpinner from '../Loading/OverlaySpinner';
+import { toast } from 'react-toastify';
 
 interface Destination {
     id: string;
@@ -41,7 +42,7 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
     private container: RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
     constructor(props: any) {
         super(props);
-        this.fetchSearchResults = _.debounce(this.fetchSearchResults, 500);
+        this.fetchSearchResults = debounce(this.fetchSearchResults, 500);
     }
 
     public static defaultProps: Partial<SearchBarProps> = {
@@ -59,25 +60,29 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
     };
 
     componentDidMount(): void {
+        // Register event listener to handle click outside
         document.addEventListener('mousedown', this.handleClickOutside);
     }
 
     componentWillUnmount(): void {
+        // Unregister event listener
         document.removeEventListener('mousedown', this.handleClickOutside);
     }
 
     private handleOnSearchInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
         const searchKey: string = e.target.value;
-        if (_.isEmpty(searchKey)) {
+        if (isEmpty(searchKey)) {
+            // when no search key given, empty results and set loading to false
             this.setState({ searchKey: searchKey, results: [], loading: false, errMsg: '' });
         } else {
+            // when search key is given, set loading to true
             this.setState({ searchKey: searchKey, loading: true, errMsg: '' });
         }
         this.fetchSearchResults(searchKey);
     }
 
     private fetchSearchResults(searchInput: string): void {
-        if (_.isEmpty(searchInput)) {
+        if (isEmpty(searchInput)) {
             return;
         }
 
@@ -130,7 +135,9 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
                     this.props.onDestAdd(getDestModel(result));
                 })
                 .catch((err: any) => {
+                    toast.error(`Failed to fetch search results [${err.toString()}]`);
                     this.setState({
+                        results: [],
                         loading: false,
                         errMsg: err.toString(),
                     });
@@ -144,7 +151,7 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
 
     private renderSearchResults() {
         const { results } = this.state;
-        if (_.isArray(results) && !_.isEmpty(results)) {
+        if (isArray(results) && !isEmpty(results)) {
             return (
                 <ul className="results-list">
                     {results.map((result) => (
@@ -166,6 +173,7 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
         }
     }
 
+    // Clicking outside the search bar closes the results section
     private handleClickOutside = (event: MouseEvent) => {
         if (this.container.current && event.target instanceof Node) {
             if (!this.container.current.contains(event.target)) {

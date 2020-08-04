@@ -10,6 +10,7 @@
     .map-page-content {
         display: flex;
         flex-direction: row;
+        z-index: 0;
 
         .map-side-bar {
             flex: 0 0 400px;

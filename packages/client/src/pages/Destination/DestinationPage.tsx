@@ -207,6 +207,8 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
 
     render() {
         const destination: Destination | undefined = this.state.destination;
+        // When we're fetching destination, its nearby destinations, and associated trecipes,
+        // show a full screen loader
         if (
             !destination ||
             this.state.isLoadingDestination ||
@@ -228,6 +230,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                     : this.state.photos[0].getUrl({ maxHeight: 600 })
                             }
                             buttons={
+                                // if not logged in, hide the "save to trecipes" functionality
                                 this.props.isAuthenticated
                                     ? [
                                           <Button
