@@ -25,6 +25,7 @@ export interface DCProps {
     onClickDelete: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
     onClickComplete: (destId: destination, e: React.MouseEvent<HTMLElement>) => void;
     isInEdit?: boolean;
+    isReadOnly?: boolean;
 }
 
 export class DestinationCard extends React.Component<DCProps> {
@@ -76,6 +77,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                     <p>{this.props.destination.website}</p>
                                 </div>
                             </div>
+                            {!this.props.isReadOnly && 
                             <span
                                 className={`check-edit-wrapper ${
                                     this.props.isInEdit ? 'in-edit' : ''
@@ -113,6 +115,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                     <FontAwesomeIcon icon={['far', 'trash-alt']} />
                                 </button>
                             </span>
+                            }
                         </div>
                     </div>
                 )}

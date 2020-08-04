@@ -29,8 +29,8 @@ const Pages = (props: PagesProps) => {
                     googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
                     libraries={libraries}>
                     <PrivateRoute path="/" exact component={MyTrecipes} />
-                    <PrivateRoute path="/:trecipeId" exact component={TrecipePage} />
-                    <PrivateRoute path="/map/:trecipeId" component={Map} />
+                    <Route path="/:trecipeId" exact component={TrecipePage} />
+                    <Route path="/map/:trecipeId" component={Map} />
                     <Route path="/destinations/:placeId" exact component={DestinationPage} />
                     <Route path="/user/login" exact component={Login} />
                 </LoadScript>

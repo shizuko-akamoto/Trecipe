@@ -41,13 +41,13 @@ export const signup = (userData: CreateUserDTO): AppThunk => {
     };
 };
 
-export const logout = (cb?: () => void): AppThunk => {
+export const logout = (callback?: () => void): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         UserService.logout()
             .then((response: UserResponse) => {
                 dispatch(setAuthenticated(response.isAuthenticated));
                 dispatch(setUser({}));
-                if (cb) cb();
+                if (callback) callback();
             })
             .catch((err: AxiosError) => {
                 if (err.response) {

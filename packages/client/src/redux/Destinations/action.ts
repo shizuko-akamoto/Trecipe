@@ -15,9 +15,9 @@ import TrecipeService from '../../services/trecipeService';
 import { updateTrecipe } from '../Trecipe/action';
 import { UpdateDestinationRatingDTO } from '../../../../shared/models/updateDestinationRatingDTO';
 
-export const getDestinationsByTrecipeId = (trecipeId: string): AppThunk => {
+export const getDestinationsByTrecipeId = (trecipeId: string, isPublic?: boolean): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        DestinationService.getDestinationsByTrecipeId(trecipeId).then(
+        DestinationService.getDestinationsByTrecipeId(trecipeId, isPublic).then(
             (dests: Array<Destination>) => {
                 dispatch(loadByTrecipeId(trecipeId, dests));
             }

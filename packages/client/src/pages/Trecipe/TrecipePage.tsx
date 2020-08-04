@@ -30,6 +30,7 @@ import { Legend } from '../Map/GoogleMap/Legend';
 import { baseURL } from '../../api';
 import RatingPopup from '../../components/RatingPopup/RatingPopup';
 import { UpdateDestinationRatingDTO } from '../../../../shared/models/updateDestinationRatingDTO';
+import { duplicateTrecipeRequest } from '../../redux/TrecipeList/action';
 
 /**
  * TrecipeProps
@@ -43,7 +44,7 @@ export type TrecipeProps = ReturnType<typeof mapStateToProps> &
 
 /**
  * Trecipe State
- * destination: destination models in the Trecipe
+ * destinationsInEdit: destination models that are currently in edit
  * visibleTo: stores the index of destinations in list currently visible (used for "Show More")
  * isInEdit: true if destinations are currently in edit
  */
@@ -69,10 +70,27 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     }
 
     componentDidMount(): void {
-        // load destinations by trecipe id before rendering
+        this.loadTrecipe();
+    }
+
+    componentDidUpdate(
+        prevProps: Readonly<TrecipeProps>
+    ): void {
+        // when we're looking at new trecipe, refetch trecipe details and associated desetination
         const trecipeId = this.props.match.params.trecipeId;
-        this.props.fetchTrecipe(trecipeId);
-        this.props.getDestinationsByTrecipeId(trecipeId);
+        if (prevProps.match.params.trecipeId !== trecipeId) {
+            this.loadTrecipe();
+        }
+    }
+    
+    // load trecipe and destination by trecipe uuid
+    private loadTrecipe(): void {    
+        const trecipeId = this.props.match.params.trecipeId;
+        const userState = this.props.user;
+        const isOwner = userState.isAuthenticated && userState.user.trecipes?.includes(trecipeId);
+
+        this.props.fetchTrecipe(trecipeId, !isOwner);
+        this.props.getDestinationsByTrecipeId(trecipeId, !isOwner);
     }
 
     private onDestDragEnd(result: DropResult, provided: ResponderProvided) {
@@ -131,6 +149,15 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         this.props.showModal(
             <TrecipePopup type={TrecipePopupType.Edit} trecipe={this.props.trecipe} />
         );
+    }
+
+    private onTrecipeSaveClick() {
+        if (this.props.trecipe)
+            this.props.duplicateTrecipe(this.props.trecipe.uuid, (uuid: string) => {
+                // TODO: update this when route is updated in a future PR
+                // Redirect to Trecipe page
+                this.props.history.push(`/${uuid}`);
+            });
     }
 
     private onDestAddClick() {
@@ -202,13 +229,13 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                     (dest) => dest.destUUID === destination.uuid && !dest.completed
                 )
             ) {
-                if (this.props.user.username) {
+                if (this.props.user.user.username) {
                     this.props.showModal(
                         <RatingPopup
                             onClickHandler={this.updateTrecipeDestOnComplete.bind(this)}
                             dest={destination}
                             trecipeId={this.props.trecipe.uuid}
-                            userId={this.props.user.username}
+                            userId={this.props.user.user.username}
                         />
                     );
                 } else {
@@ -256,9 +283,19 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     }
 
     render() {
+        const userState = this.props.user; 
         const trecipe: Trecipe | undefined = this.props.trecipe;
         const destinations: Destination[] | undefined = this.props.destinations;
         const editTrecipeBtnString = 'Edit Trecipe';
+        const saveTrecipeBtnString = 'Save Trecipe';
+        // Show everything if user is signed in and is the owner/collaborator of the trecipe
+        const displayAll = trecipe
+            && userState.isAuthenticated 
+            && userState.user.trecipes?.includes(trecipe.uuid)
+        // Show the save button if the user is signed in but is not the owner of the trecipe
+        const displayDuplicateButton = trecipe
+            && userState.isAuthenticated 
+            && !userState.user.trecipes?.includes(trecipe.uuid)
         if (!trecipe || !destinations) {
             return null;
         } else {
@@ -272,22 +309,33 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                     <div className="tc-header-container">
                         <CoverPhoto
                             imageSource={`${baseURL}upload/${trecipe.image}`}
-                            buttons={[
-                                <Button
+                            buttons={displayAll
+                                ? [<Button
                                     key={editTrecipeBtnString}
                                     text={editTrecipeBtnString}
                                     icon="edit"
                                     onClick={this.onTrecipeEditClick.bind(this)}
-                                />,
-                            ]}
-                            onFileChange={this.onCoverPhotoChange.bind(this)}>
+                                    />,]
+                                : displayDuplicateButton
+                                    ? [<Button
+                                        key={saveTrecipeBtnString}
+                                        text={saveTrecipeBtnString}
+                                        icon={['far', 'star']}
+                                        onClick={this.onTrecipeSaveClick.bind(this)}
+                                        />,]
+                                    : []
+                            }
+                            onFileChange={displayAll
+                                ? this.onCoverPhotoChange.bind(this)
+                                : undefined
+                            }>
                             <div className="tc-header-text">
                                 <div className="tc-header-title">
                                     <h1 className="tc-header-name">{trecipe.name}</h1>
-                                    <FontAwesomeIcon
+                                    {displayAll && <FontAwesomeIcon
                                         icon={trecipe.isPrivate ? 'lock' : 'lock-open'}
                                         className="tc-header-privacy"
-                                    />
+                                    />}
                                 </div>
                                 <h3 className="tc-header-time">
                                     {new Date(trecipe.updatedAt).toLocaleString()}
@@ -308,23 +356,25 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                             <span className="title-with-btns">
                                 <h1 className="trecipe-page-title">Places</h1>
                                 <span className="dest-edit-btn-wrapper">
-                                    <Button
+                                    {displayAll && <Button
                                         text="Add"
                                         onClick={this.onDestAddClick.bind(this)}
                                         ref={this.addDestButtonRef}
-                                    />
-                                    <Button
+                                    />}
+                                    {displayAll && <Button
                                         text={this.state.isInEdit ? 'Done' : 'Edit'}
                                         onClick={this.onDestEditClick.bind(this)}
-                                    />
+                                    />}
                                 </span>
                             </span>
-                            <ProgressBar
-                                total={destinations.length}
-                                completed={completed.size}
-                                showText={true}
-                                barStyle={{ height: '1rem' }}
-                            />
+                            {displayAll &&
+                                <ProgressBar
+                                    total={destinations.length}
+                                    completed={completed.size}
+                                    showText={true}
+                                    barStyle={{ height: '1rem' }}
+                                />
+                            }
                             <div>
                                 <DragDropContext onDragEnd={this.onDestDragEnd.bind(this)}>
                                     <Droppable droppableId="droppable">
@@ -342,7 +392,9 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                                         <DestinationCard
                                                             key={dest.uuid}
                                                             destination={dest}
-                                                            isCompleted={completed.has(dest.uuid)}
+                                                            isCompleted={displayAll
+                                                                ? completed.has(dest.uuid)
+                                                                : false}
                                                             index={index}
                                                             onClickDelete={this.onDestDeleteClick.bind(
                                                                 this
@@ -351,6 +403,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                                                 this
                                                             )}
                                                             isInEdit={this.state.isInEdit}
+                                                            isReadOnly={!displayAll}
                                                         />
                                                     </Link>
                                                 ))}
@@ -373,12 +426,14 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                 <Link to={`/map/${trecipe.uuid}`}>
                                     <StaticMap
                                         markers={destinations.map((dest) =>
-                                            this.getMarker(dest, completed.has(dest.uuid))
+                                            this.getMarker(dest, displayAll
+                                                ? completed.has(dest.uuid)
+                                                : false)
                                         )}
                                     />
-                                    <div className="static-map-legend">
+                                    {displayAll && <div className="static-map-legend">
                                         <Legend />
-                                    </div>
+                                    </div>}
                                     <div className="static-map-overlay">
                                         <Button icon="external-link-alt" text="Expand View" />
                                     </div>
@@ -398,7 +453,7 @@ const mapStateToProps = (
 ) => {
     const trecipeId = ownProps.match.params.trecipeId;
     const destinations = state.destinations.destsByTrecipeId.get(trecipeId);
-    const user = state.user.user;
+    const user = state.user;
     return {
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
@@ -416,6 +471,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             fetchTrecipe,
             addDestinationRequest,
             removeDestinationRequest,
+            duplicateTrecipe: duplicateTrecipeRequest,
         },
         dispatch
     );

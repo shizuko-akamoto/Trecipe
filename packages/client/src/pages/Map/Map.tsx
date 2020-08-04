@@ -47,11 +47,37 @@ class Map extends React.Component<MapProps> {
         },
     ];
 
+    private trecipeSaveMenuItems: MenuItem[] = [
+        {
+            id: 1,
+            text: 'Save',
+            icon: ['far', 'star'],
+            onClick: () => this.onTrecipeCopyClick(),
+        },
+    ];
+
     componentDidMount(): void {
-        // fetch trecipe by id and destinations by trecipe id
+        this.loadTrecipe();
+    }
+
+    componentDidUpdate(
+        prevProps: Readonly<MapProps>
+    ): void {
+        // when we're looking at new trecipe, refetch trecipe details and associated desetination
         const trecipeId = this.props.match.params.trecipeId;
-        this.props.fetchTrecipe(trecipeId);
-        this.props.getDestinationsByTrecipeId(trecipeId);
+        if (prevProps.match.params.trecipeId !== trecipeId) {
+            this.loadTrecipe();
+        }
+    }
+
+    // fetch trecipe by id and destinations by trecipe id
+    private loadTrecipe(): void {
+        const trecipeId = this.props.match.params.trecipeId;
+        const userState = this.props.user;
+        const isOwner = userState.isAuthenticated && userState.user.trecipes?.includes(trecipeId);
+
+        this.props.fetchTrecipe(trecipeId, !isOwner);
+        this.props.getDestinationsByTrecipeId(trecipeId, !isOwner);
     }
 
     private onDestCompleteClick(destination: Destination, e: React.MouseEvent) {
@@ -90,15 +116,22 @@ class Map extends React.Component<MapProps> {
 
     private onTrecipeCopyClick() {
         if (this.props.trecipe) {
-            this.props.duplicateTrecipe(this.props.trecipe.uuid);
-            // TODO: Redirect to Map page of copied Trecipe
+            this.props.duplicateTrecipe(this.props.trecipe.uuid, (uuid: string) => {
+                // TODO: update this when route is updated in a future PR
+                // Redirect to Trecipe map page
+                this.props.history.push(`/map/${uuid}`);
+            });
+            
         }
     }
 
     private onTrecipeDeleteClick() {
         if (this.props.trecipe) {
-            this.props.deleteTrecipe(this.props.trecipe.uuid);
-            // TODO: Redirect back to My Trecipes page
+            this.props.deleteTrecipe(this.props.trecipe.uuid, () => {
+                // TODO: update this when route is updated in a future PR
+                // Redirect to My Trecipe page after delete
+                this.props.history.push('/');
+            });
         }
     }
 
@@ -114,13 +147,26 @@ class Map extends React.Component<MapProps> {
                 dest.completed ? [dest.destUUID] : []
             )
         );
+        // Show everything if user is signed in and is the owner/collaborator of the trecipe
+        const userState = this.props.user; 
+        const displayAll = trecipe
+            && userState.isAuthenticated 
+            && userState.user.trecipes?.includes(trecipe.uuid)
+        // Show the save button if user is signed in but is not the owner of the trecipe
+        const displayDuplicateButton = trecipe
+            && userState.isAuthenticated 
+            && !userState.user.trecipes?.includes(trecipe.uuid)
         return (
             <div className="map-page-wrapper">
                 <div className="map-page-content">
                     <aside className="map-side-bar">
                         <div className="trecipe-header">
                             <span>{trecipe.name}</span>
-                            <CardMenu menuItems={this.trecipeEditMenuItems} />
+                            {(displayAll || displayDuplicateButton) 
+                                && <CardMenu menuItems={displayAll
+                                    ? this.trecipeEditMenuItems
+                                    : this.trecipeSaveMenuItems
+                            } />}
                         </div>
                         <div>
                             <ul className="dest-card-list">
@@ -131,10 +177,13 @@ class Map extends React.Component<MapProps> {
                                         target="_blank"
                                         key={dest.uuid}>
                                         <DestinationCard
+                                            // TODO make it read only when Search PR is merged into master
                                             index={index}
                                             key={dest.uuid}
                                             destination={dest}
-                                            isCompleted={completed.has(dest.uuid)}
+                                            isCompleted={displayAll 
+                                                ? completed.has(dest.uuid)
+                                                : false}
                                             onClickDelete={this.onDestDeleteClick.bind(this)}
                                             onClickComplete={this.onDestCompleteClick.bind(this)}
                                         />
@@ -149,6 +198,10 @@ class Map extends React.Component<MapProps> {
                             completedDest={completed}
                             onDestAdd={this.onDestAddClick.bind(this)}
                             onDestRemove={this.onDestDeleteClick.bind(this)}
+                            readOnly={displayAll
+                                ? false
+                                : true
+                            }
                         />
                     </div>
                 </div>
@@ -163,9 +216,11 @@ const mapStateToProps = (
 ) => {
     const trecipeId = ownProps.match.params.trecipeId;
     const destinations = state.destinations.destsByTrecipeId.get(trecipeId);
+    const user = state.user;
     return {
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
+        user: user,
     };
 };
 
