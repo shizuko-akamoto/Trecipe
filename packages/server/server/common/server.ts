@@ -20,6 +20,16 @@ const exit = process.exit;
 export default class ExpressServer {
     private routes: (app: Application) => void;
     constructor() {
+        // after compiling the server side, we get a /dist folder with js files
+        // root here refers to the root of that /dist folder
+        // /dist
+        // -----/build
+        // -----/server
+        // ----------/server
+        // ---------------/api
+        // ---------------/common
+        // --------------------server.js
+        // ----------/shared
         const root = path.normalize(__dirname + '/../../..');
         app.set('appPath', root + 'client');
         app.use(
