@@ -6,6 +6,7 @@ import Jwt, { SignOptions } from 'jsonwebtoken';
 import { User } from '../../../../shared/models/user';
 import UserService from '../../api/user/user.service';
 import { Request } from 'express';
+import logger from '../logger';
 
 // Middleware for authenticating user, use this function for all protected routes
 export const passportAuth = passport.authenticate('jwt', { session: false, failWithError: true });
@@ -58,7 +59,11 @@ export function signJwt(user: User): Promise<string> {
 
     return new Promise<string>((resolve, reject) => {
         Jwt.sign(JwtPayload, process.env.PRIVATE_KEY, JwtOptions, (err, token) => {
-            if (err) return reject(err);
+            if (err) {
+                logger.warn(`JWT sign failed: ${err.message}`);
+                return reject(err);
+            }
+            logger.info(`JWT sign success`);
             resolve(token);
         });
     });

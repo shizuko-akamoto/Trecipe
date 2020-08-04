@@ -5,6 +5,7 @@ import { User, CreateUserDTO, LoginDTO, UserResponse } from '../../../../shared/
 import Bcrypt from 'bcryptjs';
 import { passportAuth, signJwt } from '../../common/passport/passportUtils';
 import { Unauthorized } from 'express-openapi-validator';
+import logger from "../../common/logger";
 
 class UserController implements Controller {
     public readonly path = '/users';
@@ -63,6 +64,7 @@ class UserController implements Controller {
                 return Bcrypt.compare(userDTO.password, user.password);
             })
             .then((passwordMatch: boolean) => {
+                logger.info(`Password match confirmed by Bcrypt`);
                 if (passwordMatch) {
                     return signJwt(retreivedUser);
                 } else {
