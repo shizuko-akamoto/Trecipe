@@ -16,15 +16,10 @@ type SearchResultProps = ReturnType<typeof mapStateToProps> &
 class SearchResult extends React.Component<SearchResultProps, {}> {
     componentDidMount(): void {
         let searchKey = this.props.location.search;
-        console.log('1');
-        console.log(searchKey);
         searchKey = searchKey.substring(3);
-        console.log('2');
-        console.log(searchKey);
         this.props.fetchResultRequest(searchKey);
     }
     render() {
-        console.log('here');
         return (
             <div className="search-result-wrapper">
                 <div className="content">
