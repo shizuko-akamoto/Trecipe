@@ -37,7 +37,10 @@ class DestinationService {
             );
     }
 
-    public getDestinationsByTrecipeId(trecipeUuid: string, owner?: User): Promise<Array<DestWithStatus>> {
+    public getDestinationsByTrecipeId(
+        trecipeUuid: string,
+        owner?: User
+    ): Promise<Array<DestWithStatus>> {
         const populateField = 'destinations.destination';
         const filter = owner
             ? { uuid: trecipeUuid, owner: owner.username }

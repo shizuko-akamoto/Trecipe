@@ -48,7 +48,7 @@ class TrecipeService {
     public getTrecipeById(uuid: string, user?: User): Promise<Trecipe> {
         const filter = user
             ? { uuid: uuid, owner: user.username }
-            : { uuid: uuid, isPrivate: false }; 
+            : { uuid: uuid, isPrivate: false };
         return trecipeModel
             .findOne(filter)
             .exec()
@@ -140,9 +140,7 @@ class TrecipeService {
                             destinations: trecipeToCopy.destinations.map((dest) => {
                                 return {
                                     destUUID: dest.destUUID,
-                                    completed: isOwner
-                                        ? dest.completed
-                                        : false,
+                                    completed: isOwner ? dest.completed : false,
                                 };
                             }),
                             createdAt: '',
@@ -154,7 +152,7 @@ class TrecipeService {
                             new InternalServerError({
                                 message: `Failed to duplicate trecipe`,
                             })
-                        )
+                        );
                     }
                 } else {
                     return Promise.reject(new TrecipeNotFound(srcTrecipeId));

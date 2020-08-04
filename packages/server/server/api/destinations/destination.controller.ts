@@ -27,10 +27,7 @@ class DestinationController implements Controller {
             passportAuth,
             this.getDestinationsByTrecipeId.bind(this)
         );
-        this.router.get(
-            `${this.path}/in-public`,
-            this.getDestinationsByPublicTrecipeId.bind(this)
-        );
+        this.router.get(`${this.path}/in-public`, this.getDestinationsByPublicTrecipeId.bind(this));
         this.router.get(`${this.path}/:id`, this.getDestinationById.bind(this));
     }
 

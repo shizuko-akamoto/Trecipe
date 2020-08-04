@@ -60,9 +60,7 @@ class Map extends React.Component<MapProps> {
         this.loadTrecipe();
     }
 
-    componentDidUpdate(
-        prevProps: Readonly<MapProps>
-    ): void {
+    componentDidUpdate(prevProps: Readonly<MapProps>): void {
         // when we're looking at new trecipe, refetch trecipe details and associated desetination
         const trecipeId = this.props.match.params.trecipeId;
         if (prevProps.match.params.trecipeId !== trecipeId) {
@@ -121,7 +119,6 @@ class Map extends React.Component<MapProps> {
                 // Redirect to Trecipe map page
                 this.props.history.push(`/map/${uuid}`);
             });
-            
         }
     }
 
@@ -148,25 +145,29 @@ class Map extends React.Component<MapProps> {
             )
         );
         // Show everything if user is signed in and is the owner/collaborator of the trecipe
-        const userState = this.props.user; 
-        const displayAll = trecipe
-            && userState.isAuthenticated 
-            && userState.user.trecipes?.includes(trecipe.uuid)
+        const userState = this.props.user;
+        const displayAll =
+            trecipe && userState.isAuthenticated && userState.user.trecipes?.includes(trecipe.uuid);
         // Show the save button if user is signed in but is not the owner of the trecipe
-        const displayDuplicateButton = trecipe
-            && userState.isAuthenticated 
-            && !userState.user.trecipes?.includes(trecipe.uuid)
+        const displayDuplicateButton =
+            trecipe &&
+            userState.isAuthenticated &&
+            !userState.user.trecipes?.includes(trecipe.uuid);
         return (
             <div className="map-page-wrapper">
                 <div className="map-page-content">
                     <aside className="map-side-bar">
                         <div className="trecipe-header">
                             <span>{trecipe.name}</span>
-                            {(displayAll || displayDuplicateButton) 
-                                && <CardMenu menuItems={displayAll
-                                    ? this.trecipeEditMenuItems
-                                    : this.trecipeSaveMenuItems
-                            } />}
+                            {(displayAll || displayDuplicateButton) && (
+                                <CardMenu
+                                    menuItems={
+                                        displayAll
+                                            ? this.trecipeEditMenuItems
+                                            : this.trecipeSaveMenuItems
+                                    }
+                                />
+                            )}
                         </div>
                         <div>
                             <ul className="dest-card-list">
@@ -181,9 +182,9 @@ class Map extends React.Component<MapProps> {
                                             index={index}
                                             key={dest.uuid}
                                             destination={dest}
-                                            isCompleted={displayAll 
-                                                ? completed.has(dest.uuid)
-                                                : false}
+                                            isCompleted={
+                                                displayAll ? completed.has(dest.uuid) : false
+                                            }
                                             onClickDelete={this.onDestDeleteClick.bind(this)}
                                             onClickComplete={this.onDestCompleteClick.bind(this)}
                                         />
@@ -198,10 +199,7 @@ class Map extends React.Component<MapProps> {
                             completedDest={completed}
                             onDestAdd={this.onDestAddClick.bind(this)}
                             onDestRemove={this.onDestDeleteClick.bind(this)}
-                            readOnly={displayAll
-                                ? false
-                                : true
-                            }
+                            readOnly={displayAll ? false : true}
                         />
                     </div>
                 </div>

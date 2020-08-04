@@ -64,7 +64,10 @@ export const createTrecipeRequest = (trecipeData: CreateNewTrecipeDTO): AppThunk
     };
 };
 
-export const duplicateTrecipeRequest = (srcTrecipeId: string, callback?: (uuid: string) => void): AppThunk => {
+export const duplicateTrecipeRequest = (
+    srcTrecipeId: string,
+    callback?: (uuid: string) => void
+): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         TrecipeService.duplicateTrecipe(srcTrecipeId).then((copiedTrecipe: Trecipe) => {
             dispatch(addTrecipe(copiedTrecipe));
@@ -83,7 +86,7 @@ export const deleteTrecipeRequest = (idToDelete: string, callback?: () => void):
                 dispatch(deleteTrecipe(idToDelete));
                 UserService.getUser().then((updatedUser: UserResponse) => {
                     dispatch(setUser(updatedUser.user));
-                    if (callback) callback()
+                    if (callback) callback();
                 });
             }
         });
