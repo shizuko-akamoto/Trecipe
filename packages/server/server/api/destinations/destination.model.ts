@@ -1,6 +1,14 @@
 import mongoose from 'mongoose';
 import Destination from '../../../../shared/models/destination';
 
+const userRating = new mongoose.Schema(
+    {
+        userId: { type: String, ref: 'User' },
+        rating: Number,
+    },
+    { id: false, timestamps: true }
+);
+
 const destinationSchema = new mongoose.Schema(
     {
         uuid: String,
@@ -14,7 +22,7 @@ const destinationSchema = new mongoose.Schema(
         formattedPhoneNumber: String,
         website: String,
         rating: Number,
-        userRatings: [Number],
+        userRatings: [userRating],
         description: String,
         placeId: String,
         photoRefs: [String],

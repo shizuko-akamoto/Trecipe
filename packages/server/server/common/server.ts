@@ -7,7 +7,9 @@ import cookieParser from 'cookie-parser';
 import l from './logger';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import GridFsStorage, { ConnectionResult } from 'multer-gridfs-storage';
+import passport from 'passport';
+import { setupPassport } from './passport/passportUtils';
+import GridFsStorage from 'multer-gridfs-storage';
 
 import installValidator from './openapi';
 import multer from 'multer';
@@ -20,7 +22,12 @@ export default class ExpressServer {
     constructor() {
         const root = path.normalize(__dirname + '/../../..');
         app.set('appPath', root + 'client');
-        app.use(cors());
+        app.use(
+            cors({
+                origin: true,
+                credentials: true,
+            })
+        );
         app.use(bodyParser.json({ limit: process.env.REQUEST_LIMIT || '100kb' }));
         app.use(
             bodyParser.urlencoded({
@@ -30,6 +37,8 @@ export default class ExpressServer {
         );
         app.use(bodyParser.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
         app.use(cookieParser(process.env.SESSION_SECRET));
+        app.use(passport.initialize());
+        setupPassport(passport);
 
         // if in prod, we serve react app, otherwise we serve swagger ui
         if (process.env.NODE_ENV === 'production') {
@@ -73,7 +82,7 @@ export default class ExpressServer {
         });
         storage
             .ready()
-            .then((db: ConnectionResult) => {
+            .then(() => {
                 l.info('gridfs storage setup successful');
             })
             .catch((err) => {

@@ -5,6 +5,7 @@ import './gmap.scss';
 import Spinner from '../../../components/Loading/Spinner';
 import { mapColorStyle } from '../../../components/Map/mapHelper';
 import { SearchBarPopup } from '../../../components/SearchBarPopup/SearchBarPopup';
+import { Legend } from './Legend';
 import { CreateNewDestinationDTO } from '../../../../../shared/models/createNewDestinationDTO';
 import Destination from '../../../../../shared/models/destination';
 
@@ -120,6 +121,9 @@ export class GMap extends Component<GMapProps, GMapState> {
                         onDestAdd={this.newDestAdd}
                         onDestRemove={this.props.onDestRemove}
                     />
+                </div>
+                <div className="gmap-legend">
+                    <Legend />
                 </div>
             </div>
         );

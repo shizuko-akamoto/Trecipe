@@ -2,9 +2,10 @@
 @import '../animation';
 
 .spinner-wrapper {
-    position: relative;
     height: 100%;
     width: 100%;
+    background-color: white;
+    min-height: 80vh;
 }
 
 .spinner {

@@ -6,6 +6,7 @@ import './destinationCard.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
 import { getIcon } from '../../../../../shared/models/destination';
+import { baseURL } from '../../../api';
 
 export class DestinationCard extends React.Component<DCProps> {
     render() {
@@ -16,7 +17,9 @@ export class DestinationCard extends React.Component<DCProps> {
                     className="dest-card-header-container"
                     style={{
                         backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.5) 100%)${
-                            isEmpty(destModel.photoRefs) ? '' : `, url(${destModel.photoRefs[0]})`
+                            isEmpty(destModel.photoRefs)
+                                ? ''
+                                : `, url(${baseURL}photos/${destModel.photoRefs[0]})`
                         }`,
                     }}>
                     <div className="dest-card-header">
@@ -26,18 +29,15 @@ export class DestinationCard extends React.Component<DCProps> {
                                 <FontAwesomeIcon className="dest-check-icon" icon="check" />
                             )}
                         </span>
-                        <span className="dest-card-edit">
+                        <span className="dest-card-edit" onClick={(e) => e.preventDefault()}>
                             <CardMenu
                                 menuItems={[
                                     {
                                         id: 1,
                                         text: 'Complete',
                                         icon: 'check',
-                                        onClick: () => {
-                                            this.props.onClickComplete(
-                                                destModel.uuid,
-                                                !this.props.isCompleted
-                                            );
+                                        onClick: (e) => {
+                                            this.props.onClickComplete(destModel, e);
                                         },
                                         disabled: this.props.isCompleted,
                                     },
@@ -45,8 +45,11 @@ export class DestinationCard extends React.Component<DCProps> {
                                         id: 2,
                                         text: 'Remove',
                                         icon: ['far', 'trash-alt'],
-                                        onClick: () => {
-                                            this.props.onClickDelete(this.props.destination.uuid);
+                                        onClick: (e) => {
+                                            this.props.onClickDelete(
+                                                this.props.destination.uuid,
+                                                e
+                                            );
                                         },
                                     },
                                 ]}

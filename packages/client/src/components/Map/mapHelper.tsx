@@ -21,7 +21,7 @@ export class AutoComplete {
         this.sessionToken = new google.maps.places.AutocompleteSessionToken();
     }
 
-    getPredictions(input: string): any {
+    getPredictions(input: string) {
         let request: google.maps.places.AutocompletionRequest = {
             input: input,
             sessionToken: this.sessionToken,
@@ -84,7 +84,7 @@ export const getDestModel = (
         formattedPhoneNumber: placeResult.formatted_phone_number
             ? placeResult.formatted_phone_number
             : '',
-        rating: placeResult.rating ? (Math.max(5, Math.round(placeResult.rating)) as Rating) : 0,
+        rating: placeResult.rating ? (Math.min(5, Math.round(placeResult.rating)) as Rating) : 0,
         website: placeResult.website ? placeResult.website : '',
         placeId: placeResult.place_id ? placeResult.place_id : '',
     };

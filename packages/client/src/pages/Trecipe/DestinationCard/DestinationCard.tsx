@@ -6,6 +6,8 @@ import { RatingBar } from '../../../components/Rating/RatingBar';
 import { Draggable } from 'react-beautiful-dnd';
 import Destination, { getIcon } from '../../../../../shared/models/destination';
 import { isEmpty } from 'lodash';
+import { baseURL } from '../../../api';
+import destination from '../../../../../shared/models/destination';
 
 /**
  * DCProps
@@ -20,8 +22,8 @@ export interface DCProps {
     index: number;
     destination: Destination;
     isCompleted: boolean;
-    onClickDelete: (destId: string) => void;
-    onClickComplete: (destId: string, isCompleted: boolean) => void;
+    onClickDelete: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
+    onClickComplete: (destId: destination, e: React.MouseEvent<HTMLElement>) => void;
     isInEdit?: boolean;
 }
 
@@ -51,7 +53,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                     src={
                                         isEmpty(this.props.destination.photoRefs)
                                             ? null
-                                            : this.props.destination.photoRefs[0]
+                                            : `${baseURL}photos/${this.props.destination.photoRefs[0]}`
                                     }
                                     imgStyle={{ borderRadius: '8px 0 0 8px' }}
                                 />
@@ -78,17 +80,17 @@ export class DestinationCard extends React.Component<DCProps> {
                                 className={`check-edit-wrapper ${
                                     this.props.isInEdit ? 'in-edit' : ''
                                 }`}>
-                                <div className="completed-checkbox">
+                                <div
+                                    className="completed-checkbox"
+                                    onClick={(e) => e.stopPropagation()}>
                                     <input
                                         type="checkbox"
                                         id={this.props.destination.uuid + '-completed'}
-                                        onChange={() =>
-                                            this.props.onClickComplete(
-                                                this.props.destination.uuid,
-                                                !this.props.isCompleted
-                                            )
+                                        onClick={(e) =>
+                                            this.props.onClickComplete(this.props.destination, e)
                                         }
                                         checked={this.props.isCompleted}
+                                        readOnly
                                     />
                                     <label
                                         htmlFor={this.props.destination.uuid + '-completed'}
@@ -105,8 +107,8 @@ export class DestinationCard extends React.Component<DCProps> {
                                 <button
                                     className="edit-option"
                                     id="dest-delete"
-                                    onClick={() =>
-                                        this.props.onClickDelete(this.props.destination.uuid)
+                                    onClick={(e) =>
+                                        this.props.onClickDelete(this.props.destination.uuid, e)
                                     }>
                                     <FontAwesomeIcon icon={['far', 'trash-alt']} />
                                 </button>

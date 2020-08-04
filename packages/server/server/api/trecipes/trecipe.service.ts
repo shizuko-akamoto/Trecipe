@@ -5,11 +5,15 @@ import { TrecipeNotFound } from './trecipe.error';
 import { InternalServerError } from 'express-openapi-validator/dist';
 import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
 import { uuid } from 'uuidv4';
+import DestinationService from '../destinations/destination.service';
+import Destination from '../../../../shared/models/destination';
+import { User } from '../../../../shared/models/user';
+import { DestinationNotFound } from '../destinations/destination.error';
 
 class TrecipeService {
-    public getAll(): Promise<Array<Trecipe>> {
+    public getAll(user: User): Promise<Array<Trecipe>> {
         return trecipeModel
-            .find()
+            .find({ owner: user.username })
             .exec()
             .then((trecipes: Array<Trecipe>) => {
                 logger.info('fetch all trecipes');
@@ -41,9 +45,9 @@ class TrecipeService {
             );
     }
 
-    public getTrecipeById(uuid: string): Promise<Trecipe> {
+    public getTrecipeById(uuid: string, user: User): Promise<Trecipe> {
         return trecipeModel
-            .findOne({ uuid: uuid })
+            .findOne({ uuid: uuid, owner: user.username })
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -63,9 +67,9 @@ class TrecipeService {
             });
     }
 
-    public deleteTrecipeById(uuid: string): Promise<number> {
+    public deleteTrecipeById(uuid: string, user: User): Promise<number> {
         return trecipeModel
-            .deleteOne({ uuid: uuid })
+            .deleteOne({ uuid: uuid, owner: user.username })
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -85,9 +89,9 @@ class TrecipeService {
             });
     }
 
-    public updateTrecipeById(uuid: string, trecipeData: Trecipe): Promise<Trecipe> {
+    public updateTrecipeById(uuid: string, trecipeData: Trecipe, user: User): Promise<Trecipe> {
         return trecipeModel
-            .findOneAndUpdate({ uuid: uuid }, trecipeData, { new: true })
+            .findOneAndUpdate({ uuid: uuid, owner: user.username }, trecipeData, { new: true })
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -107,9 +111,9 @@ class TrecipeService {
             });
     }
 
-    public duplicateTrecipe(srcTrecipeId: string): Promise<Trecipe | void> {
+    public duplicateTrecipe(srcTrecipeId: string, user: User): Promise<Trecipe | void> {
         return trecipeModel
-            .findOne({ uuid: srcTrecipeId })
+            .findOne({ uuid: srcTrecipeId, owner: user.username })
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -153,6 +157,35 @@ class TrecipeService {
                     })
                 )
             );
+    }
+
+    public getAssociatedTrecipes(placeId: string, limit: number, owner?: User) {
+        return DestinationService.getDestinationByPlaceId(placeId)
+            .then((destination: Destination) => {
+                // if owner is defined, return associated trecipes for that owner, otherwise, return all public associated trecipes
+                const filter = owner
+                    ? { 'destinations.destUUID': destination.uuid, owner: owner.username }
+                    : { 'destinations.destUUID': destination.uuid, isPrivate: false };
+                return trecipeModel.find(filter).limit(limit).exec();
+            })
+            .catch((err) => {
+                if (err instanceof DestinationNotFound) {
+                    return Promise.resolve([] as Array<Trecipe>);
+                } else {
+                    throw err;
+                }
+            })
+            .catch((err) =>
+                Promise.reject(
+                    new InternalServerError({
+                        message: `Failed to get associated trecipes: ${err.toString()}`,
+                    })
+                )
+            )
+            .then((associated: Array<Trecipe>) => {
+                logger.info(`got associated trecipes (count: ${associated.length})`);
+                return Promise.resolve(associated);
+            });
     }
 }
 

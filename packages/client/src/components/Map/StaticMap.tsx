@@ -2,7 +2,7 @@ import React, { Component, RefObject } from 'react';
 import { Image } from '../Image/Image';
 import './StaticMap.scss';
 import { staticMapStyle } from './mapHelper';
-import Destination from '../../../../shared/models/destination';
+import { isEmpty } from 'lodash';
 
 /**
  * MarkerColor
@@ -22,7 +22,8 @@ export enum MarkerColor {
 export interface Marker {
     lat: number;
     long: number;
-    color?: MarkerColor;
+    color?: string;
+    label?: string;
 }
 
 /**
@@ -37,8 +38,7 @@ export interface StaticMapProps {
     height: number;
     mapScale: 1 | 2;
     markerSize: 'tiny' | 'small' | 'mid';
-    destinations: Array<Destination>;
-    completedDests: Set<string>;
+    markers: Array<Marker>;
 }
 
 /**
@@ -56,8 +56,7 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
         height: 31.25,
         mapScale: 2,
         markerSize: 'small',
-        destinations: [],
-        completedDests: new Set<string>(),
+        markers: [],
     };
 
     public readonly state = {
@@ -124,17 +123,13 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
             key: `${process.env.REACT_APP_MAP_API_KEY}`,
         });
 
-        const markers = mapProps.destinations.map((dest) => {
-            return this.getMarker(dest, mapProps.completedDests.has(dest.uuid));
-        });
-
-        const markersParams = this.getMarkerParams(markers);
+        const markersParams = this.getMarkerParams(this.props.markers);
         markersParams.forEach((param) => {
             urlParams.append('markers', param);
         });
 
         // Center the map at a location when there is no marker
-        if (this.props.destinations.length === 0) {
+        if (this.props.markers.length === 0) {
             urlParams.append('center', 'vancouver');
         }
 
@@ -142,48 +137,24 @@ export class StaticMap extends Component<StaticMapProps, StaticMapState> {
         return baseUrl.toString() + staticMapStyle;
     }
 
-    private getMarker(destination: Destination, completed: boolean): Marker {
-        //TODO : update this when destination model is updated
-        return {
-            lat: destination.geometry.lat,
-            long: destination.geometry.lng,
-            color: completed ? MarkerColor.Blue : MarkerColor.Grey,
-        };
-    }
-
     /**
      * To define markers with different style, we have to supply multiple Markers parameter in the URL
-     * Each parameter will be defined by a color followed by size and coordinates of markers
+     * Each parameter will be defined by a color followed optionally by label, then size and coordinates of markers
      * This function forms the parameters and return them in a array
      */
     private getMarkerParams(markers: Array<Marker>): string[] {
-        let paramsMap: any = {};
-
-        const markerColors = Object.values(MarkerColor);
-        markerColors.forEach((color) => {
-            paramsMap[color] = '';
-        });
-
-        markers.forEach((marker) => {
+        let configs: Array<string>;
+        return markers.map((marker) => {
+            configs = [];
             if (marker.color) {
-                paramsMap[marker.color] = `${paramsMap[marker.color]}|${marker.lat},${marker.long}`;
-            } else {
-                paramsMap[MarkerColor.Grey] = `${paramsMap[MarkerColor.Grey]}|${marker.lat},${
-                    marker.long
-                }`;
+                configs.push(`color:0x${marker.color}`);
             }
-        });
-
-        markerColors.forEach((color) => {
-            if (paramsMap[color] !== '') {
-                paramsMap[color] = `|size:${this.props.markerSize}${paramsMap[color]}`;
-                paramsMap[color] = `color:0x${color}${paramsMap[color]}`;
-            } else {
-                delete paramsMap[color];
+            if (marker.label && !isEmpty(marker.label)) {
+                configs.push(`label:${marker.label[0]}`);
             }
+            configs.push(`size:${this.props.markerSize}`, `${marker.lat},${marker.long}`);
+            return configs.join('|');
         });
-
-        return Object.values(paramsMap);
     }
 
     render() {

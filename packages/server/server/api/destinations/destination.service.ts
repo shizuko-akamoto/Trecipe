@@ -3,10 +3,9 @@ import Destination from '../../../../shared/models/destination';
 import logger from '../../common/logger';
 import { DestinationNotFound } from './destination.error';
 import { InternalServerError } from 'express-openapi-validator/dist';
-import trecipeModel from '../trecipe/trecipe.model';
+import trecipeModel from '../trecipes/trecipe.model';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
-import { TrecipeNotFound } from '../trecipe/trecipe.error';
-import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
+import { TrecipeNotFound } from '../trecipes/trecipe.error';
 
 class DestinationService {
     public createDestination(destData: Destination) {
@@ -16,7 +15,7 @@ class DestinationService {
             .then((res) => {
                 if (res) {
                     logger.info(`destination with placeId: ${res.placeId} already exists`);
-                    return Promise.resolve(res);
+                    return this.updateDestinationById(res.uuid, destData);
                 } else {
                     const newDestination = new destinationModel(destData);
                     return newDestination.save();
@@ -80,6 +79,28 @@ class DestinationService {
                 } else {
                     logger.warn(`failed to get destination with uuid ${uuid}`);
                     return Promise.reject(new DestinationNotFound(uuid));
+                }
+            });
+    }
+
+    public getDestinationByPlaceId(placeId: string): Promise<Destination> {
+        return destinationModel
+            .findOne({ placeId: placeId })
+            .exec()
+            .catch((err) =>
+                Promise.reject(
+                    new InternalServerError({
+                        message: `Failed to get destination: ${err.toString()}`,
+                    })
+                )
+            )
+            .then((destination: Destination) => {
+                if (destination) {
+                    logger.info(`got destination with placeId ${placeId}`);
+                    return Promise.resolve(destination);
+                } else {
+                    logger.warn(`failed to get destination with placeId ${placeId}`);
+                    return Promise.reject(new DestinationNotFound(placeId));
                 }
             });
     }

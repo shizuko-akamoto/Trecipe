@@ -9,12 +9,12 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
 import { deleteTrecipeRequest, duplicateTrecipeRequest } from '../../redux/TrecipeList/action';
 import {
-    getDestModelsByTrecipeId,
+    getDestinationsByTrecipeId,
     addDestinationRequest,
     removeDestinationRequest,
 } from '../../redux/Destinations/action';
 import { connect } from 'react-redux';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
@@ -51,15 +51,18 @@ class Map extends React.Component<MapProps> {
         // fetch trecipe by id and destinations by trecipe id
         const trecipeId = this.props.match.params.trecipeId;
         this.props.fetchTrecipe(trecipeId);
-        this.props.getDestModelsByTrecipeId(trecipeId);
+        this.props.getDestinationsByTrecipeId(trecipeId);
     }
 
-    private onDestCompleteClick(destId: string) {
+    private onDestCompleteClick(destination: Destination, e: React.MouseEvent) {
+        e.preventDefault();
         if (this.props.trecipe) {
             const trecipe: Trecipe = this.props.trecipe;
             this.props.updateTrecipe(trecipe.uuid, {
                 destinations: trecipe.destinations.map((dest) =>
-                    dest.destUUID === destId ? { destUUID: destId, completed: true } : dest
+                    dest.destUUID === destination.uuid
+                        ? { destUUID: destination.uuid, completed: true }
+                        : dest
                 ),
             });
         }
@@ -67,7 +70,7 @@ class Map extends React.Component<MapProps> {
 
     private onDestDeleteClick(idToDelete: string) {
         if (this.props.trecipe) {
-            this.props.removeDestination(this.props.trecipe, idToDelete);
+            this.props.removeDestination(this.props.trecipe, { destId: idToDelete });
         }
     }
 
@@ -122,14 +125,20 @@ class Map extends React.Component<MapProps> {
                         <div>
                             <ul className="dest-card-list">
                                 {destinations.map((dest, index) => (
-                                    <DestinationCard
-                                        index={index}
-                                        key={dest.uuid}
-                                        destination={dest}
-                                        isCompleted={completed.has(dest.uuid)}
-                                        onClickDelete={this.onDestDeleteClick.bind(this)}
-                                        onClickComplete={this.onDestCompleteClick.bind(this)}
-                                    />
+                                    <Link
+                                        className="router-link"
+                                        to={`/destinations/${dest.placeId}`}
+                                        target="_blank"
+                                        key={dest.uuid}>
+                                        <DestinationCard
+                                            index={index}
+                                            key={dest.uuid}
+                                            destination={dest}
+                                            isCompleted={completed.has(dest.uuid)}
+                                            onClickDelete={this.onDestDeleteClick.bind(this)}
+                                            onClickComplete={this.onDestCompleteClick.bind(this)}
+                                        />
+                                    </Link>
                                 ))}
                             </ul>
                         </div>
@@ -167,7 +176,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             updateTrecipe: updateTrecipeRequest,
             deleteTrecipe: deleteTrecipeRequest,
             duplicateTrecipe: duplicateTrecipeRequest,
-            getDestModelsByTrecipeId,
+            getDestinationsByTrecipeId,
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,
             fetchTrecipe,

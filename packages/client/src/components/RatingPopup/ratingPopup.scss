@@ -1,0 +1,53 @@
+@import '../variables';
+@import '../mixins';
+
+.ratingPopup {
+    font-family: $default-font-family;
+    width: 400px;
+    padding: 10px 27px 27px;
+    text-align: left;
+
+    .title {
+        @include title-border-bottom($powder-blue, $crayola-yellow);
+        width: fit-content;
+        font-style: normal;
+        font-size: $title-font-size;
+        color: $indigo-dye;
+    }
+
+    .contents {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        label {
+            font-size: $default-font-size;
+            font-style: normal;
+            color: $mid-gray;
+        }
+
+        label.destination-address {
+            font-size: $subtext-font-size;
+        }
+
+        label.destination-name {
+            font-size: $subtitle-font-size;
+        }
+    }
+
+    .ratingStars {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .button {
+        margin-left: 10px;
+    }
+
+    .btn {
+        display: flex;
+        justify-content: center;
+    }
+}

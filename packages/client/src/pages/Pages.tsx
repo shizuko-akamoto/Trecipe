@@ -1,15 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import MyTrecipes from './MyTrecipes/MyTrecipes';
-import { Header } from '../components/Header/Header';
+import Header from '../components/Header/Header';
 import { Footer } from '../components/Footer/Footer';
-import Trecipe from './Trecipe/TrecipePage';
+import TrecipePage from './Trecipe/TrecipePage';
 import Map from './Map/Map';
+import DestinationPage from './Destination/DestinationPage';
 import { LoadScript } from '@react-google-maps/api';
+import Login from './Login/Login';
+import PrivateRoute from '../components/Route/PrivateRoute';
+import { getUser } from '../redux/User/action';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 
 const libraries = ['places'];
 
-const Pages = () => {
+type PagesProps = ReturnType<typeof mapDispatchToProps>;
+
+const Pages = (props: PagesProps) => {
+    useEffect(() => {
+        props.getUser();
+    });
     return (
         <div>
             <Header />
@@ -17,9 +28,11 @@ const Pages = () => {
                 <LoadScript
                     googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
                     libraries={libraries}>
-                    <Route path="/" exact component={MyTrecipes} />
-                    <Route path="/:trecipeId" exact component={Trecipe} />
-                    <Route path="/map/:trecipeId" component={Map} />
+                    <PrivateRoute path="/" exact component={MyTrecipes} />
+                    <PrivateRoute path="/:trecipeId" exact component={TrecipePage} />
+                    <PrivateRoute path="/map/:trecipeId" component={Map} />
+                    <Route path="/destinations/:placeId" exact component={DestinationPage} />
+                    <Route path="/user/login" exact component={Login} />
                 </LoadScript>
             </Switch>
             <Footer />
@@ -27,4 +40,13 @@ const Pages = () => {
     );
 };
 
-export default Pages;
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return bindActionCreators(
+        {
+            getUser,
+        },
+        dispatch
+    );
+};
+
+export default connect(null, mapDispatchToProps)(Pages);

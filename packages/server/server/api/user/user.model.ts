@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import User from './user.interface';
+import { User } from '../../../../shared/models/user';
 
 const userSchema = new mongoose.Schema(
     {

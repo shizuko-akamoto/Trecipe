@@ -6,6 +6,9 @@ import { Action } from 'redux';
 import TrecipeService from '../../services/trecipeService';
 import Trecipe from '../../../../shared/models/trecipe';
 import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
+import UserService from '../../services/userService';
+import { UserResponse } from '../../../../shared/models/user';
+import { setUser } from '../User/action';
 
 export const addTrecipe = (newTrecipe: Trecipe) => {
     return typedAction(TrecipeListActionTypes.ADD_TRECIPE, newTrecipe);
@@ -28,6 +31,18 @@ export const loadTrecipes = (trecipes: Array<Trecipe>) => {
     });
 };
 
+export const loadAssociatedTrecipes = (trecipes: Array<Trecipe>) => {
+    return typedAction(TrecipeListActionTypes.LOAD_ASSOCIATED_TRECIPE, {
+        trecipes: trecipes,
+    });
+};
+
+export const loadMyAssociatedTrecipes = (trecipes: Array<Trecipe>) => {
+    return typedAction(TrecipeListActionTypes.LOAD_MY_ASSOCIATED_TRECIPE, {
+        trecipes: trecipes,
+    });
+};
+
 /**----- Sends trecipe requests to server and dispatches trecipe actions with results -----**/
 
 export const fetchAllTrecipes = (): AppThunk => {
@@ -42,6 +57,9 @@ export const createTrecipeRequest = (trecipeData: CreateNewTrecipeDTO): AppThunk
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         TrecipeService.createTrecipe(trecipeData).then((createdTrecipe: Trecipe) => {
             dispatch(addTrecipe(createdTrecipe));
+            UserService.getUser().then((updatedUser: UserResponse) => {
+                dispatch(setUser(updatedUser.user));
+            });
         });
     };
 };
@@ -50,6 +68,9 @@ export const duplicateTrecipeRequest = (srcTrecipeId: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         TrecipeService.duplicateTrecipe(srcTrecipeId).then((copiedTrecipe: Trecipe) => {
             dispatch(addTrecipe(copiedTrecipe));
+            UserService.getUser().then((updatedUser: UserResponse) => {
+                dispatch(setUser(updatedUser.user));
+            });
         });
     };
 };
@@ -59,11 +80,37 @@ export const deleteTrecipeRequest = (idToDelete: string): AppThunk => {
         TrecipeService.deleteTrecipe(idToDelete).then((deletedCount: number) => {
             if (deletedCount > 0) {
                 dispatch(deleteTrecipe(idToDelete));
+                UserService.getUser().then((updatedUser: UserResponse) => {
+                    dispatch(setUser(updatedUser.user));
+                });
             }
         });
     };
 };
 
+export const fetchAssociatedTrecipesRequest = (placeId: string, limit?: number): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        TrecipeService.fetchAssociatedTrecipes(placeId, limit).then((trecipes: Array<Trecipe>) => {
+            dispatch(loadAssociatedTrecipes(trecipes));
+        });
+    };
+};
+
+export const fetchMyAssociatedTrecipesRequest = (placeId: string, limit?: number): AppThunk => {
+    return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
+        TrecipeService.fetchAssociatedTrecipes(placeId, limit, true).then(
+            (trecipes: Array<Trecipe>) => {
+                dispatch(loadMyAssociatedTrecipes(trecipes));
+            }
+        );
+    };
+};
+
 export type TrecipeListAction = ReturnType<
-    typeof addTrecipe | typeof deleteTrecipe | typeof updateTrecipe | typeof loadTrecipes
+    | typeof addTrecipe
+    | typeof deleteTrecipe
+    | typeof updateTrecipe
+    | typeof loadTrecipes
+    | typeof loadAssociatedTrecipes
+    | typeof loadMyAssociatedTrecipes
 >;
