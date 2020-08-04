@@ -27,30 +27,34 @@ class SearchResult extends React.Component<SearchResultProps, {}> {
                     <div className="result-wrapper">
                         <h1 className="page-title">Trecipes</h1>
                         <div className="cards-wrapper">
-                            {this.props.results?.trecipeResult.map((trecipe: Trecipe) => (
-                                <div className="card-item" key={trecipe.uuid}>
-                                    <Link className="router-link" to={trecipe.uuid}>
-                                        <TrecipeCard {...trecipe} isReadOnly={true} />
-                                    </Link>
-                                </div>
-                            ))}
+                            <ul className="card-list">
+                                {this.props.results?.trecipeResult.map((trecipe: Trecipe) => (
+                                    <li className="card-item" key={trecipe.uuid}>
+                                        <Link className="router-link" to={trecipe.uuid}>
+                                            <TrecipeCard {...trecipe} isReadOnly={true} />
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
                         <h1 className="page-title">Destinations</h1>
                         <div className="cards-wrapper">
-                            {this.props.results?.destinationResult.map(
-                                (destination: Destination, index) => (
-                                    <div className="dest-item" key={destination.uuid}>
-                                        <Link className="router-link" to={destination.uuid}>
-                                            <DestinationCard
-                                                key={destination.uuid}
-                                                destination={destination}
-                                                index={index}
-                                                isReadOnly={true}
-                                            />
-                                        </Link>
-                                    </div>
-                                )
-                            )}
+                            <ul className="card-list">
+                                {this.props.results?.destinationResult.map(
+                                    (destination: Destination, index) => (
+                                        <li className="card-item" key={destination.uuid}>
+                                            <Link className="router-link" to={destination.uuid}>
+                                                <DestinationCard
+                                                    key={destination.uuid}
+                                                    destination={destination}
+                                                    index={index}
+                                                    isReadOnly={true}
+                                                />
+                                            </Link>
+                                        </li>
+                                    )
+                                )}
+                            </ul>
                         </div>
                     </div>
                 </div>

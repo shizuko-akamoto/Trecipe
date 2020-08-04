@@ -36,10 +36,26 @@
         }
 
         .cards-wrapper {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax($tc-min-width, 1fr));
-            grid-gap: 1rem;
-            grid-auto-flow: dense;
+            display: flex;
+            flex-direction: column;
+
+            .card-list {
+                list-style: none;
+                padding: 0;
+                display: flex;
+                overflow-x: auto;
+                width: 100%;
+
+                .card-item {
+                    &:nth-of-type(1) {
+                        margin-left: 0;
+                    }
+
+                    flex-shrink: 0;
+                    width: 23rem;
+                    margin-left: 1rem;
+                }
+            }
         }
     }
 }
