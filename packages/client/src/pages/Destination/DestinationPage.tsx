@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
-import Destination, { getIcon, Rating } from '../../../../shared/models/destination';
+import Destination, { getIcon } from '../../../../shared/models/destination';
 import { getDestinationById } from '../../redux/Destinations/action';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getDestModel } from '../../components/Map/mapHelper';
