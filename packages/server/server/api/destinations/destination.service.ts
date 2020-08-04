@@ -6,6 +6,7 @@ import { InternalServerError } from 'express-openapi-validator/dist';
 import trecipeModel from '../trecipes/trecipe.model';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { TrecipeNotFound } from '../trecipes/trecipe.error';
+import { User } from '../../../../shared/models/user';
 
 class DestinationService {
     public createDestination(destData: Destination) {
@@ -36,10 +37,13 @@ class DestinationService {
             );
     }
 
-    public getDestinationsByTrecipeId(trecipeUuid: string): Promise<Array<DestWithStatus>> {
+    public getDestinationsByTrecipeId(trecipeUuid: string, owner?: User): Promise<Array<DestWithStatus>> {
         const populateField = 'destinations.destination';
+        const filter = owner
+            ? { uuid: trecipeUuid, owner: owner.username }
+            : { uuid: trecipeUuid, isPrivate: false };
         return trecipeModel
-            .findOne({ uuid: trecipeUuid })
+            .findOne(filter)
             .populate(populateField)
             .exec()
             .catch((err) => {

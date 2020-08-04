@@ -45,9 +45,12 @@ class TrecipeService {
             );
     }
 
-    public getTrecipeById(uuid: string, user: User): Promise<Trecipe> {
+    public getTrecipeById(uuid: string, user?: User): Promise<Trecipe> {
+        const filter = user
+            ? { uuid: uuid, owner: user.username }
+            : { uuid: uuid, isPrivate: false }; 
         return trecipeModel
-            .findOne({ uuid: uuid, owner: user.username })
+            .findOne(filter)
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -113,7 +116,7 @@ class TrecipeService {
 
     public duplicateTrecipe(srcTrecipeId: string, user: User): Promise<Trecipe | void> {
         return trecipeModel
-            .findOne({ uuid: srcTrecipeId, owner: user.username })
+            .findOne({ uuid: srcTrecipeId })
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -124,24 +127,35 @@ class TrecipeService {
             )
             .then((trecipeToCopy: Trecipe) => {
                 if (trecipeToCopy) {
-                    const copy: Trecipe = {
-                        uuid: uuid(),
-                        name: trecipeToCopy.name,
-                        description: trecipeToCopy.description,
-                        isPrivate: trecipeToCopy.isPrivate,
-                        owner: trecipeToCopy.owner,
-                        collaborators: trecipeToCopy.collaborators,
-                        image: trecipeToCopy.image,
-                        destinations: trecipeToCopy.destinations.map((dest) => {
-                            return {
-                                destUUID: dest.destUUID,
-                                completed: dest.completed,
-                            };
-                        }),
-                        createdAt: '',
-                        updatedAt: '',
-                    };
-                    return new trecipeModel(copy).save();
+                    const isOwner = trecipeToCopy.owner === user.username;
+                    if (isOwner || !trecipeToCopy.isPrivate) {
+                        const copy: Trecipe = {
+                            uuid: uuid(),
+                            name: trecipeToCopy.name,
+                            description: trecipeToCopy.description,
+                            isPrivate: trecipeToCopy.isPrivate,
+                            owner: user.username,
+                            collaborators: [],
+                            image: trecipeToCopy.image,
+                            destinations: trecipeToCopy.destinations.map((dest) => {
+                                return {
+                                    destUUID: dest.destUUID,
+                                    completed: isOwner
+                                        ? dest.completed
+                                        : false,
+                                };
+                            }),
+                            createdAt: '',
+                            updatedAt: '',
+                        };
+                        return new trecipeModel(copy).save();
+                    } else {
+                        Promise.reject(
+                            new InternalServerError({
+                                message: `Failed to duplicate trecipe`,
+                            })
+                        )
+                    }
                 } else {
                     return Promise.reject(new TrecipeNotFound(srcTrecipeId));
                 }
