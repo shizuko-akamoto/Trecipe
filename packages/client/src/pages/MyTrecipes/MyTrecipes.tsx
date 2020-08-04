@@ -2,7 +2,7 @@ import React from 'react';
 import './MyTrecipes.scss';
 import { FilterButton, FilterButtonTypes } from './Filter/FilterButton';
 import { Button } from '../../components/Button/Button';
-import TrecipeCard from './TrecipeCard/TrecipeCard';
+import TrecipeCard from '../../components/TrecipeCard/TrecipeCard';
 import { FilterSelector, FilterSelectorTypes } from './Filter/FilterSelector';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { connect } from 'react-redux';

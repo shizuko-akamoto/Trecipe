@@ -4,6 +4,7 @@ import { modalReducer } from './Modal/reducer';
 import { destinationsReducer } from './Destinations/reducer';
 import { trecipeReducer } from './Trecipe/reducer';
 import { userReducer } from './User/reducer';
+import { searchResultReducer } from './SearchResult/reducer';
 
 export const rootReducer = combineReducers({
     trecipeList: trecipeListReducer,
@@ -11,6 +12,7 @@ export const rootReducer = combineReducers({
     destinations: destinationsReducer,
     trecipe: trecipeReducer,
     user: userReducer,
+    searchResult: searchResultReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

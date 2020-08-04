@@ -5,6 +5,7 @@ import DestinationController from './api/destinations/destination.controller';
 import UserController from './api/user/user.controller';
 import UploadController from './api/upload/upload.controller';
 import PhotoController from './api/photos/photo.controller';
+import SearchController from './api/search/search.controller';
 
 export default function routes(app: Application): void {
     const controllers = [
@@ -13,6 +14,7 @@ export default function routes(app: Application): void {
         new UserController(),
         new UploadController(),
         new PhotoController(),
+        new SearchController(),
     ];
     controllers.forEach((controller: Controller) => {
         app.use('/api/v1', controller.router);
