@@ -14,7 +14,7 @@ class TrecipeService {
      * @returns a promise of trecipe models array if successful, otherwise a promise rejection
      */
     public fetchAllTrecipes(): Promise<Array<Trecipe>> {
-        return API.get<Array<Trecipe>>(`${this.apiEndpoint}`).then(
+        return API.get<Array<Trecipe>>(this.apiEndpoint).then(
             (res: AxiosResponse<Array<Trecipe>>) => {
                 return Promise.resolve(res.data);
             }
@@ -27,7 +27,7 @@ class TrecipeService {
      * @returns a promise of created trecipe model if successful, otherwise a promise rejection
      */
     public createTrecipe(trecipeData: CreateNewTrecipeDTO): Promise<Trecipe> {
-        return API.post<Trecipe>(`${this.apiEndpoint}`, trecipeData).then(
+        return API.post<Trecipe>(this.apiEndpoint, trecipeData).then(
             (res: AxiosResponse<Trecipe>) => {
                 return Promise.resolve(res.data);
             }

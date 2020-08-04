@@ -69,7 +69,7 @@ class TrecipeCard extends React.Component<TCProps> {
                     className="tcHeaderContainer"
                     style={{
                         backgroundImage: this.props.image
-                            ? `url(${baseURL}/upload/${this.props.image})`
+                            ? `url(${baseURL}upload/${this.props.image})`
                             : 'none',
                     }}>
                     <div className="tcHeader">
