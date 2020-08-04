@@ -14,7 +14,9 @@ export const passportAuth = passport.authenticate('jwt', { session: false, failW
 // Setup passport to extract jwt token from cookie
 export function setupPassport(passport: PassportStatic): void {
     const pathToPublicKey = path.join(__dirname, 'id_rsa_pub.pem');
+    logger.log(`reading public key: ${pathToPublicKey}`);
     const PUB_KEY = fs.readFileSync(pathToPublicKey, 'utf8');
+    logger.log(PUB_KEY);
 
     const cookieExtractor = (req: Request) => {
         return req && req.cookies ? req.cookies['access_token'] : null;

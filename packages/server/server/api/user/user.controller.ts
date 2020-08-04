@@ -5,7 +5,7 @@ import { User, CreateUserDTO, LoginDTO, UserResponse } from '../../../../shared/
 import Bcrypt from 'bcryptjs';
 import { passportAuth, signJwt } from '../../common/passport/passportUtils';
 import { Unauthorized } from 'express-openapi-validator';
-import logger from "../../common/logger";
+import logger from '../../common/logger';
 
 class UserController implements Controller {
     public readonly path = '/users';
