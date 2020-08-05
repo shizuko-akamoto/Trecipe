@@ -2,7 +2,6 @@ import React from 'react';
 import './destInfoWindow.scss';
 import Destination from '../../../../../shared/models/destination';
 import { isEmpty } from 'lodash';
-import { baseURL } from '../../../api';
 import { RatingBar } from '../../../components/Rating/RatingBar';
 import { Image } from '../../../components/Image/Image';
 
