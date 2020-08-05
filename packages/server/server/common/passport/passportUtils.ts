@@ -1,4 +1,5 @@
-import { Strategy, StrategyOptions } from 'passport-jwt';
+import { Strategy as JWTStrategy, StrategyOptions } from 'passport-jwt';
+import { Strategy as AnonymousStrategy } from 'passport-anonymous';
 import fs from 'fs';
 import path from 'path';
 import passport, { PassportStatic } from 'passport';
@@ -9,6 +10,12 @@ import { Request } from 'express';
 
 // Middleware for authenticating user, use this function for all protected routes
 export const passportAuth = passport.authenticate('jwt', { session: false, failWithError: true });
+
+// Middleware for optional authentication
+export const passportAuthAnon = passport.authenticate(['jwt', 'anonymous'], {
+    session: false,
+    failWithError: true,
+});
 
 // Setup passport to extract jwt token from cookie
 export function setupPassport(passport: PassportStatic): void {
@@ -30,7 +37,7 @@ export function setupPassport(passport: PassportStatic): void {
      * This will be used when passport.authenticate('jwt') is called
      */
     passport.use(
-        new Strategy(options, (jwtPayload, done) => {
+        new JWTStrategy(options, (jwtPayload, done) => {
             UserService.getUserByUsername(jwtPayload.username)
                 .then((user: User) => {
                     if (user) {
@@ -44,6 +51,8 @@ export function setupPassport(passport: PassportStatic): void {
                 });
         })
     );
+
+    passport.use(new AnonymousStrategy());
 }
 
 export function signJwt(user: User): Promise<string> {
