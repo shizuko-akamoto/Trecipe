@@ -75,9 +75,16 @@ class SearchController implements Controller {
     private searchTrecipe(keyword: string, offset: number, limit: number): Promise<Trecipe[]> {
         return trecipeModel
             .find({
-                $or: [
-                    { name: { $regex: '.*(?i)' + keyword + '.*' } },
-                    { description: { $regex: '.*' + keyword + '.*' } },
+                $and: [
+                    {
+                        $or: [
+                            { name: { $regex: '.*(?i)' + keyword + '.*' } },
+                            { description: { $regex: '.*' + keyword + '.*' } },
+                        ],
+                    },
+                    {
+                        isPrivate: false,
+                    },
                 ],
             })
             .skip(offset)

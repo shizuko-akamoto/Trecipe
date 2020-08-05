@@ -46,7 +46,7 @@ class SearchResult extends React.Component<SearchResultProps, {}> {
                                                 <li className="card-item" key={trecipe.uuid}>
                                                     <Link
                                                         className="router-link"
-                                                        to={trecipe.uuid}
+                                                        to={`/trecipes/${trecipe.uuid}`}
                                                         target="_blank">
                                                         <TrecipeCard
                                                             trecipe={{ ...trecipe }}
