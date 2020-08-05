@@ -84,8 +84,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     // load trecipe and destination by trecipe uuid
     private loadTrecipe(): void {
         const trecipeId = this.props.match.params.trecipeId;
-        const userState = this.props.user;
-        const isOwner = userState.isAuthenticated && userState.user.trecipes?.includes(trecipeId);
+        const isOwner = this.props.isAuthenticated && this.props.user.trecipes?.includes(trecipeId);
 
         this.props.fetchTrecipe(trecipeId, !isOwner);
         this.props.getDestinationsByTrecipeId(trecipeId, !isOwner);
@@ -227,13 +226,13 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                     (dest) => dest.destUUID === destination.uuid && !dest.completed
                 )
             ) {
-                if (this.props.user.user.username) {
+                if (this.props.user.username) {
                     this.props.showModal(
                         <RatingPopup
                             onClickHandler={this.updateTrecipeDestOnComplete.bind(this)}
                             dest={destination}
                             trecipeId={this.props.trecipe.uuid}
-                            userId={this.props.user.user.username}
+                            userId={this.props.user.username}
                         />
                     );
                 } else {
@@ -281,19 +280,20 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     }
 
     render() {
-        const userState = this.props.user;
+        const isAuthenticated = this.props.isAuthenticated;
+        const user = this.props.user;
         const trecipe: Trecipe | undefined = this.props.trecipe;
         const destinations: Destination[] | undefined = this.props.destinations;
         const editTrecipeBtnString = 'Edit Trecipe';
         const saveTrecipeBtnString = 'Save Trecipe';
         // Show everything if user is signed in and is the owner/collaborator of the trecipe
-        const displayAll =
-            trecipe && userState.isAuthenticated && userState.user.trecipes?.includes(trecipe.uuid);
+        const canEdit =
+            !!(trecipe && isAuthenticated && user.trecipes?.includes(trecipe.uuid));
         // Show the save button if the user is signed in but is not the owner of the trecipe
-        const displayDuplicateButton =
+        const canSave =
             trecipe &&
-            userState.isAuthenticated &&
-            !userState.user.trecipes?.includes(trecipe.uuid);
+            isAuthenticated &&
+            !user.trecipes?.includes(trecipe.uuid);
         if (!trecipe || !destinations) {
             return null;
         } else {
@@ -308,7 +308,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                         <CoverPhoto
                             imageSource={`${baseURL}upload/${trecipe.image}`}
                             buttons={
-                                displayAll
+                                canEdit
                                     ? [
                                           <Button
                                               key={editTrecipeBtnString}
@@ -317,7 +317,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                               onClick={this.onTrecipeEditClick.bind(this)}
                                           />,
                                       ]
-                                    : displayDuplicateButton
+                                    : canSave
                                     ? [
                                           <Button
                                               key={saveTrecipeBtnString}
@@ -329,12 +329,12 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                     : []
                             }
                             onFileChange={
-                                displayAll ? this.onCoverPhotoChange.bind(this) : undefined
+                                canEdit ? this.onCoverPhotoChange.bind(this) : undefined
                             }>
                             <div className="tc-header-text">
                                 <div className="tc-header-title">
                                     <h1 className="tc-header-name">{trecipe.name}</h1>
-                                    {displayAll && (
+                                    {canEdit && (
                                         <FontAwesomeIcon
                                             icon={trecipe.isPrivate ? 'lock' : 'lock-open'}
                                             className="tc-header-privacy"
@@ -359,23 +359,20 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                             <p>{trecipe.description}</p>
                             <span className="title-with-btns">
                                 <h1 className="trecipe-page-title">Places</h1>
-                                <span className="dest-edit-btn-wrapper">
-                                    {displayAll && (
+                                {canEdit && 
+                                    <span className="dest-edit-btn-wrapper">
                                         <Button
                                             text="Add"
                                             onClick={this.onDestAddClick.bind(this)}
                                             ref={this.addDestButtonRef}
                                         />
-                                    )}
-                                    {displayAll && (
                                         <Button
                                             text={this.state.isInEdit ? 'Done' : 'Edit'}
                                             onClick={this.onDestEditClick.bind(this)}
                                         />
-                                    )}
-                                </span>
+                                    </span>}
                             </span>
-                            {displayAll && (
+                            {canEdit && (
                                 <ProgressBar
                                     total={destinations.length}
                                     completed={completed.size}
@@ -401,9 +398,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                                             key={dest.uuid}
                                                             destination={dest}
                                                             isCompleted={
-                                                                displayAll
-                                                                    ? completed.has(dest.uuid)
-                                                                    : false
+                                                                canEdit && completed.has(dest.uuid)
                                                             }
                                                             index={index}
                                                             onClickDelete={this.onDestDeleteClick.bind(
@@ -413,7 +408,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                                                 this
                                                             )}
                                                             isInEdit={this.state.isInEdit}
-                                                            isReadOnly={!displayAll}
+                                                            isReadOnly={!canEdit}
                                                         />
                                                     </Link>
                                                 ))}
@@ -438,11 +433,11 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                         markers={destinations.map((dest) =>
                                             this.getMarker(
                                                 dest,
-                                                displayAll ? completed.has(dest.uuid) : false
+                                                canEdit ? completed.has(dest.uuid) : true
                                             )
                                         )}
                                     />
-                                    {displayAll && (
+                                    {canEdit && (
                                         <div className="static-map-legend">
                                             <Legend />
                                         </div>
@@ -470,7 +465,8 @@ const mapStateToProps = (
     return {
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
-        user: user,
+        user: user.user,
+        isAuthenticated: user.isAuthenticated,
     };
 };
 

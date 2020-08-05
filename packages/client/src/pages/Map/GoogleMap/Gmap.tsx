@@ -113,9 +113,7 @@ export class GMap extends Component<GMapProps, GMapState> {
                             key={dest.uuid}
                             dest={dest}
                             completed={
-                                this.props.readOnly
-                                    ? false
-                                    : this.props.completedDest.has(dest.uuid)
+                                !this.props.readOnly ? this.props.completedDest.has(dest.uuid) : true
                             }
                         />
                     ))}

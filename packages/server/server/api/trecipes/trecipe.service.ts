@@ -2,7 +2,7 @@ import trecipeModel from './trecipe.model';
 import Trecipe from '../../../../shared/models/trecipe';
 import logger from '../../common/logger';
 import { TrecipeNotFound } from './trecipe.error';
-import { InternalServerError } from 'express-openapi-validator/dist';
+import { InternalServerError, Unauthorized } from 'express-openapi-validator/dist';
 import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
 import { uuid } from 'uuidv4';
 import DestinationService from '../destinations/destination.service';
@@ -149,8 +149,9 @@ class TrecipeService {
                         return new trecipeModel(copy).save();
                     } else {
                         Promise.reject(
-                            new InternalServerError({
-                                message: `Failed to duplicate trecipe`,
+                            new Unauthorized({
+                                path: trecipeToCopy.uuid,
+                                message: `Not authorized to duplicate trecipe`,
                             })
                         );
                     }
