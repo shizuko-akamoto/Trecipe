@@ -1,0 +1,19 @@
+@import '../variables';
+
+.empty-text-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+
+    .empty-text {
+        font-size: $title-font-size;
+        color: $bright-gray;
+    }
+
+    .description-text {
+        font-size: $default-font-size;
+        color: $silver-gray;
+    }
+}

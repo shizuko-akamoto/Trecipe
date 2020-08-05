@@ -13,7 +13,7 @@ class TrecipeService {
      * Fetches all trecipes from server.
      * @returns a promise of trecipe models array if successful, otherwise a promise rejection
      */
-    public fetchAllTrecipes(): Promise<Array<Trecipe>> {
+    public fetchMyTrecipes(): Promise<Array<Trecipe>> {
         return API.get<Array<Trecipe>>(this.apiEndpoint).then(
             (res: AxiosResponse<Array<Trecipe>>) => {
                 return Promise.resolve(res.data);

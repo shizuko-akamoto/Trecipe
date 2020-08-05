@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux';
 import { RouteProps, Route, Redirect } from 'react-router-dom';
-import Spinner from '../Loading/Spinner';
+import FullScreenLoader from '../Loading/FullScreenLoader';
 
 type PrivateRouteProps = ReturnType<typeof mapStateToProps> & RouteProps;
 
@@ -16,7 +16,7 @@ class PrivateRoute extends React.Component<PrivateRouteProps> {
              * If not, redirect user back to the login page
              */
             loading ? (
-                <Spinner positionStyle="static" />
+                <FullScreenLoader />
             ) : (
                 <Route
                     {...rest}

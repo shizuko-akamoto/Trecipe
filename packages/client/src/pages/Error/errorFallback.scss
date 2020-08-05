@@ -1,0 +1,33 @@
+@import '../../components/variables';
+@import '../../components/mixins';
+
+.error-fallback-wrapper {
+    height: 100vh;
+    background-color: $tc-white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: $default-font-family;
+    text-align: center;
+
+    .machine-image {
+        height: 30vh;
+        width: auto;
+    }
+
+    .error {
+        font-size: $godzilla-font-size;
+        color: $powder-blue;
+    }
+
+    .error-desc {
+        font-size: $title-font-size;
+        color: $mid-gray;
+    }
+
+    .error-msg {
+        font-size: $subtitle-font-size;
+        color: $mid-gray;
+        margin-bottom: 0;
+    }
+}

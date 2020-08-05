@@ -35,16 +35,6 @@ class DestinationService {
         );
     }
 
-    public getDestinationById(destId: string): Promise<Destination> {
-        return API.get<Destination>(`${this.apiEndpoint}/${destId}`)
-            .then((res: AxiosResponse<Destination>) => {
-                return Promise.resolve(res.data);
-            })
-            .catch((err) => {
-                return Promise.reject(err);
-            });
-    }
-
     public getDestinationByPlaceId(placeId: string): Promise<Destination> {
         return API.get<Destination>(this.apiEndpoint, {
             params: {

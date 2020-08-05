@@ -6,7 +6,7 @@ export function searchResultReducer(
     action: SearchResultAction
 ): SearchResultState {
     switch (action.type) {
-        case SearchResultActionTypes.LOAD_SEARCH_RESULTS:
+        case SearchResultActionTypes.LOAD_SEARCH_RESULTS_SUCCESS:
             return {
                 result: action.payload,
             };

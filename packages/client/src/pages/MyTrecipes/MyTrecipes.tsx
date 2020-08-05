@@ -7,12 +7,18 @@ import { FilterSelector, FilterSelectorTypes } from './Filter/FilterSelector';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux';
-import { fetchAllTrecipes } from '../../redux/TrecipeList/action';
+import { fetchMyTrecipesRequest } from '../../redux/TrecipeList/action';
 import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import Trecipe from '../../../../shared/models/trecipe';
+import { createLoadingSelector } from '../../redux/Loading/selector';
+import { TrecipeListActionCategory } from '../../redux/TrecipeList/types';
+import OverlaySpinner from '../../components/Loading/OverlaySpinner';
+import FullScreenLoader from '../../components/Loading/FullScreenLoader';
+import { EmptyTrecipes } from '../../components/EmptyText/EmptyTrecipes';
+import { isEmpty } from 'lodash';
 
 type MyTrecipesProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -43,7 +49,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
     }
 
     componentDidMount(): void {
-        this.props.fetchAllTrecipes();
+        this.props.fetchMyTrecipes();
     }
 
     private renderAddPopup = () => {
@@ -144,78 +150,107 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
     render() {
         return (
             <div className="mytrecipes-wrapper">
-                <div className="content">
-                    <h1 className="page-title">My Trecipes</h1>
-                    <div className="buttons-wrapper">
-                        <ul className="context-filters">
-                            {this.state.filterStates.map((filter) => (
-                                <li className="filter-item" key={filter.filterName}>
-                                    <FilterButton
-                                        text={filter.filterName}
-                                        icon="check"
-                                        fontSize={1}
-                                        filterType={filter.filterName as FilterButtonTypes}
-                                        selected={filter.selected}
-                                        onClick={() => {
-                                            return;
-                                        }}
-                                        filterOnClick={this.handleFilterOnClick.bind(this)}
-                                        defaultDisabled={false}
-                                    />
-                                </li>
-                            ))}
-                            <FilterSelector
-                                listItem={[
-                                    {
-                                        text: 'Any',
-                                        icon: 'border-all' as IconProp,
-                                        selectorType: FilterSelectorTypes.ANY,
-                                    },
-                                    {
-                                        text: 'Public',
-                                        icon: 'lock-open' as IconProp,
-                                        selectorType: FilterSelectorTypes.PUBLIC,
-                                    },
-                                    {
-                                        text: 'Private',
-                                        icon: 'lock' as IconProp,
-                                        selectorType: FilterSelectorTypes.PRIVATE,
-                                    },
-                                ]}
-                                onClick={this.onPrivacySelectorChange.bind(this)}
-                            />
-                        </ul>
-                        <div className="new-trecipe-button">
-                            <Button
-                                text="Create New"
-                                icon="plus-circle"
-                                onClick={this.renderAddPopup}
-                            />
+                {this.props.isLoading ? (
+                    <FullScreenLoader />
+                ) : (
+                    <div className="content">
+                        <h1 className="page-title">My Trecipes</h1>
+                        <div className="buttons-wrapper">
+                            <ul className="context-filters">
+                                {this.state.filterStates.map((filter) => (
+                                    <li className="filter-item" key={filter.filterName}>
+                                        <FilterButton
+                                            text={filter.filterName}
+                                            icon="check"
+                                            fontSize={1}
+                                            filterType={filter.filterName as FilterButtonTypes}
+                                            selected={filter.selected}
+                                            onClick={() => {
+                                                return;
+                                            }}
+                                            filterOnClick={this.handleFilterOnClick.bind(this)}
+                                            defaultDisabled={false}
+                                        />
+                                    </li>
+                                ))}
+                                <FilterSelector
+                                    listItem={[
+                                        {
+                                            text: 'Any',
+                                            icon: 'border-all' as IconProp,
+                                            selectorType: FilterSelectorTypes.ANY,
+                                        },
+                                        {
+                                            text: 'Public',
+                                            icon: 'lock-open' as IconProp,
+                                            selectorType: FilterSelectorTypes.PUBLIC,
+                                        },
+                                        {
+                                            text: 'Private',
+                                            icon: 'lock' as IconProp,
+                                            selectorType: FilterSelectorTypes.PRIVATE,
+                                        },
+                                    ]}
+                                    onClick={this.onPrivacySelectorChange.bind(this)}
+                                />
+                            </ul>
+                            <div className="new-trecipe-button">
+                                <Button
+                                    text="Create New"
+                                    icon="plus-circle"
+                                    onClick={this.renderAddPopup}
+                                />
+                            </div>
+                        </div>
+                        <div className="cards-wrapper">
+                            {isEmpty(this.filterTrecipes()) ? (
+                                <EmptyTrecipes />
+                            ) : (
+                                <div className="card-grids">
+                                    {this.filterTrecipes().map((trecipe: Trecipe) => (
+                                        <div className="card-item" key={trecipe.uuid}>
+                                            <Link
+                                                className="router-link"
+                                                to={`trecipes/${trecipe.uuid}`}>
+                                                <TrecipeCard
+                                                    trecipe={{ ...trecipe }}
+                                                    isReadOnly={false}
+                                                />
+                                            </Link>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                            {/*When updating trecipes, we want to use a spinner overlay instead for smoother experience*/}
+                            {this.props.isUpdating && <OverlaySpinner size={50} />}
                         </div>
                     </div>
-                    <div className="cards-wrapper">
-                        {this.filterTrecipes().map((trecipe: Trecipe) => (
-                            <div className="card-item" key={trecipe.uuid}>
-                                <Link className="router-link" to={trecipe.uuid}>
-                                    <TrecipeCard trecipe={{ ...trecipe }} isReadOnly={false} />
-                                </Link>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                )}
             </div>
         );
     }
 }
 
+// when fetching trecipes
+const loadingSelector = createLoadingSelector([TrecipeListActionCategory.FETCH_MY_TRECIPES]);
+
+// when updating trecipes in the list
+const updatingSelector = createLoadingSelector([
+    TrecipeListActionCategory.CREATE_TRECIPE,
+    TrecipeListActionCategory.UPDATE_TRECIPE,
+    TrecipeListActionCategory.DELETE_TRECIPE,
+]);
+
 const mapStateToProps = (state: RootState) => ({
     trecipes: state.trecipeList.myTrecipes,
+    isLoading: loadingSelector(state),
+    isUpdating: updatingSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
-            fetchAllTrecipes,
+            fetchMyTrecipes: fetchMyTrecipesRequest,
             showModal,
         },
         dispatch
