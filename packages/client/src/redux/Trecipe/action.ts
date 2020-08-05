@@ -7,33 +7,61 @@ import { Action } from 'redux';
 import TrecipeService from '../../services/trecipeService';
 import { getDestinationsByTrecipeId } from '../Destinations/action';
 import { updateTrecipe as updateTrecipeInList } from '../TrecipeList/action';
+import { TrecipeListActionTypes } from '../TrecipeList/types';
+import { toast } from 'react-toastify';
 
-export const loadTrecipe = (trecipe: Trecipe) => {
-    return typedAction(TrecipeActionTypes.LOAD_TRECIPE, trecipe);
+export const fetchTrecipe = (trecipe: Trecipe) => {
+    return typedAction(TrecipeActionTypes.FETCH_TRECIPE_SUCCESS, trecipe);
 };
 
 export const updateTrecipe = (trecipe: Trecipe) => {
-    return typedAction(TrecipeActionTypes.UPDATE_TRECIPE, trecipe);
+    return typedAction(TrecipeActionTypes.UPDATE_TRECIPE_SUCCESS, trecipe);
 };
 
-export const fetchTrecipe = (id: string): AppThunk => {
+export const fetchTrecipeRequest = (id: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        TrecipeService.getTrecipe(id).then((trecipe: Trecipe) => {
-            dispatch(loadTrecipe(trecipe));
-        });
+        dispatch(typedAction(TrecipeActionTypes.FETCH_TRECIPE_REQUEST));
+        TrecipeService.getTrecipe(id)
+            .then((trecipe: Trecipe) => {
+                dispatch(fetchTrecipe(trecipe));
+            })
+            .catch((err) => {
+                dispatch(
+                    typedAction(TrecipeActionTypes.FETCH_TRECIPE_FAILURE, {
+                        reason: err.toString(),
+                    })
+                );
+                toast(`Failed to fetch trecipe [${err.toString()}]`, {
+                    type: toast.TYPE.ERROR,
+                });
+            });
     };
 };
 
 export const updateTrecipeRequest = (trecipeId: string, updatedTrecipe: Partial<Trecipe>) => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        TrecipeService.updateTrecipe(trecipeId, updatedTrecipe).then((updated: Trecipe) => {
-            dispatch(loadTrecipe(updated));
-            dispatch(updateTrecipeInList(trecipeId, updated));
-            if (updatedTrecipe.destinations) {
-                dispatch(getDestinationsByTrecipeId(trecipeId));
-            }
-        });
+        dispatch(typedAction(TrecipeListActionTypes.UPDATE_TRECIPE_REQUEST));
+        dispatch(typedAction(TrecipeActionTypes.UPDATE_TRECIPE_REQUEST));
+        TrecipeService.updateTrecipe(trecipeId, updatedTrecipe)
+            .then((updated: Trecipe) => {
+                dispatch(updateTrecipe(updated));
+                dispatch(updateTrecipeInList(trecipeId, updated));
+                // if change included destinations, refresh desitnations for this trecipe as well
+                if (updatedTrecipe.destinations) {
+                    dispatch(getDestinationsByTrecipeId(trecipeId));
+                }
+            })
+            .catch((err) => {
+                dispatch(
+                    typedAction(TrecipeActionTypes.UPDATE_TRECIPE_FAILURE, {
+                        reason: err.toString(),
+                    })
+                );
+                toast(`Failed to update trecipe [${err.toString()}]`, {
+                    type: toast.TYPE.ERROR,
+                });
+            });
     };
 };
 
-export type TrecipeAction = ReturnType<typeof loadTrecipe | typeof updateTrecipe>;
+export type TrecipeAction = ReturnType<typeof fetchTrecipe | typeof updateTrecipe>;

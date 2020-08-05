@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { GoogleMap } from '@react-google-maps/api';
 import { HoverMarker } from './HoverMarker';
 import './gmap.scss';
-import Spinner from '../../../components/Loading/Spinner';
 import { mapColorStyle } from '../../../components/Map/mapHelper';
 import { SearchBarPopup } from '../../../components/SearchBarPopup/SearchBarPopup';
 import { Legend } from './Legend';
 import { CreateNewDestinationDTO } from '../../../../../shared/models/createNewDestinationDTO';
 import Destination from '../../../../../shared/models/destination';
+import OverlaySpinner from '../../../components/Loading/OverlaySpinner';
 
 const mapOptions = {
     center: {
@@ -100,7 +100,7 @@ export class GMap extends Component<GMapProps, GMapState> {
     render() {
         return (
             <div className="gmap-wrapper">
-                {this.state.loading && <Spinner />}
+                {this.state.loading && <OverlaySpinner size={50} />}
                 <GoogleMap
                     mapContainerStyle={mapOptions.mapStyle}
                     mapContainerClassName={mapOptions.className}
@@ -113,7 +113,9 @@ export class GMap extends Component<GMapProps, GMapState> {
                             key={dest.uuid}
                             dest={dest}
                             completed={
-                                !this.props.readOnly ? this.props.completedDest.has(dest.uuid) : true
+                                !this.props.readOnly
+                                    ? this.props.completedDest.has(dest.uuid)
+                                    : true
                             }
                         />
                     ))}

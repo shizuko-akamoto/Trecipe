@@ -21,9 +21,9 @@ import destination from '../../../../../shared/models/destination';
 export interface DCProps {
     index: number;
     destination: Destination;
-    isCompleted: boolean;
-    onClickDelete: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
-    onClickComplete: (destId: destination, e: React.MouseEvent<HTMLElement>) => void;
+    isCompleted?: boolean;
+    onClickDelete?: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
+    onClickComplete?: (destId: destination, e: React.MouseEvent<HTMLElement>) => void;
     isInEdit?: boolean;
     isReadOnly?: boolean;
 }
@@ -33,7 +33,7 @@ export class DestinationCard extends React.Component<DCProps> {
         const defaultFilter = { filter: 'none' };
         if (this.props.isInEdit) {
             return defaultFilter;
-        } else if (this.props.isCompleted) {
+        } else if (!!this.props.isCompleted) {
             return { filter: 'opacity(50%)' };
         } else {
             return defaultFilter;
@@ -88,13 +88,15 @@ export class DestinationCard extends React.Component<DCProps> {
                                         <input
                                             type="checkbox"
                                             id={this.props.destination.uuid + '-completed'}
-                                            onClick={(e) =>
-                                                this.props.onClickComplete(
-                                                    this.props.destination,
-                                                    e
-                                                )
-                                            }
-                                            checked={this.props.isCompleted}
+                                            onClick={(e) => {
+                                                if (this.props.onClickComplete) {
+                                                    this.props.onClickComplete(
+                                                        this.props.destination,
+                                                        e
+                                                    );
+                                                }
+                                            }}
+                                            checked={!!this.props.isCompleted}
                                             readOnly
                                         />
                                         <label
@@ -112,9 +114,14 @@ export class DestinationCard extends React.Component<DCProps> {
                                     <button
                                         className="edit-option"
                                         id="dest-delete"
-                                        onClick={(e) =>
-                                            this.props.onClickDelete(this.props.destination.uuid, e)
-                                        }>
+                                        onClick={(e) => {
+                                            if (this.props.onClickDelete) {
+                                                this.props.onClickDelete(
+                                                    this.props.destination.uuid,
+                                                    e
+                                                );
+                                            }
+                                        }}>
                                         <FontAwesomeIcon icon={['far', 'trash-alt']} />
                                     </button>
                                 </span>

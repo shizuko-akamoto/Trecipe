@@ -7,6 +7,7 @@ import Jwt, { SignOptions } from 'jsonwebtoken';
 import { User } from '../../../../shared/models/user';
 import UserService from '../../api/user/user.service';
 import { Request } from 'express';
+import logger from '../logger';
 
 // Middleware for authenticating user, use this function for all protected routes
 export const passportAuth = passport.authenticate('jwt', { session: false, failWithError: true });
@@ -20,6 +21,7 @@ export const passportAuthAnon = passport.authenticate(['jwt', 'anonymous'], {
 // Setup passport to extract jwt token from cookie
 export function setupPassport(passport: PassportStatic): void {
     const pathToPublicKey = path.join(__dirname, 'id_rsa_pub.pem');
+    logger.info(`reading public key: ${pathToPublicKey}`);
     const PUB_KEY = fs.readFileSync(pathToPublicKey, 'utf8');
 
     const cookieExtractor = (req: Request) => {
@@ -66,9 +68,18 @@ export function signJwt(user: User): Promise<string> {
     };
 
     return new Promise<string>((resolve, reject) => {
-        Jwt.sign(JwtPayload, process.env.PRIVATE_KEY, JwtOptions, (err, token) => {
-            if (err) return reject(err);
-            resolve(token);
-        });
+        Jwt.sign(
+            JwtPayload,
+            process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+            JwtOptions,
+            (err, token) => {
+                if (err) {
+                    logger.warn(`JWT sign failed: ${err.message}`);
+                    return reject(err);
+                }
+                logger.info(`JWT sign success`);
+                resolve(token);
+            }
+        );
     });
 }

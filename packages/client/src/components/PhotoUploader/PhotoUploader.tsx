@@ -2,6 +2,7 @@ import React from 'react';
 import '../CoverPhoto/coverPhoto.scss';
 import { Button } from '../Button/Button';
 import UploadService from '../../services/uploadService';
+import { toast } from 'react-toastify';
 
 export interface PhotoUploaderProps {
     changeFileCallback(filename: string): void;
@@ -28,9 +29,16 @@ class PhotoUploader extends React.Component<PhotoUploaderProps> {
 
     onFileSelected(event: React.ChangeEvent<HTMLInputElement>) {
         if (event.target.files && event.target.files[0].type.match(/image.*/)) {
-            UploadService.uploadFile(event.target.files[0]).then((filename) => {
-                this.props.changeFileCallback(filename);
-            });
+            UploadService.uploadFile(event.target.files[0])
+                .then((filename) => {
+                    // Toast upload success message
+                    toast('Upload complete!', { type: toast.TYPE.INFO });
+                    this.props.changeFileCallback(filename);
+                })
+                .catch((err) => {
+                    // Toast failure message
+                    toast(`Failed to upload image [${err.toString()}]`, { type: toast.TYPE.ERROR });
+                });
         }
     }
 

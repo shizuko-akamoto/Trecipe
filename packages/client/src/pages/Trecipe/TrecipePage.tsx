@@ -23,11 +23,18 @@ import { SearchBarPopup } from '../../components/SearchBarPopup/SearchBarPopup';
 import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
 import Modal from '../../components/Modal/Modal';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
-import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
+import { fetchTrecipeRequest, updateTrecipeRequest } from '../../redux/Trecipe/action';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { Legend } from '../Map/GoogleMap/Legend';
 import { baseURL } from '../../api';
+import { createLoadingSelector } from '../../redux/Loading/selector';
+import { DestinationsActionCategory } from '../../redux/Destinations/types';
+import OverlaySpinner from '../../components/Loading/OverlaySpinner';
+import { TrecipeActionCategory } from '../../redux/Trecipe/types';
+import { isEmpty } from 'lodash';
+import { EmptyDestinations } from '../../components/EmptyText/EmptyDestinations';
+import FullScreenLoader from '../../components/Loading/FullScreenLoader';
 import RatingPopup from '../../components/RatingPopup/RatingPopup';
 import { UpdateDestinationRatingDTO } from '../../../../shared/models/updateDestinationRatingDTO';
 import { duplicateTrecipeRequest } from '../../redux/TrecipeList/action';
@@ -85,7 +92,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     private loadTrecipe(): void {
         const trecipeId = this.props.match.params.trecipeId;
         this.props.fetchTrecipe(trecipeId);
-        this.props.getDestinationsByTrecipeId(trecipeId);
+        this.props.fetchDestinations(trecipeId);
     }
 
     private onDestDragEnd(result: DropResult, provided: ResponderProvided) {
@@ -170,22 +177,28 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
 
     private onDestAdded(destination: CreateNewDestinationDTO): void {
         if (this.props.trecipe) {
-            this.props.addDestinationRequest(this.props.trecipe, destination);
+            this.props.addDestination(this.props.trecipe, destination);
         }
     }
 
-    private onDestRemoved(idToDelete: string): void {
+    /**
+     * Callback method for deleting destinations from SearchBarPopup
+     * NOTE: it uses place id for id to delete
+     * @param placeIdToDelete
+     */
+    private onDestRemoved(placeIdToDelete: string): void {
         if (this.props.trecipe) {
-            this.props.removeDestinationRequest(this.props.trecipe, { destId: idToDelete });
+            this.props.removeDestination(this.props.trecipe, { placeId: placeIdToDelete });
         }
     }
 
     private onDestEditClick() {
-        // if exiting from editing, update TrecipeModel with the changes to destination,
-        // else if entering editing, reset destinationsInEdit state to store's destinations
         if (!this.props.trecipe || !this.props.destinations) {
             return;
         }
+
+        // if exiting from editing, update TrecipeModel with the changes to destination,
+        // else if entering editing, reset destinationsInEdit state to store's destinations
         if (this.state.isInEdit) {
             const trecipe: Trecipe = this.props.trecipe;
             const completed = new Set(
@@ -205,6 +218,11 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         this.toggleEdit(); // toggle edit button
     }
 
+    /**
+     * Callback method when deleting from DestinationCard
+     * @param idToDelete: destination uuid
+     * @param e: click event
+     */
     private onDestDeleteClick(idToDelete: string, e: React.MouseEvent<HTMLElement>) {
         e.preventDefault();
         if (this.state.isInEdit) {
@@ -277,6 +295,41 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         };
     }
 
+    private renderDestinationList(completed: Set<string>, canEdit: boolean) {
+        return (
+            <DragDropContext onDragEnd={this.onDestDragEnd.bind(this)}>
+                <Droppable droppableId="droppable">
+                    {(provided) => (
+                        <ul
+                            className="destination-cards"
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}>
+                            {this.getDestinationsList().map((dest, index) => (
+                                <Link
+                                    className="router-link"
+                                    to={`/destinations/${dest.placeId}`}
+                                    target="_blank"
+                                    key={dest.uuid}>
+                                    <DestinationCard
+                                        key={dest.uuid}
+                                        destination={dest}
+                                        isCompleted={canEdit && completed.has(dest.uuid)}
+                                        index={index}
+                                        onClickDelete={this.onDestDeleteClick.bind(this)}
+                                        onClickComplete={this.onDestCompleteClick.bind(this)}
+                                        isInEdit={this.state.isInEdit}
+                                        isReadOnly={!canEdit}
+                                    />
+                                </Link>
+                            ))}
+                            {provided.placeholder}
+                        </ul>
+                    )}
+                </Droppable>
+            </DragDropContext>
+        );
+    }
+
     render() {
         const isAuthenticated = this.props.isAuthenticated;
         const user = this.props.user;
@@ -289,7 +342,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         // Show the save button if the user is signed in but is not the owner of the trecipe
         const canSave = trecipe && isAuthenticated && !user.trecipes?.includes(trecipe.uuid);
         if (!trecipe || !destinations) {
-            return null;
+            return <FullScreenLoader />;
         } else {
             const completed = new Set(
                 trecipe.destinations.flatMap((dest: DestWithStatus) =>
@@ -373,43 +426,12 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                     barStyle={{ height: '1rem' }}
                                 />
                             )}
-                            <div>
-                                <DragDropContext onDragEnd={this.onDestDragEnd.bind(this)}>
-                                    <Droppable droppableId="droppable">
-                                        {(provided) => (
-                                            <ul
-                                                className="destination-cards"
-                                                {...provided.droppableProps}
-                                                ref={provided.innerRef}>
-                                                {this.getDestinationsList().map((dest, index) => (
-                                                    <Link
-                                                        className="router-link"
-                                                        to={`/destinations/${dest.placeId}`}
-                                                        target="_blank"
-                                                        key={dest.uuid}>
-                                                        <DestinationCard
-                                                            key={dest.uuid}
-                                                            destination={dest}
-                                                            isCompleted={
-                                                                canEdit && completed.has(dest.uuid)
-                                                            }
-                                                            index={index}
-                                                            onClickDelete={this.onDestDeleteClick.bind(
-                                                                this
-                                                            )}
-                                                            onClickComplete={this.onDestCompleteClick.bind(
-                                                                this
-                                                            )}
-                                                            isInEdit={this.state.isInEdit}
-                                                            isReadOnly={!canEdit}
-                                                        />
-                                                    </Link>
-                                                ))}
-                                                {provided.placeholder}
-                                            </ul>
-                                        )}
-                                    </Droppable>
-                                </DragDropContext>
+                            <div className="destination-card-list">
+                                {isEmpty(this.getDestinationsList()) ? (
+                                    <EmptyDestinations />
+                                ) : (
+                                    this.renderDestinationList(completed, canEdit)
+                                )}
                                 {this.canExpand() && (
                                     <button
                                         className="show-more-btn"
@@ -418,6 +440,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                         <FontAwesomeIcon id="show-more-icon" icon="chevron-down" />
                                     </button>
                                 )}
+                                {this.props.isDestsLoading && <OverlaySpinner size={50} />}
                             </div>
                             <h1 className="trecipe-page-title">See places on the map</h1>
                             <div className="trecipe-map-wrapper">
@@ -448,6 +471,19 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     }
 }
 
+const destLoadingSelector = createLoadingSelector([
+    DestinationsActionCategory.ADD_DESTINATION,
+    DestinationsActionCategory.UPDATE_DESTINATION,
+    DestinationsActionCategory.REMOVE_DESTINATION,
+    DestinationsActionCategory.FETCH_DESTS_BY_TRECIPE_ID,
+]);
+
+const trecipeLoadingSelector = createLoadingSelector([
+    // just fetch, and not update trecipe because any destination change also updates trecipe and
+    // having a full screen loader on every destination change is a bit jarring
+    TrecipeActionCategory.FETCH_TRECIPE,
+]);
+
 const mapStateToProps = (
     state: RootState,
     ownProps: RouteComponentProps<{ trecipeId: string }>
@@ -460,6 +496,10 @@ const mapStateToProps = (
         destinations: destinations,
         user: user.user,
         isAuthenticated: user.isAuthenticated,
+        // we have separate loading state for destinations and trecipe because for destinations, we don't want
+        // a full screen spinner, but rather, an overlay on top of destination list
+        isDestsLoading: destLoadingSelector(state),
+        isTrecipeLoading: trecipeLoadingSelector(state),
     };
 };
 
@@ -467,12 +507,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
             showModal,
+            fetchTrecipe: fetchTrecipeRequest,
             updateTrecipe: updateTrecipeRequest,
-            getDestinationsByTrecipeId,
+            fetchDestinations: getDestinationsByTrecipeId,
+            addDestination: addDestinationRequest,
+            removeDestination: removeDestinationRequest,
             rateDestination: rateDestinationRequest,
-            fetchTrecipe,
-            addDestinationRequest,
-            removeDestinationRequest,
             duplicateTrecipe: duplicateTrecipeRequest,
         },
         dispatch

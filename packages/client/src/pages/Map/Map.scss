@@ -10,6 +10,7 @@
     .map-page-content {
         display: flex;
         flex-direction: row;
+        z-index: 0;
 
         .map-side-bar {
             flex: 0 0 400px;
@@ -28,7 +29,7 @@
                 font-family: $default-font-family;
                 background: $tc-white;
                 padding: 1rem 0.5rem;
-
+                z-index: 10;
                 .icon-button {
                     color: $mid-gray;
 
@@ -38,13 +39,22 @@
                 }
             }
 
+            .empty-text-wrapper {
+                position: relative;
+                height: calc(100vh - 4rem);
+                padding: 0 0.5rem;
+                z-index: 0;
+            }
+
             .dest-card-list {
-                overflow: auto;
-                max-height: calc(100vh - 4rem);
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: calc(100vh - 4rem);
                 margin: 0;
                 padding: 0;
+                z-index: 0;
 
-                & > * {
+                & .dest-card-item-wrapper {
                     padding: 0.3rem 0.5rem;
                 }
             }

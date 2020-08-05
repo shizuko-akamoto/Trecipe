@@ -3,13 +3,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../../redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { fetchAllTrecipes, fetchMyAssociatedTrecipesRequest } from '../../redux/TrecipeList/action';
+import {
+    fetchMyAssociatedTrecipesRequest,
+    fetchMyTrecipesRequest,
+} from '../../redux/TrecipeList/action';
 import Trecipe from '../../../../shared/models/trecipe';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './trecipePicker.scss';
 import { addDestinationRequest, removeDestinationRequest } from '../../redux/Destinations/action';
 import Destination from '../../../../shared/models/destination';
 import { hideModal } from '../../redux/Modal/action';
+import { createLoadingSelector } from '../../redux/Loading/selector';
+import { TrecipeListActionCategory } from '../../redux/TrecipeList/types';
+import OverlaySpinner from '../Loading/OverlaySpinner';
 
 /**
  * Trecipe Picker own props
@@ -26,7 +32,7 @@ export type TrecipePickerProps = ReturnType<typeof mapStateToProps> &
 class TrecipePicker extends React.Component<TrecipePickerProps> {
     componentDidMount(): void {
         // fetches all trecipes owned by the user
-        this.props.fetchAllTrecipes();
+        this.props.fetchMyTrecipes();
         // fetches all user's trecipes containing this destination
         this.props.fetchCheckedTrecipes(this.props.destination.placeId);
     }
@@ -77,6 +83,7 @@ class TrecipePicker extends React.Component<TrecipePickerProps> {
                                 </li>
                             ))}
                         </ul>
+                        {this.props.isLoading && <OverlaySpinner />}
                     </div>
                 </div>
             </Modal>
@@ -84,19 +91,25 @@ class TrecipePicker extends React.Component<TrecipePickerProps> {
     }
 }
 
+const loadingSelector = createLoadingSelector([
+    TrecipeListActionCategory.FETCH_MY_TRECIPES,
+    TrecipeListActionCategory.FETCH_MY_ASSOCIATED_TRECIPES,
+]);
+
 const mapStateToProps = (state: RootState) => {
     return {
         trecipes: state.trecipeList.myTrecipes,
         checkedTrecipes: new Set(
             state.trecipeList.myAssociatedTrecipes.map((trecipe) => trecipe.uuid)
         ),
+        isLoading: loadingSelector(state),
     };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {
-            fetchAllTrecipes,
+            fetchMyTrecipes: fetchMyTrecipesRequest,
             fetchCheckedTrecipes: fetchMyAssociatedTrecipesRequest,
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,

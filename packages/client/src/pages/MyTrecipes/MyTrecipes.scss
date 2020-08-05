@@ -47,10 +47,16 @@
         }
 
         .cards-wrapper {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax($tc-min-width, 1fr));
-            grid-gap: 1rem;
-            grid-auto-flow: dense;
+            position: relative;
+            min-height: 40vh;
+            height: 100%;
+
+            .card-grids {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax($tc-min-width, 1fr));
+                grid-gap: 1rem;
+                grid-auto-flow: dense;
+            }
         }
     }
 }

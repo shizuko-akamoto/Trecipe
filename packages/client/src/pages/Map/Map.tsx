@@ -17,9 +17,11 @@ import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
-import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
+import { fetchTrecipeRequest, updateTrecipeRequest } from '../../redux/Trecipe/action';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
+import { isEmpty } from 'lodash';
+import { EmptyDestinations } from '../../components/EmptyText/EmptyDestinations';
 
 export type MapProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -89,9 +91,24 @@ class Map extends React.Component<MapProps> {
         }
     }
 
-    private onDestDeleteClick(idToDelete: string) {
+    /**
+     * Callback method when delete trecipe button on Destination card is clicked
+     * @param idToDelete: destination uuid
+     */
+    private onDestCardDeleteClick(idToDelete: string) {
         if (this.props.trecipe) {
             this.props.removeDestination(this.props.trecipe, { destId: idToDelete });
+        }
+    }
+
+    /**
+     * Callback method when delete is called from search bar popup
+     * NOTE: difference between this "onDestCardDeleteClick" is the id provided
+     * @param placeIdToDelete: place id from Google Place api
+     */
+    private onDestRemoveClick(placeIdToDelete: string) {
+        if (this.props.trecipe) {
+            this.props.removeDestination(this.props.trecipe, { placeId: placeIdToDelete });
         }
     }
 
@@ -163,7 +180,11 @@ class Map extends React.Component<MapProps> {
                                 />
                             )}
                         </div>
-                        <div>
+                        {isEmpty(destinations) ? (
+                            <div className="empty-text-wrapper">
+                                <EmptyDestinations />
+                            </div>
+                        ) : (
                             <ul className="dest-card-list">
                                 {destinations.map((dest, index) => (
                                     <Link
@@ -176,21 +197,24 @@ class Map extends React.Component<MapProps> {
                                             index={index}
                                             key={dest.uuid}
                                             destination={dest}
+                                            isReadOnly={false}
                                             isCompleted={canEdit && completed.has(dest.uuid)}
-                                            onClickDelete={this.onDestDeleteClick.bind(this)}
+                                            // for DC, delete by destination uuid
+                                            onClickDelete={this.onDestCardDeleteClick.bind(this)}
                                             onClickComplete={this.onDestCompleteClick.bind(this)}
                                         />
                                     </Link>
                                 ))}
                             </ul>
-                        </div>
+                        )}
                     </aside>
                     <div className="map-container">
                         <GMap
                             destinations={destinations}
                             completedDest={completed}
                             onDestAdd={this.onDestAddClick.bind(this)}
-                            onDestRemove={this.onDestDeleteClick.bind(this)}
+                            // Since GMap deals with place ids instead of destination uuid, callback takes in placeId
+                            onDestRemove={this.onDestRemoveClick.bind(this)}
                             readOnly={!canEdit}
                         />
                     </div>
@@ -225,7 +249,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             getDestinationsByTrecipeId,
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,
-            fetchTrecipe,
+            fetchTrecipe: fetchTrecipeRequest,
         },
         dispatch
     );
