@@ -82,6 +82,13 @@
                     margin: 0 0 0 0.5rem;
                 }
 
+                .rating-icon {
+                    margin: 0 1rem 0 0;
+                    width: 50px;
+                    font-family: $logo-font-family;
+                    font-weight: bold;
+                }
+
                 .router-link {
                     text-decoration: none;
                     border-bottom: 2px solid $tc-white;
