@@ -37,6 +37,7 @@ import { EmptyDestinations } from '../../components/EmptyText/EmptyDestinations'
 import FullScreenLoader from '../../components/Loading/FullScreenLoader';
 import RatingPopup from '../../components/RatingPopup/RatingPopup';
 import { UpdateDestinationRatingDTO } from '../../../../shared/models/updateDestinationRatingDTO';
+import { duplicateTrecipeRequest } from '../../redux/TrecipeList/action';
 
 /**
  * TrecipeProps
@@ -50,7 +51,7 @@ export type TrecipeProps = ReturnType<typeof mapStateToProps> &
 
 /**
  * Trecipe State
- * destination: destination models in the Trecipe
+ * destinationsInEdit: destination models that are currently in edit
  * visibleTo: stores the index of destinations in list currently visible (used for "Show More")
  * isInEdit: true if destinations are currently in edit
  */
@@ -76,22 +77,22 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     }
 
     componentDidMount(): void {
-        // load destinations by trecipe id before rendering
+        this.loadTrecipe();
+    }
+
+    componentDidUpdate(prevProps: Readonly<TrecipeProps>): void {
+        // when we're looking at new trecipe, refetch trecipe details and associated desetination
+        const trecipeId = this.props.match.params.trecipeId;
+        if (prevProps.match.params.trecipeId !== trecipeId) {
+            this.loadTrecipe();
+        }
+    }
+
+    // load trecipe and destination by trecipe uuid
+    private loadTrecipe(): void {
         const trecipeId = this.props.match.params.trecipeId;
         this.props.fetchTrecipe(trecipeId);
         this.props.fetchDestinations(trecipeId);
-    }
-
-    componentDidUpdate(
-        prevProps: Readonly<TrecipeProps>,
-        prevState: Readonly<TrecipeState>,
-        snapshot?: any
-    ) {
-        const trecipeId = this.props.match.params.trecipeId;
-        if (prevProps.match.params.trecipeId !== trecipeId) {
-            this.props.fetchTrecipe(trecipeId);
-            this.props.getDestinationsByTrecipeId(trecipeId);
-        }
     }
 
     private onDestDragEnd(result: DropResult, provided: ResponderProvided) {
@@ -150,6 +151,14 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         this.props.showModal(
             <TrecipePopup type={TrecipePopupType.Edit} trecipe={this.props.trecipe} />
         );
+    }
+
+    private onTrecipeSaveClick() {
+        if (this.props.trecipe)
+            this.props.duplicateTrecipe(this.props.trecipe.uuid, (uuid: string) => {
+                // Redirect to Trecipe page
+                this.props.history.push(`/trecipes/${uuid}`);
+            });
     }
 
     private onDestAddClick() {
@@ -285,7 +294,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         };
     }
 
-    private renderDestinationList(completed: Set<string>) {
+    private renderDestinationList(completed: Set<string>, canEdit: boolean) {
         return (
             <DragDropContext onDragEnd={this.onDestDragEnd.bind(this)}>
                 <Droppable droppableId="droppable">
@@ -303,11 +312,12 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                     <DestinationCard
                                         key={dest.uuid}
                                         destination={dest}
-                                        isCompleted={completed.has(dest.uuid)}
+                                        isCompleted={canEdit && completed.has(dest.uuid)}
                                         index={index}
                                         onClickDelete={this.onDestDeleteClick.bind(this)}
                                         onClickComplete={this.onDestCompleteClick.bind(this)}
                                         isInEdit={this.state.isInEdit}
+                                        isReadOnly={!canEdit}
                                     />
                                 </Link>
                             ))}
@@ -320,9 +330,16 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     }
 
     render() {
+        const isAuthenticated = this.props.isAuthenticated;
+        const user = this.props.user;
         const trecipe: Trecipe | undefined = this.props.trecipe;
         const destinations: Destination[] | undefined = this.props.destinations;
         const editTrecipeBtnString = 'Edit Trecipe';
+        const saveTrecipeBtnString = 'Save Trecipe';
+        // Show everything if user is signed in and is the owner/collaborator of the trecipe
+        const canEdit = !!(trecipe && isAuthenticated && user.trecipes?.includes(trecipe.uuid));
+        // Show the save button if the user is signed in but is not the owner of the trecipe
+        const canSave = trecipe && isAuthenticated && !user.trecipes?.includes(trecipe.uuid);
         if (!trecipe || !destinations) {
             return <FullScreenLoader />;
         } else {
@@ -336,22 +353,37 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                     <div className="tc-header-container">
                         <CoverPhoto
                             imageSource={`${baseURL}upload/${trecipe.image}`}
-                            buttons={[
-                                <Button
-                                    key={editTrecipeBtnString}
-                                    text={editTrecipeBtnString}
-                                    icon="edit"
-                                    onClick={this.onTrecipeEditClick.bind(this)}
-                                />,
-                            ]}
-                            onFileChange={this.onCoverPhotoChange.bind(this)}>
+                            buttons={
+                                canEdit
+                                    ? [
+                                          <Button
+                                              key={editTrecipeBtnString}
+                                              text={editTrecipeBtnString}
+                                              icon="edit"
+                                              onClick={this.onTrecipeEditClick.bind(this)}
+                                          />,
+                                      ]
+                                    : canSave
+                                    ? [
+                                          <Button
+                                              key={saveTrecipeBtnString}
+                                              text={saveTrecipeBtnString}
+                                              icon={['far', 'star']}
+                                              onClick={this.onTrecipeSaveClick.bind(this)}
+                                          />,
+                                      ]
+                                    : []
+                            }
+                            onFileChange={canEdit ? this.onCoverPhotoChange.bind(this) : undefined}>
                             <div className="tc-header-text">
                                 <div className="tc-header-title">
                                     <h1 className="tc-header-name">{trecipe.name}</h1>
-                                    <FontAwesomeIcon
-                                        icon={trecipe.isPrivate ? 'lock' : 'lock-open'}
-                                        className="tc-header-privacy"
-                                    />
+                                    {canEdit && (
+                                        <FontAwesomeIcon
+                                            icon={trecipe.isPrivate ? 'lock' : 'lock-open'}
+                                            className="tc-header-privacy"
+                                        />
+                                    )}
                                 </div>
                                 <h3 className="tc-header-time">
                                     {new Date(trecipe.updatedAt).toLocaleString()}
@@ -371,29 +403,33 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                             <p>{trecipe.description}</p>
                             <span className="title-with-btns">
                                 <h1 className="trecipe-page-title">Places</h1>
-                                <span className="dest-edit-btn-wrapper">
-                                    <Button
-                                        text="Add"
-                                        onClick={this.onDestAddClick.bind(this)}
-                                        ref={this.addDestButtonRef}
-                                    />
-                                    <Button
-                                        text={this.state.isInEdit ? 'Done' : 'Edit'}
-                                        onClick={this.onDestEditClick.bind(this)}
-                                    />
-                                </span>
+                                {canEdit && (
+                                    <span className="dest-edit-btn-wrapper">
+                                        <Button
+                                            text="Add"
+                                            onClick={this.onDestAddClick.bind(this)}
+                                            ref={this.addDestButtonRef}
+                                        />
+                                        <Button
+                                            text={this.state.isInEdit ? 'Done' : 'Edit'}
+                                            onClick={this.onDestEditClick.bind(this)}
+                                        />
+                                    </span>
+                                )}
                             </span>
-                            <ProgressBar
-                                total={destinations.length}
-                                completed={completed.size}
-                                showText={true}
-                                barStyle={{ height: '1rem' }}
-                            />
+                            {canEdit && (
+                                <ProgressBar
+                                    total={destinations.length}
+                                    completed={completed.size}
+                                    showText={true}
+                                    barStyle={{ height: '1rem' }}
+                                />
+                            )}
                             <div className="destination-card-list">
                                 {isEmpty(this.getDestinationsList()) ? (
                                     <EmptyDestinations />
                                 ) : (
-                                    this.renderDestinationList(completed)
+                                    this.renderDestinationList(completed, canEdit)
                                 )}
                                 {this.canExpand() && (
                                     <button
@@ -410,12 +446,17 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                 <Link to={`/map/${trecipe.uuid}`}>
                                     <StaticMap
                                         markers={destinations.map((dest) =>
-                                            this.getMarker(dest, completed.has(dest.uuid))
+                                            this.getMarker(
+                                                dest,
+                                                canEdit ? completed.has(dest.uuid) : true
+                                            )
                                         )}
                                     />
-                                    <div className="static-map-legend">
-                                        <Legend />
-                                    </div>
+                                    {canEdit && (
+                                        <div className="static-map-legend">
+                                            <Legend />
+                                        </div>
+                                    )}
                                     <div className="static-map-overlay">
                                         <Button icon="external-link-alt" text="Expand View" />
                                     </div>
@@ -448,11 +489,12 @@ const mapStateToProps = (
 ) => {
     const trecipeId = ownProps.match.params.trecipeId;
     const destinations = state.destinations.destsByTrecipeId.get(trecipeId);
-    const user = state.user.user;
+    const user = state.user;
     return {
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
-        user: user,
+        user: user.user,
+        isAuthenticated: user.isAuthenticated,
         // we have separate loading state for destinations and trecipe because for destinations, we don't want
         // a full screen spinner, but rather, an overlay on top of destination list
         isDestsLoading: destLoadingSelector(state),
@@ -470,7 +512,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,
             rateDestination: rateDestinationRequest,
-            getDestinationsByTrecipeId,
+            duplicateTrecipe: duplicateTrecipeRequest,
         },
         dispatch
     );

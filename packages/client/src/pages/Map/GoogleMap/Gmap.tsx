@@ -37,6 +37,7 @@ interface GMapProps {
     completedDest: Set<string>;
     onDestAdd: (destination: CreateNewDestinationDTO) => void;
     onDestRemove: (destinationId: string) => void;
+    readOnly: boolean;
 }
 
 interface GMapState {
@@ -111,20 +112,28 @@ export class GMap extends Component<GMapProps, GMapState> {
                         <HoverMarker
                             key={dest.uuid}
                             dest={dest}
-                            completed={this.props.completedDest.has(dest.uuid)}
+                            completed={
+                                !this.props.readOnly
+                                    ? this.props.completedDest.has(dest.uuid)
+                                    : true
+                            }
                         />
                     ))}
                 </GoogleMap>
-                <div className="gmap-search-bar">
-                    <SearchBarPopup
-                        minWidth={20}
-                        onDestAdd={this.newDestAdd}
-                        onDestRemove={this.props.onDestRemove}
-                    />
-                </div>
-                <div className="gmap-legend">
-                    <Legend />
-                </div>
+                {!this.props.readOnly && (
+                    <div className="gmap-search-bar">
+                        <SearchBarPopup
+                            minWidth={20}
+                            onDestAdd={this.newDestAdd}
+                            onDestRemove={this.props.onDestRemove}
+                        />
+                    </div>
+                )}
+                {!this.props.readOnly && (
+                    <div className="gmap-legend">
+                        <Legend />
+                    </div>
+                )}
             </div>
         );
     }
