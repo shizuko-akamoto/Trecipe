@@ -470,6 +470,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,
             rateDestination: rateDestinationRequest,
+            getDestinationsByTrecipeId,
         },
         dispatch
     );
