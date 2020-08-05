@@ -11,6 +11,9 @@ import Destination from '../../../../shared/models/destination';
 import { DestinationCard } from '../Map/DestinationCard/DestinationCard';
 import { transform, isEmpty } from 'lodash';
 import { SearchResultModel } from '../../../../shared/models/searchResult';
+import { createLoadingSelector } from '../../redux/Loading/selector';
+import { SearchResultActionCategory } from '../../redux/SearchResult/types';
+import FullScreenLoader from '../../components/Loading/FullScreenLoader';
 
 type SearchResultProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -26,61 +29,69 @@ class SearchResult extends React.Component<SearchResultProps, {}> {
 
     render() {
         return (
-            <div className="search-result-wrapper">
-                <div className="content">
-                    <div className="result-row">
-                        <h1 className="page-title">Trecipes</h1>
-                        {isEmpty(this.props.trecipeResults) ? (
-                            <p className="empty-text">No matching trecipes found</p>
-                        ) : (
-                            <div className="cards-wrapper">
-                                <ul className="card-list">
-                                    {this.props.trecipeResults.map((trecipe: Trecipe) => (
-                                        <li className="card-item" key={trecipe.uuid}>
-                                            <Link
-                                                className="router-link"
-                                                to={trecipe.uuid}
-                                                target="_blank">
-                                                <TrecipeCard
-                                                    trecipe={{ ...trecipe }}
-                                                    isReadOnly={true}
-                                                />
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
+            <div>
+                {this.props.isFetching ? (
+                    <FullScreenLoader />
+                ) : (
+                    <div className="search-result-wrapper">
+                        <div className="content">
+                            <div className="result-row">
+                                <h1 className="page-title">Trecipes</h1>
+                                {isEmpty(this.props.trecipeResults) ? (
+                                    <p className="empty-text">No matching trecipes found</p>
+                                ) : (
+                                    <div className="cards-wrapper">
+                                        <ul className="card-list">
+                                            {this.props.trecipeResults.map((trecipe: Trecipe) => (
+                                                <li className="card-item" key={trecipe.uuid}>
+                                                    <Link
+                                                        className="router-link"
+                                                        to={trecipe.uuid}
+                                                        target="_blank">
+                                                        <TrecipeCard
+                                                            trecipe={{ ...trecipe }}
+                                                            isReadOnly={true}
+                                                        />
+                                                    </Link>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
-                        )}
-                    </div>
-                    <div className="result-row">
-                        <h1 className="page-title">Destinations</h1>
-                        {isEmpty(this.props.mergedDestResults) ? (
-                            <p className="empty-text">No matching destinations found</p>
-                        ) : (
-                            <div className="cards-wrapper">
-                                <ul className="card-list">
-                                    {this.props.mergedDestResults.map(
-                                        (destination: Destination, index) => (
-                                            <li className="card-item" key={destination.uuid}>
-                                                <Link
-                                                    className="router-link"
-                                                    to={`/destinations/${destination.placeId}`}
-                                                    target="_blank">
-                                                    <DestinationCard
-                                                        key={destination.uuid}
-                                                        destination={destination}
-                                                        index={index}
-                                                        isReadOnly={true}
-                                                    />
-                                                </Link>
-                                            </li>
-                                        )
-                                    )}
-                                </ul>
+                            <div className="result-row">
+                                <h1 className="page-title">Destinations</h1>
+                                {isEmpty(this.props.mergedDestResults) ? (
+                                    <p className="empty-text">No matching destinations found</p>
+                                ) : (
+                                    <div className="cards-wrapper">
+                                        <ul className="card-list">
+                                            {this.props.mergedDestResults.map(
+                                                (destination: Destination, index) => (
+                                                    <li
+                                                        className="card-item"
+                                                        key={destination.uuid}>
+                                                        <Link
+                                                            className="router-link"
+                                                            to={`/destinations/${destination.placeId}`}
+                                                            target="_blank">
+                                                            <DestinationCard
+                                                                key={destination.uuid}
+                                                                destination={destination}
+                                                                index={index}
+                                                                isReadOnly={true}
+                                                            />
+                                                        </Link>
+                                                    </li>
+                                                )
+                                            )}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
-                        )}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         );
     }
@@ -102,13 +113,14 @@ const destResultsMerger = (state: RootState) => {
     );
 };
 
-const mapStateToProps = (
-    state: RootState,
-    ownProps: RouteComponentProps<{ searchKey: string }>
-) => ({
+const loadingSelector = createLoadingSelector([SearchResultActionCategory.LOAD_SEARCH_RESULTS]);
+
+const mapStateToProps = (state: RootState) => ({
     trecipeResults: state.searchResult.result ? state.searchResult.result.trecipeResult : [],
     mergedDestResults: destResultsMerger(state),
+    isFetching: loadingSelector(state),
 });
+
 const mapDispatchToProps = (dispatch: Dispatch) => {
     return bindActionCreators(
         {

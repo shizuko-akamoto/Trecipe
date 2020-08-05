@@ -79,6 +79,7 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
         const placeId = this.props.match.params.placeId;
         // retrieve public trecipes containing this destination
         this.props.fetchAssociatedTrecipesRequest(placeId, 10);
+        // we try to retrieve this destination from backend for user ratings (if it does not exist in backend that's ok)
         this.props.getDestinationByPlaceId(placeId);
         // use place id to fetch place details from Google
         this.initializeDestDetail(placeId);

@@ -106,7 +106,6 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
                     result = searchResult.map((value) => {
                         return {
                             name: value.name,
-                            // TODO implement destination page so we could pass props to generate a new page.
                             href: `/destinations/${value.placeId}`,
                             info:
                                 typeof value.formattedAddress === 'undefined'

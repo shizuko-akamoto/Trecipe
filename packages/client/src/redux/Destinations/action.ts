@@ -48,9 +48,6 @@ export const getDestinationByPlaceId = (placeId: string): AppThunk => {
                         reason: err.toString(),
                     })
                 );
-                toast(`Failed to fetch destination [${err.toString()}]`, {
-                    type: toast.TYPE.ERROR,
-                });
             });
     };
 };

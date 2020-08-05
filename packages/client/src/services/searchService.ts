@@ -5,7 +5,7 @@ import Trecipe from '../../../shared/models/trecipe';
 import { AutoComplete, getDestModel } from '../components/Map/mapHelper';
 import { SearchResultModel } from '../../../shared/models/searchResult';
 
-class searchService {
+class SearchService {
     private searchEndpoint = 'search';
     private trecipeSearchEndpoint = 'search/trecipes';
     private destinationSearchEndpoint = 'search/destinations';
@@ -116,4 +116,4 @@ class searchService {
     }
 }
 
-export default new searchService();
+export default new SearchService();
