@@ -82,6 +82,18 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         this.props.fetchDestinations(trecipeId);
     }
 
+    componentDidUpdate(
+        prevProps: Readonly<TrecipeProps>,
+        prevState: Readonly<TrecipeState>,
+        snapshot?: any
+    ) {
+        const trecipeId = this.props.match.params.trecipeId;
+        if (prevProps.match.params.trecipeId !== trecipeId) {
+            this.props.fetchTrecipe(trecipeId);
+            this.props.getDestinationsByTrecipeId(trecipeId);
+        }
+    }
+
     private onDestDragEnd(result: DropResult, provided: ResponderProvided) {
         if (result.destination) {
             const dests: Array<Destination> = TrecipePage.reorder(

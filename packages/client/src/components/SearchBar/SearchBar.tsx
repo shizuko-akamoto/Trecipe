@@ -137,9 +137,12 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
                 <div className="results-container">
                     <ul className="results-list">
                         {results.map((result) => (
-                            <li className="results-entry" key={result.uuid}>
-                                <Link to={result.href}>{result.name}</Link>
-                            </li>
+                            <Link
+                                to={result.href}
+                                onClick={(e) => this.setState({ resultsOpen: false })}
+                                key={result.uuid}>
+                                <li className="results-entry">{result.name}</li>
+                            </Link>
                         ))}
                     </ul>
                 </div>
