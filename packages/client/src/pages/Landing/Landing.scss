@@ -1,16 +1,17 @@
-.carousel-container{
+.carousel-container {
     background: white;
     height: calc(100vh - 119px);
     position: relative;
 }
 
-.intro-image{
+.intro-image {
     height: calc(100vh - 119px);
-    background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 35%),url('http://localhost:7000/api/v1/upload/6a05362348e238c5cf1f6d43dda938a5.jpg');
+    background-image: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 35%),
+        url('http://localhost:7000/api/v1/upload/6a05362348e238c5cf1f6d43dda938a5.jpg');
     background-position: center;
 }
 
-.intro-text{
+.intro-text {
     color: white;
     position: absolute;
     top: calc(50% - 12vh);
@@ -18,60 +19,62 @@
     width: 655px;
     margin: 0.5rem 1rem 0.5rem 0;
     font-size: 12vh;
-    font-family: "Shadows Into Light", cursive;
+    font-family: 'Shadows Into Light', cursive;
 }
 
-.intro-banner{
-    position:relative;
+.intro-banner {
+    position: relative;
 }
 
-.dot{
-    &:focus{
+.dot {
+    &:focus {
         outline: none;
     }
 }
 
-.border{
+.border {
     position: absolute;
     left: 0;
     bottom: -50px;
     width: 100%;
     height: 100px;
     fill: #ffffff;
+    .gradient-wrapper {
+        background-image: linear-gradient(-180deg, transparent 0%, rgba(0, 0, 0, 0.5) 99%);
+    }
 }
 
-.content-container{
+.content-container {
     background: white;
 }
 
-.content-wrapper{
+.content-wrapper {
     max-width: 1280px;
     margin: auto;
 }
 
-.carousel-root{
+.carousel-root {
     height: 100%;
 }
 
-.carousel{
-    &.carousel-slider{
-        height: 100%;
-    }
-
-}
-
-.slider-wrapper{
-    &.axis-horizontal{
+.carousel {
+    &.carousel-slider {
         height: 100%;
     }
 }
 
-.slider{
+.slider-wrapper {
+    &.axis-horizontal {
+        height: 100%;
+    }
+}
+
+.slider {
     height: 100%;
 }
 
-.slide{
-    &.selected{
+.slide {
+    &.selected {
         height: 100%;
     }
     height: 100%;
