@@ -19,7 +19,7 @@ export class DestInfoWindow extends React.Component<InfoWindowProps> {
                         src={
                             isEmpty(this.props.destination.photoRefs)
                                 ? null
-                                : `${baseURL}photos/${this.props.destination.photoRefs[0]}`
+                                : `${this.props.destination.photoRefs[0]}`
                         }
                         imgStyle={{ borderRadius: '8px 0 0 8px' }}
                     />

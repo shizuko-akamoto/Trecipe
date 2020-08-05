@@ -12,6 +12,7 @@ import { passportAuth } from '../../common/passport/passportUtils';
 class DestinationController implements Controller {
     public readonly path = '/destinations';
     public readonly router = Router();
+    private photosEndpoint = `http://localhost:${process.env.PORT}/${process.env.API_VERSION}/photos`;
 
     constructor() {
         this.initializeRoutes();
@@ -58,7 +59,7 @@ class DestinationController implements Controller {
                 const newDest: Destination = {
                     uuid: uuid(),
                     userRatings: [] as UserRating[],
-                    photoRefs: photoRefs,
+                    photoRefs: photoRefs.map((ref) => `${this.photosEndpoint}/${ref}`),
                     name: dest.name,
                     description: '',
                     category: dest.category,

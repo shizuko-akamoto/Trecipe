@@ -6,7 +6,6 @@ import './destinationCard.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
 import { getIcon } from '../../../../../shared/models/destination';
-import { baseURL } from '../../../api';
 
 export class DestinationCard extends React.Component<DCProps> {
     render() {
@@ -17,9 +16,7 @@ export class DestinationCard extends React.Component<DCProps> {
                     className="dest-card-header-container"
                     style={{
                         backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.5) 100%)${
-                            isEmpty(destModel.photoRefs)
-                                ? ''
-                                : `, url(${baseURL}photos/${destModel.photoRefs[0]})`
+                            isEmpty(destModel.photoRefs) ? '' : `, url(${destModel.photoRefs[0]})`
                         }`,
                     }}>
                     <div className="dest-card-header">
