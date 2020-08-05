@@ -6,6 +6,7 @@ import { Footer } from '../components/Footer/Footer';
 import TrecipePage from './Trecipe/TrecipePage';
 import Map from './Map/Map';
 import DestinationPage from './Destination/DestinationPage';
+import SearchResult from './SearchResult/SearchResult';
 import { LoadScript } from '@react-google-maps/api';
 import Login from './Login/Login';
 import PrivateRoute from '../components/Route/PrivateRoute';
@@ -40,6 +41,7 @@ const Pages = (props: PagesProps) => {
                         <PrivateRoute path="/map/:trecipeId" exact component={Map} />
                         <Route path="/destinations/:placeId" exact component={DestinationPage} />
                         <Route path="/user/login" exact component={Login} />
+                        <Route path="/search" component={SearchResult} />
                         <Route component={NotFound} />
                     </Switch>
                 </LoadScript>

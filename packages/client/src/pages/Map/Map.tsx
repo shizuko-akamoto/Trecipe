@@ -155,6 +155,7 @@ class Map extends React.Component<MapProps> {
                                             index={index}
                                             key={dest.uuid}
                                             destination={dest}
+                                            isReadOnly={false}
                                             isCompleted={completed.has(dest.uuid)}
                                             // for DC, delete by destination uuid
                                             onClickDelete={this.onDestCardDeleteClick.bind(this)}

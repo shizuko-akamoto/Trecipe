@@ -54,7 +54,7 @@ class UserService {
      * @returns a promise of current authenticated user if successful, otherwise a promise rejection
      */
     public getUser(): Promise<UserResponse> {
-        return API.get<UserResponse>(`${this.apiEndpoint}`)
+        return API.get<UserResponse>(this.apiEndpoint)
             .then((res: AxiosResponse<UserResponse>) => {
                 return Promise.resolve(res.data);
             })
@@ -69,7 +69,7 @@ class UserService {
      * @returns a promise of updated user model if successful, otherwise a promise rejection
      */
     public updateUser(updatedUser: Partial<User>): Promise<UserResponse> {
-        return API.put<UserResponse>(`${this.apiEndpoint}`, updatedUser).then(
+        return API.put<UserResponse>(this.apiEndpoint, updatedUser).then(
             (res: AxiosResponse<UserResponse>) => {
                 return Promise.resolve(res.data);
             }
