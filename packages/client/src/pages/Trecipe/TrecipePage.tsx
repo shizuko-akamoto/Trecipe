@@ -156,9 +156,8 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     private onTrecipeSaveClick() {
         if (this.props.trecipe)
             this.props.duplicateTrecipe(this.props.trecipe.uuid, (uuid: string) => {
-                // TODO: update this when route is updated in a future PR
                 // Redirect to Trecipe page
-                this.props.history.push(`/${uuid}`);
+                this.props.history.push(`/trecipes/${uuid}`);
             });
     }
 

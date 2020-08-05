@@ -129,7 +129,6 @@ class Map extends React.Component<MapProps> {
     private onTrecipeCopyClick() {
         if (this.props.trecipe) {
             this.props.duplicateTrecipe(this.props.trecipe.uuid, (uuid: string) => {
-                // TODO: update this when route is updated in a future PR
                 // Redirect to Trecipe map page
                 this.props.history.push(`/map/${uuid}`);
             });
@@ -139,9 +138,8 @@ class Map extends React.Component<MapProps> {
     private onTrecipeDeleteClick() {
         if (this.props.trecipe) {
             this.props.deleteTrecipe(this.props.trecipe.uuid, () => {
-                // TODO: update this when route is updated in a future PR
                 // Redirect to My Trecipe page after delete
-                this.props.history.push('/');
+                this.props.history.push('/mytrecipes');
             });
         }
     }
@@ -193,11 +191,10 @@ class Map extends React.Component<MapProps> {
                                         target="_blank"
                                         key={dest.uuid}>
                                         <DestinationCard
-                                            // TODO make it read only when Search PR is merged into master
                                             index={index}
                                             key={dest.uuid}
                                             destination={dest}
-                                            isReadOnly={false}
+                                            isReadOnly={!canEdit}
                                             isCompleted={canEdit && completed.has(dest.uuid)}
                                             // for DC, delete by destination uuid
                                             onClickDelete={this.onDestCardDeleteClick.bind(this)}
