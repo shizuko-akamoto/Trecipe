@@ -4,19 +4,9 @@ import { RatingBar } from '../../../components/Rating/RatingBar';
 import './destinationCard.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
-import Destination, { getIcon } from '../../../../../shared/models/destination';
+import { getIcon } from '../../../../../shared/models/destination';
 import { baseURL } from '../../../api';
-import destination from '../../../../../shared/models/destination';
-
-export interface DCProps {
-    index: number;
-    destination: Destination;
-    isReadOnly: boolean;
-    isCompleted?: boolean;
-    onClickDelete?: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
-    onClickComplete?: (destId: destination, e: React.MouseEvent<HTMLElement>) => void;
-    isInEdit?: boolean;
-}
+import { DCProps } from '../../Trecipe/DestinationCard/DestinationCard';
 
 export class DestinationCard extends React.Component<DCProps> {
     render() {
