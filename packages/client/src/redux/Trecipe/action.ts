@@ -16,17 +16,11 @@ export const updateTrecipe = (trecipe: Trecipe) => {
     return typedAction(TrecipeActionTypes.UPDATE_TRECIPE, trecipe);
 };
 
-export const fetchTrecipe = (id: string, isPublic?: boolean): AppThunk => {
+export const fetchTrecipe = (id: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        if (isPublic) {
-            TrecipeService.getPublicTrecipe(id).then((trecipe: Trecipe) => {
-                dispatch(loadTrecipe(trecipe));
-            });
-        } else {
-            TrecipeService.getTrecipe(id).then((trecipe: Trecipe) => {
-                dispatch(loadTrecipe(trecipe));
-            });
-        }
+        TrecipeService.getTrecipe(id).then((trecipe: Trecipe) => {
+            dispatch(loadTrecipe(trecipe));
+        });
     };
 };
 

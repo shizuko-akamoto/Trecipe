@@ -129,25 +129,6 @@ paths:
                   $ref: '#/components/schemas/Trecipe'
         500:
           $ref: '#/components/responses/InternalServerError'
-  '/trecipes/public':
-    get:
-      tags:
-        - Trecipes
-      summary: Gets public trecipe by uuid
-      description: Gets public trecipe by uuid
-      parameters:
-        - $ref: '#/components/parameters/queryTrecipeId'
-      responses:
-        '200':
-          description: Returns the copy of trecipe
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Trecipe'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
   '/trecipes/{id}':
     get:
       tags:
@@ -155,6 +136,7 @@ paths:
       summary: Gets a trecipe by uuid
       description: Gets a trecipe by uuid
       security:
+        - {}
         - cookieAuth: []
       parameters:
         - $ref: '#/components/parameters/pathId'
@@ -297,6 +279,7 @@ paths:
       summary: Get destinations by trecipe uuid
       description: Get all destinations in a trecipe with specified uuid
       security:
+        - {}
         - cookieAuth: []
       parameters:
         - $ref: '#/components/parameters/queryTrecipeId'
@@ -313,28 +296,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/destinations/in-public':
-    get:
-      tags:
-        - Destinations
-      summary: Get destinations by public trecipe uuid
-      description: Get all destinations in a public trecipe with specified uuid
-      parameters:
-        - $ref: '#/components/parameters/queryTrecipeId'
-      responses:
-        '200':
-          description: Returns an array of destinations in trecipe of given uuid
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Destination'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-
   /upload:
     post:
       tags:

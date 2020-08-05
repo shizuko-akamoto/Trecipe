@@ -45,9 +45,15 @@ class TrecipeService {
             );
     }
 
-    public getTrecipeById(uuid: string, user?: User): Promise<Trecipe> {
+    public getTrecipeById(uuid: string, user: Express.User | undefined): Promise<Trecipe> {
+        // If user is authenticated, they can retreive both private and public Trecipe
         const filter = user
-            ? { uuid: uuid, owner: user.username }
+            ? {
+                  $or: [
+                      { uuid: uuid, owner: (user as User).username },
+                      { uuid: uuid, isPrivate: false },
+                  ],
+              }
             : { uuid: uuid, isPrivate: false };
         return trecipeModel
             .findOne(filter)

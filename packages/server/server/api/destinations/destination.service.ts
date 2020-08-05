@@ -39,11 +39,16 @@ class DestinationService {
 
     public getDestinationsByTrecipeId(
         trecipeUuid: string,
-        owner?: User
+        user: Express.User | undefined
     ): Promise<Array<DestWithStatus>> {
         const populateField = 'destinations.destination';
-        const filter = owner
-            ? { uuid: trecipeUuid, owner: owner.username }
+        const filter = user
+            ? {
+                  $or: [
+                      { uuid: trecipeUuid, owner: (user as User).username },
+                      { uuid: trecipeUuid, isPrivate: false },
+                  ],
+              }
             : { uuid: trecipeUuid, isPrivate: false };
         return trecipeModel
             .findOne(filter)

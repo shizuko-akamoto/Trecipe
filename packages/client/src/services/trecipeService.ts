@@ -86,21 +86,6 @@ class TrecipeService {
         });
     }
 
-    /**
-     * Sends a request to get a public trecipe by its id
-     * @param id: id of trecipe to retrieve
-     * @returns a promise with the retrieved trecipe if successful, otherwise a promise rejection
-     */
-    public getPublicTrecipe(id: string): Promise<Trecipe> {
-        return API.get<Trecipe>(`${this.apiEndpoint}/public`, {
-            params: {
-                id: id,
-            },
-        }).then((res: AxiosResponse<Trecipe>) => {
-            return Promise.resolve(res.data);
-        });
-    }
-
     public fetchAssociatedTrecipes(
         placeId: string,
         limit?: number,

@@ -13,12 +13,8 @@ type GetDestinationsResponse = Array<{
 class DestinationService {
     private apiEndpoint = 'destinations';
 
-    public getDestinationsByTrecipeId(
-        trecipeId: string,
-        isPublic?: boolean
-    ): Promise<Array<Destination>> {
-        const endpoint = isPublic ? '/in-public' : '/in';
-        return API.get<GetDestinationsResponse>(`${this.apiEndpoint}${endpoint}`, {
+    public getDestinationsByTrecipeId(trecipeId: string): Promise<Array<Destination>> {
+        return API.get<GetDestinationsResponse>(`${this.apiEndpoint}/in`, {
             params: {
                 id: trecipeId,
             },

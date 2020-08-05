@@ -84,10 +84,8 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     // load trecipe and destination by trecipe uuid
     private loadTrecipe(): void {
         const trecipeId = this.props.match.params.trecipeId;
-        const isOwner = this.props.isAuthenticated && this.props.user.trecipes?.includes(trecipeId);
-
-        this.props.fetchTrecipe(trecipeId, !isOwner);
-        this.props.getDestinationsByTrecipeId(trecipeId, !isOwner);
+        this.props.fetchTrecipe(trecipeId);
+        this.props.getDestinationsByTrecipeId(trecipeId);
     }
 
     private onDestDragEnd(result: DropResult, provided: ResponderProvided) {
@@ -287,13 +285,9 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         const editTrecipeBtnString = 'Edit Trecipe';
         const saveTrecipeBtnString = 'Save Trecipe';
         // Show everything if user is signed in and is the owner/collaborator of the trecipe
-        const canEdit =
-            !!(trecipe && isAuthenticated && user.trecipes?.includes(trecipe.uuid));
+        const canEdit = !!(trecipe && isAuthenticated && user.trecipes?.includes(trecipe.uuid));
         // Show the save button if the user is signed in but is not the owner of the trecipe
-        const canSave =
-            trecipe &&
-            isAuthenticated &&
-            !user.trecipes?.includes(trecipe.uuid);
+        const canSave = trecipe && isAuthenticated && !user.trecipes?.includes(trecipe.uuid);
         if (!trecipe || !destinations) {
             return null;
         } else {
@@ -328,9 +322,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                       ]
                                     : []
                             }
-                            onFileChange={
-                                canEdit ? this.onCoverPhotoChange.bind(this) : undefined
-                            }>
+                            onFileChange={canEdit ? this.onCoverPhotoChange.bind(this) : undefined}>
                             <div className="tc-header-text">
                                 <div className="tc-header-title">
                                     <h1 className="tc-header-name">{trecipe.name}</h1>
@@ -359,7 +351,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                             <p>{trecipe.description}</p>
                             <span className="title-with-btns">
                                 <h1 className="trecipe-page-title">Places</h1>
-                                {canEdit && 
+                                {canEdit && (
                                     <span className="dest-edit-btn-wrapper">
                                         <Button
                                             text="Add"
@@ -370,7 +362,8 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                             text={this.state.isInEdit ? 'Done' : 'Edit'}
                                             onClick={this.onDestEditClick.bind(this)}
                                         />
-                                    </span>}
+                                    </span>
+                                )}
                             </span>
                             {canEdit && (
                                 <ProgressBar

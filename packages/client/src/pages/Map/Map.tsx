@@ -71,10 +71,8 @@ class Map extends React.Component<MapProps> {
     // fetch trecipe by id and destinations by trecipe id
     private loadTrecipe(): void {
         const trecipeId = this.props.match.params.trecipeId;
-        const isOwner = this.props.isAuthenticated && this.props.user.trecipes?.includes(trecipeId);
-
-        this.props.fetchTrecipe(trecipeId, !isOwner);
-        this.props.getDestinationsByTrecipeId(trecipeId, !isOwner);
+        this.props.fetchTrecipe(trecipeId);
+        this.props.getDestinationsByTrecipeId(trecipeId);
     }
 
     private onDestCompleteClick(destination: Destination, e: React.MouseEvent) {
@@ -145,14 +143,10 @@ class Map extends React.Component<MapProps> {
         );
         // Show everything if user is signed in and is the owner/collaborator of the trecipe
         const user = this.props.user;
-        const isAuthenticated = this.props.isAuthenticated
-        const canEdit =
-            !!(trecipe && isAuthenticated && user.trecipes?.includes(trecipe.uuid));
+        const isAuthenticated = this.props.isAuthenticated;
+        const canEdit = !!(trecipe && isAuthenticated && user.trecipes?.includes(trecipe.uuid));
         // Show the save button if user is signed in but is not the owner of the trecipe
-        const canSave =
-            trecipe &&
-            isAuthenticated &&
-            !user.trecipes?.includes(trecipe.uuid);
+        const canSave = trecipe && isAuthenticated && !user.trecipes?.includes(trecipe.uuid);
         return (
             <div className="map-page-wrapper">
                 <div className="map-page-content">
@@ -182,9 +176,7 @@ class Map extends React.Component<MapProps> {
                                             index={index}
                                             key={dest.uuid}
                                             destination={dest}
-                                            isCompleted={
-                                                canEdit && completed.has(dest.uuid)
-                                            }
+                                            isCompleted={canEdit && completed.has(dest.uuid)}
                                             onClickDelete={this.onDestDeleteClick.bind(this)}
                                             onClickComplete={this.onDestCompleteClick.bind(this)}
                                         />
@@ -219,7 +211,7 @@ const mapStateToProps = (
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
         user: user.user,
-        isAuthenticated: user.isAuthenticated
+        isAuthenticated: user.isAuthenticated,
     };
 };
 

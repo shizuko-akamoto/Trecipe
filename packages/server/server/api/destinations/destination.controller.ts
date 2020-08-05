@@ -7,8 +7,7 @@ import DestinationService from './destination.service';
 import { uuid } from 'uuidv4';
 import axios from 'axios';
 import logger from '../../common/logger';
-import { passportAuth } from '../../common/passport/passportUtils';
-import { User } from '../../../../shared/models/user';
+import { passportAuth, passportAuthAnon } from '../../common/passport/passportUtils';
 
 class DestinationController implements Controller {
     public readonly path = '/destinations';
@@ -24,10 +23,9 @@ class DestinationController implements Controller {
         this.router.get(this.path, this.getDestinationByPlaceId.bind(this));
         this.router.get(
             `${this.path}/in`,
-            passportAuth,
+            passportAuthAnon,
             this.getDestinationsByTrecipeId.bind(this)
         );
-        this.router.get(`${this.path}/in-public`, this.getDestinationsByPublicTrecipeId.bind(this));
         this.router.get(`${this.path}/:id`, this.getDestinationById.bind(this));
     }
 
@@ -81,17 +79,7 @@ class DestinationController implements Controller {
 
     private getDestinationsByTrecipeId(req: Request, res: Response, next: NextFunction) {
         const trecipeUUID: string = req.query.id as string;
-        const user = req.user as User;
-        DestinationService.getDestinationsByTrecipeId(trecipeUUID, user)
-            .then((destsWithStatus: Array<DestWithStatus>) => {
-                res.status(200).json(destsWithStatus);
-            })
-            .catch((err) => next(err));
-    }
-
-    private getDestinationsByPublicTrecipeId(req: Request, res: Response, next: NextFunction) {
-        const trecipeUUID: string = req.query.id as string;
-        DestinationService.getDestinationsByTrecipeId(trecipeUUID)
+        DestinationService.getDestinationsByTrecipeId(trecipeUUID, req.user)
             .then((destsWithStatus: Array<DestWithStatus>) => {
                 res.status(200).json(destsWithStatus);
             })
