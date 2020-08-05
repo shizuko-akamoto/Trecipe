@@ -6,6 +6,7 @@ import { Footer } from '../components/Footer/Footer';
 import TrecipePage from './Trecipe/TrecipePage';
 import Map from './Map/Map';
 import DestinationPage from './Destination/DestinationPage';
+import SearchResult from './SearchResult/SearchResult';
 import { LoadScript } from '@react-google-maps/api';
 import Login from './Login/Login';
 import PrivateRoute from '../components/Route/PrivateRoute';
@@ -24,17 +25,18 @@ const Pages = (props: PagesProps) => {
     return (
         <div>
             <Header />
-            <Switch>
-                <LoadScript
-                    googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
-                    libraries={libraries}>
+            <LoadScript
+                googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
+                libraries={libraries}>
+                <Switch>
+                    <Route path="/search" component={SearchResult} />
                     <PrivateRoute path="/" exact component={MyTrecipes} />
                     <PrivateRoute path="/:trecipeId" exact component={TrecipePage} />
                     <PrivateRoute path="/map/:trecipeId" component={Map} />
                     <Route path="/destinations/:placeId" exact component={DestinationPage} />
                     <Route path="/user/login" exact component={Login} />
-                </LoadScript>
-            </Switch>
+                </Switch>
+            </LoadScript>
             <Footer />
         </div>
     );

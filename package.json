@@ -12,12 +12,17 @@
     ]
   },
   "scripts": {
-    "start:client": "yarn workspace client start",
-    "start:server": "yarn workspace server dev",
-    "start": "concurrently --kill-others-on-fail \"yarn start:client\" \"yarn start:server\"",
+    "dev:client": "yarn workspace client start",
+    "dev:server": "yarn workspace server dev",
+    "dev": "concurrently --kill-others-on-fail \"yarn dev:client\" \"yarn dev:server\"",
+    "start": "yarn workspace server start",
+    "build:client": "yarn workspace client install && yarn workspace client build",
+    "build:server": "yarn workspace server install && yarn workspace server compile",
     "lint": "yarn lint:client && yarn lint:server",
     "lint:client": "yarn workspace client lint",
-    "lint:server": "yarn workspace server lint"
+    "lint:server": "yarn workspace server lint",
+    "copy-build": "npx copyfiles -u 3 \"./packages/client/build/**/*.*\" \"./packages/server/dist/build\"",
+    "heroku-postbuild": "yarn build:client && yarn build:server && yarn copy-build"
   },
   "husky": {
     "hooks": {
@@ -32,6 +37,9 @@
       "yarn lint:server"
     ]
   },
+  "dependencies": {
+    "copyfiles": "^2.3.0"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.5.0",
     "@typescript-eslint/parser": "^3.5.0",
@@ -45,5 +53,9 @@
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5"
+  },
+  "engines": {
+    "node": "12.x",
+    "yarn": "^1.19.x"
   }
 }

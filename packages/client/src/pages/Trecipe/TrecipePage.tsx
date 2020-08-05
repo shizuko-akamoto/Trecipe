@@ -24,7 +24,7 @@ import { Marker, MarkerColor, StaticMap } from '../../components/Map/StaticMap';
 import Modal from '../../components/Modal/Modal';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
-import Destination, { Rating } from '../../../../shared/models/destination';
+import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import { Legend } from '../Map/GoogleMap/Legend';
 import { baseURL } from '../../api';

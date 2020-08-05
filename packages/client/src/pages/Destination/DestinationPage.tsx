@@ -16,7 +16,7 @@ import Review from './Review/review';
 import { isEmpty } from 'lodash';
 import { fetchAssociatedTrecipesRequest } from '../../redux/TrecipeList/action';
 import Trecipe from '../../../../shared/models/trecipe';
-import TrecipeCard from '../MyTrecipes/TrecipeCard/TrecipeCard';
+import TrecipeCard from '../../components/TrecipeCard/TrecipeCard';
 import { showModal } from '../../redux/Modal/action';
 import TrecipePicker from '../../components/TrecipePicker/TrecipePicker';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
@@ -335,7 +335,10 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                             <li
                                                 key={trecipe.uuid}
                                                 className="associated-trecipe-item">
-                                                <TrecipeCard {...trecipe} />
+                                                <TrecipeCard
+                                                    trecipe={{ ...trecipe }}
+                                                    isReadOnly={true}
+                                                />
                                             </li>
                                         ))}
                                     </ul>
