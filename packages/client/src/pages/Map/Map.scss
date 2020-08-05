@@ -10,6 +10,7 @@
     .map-page-content {
         display: flex;
         flex-direction: row;
+        z-index: 0;
 
         .map-side-bar {
             flex: 0 0 400px;
@@ -41,6 +42,7 @@
             .empty-text-wrapper {
                 position: relative;
                 height: calc(100vh - 4rem);
+                padding: 0 0.5rem;
                 z-index: 0;
             }
 

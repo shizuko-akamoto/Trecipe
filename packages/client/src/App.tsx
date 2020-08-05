@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
+    // configure toast once at top level
     toast.configure({
         position: 'bottom-center',
         limit: 5,

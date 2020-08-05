@@ -48,9 +48,6 @@ export const getDestinationByPlaceId = (placeId: string): AppThunk => {
                         reason: err.toString(),
                     })
                 );
-                toast(`Failed to fetch destination [${err.toString()}]`, {
-                    type: toast.TYPE.ERROR,
-                });
             });
     };
 };
@@ -148,11 +145,21 @@ export const rateDestinationRequest = (
     updateRatingData: UpdateDestinationRatingDTO
 ): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
-        DestinationService.updateDestinationRating(destIdForUpdate, updateRatingData).then(
-            (updated: Destination) => {
+        dispatch(typedAction(DestinationsActionTypes.UPDATE_DESTINATION_REQUEST));
+        DestinationService.updateDestinationRating(destIdForUpdate, updateRatingData)
+            .then((updated: Destination) => {
                 dispatch(updateDestination(updateRatingData.trecipeId, updated));
-            }
-        );
+            })
+            .catch((err) => {
+                toast(`Failed to update destination [${err.toString()}]`, {
+                    type: toast.TYPE.ERROR,
+                });
+                dispatch(
+                    typedAction(DestinationsActionTypes.UPDATE_DESTINATION_FAILURE, {
+                        reason: err.toString(),
+                    })
+                );
+            });
     };
 };
 
@@ -178,7 +185,7 @@ export const removeDestination = (trecipeId: string, destinationId: string) => {
 };
 
 export const updateDestination = (trecipeId: string, destination: Destination) => {
-    return typedAction(DestinationsActionTypes.UPDATE_DESTINATION, {
+    return typedAction(DestinationsActionTypes.UPDATE_DESTINATION_SUCCESS, {
         trecipeId: trecipeId,
         destination: destination,
     });

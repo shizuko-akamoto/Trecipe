@@ -2,7 +2,8 @@ import React from 'react';
 import './spinner.scss';
 /**
  * Spinner Props
- * positionStyle: Position css property
+ * backgroundColor: background color of spinner
+ * size: size in px of spinner
  */
 export interface SpinnerProps {
     backgroundColor: string;

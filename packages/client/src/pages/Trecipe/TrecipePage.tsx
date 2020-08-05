@@ -33,7 +33,7 @@ import { DestinationsActionCategory } from '../../redux/Destinations/types';
 import OverlaySpinner from '../../components/Loading/OverlaySpinner';
 import { TrecipeActionCategory } from '../../redux/Trecipe/types';
 import { isEmpty } from 'lodash';
-import { EmptyText } from '../../components/EmptyText/EmptyText';
+import { EmptyDestinations } from '../../components/EmptyText/EmptyDestinations';
 import FullScreenLoader from '../../components/Loading/FullScreenLoader';
 import RatingPopup from '../../components/RatingPopup/RatingPopup';
 import { UpdateDestinationRatingDTO } from '../../../../shared/models/updateDestinationRatingDTO';
@@ -80,6 +80,18 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         const trecipeId = this.props.match.params.trecipeId;
         this.props.fetchTrecipe(trecipeId);
         this.props.fetchDestinations(trecipeId);
+    }
+
+    componentDidUpdate(
+        prevProps: Readonly<TrecipeProps>,
+        prevState: Readonly<TrecipeState>,
+        snapshot?: any
+    ) {
+        const trecipeId = this.props.match.params.trecipeId;
+        if (prevProps.match.params.trecipeId !== trecipeId) {
+            this.props.fetchTrecipe(trecipeId);
+            this.props.getDestinationsByTrecipeId(trecipeId);
+        }
     }
 
     private onDestDragEnd(result: DropResult, provided: ResponderProvided) {
@@ -159,9 +171,14 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         }
     }
 
-    private onDestRemoved(idToDelete: string): void {
+    /**
+     * Callback method for deleting destinations from SearchBarPopup
+     * NOTE: it uses place id for id to delete
+     * @param placeIdToDelete
+     */
+    private onDestRemoved(placeIdToDelete: string): void {
         if (this.props.trecipe) {
-            this.props.removeDestination(this.props.trecipe, { placeId: idToDelete });
+            this.props.removeDestination(this.props.trecipe, { placeId: placeIdToDelete });
         }
     }
 
@@ -191,6 +208,11 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         this.toggleEdit(); // toggle edit button
     }
 
+    /**
+     * Callback method when deleting from DestinationCard
+     * @param idToDelete: destination uuid
+     * @param e: click event
+     */
     private onDestDeleteClick(idToDelete: string, e: React.MouseEvent<HTMLElement>) {
         e.preventDefault();
         if (this.state.isInEdit) {
@@ -261,6 +283,40 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
             long: destination.geometry.lng,
             color: completed ? MarkerColor.Blue : MarkerColor.Grey,
         };
+    }
+
+    private renderDestinationList(completed: Set<string>) {
+        return (
+            <DragDropContext onDragEnd={this.onDestDragEnd.bind(this)}>
+                <Droppable droppableId="droppable">
+                    {(provided) => (
+                        <ul
+                            className="destination-cards"
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}>
+                            {this.getDestinationsList().map((dest, index) => (
+                                <Link
+                                    className="router-link"
+                                    to={`/destinations/${dest.placeId}`}
+                                    target="_blank"
+                                    key={dest.uuid}>
+                                    <DestinationCard
+                                        key={dest.uuid}
+                                        destination={dest}
+                                        isCompleted={completed.has(dest.uuid)}
+                                        index={index}
+                                        onClickDelete={this.onDestDeleteClick.bind(this)}
+                                        onClickComplete={this.onDestCompleteClick.bind(this)}
+                                        isInEdit={this.state.isInEdit}
+                                    />
+                                </Link>
+                            ))}
+                            {provided.placeholder}
+                        </ul>
+                    )}
+                </Droppable>
+            </DragDropContext>
+        );
     }
 
     render() {
@@ -335,45 +391,9 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                             />
                             <div className="destination-card-list">
                                 {isEmpty(this.getDestinationsList()) ? (
-                                    <EmptyText />
+                                    <EmptyDestinations />
                                 ) : (
-                                    <DragDropContext onDragEnd={this.onDestDragEnd.bind(this)}>
-                                        <Droppable droppableId="droppable">
-                                            {(provided) => (
-                                                <ul
-                                                    className="destination-cards"
-                                                    {...provided.droppableProps}
-                                                    ref={provided.innerRef}>
-                                                    {this.getDestinationsList().map(
-                                                        (dest, index) => (
-                                                            <Link
-                                                                className="router-link"
-                                                                to={`/destinations/${dest.placeId}`}
-                                                                target="_blank"
-                                                                key={dest.uuid}>
-                                                                <DestinationCard
-                                                                    key={dest.uuid}
-                                                                    destination={dest}
-                                                                    isCompleted={completed.has(
-                                                                        dest.uuid
-                                                                    )}
-                                                                    index={index}
-                                                                    onClickDelete={this.onDestDeleteClick.bind(
-                                                                        this
-                                                                    )}
-                                                                    onClickComplete={this.onDestCompleteClick.bind(
-                                                                        this
-                                                                    )}
-                                                                    isInEdit={this.state.isInEdit}
-                                                                />
-                                                            </Link>
-                                                        )
-                                                    )}
-                                                    {provided.placeholder}
-                                                </ul>
-                                            )}
-                                        </Droppable>
-                                    </DragDropContext>
+                                    this.renderDestinationList(completed)
                                 )}
                                 {this.canExpand() && (
                                     <button
@@ -411,13 +431,15 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
 
 const destLoadingSelector = createLoadingSelector([
     DestinationsActionCategory.ADD_DESTINATION,
+    DestinationsActionCategory.UPDATE_DESTINATION,
     DestinationsActionCategory.REMOVE_DESTINATION,
     DestinationsActionCategory.FETCH_DESTS_BY_TRECIPE_ID,
 ]);
 
 const trecipeLoadingSelector = createLoadingSelector([
+    // just fetch, and not update trecipe because any destination change also updates trecipe and
+    // having a full screen loader on every destination change is a bit jarring
     TrecipeActionCategory.FETCH_TRECIPE,
-    TrecipeActionCategory.UPDATE_TRECIPE,
 ]);
 
 const mapStateToProps = (
@@ -431,6 +453,8 @@ const mapStateToProps = (
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
         user: user,
+        // we have separate loading state for destinations and trecipe because for destinations, we don't want
+        // a full screen spinner, but rather, an overlay on top of destination list
         isDestsLoading: destLoadingSelector(state),
         isTrecipeLoading: trecipeLoadingSelector(state),
     };
@@ -446,6 +470,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,
             rateDestination: rateDestinationRequest,
+            getDestinationsByTrecipeId,
         },
         dispatch
     );

@@ -1,6 +1,6 @@
 import Controller from '../../common/controller';
 import { NextFunction, Request, Response, Router } from 'express';
-import Destination, { Rating, UserRating } from '../../../../shared/models/destination';
+import Destination, { UserRating } from '../../../../shared/models/destination';
 import { DestWithStatus } from '../../../../shared/models/trecipe';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import DestinationService from './destination.service';
