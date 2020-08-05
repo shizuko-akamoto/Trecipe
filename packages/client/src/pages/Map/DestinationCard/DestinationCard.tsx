@@ -1,12 +1,12 @@
 import React from 'react';
 import { CardMenu } from '../../../components/CardMenu/CardMenu';
 import { RatingBar } from '../../../components/Rating/RatingBar';
-import { DCProps } from '../../Trecipe/DestinationCard/DestinationCard';
 import './destinationCard.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
 import { getIcon } from '../../../../../shared/models/destination';
 import { baseURL } from '../../../api';
+import { DCProps } from '../../Trecipe/DestinationCard/DestinationCard';
 
 export class DestinationCard extends React.Component<DCProps> {
     render() {
@@ -37,7 +37,9 @@ export class DestinationCard extends React.Component<DCProps> {
                                         text: 'Complete',
                                         icon: 'check',
                                         onClick: (e) => {
-                                            this.props.onClickComplete(destModel, e);
+                                            if (this.props.onClickComplete) {
+                                                this.props.onClickComplete(destModel, e);
+                                            }
                                         },
                                         disabled: this.props.isCompleted,
                                     },
@@ -46,10 +48,12 @@ export class DestinationCard extends React.Component<DCProps> {
                                         text: 'Remove',
                                         icon: ['far', 'trash-alt'],
                                         onClick: (e) => {
-                                            this.props.onClickDelete(
-                                                this.props.destination.uuid,
-                                                e
-                                            );
+                                            if (this.props.onClickDelete) {
+                                                this.props.onClickDelete(
+                                                    this.props.destination.uuid,
+                                                    e
+                                                );
+                                            }
                                         },
                                     },
                                 ]}
