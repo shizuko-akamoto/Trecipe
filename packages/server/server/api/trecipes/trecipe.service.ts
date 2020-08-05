@@ -2,7 +2,7 @@ import trecipeModel from './trecipe.model';
 import Trecipe from '../../../../shared/models/trecipe';
 import logger from '../../common/logger';
 import { TrecipeNotFound } from './trecipe.error';
-import { InternalServerError } from 'express-openapi-validator/dist';
+import { InternalServerError, Unauthorized } from 'express-openapi-validator/dist';
 import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
 import { uuid } from 'uuidv4';
 import DestinationService from '../destinations/destination.service';
@@ -45,9 +45,18 @@ class TrecipeService {
             );
     }
 
-    public getTrecipeById(uuid: string, user: User): Promise<Trecipe> {
+    public getTrecipeById(uuid: string, user: Express.User | undefined): Promise<Trecipe> {
+        // If user is authenticated, they can retreive both private and public Trecipe
+        const filter = user
+            ? {
+                  $or: [
+                      { uuid: uuid, owner: (user as User).username },
+                      { uuid: uuid, isPrivate: false },
+                  ],
+              }
+            : { uuid: uuid, isPrivate: false };
         return trecipeModel
-            .findOne({ uuid: uuid, owner: user.username })
+            .findOne(filter)
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -113,7 +122,7 @@ class TrecipeService {
 
     public duplicateTrecipe(srcTrecipeId: string, user: User): Promise<Trecipe | void> {
         return trecipeModel
-            .findOne({ uuid: srcTrecipeId, owner: user.username })
+            .findOne({ uuid: srcTrecipeId })
             .exec()
             .catch((err) =>
                 Promise.reject(
@@ -124,24 +133,34 @@ class TrecipeService {
             )
             .then((trecipeToCopy: Trecipe) => {
                 if (trecipeToCopy) {
-                    const copy: Trecipe = {
-                        uuid: uuid(),
-                        name: trecipeToCopy.name,
-                        description: trecipeToCopy.description,
-                        isPrivate: trecipeToCopy.isPrivate,
-                        owner: trecipeToCopy.owner,
-                        collaborators: trecipeToCopy.collaborators,
-                        image: trecipeToCopy.image,
-                        destinations: trecipeToCopy.destinations.map((dest) => {
-                            return {
-                                destUUID: dest.destUUID,
-                                completed: dest.completed,
-                            };
-                        }),
-                        createdAt: '',
-                        updatedAt: '',
-                    };
-                    return new trecipeModel(copy).save();
+                    const isOwner = trecipeToCopy.owner === user.username;
+                    if (isOwner || !trecipeToCopy.isPrivate) {
+                        const copy: Trecipe = {
+                            uuid: uuid(),
+                            name: trecipeToCopy.name,
+                            description: trecipeToCopy.description,
+                            isPrivate: trecipeToCopy.isPrivate,
+                            owner: user.username,
+                            collaborators: [],
+                            image: trecipeToCopy.image,
+                            destinations: trecipeToCopy.destinations.map((dest) => {
+                                return {
+                                    destUUID: dest.destUUID,
+                                    completed: isOwner ? dest.completed : false,
+                                };
+                            }),
+                            createdAt: '',
+                            updatedAt: '',
+                        };
+                        return new trecipeModel(copy).save();
+                    } else {
+                        Promise.reject(
+                            new Unauthorized({
+                                path: trecipeToCopy.uuid,
+                                message: `Not authorized to duplicate trecipe`,
+                            })
+                        );
+                    }
                 } else {
                     return Promise.reject(new TrecipeNotFound(srcTrecipeId));
                 }

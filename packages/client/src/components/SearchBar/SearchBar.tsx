@@ -94,7 +94,7 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
                     result = searchResult.map((value) => {
                         return {
                             name: value.name,
-                            href: `/${value.uuid}`,
+                            href: `/trecipes/${value.uuid}`,
                             info: value.owner,
                             uuid: value.uuid,
                         };

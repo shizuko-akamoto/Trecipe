@@ -4,7 +4,7 @@ import TrecipeService from './trecipe.service';
 import Trecipe from '../../../../shared/models/trecipe';
 import CreateNewTrecipeDTO from '../../../../shared/models/createNewTrecipeDTO';
 import { uuid } from 'uuidv4';
-import { passportAuth } from '../../common/passport/passportUtils';
+import { passportAuth, passportAuthAnon } from '../../common/passport/passportUtils';
 import { User } from '../../../../shared/models/user';
 import UserService from '../user/user.service';
 
@@ -26,7 +26,7 @@ class TrecipeController implements Controller {
             this.getMyAssociatedTrecipes.bind(this)
         );
         this.router.post(`${this.path}/copy`, passportAuth, this.duplicateTrecipe.bind(this));
-        this.router.get(`${this.path}/:id`, passportAuth, this.getTrecipeById.bind(this));
+        this.router.get(`${this.path}/:id`, passportAuthAnon, this.getTrecipeById.bind(this));
         this.router.delete(`${this.path}/:id`, passportAuth, this.deleteTrecipeById.bind(this));
         this.router.put(`${this.path}/:id`, passportAuth, this.updateTrecipeById.bind(this));
     }
@@ -69,8 +69,7 @@ class TrecipeController implements Controller {
 
     private getTrecipeById(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.params.id;
-        const user = req.user as User;
-        TrecipeService.getTrecipeById(uuid, user)
+        TrecipeService.getTrecipeById(uuid, req.user)
             .then((foundTrecipe: Trecipe) => {
                 res.status(200).json(foundTrecipe);
             })

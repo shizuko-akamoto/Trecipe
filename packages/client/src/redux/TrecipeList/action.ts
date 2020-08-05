@@ -98,7 +98,10 @@ export const createTrecipeRequest = (trecipeData: CreateNewTrecipeDTO): AppThunk
     };
 };
 
-export const duplicateTrecipeRequest = (srcTrecipeId: string): AppThunk => {
+export const duplicateTrecipeRequest = (
+    srcTrecipeId: string,
+    callback?: (uuid: string) => void
+): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         dispatch({ type: TrecipeListActionTypes.CREATE_TRECIPE_REQUEST });
         TrecipeService.duplicateTrecipe(srcTrecipeId)
@@ -110,6 +113,7 @@ export const duplicateTrecipeRequest = (srcTrecipeId: string): AppThunk => {
                 UserService.getUser()
                     .then((updatedUser: UserResponse) => {
                         dispatch(setUser(updatedUser.user));
+                        if (callback) callback(copiedTrecipe.uuid);
                     })
                     .catch((err) =>
                         toast(`Failed to get user [${err.toString()}]`, {
@@ -130,7 +134,7 @@ export const duplicateTrecipeRequest = (srcTrecipeId: string): AppThunk => {
     };
 };
 
-export const deleteTrecipeRequest = (idToDelete: string): AppThunk => {
+export const deleteTrecipeRequest = (idToDelete: string, callback?: () => void): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         dispatch({ type: TrecipeListActionTypes.DELETE_TRECIPE_REQUEST });
         TrecipeService.deleteTrecipe(idToDelete)
@@ -143,6 +147,7 @@ export const deleteTrecipeRequest = (idToDelete: string): AppThunk => {
                     UserService.getUser()
                         .then((updatedUser: UserResponse) => {
                             dispatch(setUser(updatedUser.user));
+                            if (callback) callback();
                         })
                         .catch((err) =>
                             toast(`Failed to get user [${err.toString()}]`, {

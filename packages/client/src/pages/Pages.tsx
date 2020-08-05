@@ -37,8 +37,8 @@ const Pages = (props: PagesProps) => {
                     <Switch>
                         <Route path="/" exact component={Landing} />
                         <PrivateRoute path="/mytrecipes" exact component={MyTrecipes} />
-                        <PrivateRoute path="/trecipes/:trecipeId" exact component={TrecipePage} />
-                        <PrivateRoute path="/map/:trecipeId" exact component={Map} />
+                        <Route path="/trecipes/:trecipeId" exact component={TrecipePage} />
+                        <Route path="/map/:trecipeId" exact component={Map} />
                         <Route path="/destinations/:placeId" exact component={DestinationPage} />
                         <Route path="/user/login" exact component={Login} />
                         <Route path="/search" component={SearchResult} />
