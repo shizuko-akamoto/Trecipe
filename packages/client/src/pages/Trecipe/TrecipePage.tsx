@@ -167,6 +167,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
         this.props.showModal(
             <Modal>
                 <SearchBarPopup
+                    addedDests={this.props.destinations || []}
                     onDestAdd={this.onDestAdded.bind(this)}
                     onDestRemove={this.onDestRemoved.bind(this)}
                 />
