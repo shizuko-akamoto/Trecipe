@@ -3,7 +3,6 @@ import { AxiosResponse } from 'axios';
 import Destination from '../../../shared/models/destination';
 import Trecipe from '../../../shared/models/trecipe';
 import { AutoComplete, getDestModel } from '../components/Map/mapHelper';
-import { CreateNewDestinationDTO } from '../../../shared/models/createNewDestinationDTO';
 import { SearchResultModel } from '../../../shared/models/searchResult';
 
 class searchService {
@@ -30,9 +29,7 @@ class searchService {
             });
     }
 
-    public performDestinationSearchGoogle(
-        keyword: string
-    ): Promise<Array<CreateNewDestinationDTO>> {
+    public performDestinationSearchGoogle(keyword: string): Promise<Array<Destination>> {
         let autocomplete: AutoComplete = new AutoComplete();
         return autocomplete
             .getPredictions(keyword)
@@ -45,7 +42,18 @@ class searchService {
                 return Promise.all(detailPromises);
             })
             .then((results: Array<google.maps.places.PlaceResult>) => {
-                return Promise.resolve(results.map((dest) => getDestModel(dest)));
+                const destiations: Array<Destination> = results.map((dest) => {
+                    return {
+                        ...getDestModel(dest),
+                        uuid: '',
+                        userRatings: [],
+                        description: '',
+                        photoRefs: dest.photos
+                            ? dest.photos.map((photo) => photo.getUrl({ maxHeight: 500 }))
+                            : [],
+                    };
+                });
+                return Promise.resolve(destiations);
             })
             .catch((err: any) => {
                 return Promise.reject(err);
@@ -72,25 +80,36 @@ class searchService {
     }
 
     public performSearch(keyword: string, offset: number): Promise<SearchResultModel> {
-        let backendPromise = API.get(`${this.searchEndpoint}/${keyword}`, {
-            params: {
-                limit: 10,
-                // if user wants to load more, we should increment offset
-                offset: offset,
-            },
-            transformResponse: [
-                (data): SearchResultModel => {
-                    return JSON.parse(data);
+        let backendPromise: Promise<AxiosResponse<SearchResultModel>> = API.get(
+            `${this.searchEndpoint}/${keyword}`,
+            {
+                params: {
+                    limit: 10,
+                    // if user wants to load more, we should increment offset
+                    offset: offset,
                 },
-            ],
-        });
-        let destPromise = this.performDestinationSearchGoogle(keyword);
-        return Promise.all([backendPromise, destPromise])
-            .then((res) => {
-                let result = res[0].data;
-                result.googleDestinationResult = res[1];
-                return Promise.resolve(result);
-            })
+                transformResponse: [
+                    (data): SearchResultModel => {
+                        return JSON.parse(data);
+                    },
+                ],
+            }
+        );
+        let destPromise: Promise<Destination[]> = this.performDestinationSearchGoogle(keyword);
+        return Promise.all<AxiosResponse<SearchResultModel>, Destination[]>([
+            backendPromise,
+            destPromise,
+        ])
+            .then(
+                ([backendResult, destResult]: [
+                    AxiosResponse<SearchResultModel>,
+                    Destination[]
+                ]) => {
+                    const mergedResult: SearchResultModel = backendResult.data;
+                    mergedResult.googleDestinationResult = destResult;
+                    return Promise.resolve(mergedResult);
+                }
+            )
             .catch((err) => {
                 return Promise.reject(err);
             });

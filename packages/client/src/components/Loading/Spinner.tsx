@@ -1,13 +1,12 @@
 import React from 'react';
 import './spinner.scss';
-import { PositionProperty } from 'csstype';
 
 /**
  * Spinner Props
  * positionStyle: Position css property
  */
 export interface SpinnerProps {
-    positionStyle: PositionProperty;
+    positionStyle: string;
 }
 
 class Spinner extends React.Component<SpinnerProps> {
@@ -17,7 +16,7 @@ class Spinner extends React.Component<SpinnerProps> {
 
     render() {
         return (
-            <div className="spinner-wrapper" style={{ position: this.props.positionStyle }}>
+            <div className="spinner-wrapper" style={{ position: 'static' }}>
                 <div className="spinner"></div>
             </div>
         );

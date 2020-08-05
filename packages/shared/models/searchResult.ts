@@ -6,5 +6,5 @@ export interface SearchResultModel {
     trecipeResult: Trecipe[];
     destinationResult: Destination[];
     userResult: User[];
-    googleDestinationResult: CreateNewDestinationDTO[];
+    googleDestinationResult: Destination[];
 }
