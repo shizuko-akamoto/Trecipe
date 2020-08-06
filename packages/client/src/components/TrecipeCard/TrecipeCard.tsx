@@ -87,15 +87,13 @@ class TrecipeCard extends React.Component<TCProps> {
                         'linear-gradient(180deg, rgba(255, 255, 255, 0) 35%, rgba(0, 0, 0, 0.5) 100%)',
                     ]}>
                     <div className="tcHeader">
-                        <label className="tcTitle">
-                            {this.props.trecipe.name}
-                            {!this.props.isReadOnly && (
-                                <FontAwesomeIcon
-                                    icon={this.props.trecipe.isPrivate ? 'lock' : 'lock-open'}
-                                    className="tcPrivacy"
-                                />
-                            )}
-                        </label>
+                        <label className="tcTitle">{this.props.trecipe.name}</label>
+                        {!this.props.isReadOnly && (
+                            <FontAwesomeIcon
+                                icon={this.props.trecipe.isPrivate ? 'lock' : 'lock-open'}
+                                className="tcPrivacy"
+                            />
+                        )}
                         {!this.props.isReadOnly && (
                             <div className="tcEdit" onClick={(e) => this.onTCEditClick(e)}>
                                 <CardMenu menuItems={this.cardMenuItems} />

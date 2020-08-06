@@ -17,6 +17,7 @@ import { NotFound } from './NotFound/NotFound';
 import Landing from './Landing/Landing';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from './Error/ErrorFallback';
+import FullScreenLoader from '../components/Loading/FullScreenLoader';
 
 const libraries = ['places'];
 
@@ -33,7 +34,8 @@ const Pages = (props: PagesProps) => {
                 <Header />
                 <LoadScript
                     googleMapsApiKey={`${process.env.REACT_APP_MAP_API_KEY}`}
-                    libraries={libraries}>
+                    libraries={libraries}
+                    loadingElement={<FullScreenLoader />}>
                     <Switch>
                         <Route path="/" exact component={Landing} />
                         <PrivateRoute path="/mytrecipes" exact component={MyTrecipes} />

@@ -94,6 +94,11 @@
                     text-decoration: none;
                     @include animated-underline($powder-blue);
                 }
+
+                .rating-bar {
+                    display: flex;
+                    align-items: center;
+                }
             }
 
             .nearby-dest-item {

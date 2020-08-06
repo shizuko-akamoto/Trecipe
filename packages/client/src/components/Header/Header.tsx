@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavBar } from '../NavBar/NavBar';
+import NavBar from '../NavBar/NavBar';
 import { SearchBar } from '../SearchBar/SearchBar';
 import './header.scss';
 import { connect } from 'react-redux';
