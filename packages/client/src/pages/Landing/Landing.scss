@@ -47,26 +47,54 @@
         margin: auto;
 
         .main-text-wrapper {
-            text-align: center;
             color: $mid-gray;
 
             .main-text-header {
+                text-align: center;
                 font-family: $logo-font-family;
                 font-size: 3rem;
-                margin: 3rem 0;
+                margin-top: 10rem;
             }
 
             .main-text-subheader {
+                font-weight: lighter;
+                text-align: center;
                 font-family: $default-font-family;
                 font-size: $subtitle-font-size;
-                margin-bottom: 3rem;
+                margin-bottom: 10rem;
             }
 
             .main-text {
+                text-align: center;
                 font-family: $default-font-family;
                 font-size: $default-font-size;
-                line-height: 5rem;
+                line-height: 2rem;
                 max-width: 50%;
+                margin: auto auto 5rem;
+            }
+
+            .main-text-subending {
+                font-weight: lighter;
+                text-align: center;
+                font-family: $default-font-family;
+                font-size: $subtitle-font-size;
+                margin-top: 10rem;
+
+                span {
+                    color: $powder-blue;
+                }
+            }
+
+            .main-text-ending {
+                font-weight: lighter;
+                text-align: center;
+                font-family: $default-font-family;
+                font-size: $default-font-size;
+                margin: 5rem 0 2rem 0;
+            }
+
+            .sign-up-btn {
+                width: fit-content;
                 margin: auto;
             }
         }

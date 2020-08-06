@@ -11,7 +11,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { LazyBackground } from '../../components/Image/LazyBackground';
 import LoginBackground from './loginBackground.jpg';
 
-type RouteWithStateProps = RouteComponentProps<{}, StaticContext, { from: { pathname: string } }>;
+type RouteWithStateProps = RouteComponentProps<
+    {},
+    StaticContext,
+    { from: { pathname: string }; isLogin: boolean }
+>;
 
 type ErrorIconProps = {
     active: boolean;
