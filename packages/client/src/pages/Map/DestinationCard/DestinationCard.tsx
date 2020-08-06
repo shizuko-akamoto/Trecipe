@@ -5,23 +5,20 @@ import './destinationCard.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
 import { getIcon } from '../../../../../shared/models/destination';
-import { baseURL } from '../../../api';
 import { DCProps } from '../../Trecipe/DestinationCard/DestinationCard';
+import { LazyBackground } from '../../../components/Image/LazyBackground';
 
 export class DestinationCard extends React.Component<DCProps> {
     render() {
         const destModel = this.props.destination;
         return (
             <div className="dest-card-item-wrapper" id={destModel.uuid}>
-                <div
+                <LazyBackground
                     className="dest-card-header-container"
-                    style={{
-                        backgroundImage: `linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.5) 100%)${
-                            isEmpty(destModel.photoRefs)
-                                ? ''
-                                : `, url(${baseURL}photos/${destModel.photoRefs[0]})`
-                        }`,
-                    }}>
+                    src={isEmpty(destModel.photoRefs) ? null : destModel.photoRefs[0]}
+                    otherStyles={[
+                        'linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.5) 100%)',
+                    ]}>
                     <div className="dest-card-header">
                         <span id="dest-card-title">{destModel.name}</span>
                         {this.props.isCompleted && (
@@ -62,7 +59,7 @@ export class DestinationCard extends React.Component<DCProps> {
                             </span>
                         )}
                     </div>
-                </div>
+                </LazyBackground>
                 <div className="dest-card-body">
                     <div className="dest-metadata">
                         <span>

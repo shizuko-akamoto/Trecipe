@@ -8,8 +8,14 @@ import { RootState } from '../../redux';
 import { signup, login } from '../../redux/User/action';
 import { LoginDTO, CreateUserDTO } from '../../../../shared/models/user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { LazyBackground } from '../../components/Image/LazyBackground';
+import LoginBackground from './loginBackground.jpg';
 
-type RouteWithStateProps = RouteComponentProps<{}, StaticContext, { from: { pathname: string } }>;
+type RouteWithStateProps = RouteComponentProps<
+    {},
+    StaticContext,
+    { from: { pathname: string }; isLogin: boolean }
+>;
 
 type ErrorIconProps = {
     active: boolean;
@@ -141,7 +147,12 @@ class Login extends React.Component<LoginProps, LoginState> {
         const signupEmailError = errors.emailError || errors.dupEmailError;
 
         return (
-            <div className="login-wrapper">
+            <LazyBackground
+                className="login-wrapper"
+                src={LoginBackground}
+                otherStyles={[
+                    'linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 30%)',
+                ]}>
                 <div className="login-window">
                     <div className="login-nav">
                         <ul>
@@ -269,7 +280,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                         </form>
                     </div>
                 </div>
-            </div>
+            </LazyBackground>
         );
     }
 }
