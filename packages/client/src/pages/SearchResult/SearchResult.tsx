@@ -27,6 +27,15 @@ class SearchResult extends React.Component<SearchResultProps, {}> {
         this.props.fetchResultRequest(searchKey);
     }
 
+    componentDidUpdate(prevProps: Readonly<SearchResultProps>): void {
+        // refretch result when searching with a new key
+        let searchKey = this.props.location.search;
+        if (prevProps.location.search !== searchKey) {
+            searchKey = searchKey.substring(3);
+            this.props.fetchResultRequest(searchKey);
+        }
+    }
+
     render() {
         return (
             <div>
