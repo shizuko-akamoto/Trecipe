@@ -11,6 +11,8 @@ import { showModal } from '../../redux/Modal/action';
 import TrecipePopup, { TrecipePopupType } from '../TrecipePopup/TrecipePopup';
 import Trecipe from '../../../../shared/models/trecipe';
 import { baseURL } from '../../api';
+import { LazyBackground } from '../Image/LazyBackground';
+import { isEmpty } from 'lodash';
 
 type TCProps = TCOwnProps & ReturnType<typeof mapDispatchToProps>;
 
@@ -74,30 +76,31 @@ class TrecipeCard extends React.Component<TCProps> {
         const completed = this.props.trecipe.destinations.filter((dest) => dest.completed);
         return (
             <div className="trecipeCard">
-                <div
+                <LazyBackground
                     className="tcHeaderContainer"
-                    style={{
-                        backgroundImage: this.props.trecipe.image
-                            ? `url(${baseURL}upload/${this.props.trecipe.image})`
-                            : 'none',
-                    }}>
+                    src={
+                        !isEmpty(this.props.trecipe.image)
+                            ? `${baseURL}upload/${this.props.trecipe.image}`
+                            : null
+                    }
+                    otherStyles={[
+                        'linear-gradient(180deg, rgba(255, 255, 255, 0) 35%, rgba(0, 0, 0, 0.5) 100%)',
+                    ]}>
                     <div className="tcHeader">
-                        <label className="tcTitle">
-                            {this.props.trecipe.name}
-                            {!this.props.isReadOnly && (
-                                <FontAwesomeIcon
-                                    icon={this.props.trecipe.isPrivate ? 'lock' : 'lock-open'}
-                                    className="tcPrivacy"
-                                />
-                            )}
-                        </label>
+                        <label className="tcTitle">{this.props.trecipe.name}</label>
+                        {!this.props.isReadOnly && (
+                            <FontAwesomeIcon
+                                icon={this.props.trecipe.isPrivate ? 'lock' : 'lock-open'}
+                                className="tcPrivacy"
+                            />
+                        )}
                         {!this.props.isReadOnly && (
                             <div className="tcEdit" onClick={(e) => this.onTCEditClick(e)}>
                                 <CardMenu menuItems={this.cardMenuItems} />
                             </div>
                         )}
                     </div>
-                </div>
+                </LazyBackground>
                 <div className="tcBody">
                     <div className="tcMetaData">
                         <div className="tcDate">

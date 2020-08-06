@@ -1,5 +1,6 @@
 import React, { ReactNodeArray } from 'react';
 import PhotoUploader from '../PhotoUploader/PhotoUploader';
+import { LazyBackground } from '../Image/LazyBackground';
 
 /**
  * CoverPhoto props
@@ -17,16 +18,14 @@ export class CoverPhoto extends React.Component<CoverPhotoProps> {
     render() {
         return (
             <div className="coverPhotoWrapper">
-                <div
+                <LazyBackground
                     className="coverPhotoImage"
-                    style={{
-                        backgroundImage: this.props.imageSource
-                            ? `linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 35%), 
-                     url(${this.props.imageSource})`
-                            : `none`,
-                    }}>
+                    src={this.props.imageSource}
+                    otherStyles={[
+                        'linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 35%)',
+                    ]}>
                     {this.props.children}
-                </div>
+                </LazyBackground>
                 <div className="coverPhotoBtnsWrapper">
                     {this.props.buttons}
                     {this.props.onFileChange && (

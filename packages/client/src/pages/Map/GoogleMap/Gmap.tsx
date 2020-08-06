@@ -124,6 +124,7 @@ export class GMap extends Component<GMapProps, GMapState> {
                     <div className="gmap-search-bar">
                         <SearchBarPopup
                             minWidth={20}
+                            addedDests={this.props.destinations}
                             onDestAdd={this.newDestAdd}
                             onDestRemove={this.props.onDestRemove}
                         />

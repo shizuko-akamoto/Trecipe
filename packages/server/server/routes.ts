@@ -18,7 +18,7 @@ export default function routes(app: Application): void {
         new SearchController(),
     ];
     controllers.forEach((controller: Controller) => {
-        app.use('/api/v1', controller.router);
+        app.use(`/${process.env.API_VERSION}` || '/api/v1', controller.router);
     });
     if (process.env.NODE_ENV === 'production') {
         app.get('*', (req, res) => {
