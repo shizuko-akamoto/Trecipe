@@ -6,8 +6,9 @@ import { AutoComplete, getDestModel } from '../Map/mapHelper';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
 import OverlaySpinner from '../Loading/OverlaySpinner';
 import { toast } from 'react-toastify';
+import Destination from '../../../../shared/models/destination';
 
-interface Destination {
+interface DestinationResult {
     id: string;
     name: string;
     address: string;
@@ -23,7 +24,7 @@ interface Destination {
  */
 export interface SearchBarState {
     searchKey: string;
-    results: Array<Destination>;
+    results: Array<DestinationResult>;
     resultsOpen: boolean;
     loading: boolean;
     errMsg: string;
@@ -31,6 +32,7 @@ export interface SearchBarState {
 
 export interface SearchBarProps {
     minWidth: number;
+    addedDests: Array<Destination>;
     onDestAdd: (destData: CreateNewDestinationDTO) => void;
     onDestRemove: (destinationId: string) => void;
 }
@@ -40,24 +42,26 @@ export interface SearchBarProps {
  */
 export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarState> {
     private container: RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
-    constructor(props: any) {
-        super(props);
-        this.fetchSearchResults = debounce(this.fetchSearchResults, 500);
-    }
-
-    public static defaultProps: Partial<SearchBarProps> = {
-        minWidth: 31.25,
-    };
-
+    private addedPlaceIds: Set<string>;
     private autoComplete: AutoComplete = new AutoComplete();
 
     state = {
         searchKey: '',
         resultsOpen: false,
-        results: [] as Destination[],
+        results: [] as DestinationResult[],
         loading: false,
         errMsg: '',
     };
+
+    public static defaultProps: Partial<SearchBarProps> = {
+        minWidth: 31.25,
+    };
+
+    constructor(props: SearchBarProps) {
+        super(props);
+        this.addedPlaceIds = new Set(props.addedDests.map((dest) => dest.placeId));
+        this.fetchSearchResults = debounce(this.fetchSearchResults, 500);
+    }
 
     componentDidMount(): void {
         // Register event listener to handle click outside
@@ -96,7 +100,7 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
                             id: prediction.place_id,
                             name: prediction.structured_formatting.main_text,
                             address: prediction.structured_formatting.secondary_text,
-                            isAdded: false,
+                            isAdded: this.addedPlaceIds.has(prediction.place_id),
                         };
                     }
                 );

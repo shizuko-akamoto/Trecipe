@@ -373,14 +373,16 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
 
                                     <ul className="associated-trecipes-list">
                                         {this.props.associatedTrecipes.map((trecipe: Trecipe) => (
-                                            <li
+                                            <Link
                                                 key={trecipe.uuid}
-                                                className="associated-trecipe-item">
+                                                className="router-link associated-trecipe-item"
+                                                to={`/trecipes/${trecipe.uuid}`}
+                                                target="_blank">
                                                 <TrecipeCard
                                                     trecipe={{ ...trecipe }}
                                                     isReadOnly={true}
                                                 />
-                                            </li>
+                                            </Link>
                                         ))}
                                     </ul>
                                 </div>

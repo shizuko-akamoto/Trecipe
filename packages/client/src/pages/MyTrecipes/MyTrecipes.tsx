@@ -211,7 +211,7 @@ class MyTrecipes extends React.Component<MyTrecipesProps, MyTrecipesState> {
                                         <div className="card-item" key={trecipe.uuid}>
                                             <Link
                                                 className="router-link"
-                                                to={`trecipes/${trecipe.uuid}`}>
+                                                to={`/trecipes/${trecipe.uuid}`}>
                                                 <TrecipeCard
                                                     trecipe={{ ...trecipe }}
                                                     isReadOnly={false}

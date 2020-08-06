@@ -11,8 +11,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { createLoadingSelector } from '../../redux/Loading/selector';
 import { UserActionCategory } from '../../redux/User/types';
 import OverlaySpinner from '../../components/Loading/OverlaySpinner';
+import { LazyBackground } from '../../components/Image/LazyBackground';
+import LoginBackground from './loginBackground.jpg';
 
-type RouteWithStateProps = RouteComponentProps<{}, StaticContext, { from: { pathname: string } }>;
+type RouteWithStateProps = RouteComponentProps<
+    {},
+    StaticContext,
+    { from: { pathname: string }; isLogin: boolean }
+>;
 
 type ErrorIconProps = {
     active: boolean;
@@ -146,7 +152,12 @@ class Login extends React.Component<LoginProps, LoginState> {
         const signupEmailError = errors.emailError || errors.dupEmailError;
 
         return (
-            <div className="login-wrapper">
+            <LazyBackground
+                className="login-wrapper"
+                src={LoginBackground}
+                otherStyles={[
+                    'linear-gradient(rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 30%)',
+                ]}>
                 <div className="login-window">
                     <div className="login-nav">
                         <ul>
@@ -275,7 +286,7 @@ class Login extends React.Component<LoginProps, LoginState> {
                     </div>
                     {this.props.isLoading && <OverlaySpinner size={50} />}
                 </div>
-            </div>
+            </LazyBackground>
         );
     }
 }
