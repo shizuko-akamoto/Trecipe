@@ -82,15 +82,13 @@ class TrecipeCard extends React.Component<TCProps> {
                             : 'none',
                     }}>
                     <div className="tcHeader">
-                        <label className="tcTitle">
-                            {this.props.trecipe.name}
-                            {!this.props.isReadOnly && (
-                                <FontAwesomeIcon
-                                    icon={this.props.trecipe.isPrivate ? 'lock' : 'lock-open'}
-                                    className="tcPrivacy"
-                                />
-                            )}
-                        </label>
+                        <label className="tcTitle">{this.props.trecipe.name}</label>
+                        {!this.props.isReadOnly && (
+                            <FontAwesomeIcon
+                                icon={this.props.trecipe.isPrivate ? 'lock' : 'lock-open'}
+                                className="tcPrivacy"
+                            />
+                        )}
                         {!this.props.isReadOnly && (
                             <div className="tcEdit" onClick={(e) => this.onTCEditClick(e)}>
                                 <CardMenu menuItems={this.cardMenuItems} />
