@@ -11,6 +11,7 @@ import { showModal } from '../../redux/Modal/action';
 import TrecipePopup, { TrecipePopupType } from '../TrecipePopup/TrecipePopup';
 import Trecipe from '../../../../shared/models/trecipe';
 import { baseURL } from '../../api';
+import { LazyBackground } from '../Image/LazyBackground';
 
 type TCProps = TCOwnProps & ReturnType<typeof mapDispatchToProps>;
 
@@ -74,13 +75,9 @@ class TrecipeCard extends React.Component<TCProps> {
         const completed = this.props.trecipe.destinations.filter((dest) => dest.completed);
         return (
             <div className="trecipeCard">
-                <div
+                <LazyBackground
                     className="tcHeaderContainer"
-                    style={{
-                        backgroundImage: this.props.trecipe.image
-                            ? `url(${baseURL}upload/${this.props.trecipe.image})`
-                            : 'none',
-                    }}>
+                    src={`${baseURL}upload/${this.props.trecipe.image}`}>
                     <div className="tcHeader">
                         <label className="tcTitle">
                             {this.props.trecipe.name}
@@ -97,7 +94,7 @@ class TrecipeCard extends React.Component<TCProps> {
                             </div>
                         )}
                     </div>
-                </div>
+                </LazyBackground>
                 <div className="tcBody">
                     <div className="tcMetaData">
                         <div className="tcDate">

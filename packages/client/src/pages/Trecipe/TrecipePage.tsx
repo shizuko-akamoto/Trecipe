@@ -311,7 +311,6 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                                     target="_blank"
                                     key={dest.uuid}>
                                     <DestinationCard
-                                        key={dest.uuid}
                                         destination={dest}
                                         isCompleted={canEdit && completed.has(dest.uuid)}
                                         index={index}
@@ -353,7 +352,7 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                 <div>
                     <div className="tc-header-container">
                         <CoverPhoto
-                            imageSource={`${baseURL}upload/${trecipe.image}`}
+                            imageSource={trecipe.image ? `${baseURL}upload/${trecipe.image}` : null}
                             buttons={
                                 canEdit
                                     ? [

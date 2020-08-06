@@ -2,6 +2,7 @@ import React from 'react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import './Landing.scss';
+import { LazyBackground } from '../../components/Image/LazyBackground';
 
 class Landing extends React.Component {
     private static IMAGES: string[] = [
@@ -14,13 +15,13 @@ class Landing extends React.Component {
 
     private renderSlide(imageUrl: string) {
         return (
-            <div className="intro-banner">
-                <div
+            <div className="intro-banner" key={imageUrl}>
+                <LazyBackground
                     className="intro-image"
-                    key={imageUrl}
-                    style={{
-                        backgroundImage: `linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 5%),url(${imageUrl})`,
-                    }}
+                    src={imageUrl}
+                    otherStyles={[
+                        'linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 5%)',
+                    ]}
                 />
                 <h1 className="intro-text">Trecipe</h1>
                 <svg
