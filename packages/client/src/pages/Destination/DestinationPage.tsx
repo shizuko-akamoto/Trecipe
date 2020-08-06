@@ -289,10 +289,14 @@ class DestinationPage extends React.Component<DestinationProps, DestinationState
                                             {destination.category.join(', ')}
                                         </p>
                                     </span>
-                                    <span className="dest-info-item">
-                                        <FontAwesomeIcon icon="map-marker-alt" fixedWidth />
-                                        <p className="info-text">{destination.formattedAddress}</p>
-                                    </span>
+                                    {destination.formattedAddress && (
+                                        <span className="dest-info-item">
+                                            <FontAwesomeIcon icon="map-marker-alt" fixedWidth />
+                                            <p className="info-text">
+                                                {destination.formattedAddress}
+                                            </p>
+                                        </span>
+                                    )}
                                     {destination.formattedPhoneNumber && (
                                         <span className="dest-info-item">
                                             <FontAwesomeIcon icon="phone" fixedWidth />
