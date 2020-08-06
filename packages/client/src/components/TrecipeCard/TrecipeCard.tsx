@@ -12,6 +12,7 @@ import TrecipePopup, { TrecipePopupType } from '../TrecipePopup/TrecipePopup';
 import Trecipe from '../../../../shared/models/trecipe';
 import { baseURL } from '../../api';
 import { LazyBackground } from '../Image/LazyBackground';
+import { isEmpty } from 'lodash';
 
 type TCProps = TCOwnProps & ReturnType<typeof mapDispatchToProps>;
 
@@ -77,7 +78,11 @@ class TrecipeCard extends React.Component<TCProps> {
             <div className="trecipeCard">
                 <LazyBackground
                     className="tcHeaderContainer"
-                    src={`${baseURL}upload/${this.props.trecipe.image}`}
+                    src={
+                        !isEmpty(this.props.trecipe.image)
+                            ? `${baseURL}upload/${this.props.trecipe.image}`
+                            : null
+                    }
                     otherStyles={[
                         'linear-gradient(180deg, rgba(255, 255, 255, 0) 35%, rgba(0, 0, 0, 0.5) 100%)',
                     ]}>

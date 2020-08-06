@@ -92,7 +92,7 @@ class Landing extends React.Component<RouteComponentProps & ReturnType<typeof ma
                                 </p>
                             </Fade>
                             {!this.props.isAuthenticated && (
-                                <div className="sign-up-btn">
+                                <div className="login-btn">
                                     <Button
                                         text="Login"
                                         onClick={() => this.props.history.push('/user/login')}

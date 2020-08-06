@@ -352,7 +352,9 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                 <div>
                     <div className="tc-header-container">
                         <CoverPhoto
-                            imageSource={trecipe.image ? `${baseURL}upload/${trecipe.image}` : null}
+                            imageSource={
+                                !isEmpty(trecipe.image) ? `${baseURL}upload/${trecipe.image}` : null
+                            }
                             buttons={
                                 canEdit
                                     ? [
