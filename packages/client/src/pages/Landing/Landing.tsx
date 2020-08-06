@@ -34,6 +34,7 @@ class Landing extends React.Component {
             </div>
         );
     }
+
     render() {
         return (
             <div className="container">

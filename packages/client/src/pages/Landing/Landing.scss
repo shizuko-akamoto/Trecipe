@@ -2,100 +2,73 @@
 
 .container {
     background: $tc-white;
-}
 
-.carousel-container {
-    background: white;
-    height: calc(100vh - 119px);
-    position: relative;
-}
+    .carousel-container {
+        background: $tc-white;
+        height: calc(100vh - 119px);
+        position: relative;
+    }
 
-.intro-image {
-    height: calc(100vh - 119px);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
+    .intro-banner {
+        position: relative;
+        background-color: $white-gray;
 
-.intro-text {
-    color: white;
-    position: absolute;
-    top: calc(50% - 12vh);
-    right: calc(50% - 327.5px);
-    width: 655px;
-    margin: 0.5rem 1rem;
-    font-size: 12vh;
-    font-family: $logo-font-family;
-}
+        .intro-image {
+            height: calc(100vh - 119px);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
 
-.intro-banner {
-    position: relative;
-    background-color: $white-gray;
-}
-
-.border {
-    position: absolute;
-    left: 0;
-    bottom: -50px;
-    width: 100%;
-    height: 100px;
-    fill: $tc-white;
-}
-
-.content-wrapper {
-    max-width: 1280px;
-    padding: 0 0 10rem 0;
-    margin: auto;
-
-    .main-text-wrapper {
-        text-align: center;
-        color: $mid-gray;
-
-        .main-text-header {
+        .intro-text {
+            color: $tc-white;
+            position: absolute;
+            top: calc(50% - 12vh);
+            right: calc(50% - 327.5px);
+            width: 655px;
+            margin: 0.5rem 1rem;
+            font-size: 12vh;
             font-family: $logo-font-family;
-            font-size: 3rem;
-            margin: 3rem 0;
         }
 
-        .main-text-subheader {
-            font-family: $default-font-family;
-            font-size: $subtitle-font-size;
-            margin-bottom: 3rem;
-        }
-
-        .main-text {
-            font-family: $default-font-family;
-            font-size: $default-font-size;
-            line-height: 5rem;
-            max-width: 50%;
-            margin: auto;
+        .border {
+            position: absolute;
+            left: 0;
+            bottom: -50px;
+            width: 100%;
+            height: 100px;
+            fill: $tc-white;
         }
     }
-}
 
-.carousel-root {
-    height: 100%;
-}
+    .content-wrapper {
+        max-width: 1280px;
+        padding: 0 0 10rem 0;
+        margin: auto;
 
-.carousel {
-    &.carousel-slider {
-        height: 100%;
+        .main-text-wrapper {
+            text-align: center;
+            color: $mid-gray;
+
+            .main-text-header {
+                font-family: $logo-font-family;
+                font-size: 3rem;
+                margin: 3rem 0;
+            }
+
+            .main-text-subheader {
+                font-family: $default-font-family;
+                font-size: $subtitle-font-size;
+                margin-bottom: 3rem;
+            }
+
+            .main-text {
+                font-family: $default-font-family;
+                font-size: $default-font-size;
+                line-height: 5rem;
+                max-width: 50%;
+                margin: auto;
+            }
+        }
     }
-}
-
-.slider-wrapper {
-    &.axis-horizontal {
-        height: 100%;
-    }
-}
-
-.slider {
-    height: 100%;
-}
-
-.slide {
-    &.selected {
-        height: 100%;
-    }
-    height: 100%;
 }
