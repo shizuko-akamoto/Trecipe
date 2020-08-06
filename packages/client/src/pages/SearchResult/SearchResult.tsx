@@ -70,7 +70,7 @@ class SearchResult extends React.Component<SearchResultProps, {}> {
                                                 (destination: Destination, index) => (
                                                     <li
                                                         className="card-item"
-                                                        key={destination.uuid}>
+                                                        key={destination.placeId}>
                                                         <Link
                                                             className="router-link"
                                                             to={`/destinations/${destination.placeId}`}
