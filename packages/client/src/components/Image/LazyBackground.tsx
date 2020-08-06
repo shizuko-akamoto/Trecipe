@@ -32,7 +32,8 @@ export class LazyBackground extends React.Component<LazyBackgroundProps, { src: 
     render() {
         const placeholder = this.props.placeholder ? `url(${this.props.placeholder})` : 'none';
         const imageSrc = this.state.src ? `url(${this.state.src})` : placeholder;
-        const otherStyles = this.props.otherStyles ? `${this.props.otherStyles.join(', ')},` : '';
+        const otherStyles =
+            this.props.otherStyles && this.state.src ? `${this.props.otherStyles.join(', ')},` : '';
         return (
             <div
                 className={this.props.className}

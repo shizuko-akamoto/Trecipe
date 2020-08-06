@@ -77,7 +77,10 @@ class TrecipeCard extends React.Component<TCProps> {
             <div className="trecipeCard">
                 <LazyBackground
                     className="tcHeaderContainer"
-                    src={`${baseURL}upload/${this.props.trecipe.image}`}>
+                    src={`${baseURL}upload/${this.props.trecipe.image}`}
+                    otherStyles={[
+                        'linear-gradient(180deg, rgba(255, 255, 255, 0) 35%, rgba(0, 0, 0, 0.5) 100%)',
+                    ]}>
                     <div className="tcHeader">
                         <label className="tcTitle">
                             {this.props.trecipe.name}
