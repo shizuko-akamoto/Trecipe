@@ -109,12 +109,14 @@ class TrecipeCard extends React.Component<TCProps> {
                         <p>{this.props.trecipe.description}</p>
                     </div>
                 </div>
-                <ProgressBar
-                    total={this.props.trecipe.destinations.length}
-                    completed={completed.length}
-                    showText={false}
-                    barStyle={{ borderRadius: '0 0 8px 8px' }}
-                />
+                {!this.props.isReadOnly && (
+                    <ProgressBar
+                        total={this.props.trecipe.destinations.length}
+                        completed={completed.length}
+                        showText={false}
+                        barStyle={{ borderRadius: '0 0 8px 8px' }}
+                    />
+                )}
             </div>
         );
     }
