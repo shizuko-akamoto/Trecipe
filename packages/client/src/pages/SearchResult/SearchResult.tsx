@@ -21,10 +21,18 @@ type SearchResultProps = ReturnType<typeof mapStateToProps> &
 class SearchResult extends React.Component<SearchResultProps, {}> {
     componentDidMount(): void {
         let searchKey = this.props.location.search;
-
         // search key from Router comes with "?q=", removing the first three characters corresponding to this
         searchKey = searchKey.substring(3);
         this.props.fetchResultRequest(searchKey);
+    }
+
+    componentDidUpdate(prevProps: Readonly<SearchResultProps>): void {
+        // refretch result when searching with a new key
+        let searchKey = this.props.location.search;
+        if (prevProps.location.search !== searchKey) {
+            searchKey = searchKey.substring(3);
+            this.props.fetchResultRequest(searchKey);
+        }
     }
 
     render() {
