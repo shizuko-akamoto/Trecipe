@@ -107,37 +107,39 @@ class Login extends React.Component<LoginProps, LoginState> {
             dupUsernameError: false,
             dupEmailError: false,
         };
-        this.props.user.errors.forEach((error) => {
-            switch (error.path) {
-                case '.body.email':
-                    errors.emailError = true;
-                    break;
-                case '.body.password':
-                    errors.passwordError = true;
-                    break;
-                case '.body.username':
-                    errors.usernameError = true;
-                    break;
-                case '.body.displayName':
-                    errors.displayNameError = true;
-                    break;
-                default:
-                    break;
-            }
-            switch (error.message) {
-                case 'Email or password is incorrect':
-                    errors.credentialError = true;
-                    break;
-                case 'Username already existed':
-                    errors.dupUsernameError = true;
-                    break;
-                case 'Email already existed':
-                    errors.dupEmailError = true;
-                    break;
-                default:
-                    break;
-            }
-        });
+        if (this.props.user.errors) {
+            this.props.user.errors.forEach((error) => {
+                switch (error.path) {
+                    case '.body.email':
+                        errors.emailError = true;
+                        break;
+                    case '.body.password':
+                        errors.passwordError = true;
+                        break;
+                    case '.body.username':
+                        errors.usernameError = true;
+                        break;
+                    case '.body.displayName':
+                        errors.displayNameError = true;
+                        break;
+                    default:
+                        break;
+                }
+                switch (error.message) {
+                    case 'Email or password is incorrect':
+                        errors.credentialError = true;
+                        break;
+                    case 'Username already existed':
+                        errors.dupUsernameError = true;
+                        break;
+                    case 'Email already existed':
+                        errors.dupEmailError = true;
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
 
         const loginPasswordError = errors.credentialError || errors.passwordError;
         const signupUsernameError = errors.usernameError || errors.dupUsernameError;

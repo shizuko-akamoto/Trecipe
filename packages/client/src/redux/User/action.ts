@@ -6,6 +6,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { RootState } from '..';
 import UserService from '../../services/userService';
 import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
 export const login = (userData: LoginDTO): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
@@ -23,6 +24,7 @@ export const login = (userData: LoginDTO): AppThunk => {
                             reason: err.toString(),
                         })
                     );
+                    toast(`Failed to login [${err.toString()}]`, { type: toast.TYPE.ERROR });
                 }
             });
     };
@@ -48,6 +50,7 @@ export const signup = (userData: CreateUserDTO): AppThunk => {
                             reason: err.toString(),
                         })
                     );
+                    toast(`Failed to sign up [${err.toString()}]`, { type: toast.TYPE.ERROR });
                 }
             });
     };
@@ -64,6 +67,7 @@ export const logout = (callback?: () => void): AppThunk => {
             .catch((err: AxiosError) => {
                 if (err.response) {
                     dispatch(setError(err.response.data.errors));
+                    toast(`Failed to logout [${err.toString()}]`, { type: toast.TYPE.ERROR });
                 }
             });
     };
