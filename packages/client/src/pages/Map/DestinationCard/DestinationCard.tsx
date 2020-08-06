@@ -29,36 +29,38 @@ export class DestinationCard extends React.Component<DCProps> {
                                 <FontAwesomeIcon icon="check" />
                             </span>
                         )}
-                        <span className="dest-card-edit" onClick={(e) => e.preventDefault()}>
-                            <CardMenu
-                                menuItems={[
-                                    {
-                                        id: 1,
-                                        text: 'Complete',
-                                        icon: 'check',
-                                        onClick: (e) => {
-                                            if (this.props.onClickComplete) {
-                                                this.props.onClickComplete(destModel, e);
-                                            }
+                        {!this.props.isReadOnly && (
+                            <span className="dest-card-edit" onClick={(e) => e.preventDefault()}>
+                                <CardMenu
+                                    menuItems={[
+                                        {
+                                            id: 1,
+                                            text: 'Complete',
+                                            icon: 'check',
+                                            onClick: (e) => {
+                                                if (this.props.onClickComplete) {
+                                                    this.props.onClickComplete(destModel, e);
+                                                }
+                                            },
+                                            disabled: this.props.isCompleted,
                                         },
-                                        disabled: this.props.isCompleted,
-                                    },
-                                    {
-                                        id: 2,
-                                        text: 'Remove',
-                                        icon: ['far', 'trash-alt'],
-                                        onClick: (e) => {
-                                            if (this.props.onClickDelete) {
-                                                this.props.onClickDelete(
-                                                    this.props.destination.uuid,
-                                                    e
-                                                );
-                                            }
+                                        {
+                                            id: 2,
+                                            text: 'Remove',
+                                            icon: ['far', 'trash-alt'],
+                                            onClick: (e) => {
+                                                if (this.props.onClickDelete) {
+                                                    this.props.onClickDelete(
+                                                        this.props.destination.uuid,
+                                                        e
+                                                    );
+                                                }
+                                            },
                                         },
-                                    },
-                                ]}
-                            />
-                        </span>
+                                    ]}
+                                />
+                            </span>
+                        )}
                     </div>
                 </div>
                 <div className="dest-card-body">
