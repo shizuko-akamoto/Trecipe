@@ -8,6 +8,9 @@ import { RootState } from '../../redux';
 import { signup, login } from '../../redux/User/action';
 import { LoginDTO, CreateUserDTO } from '../../../../shared/models/user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { createLoadingSelector } from '../../redux/Loading/selector';
+import { UserActionCategory } from '../../redux/User/types';
+import OverlaySpinner from '../../components/Loading/OverlaySpinner';
 
 type RouteWithStateProps = RouteComponentProps<{}, StaticContext, { from: { pathname: string } }>;
 
@@ -89,7 +92,7 @@ class Login extends React.Component<LoginProps, LoginState> {
 
     render() {
         // Return the user back to the page before login
-        const { from } = this.props.location.state || { from: { pathname: '/' } };
+        const { from } = this.props.location.state || { from: { pathname: '/mytrecipes' } };
         if (this.props.user.isAuthenticated) {
             return <Redirect to={from} />;
         }
@@ -268,14 +271,19 @@ class Login extends React.Component<LoginProps, LoginState> {
                             <button onClick={this.createAccount}>Sign up</button>
                         </form>
                     </div>
+                    {this.props.isLoading && <OverlaySpinner size={50} />}
                 </div>
             </div>
         );
     }
 }
 
+// when user sign up / sign in
+const loadingSelector = createLoadingSelector([UserActionCategory.SET_USER]);
+
 const mapStateToProps = (state: RootState) => ({
     user: state.user,
+    isLoading: loadingSelector(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
