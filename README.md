@@ -35,27 +35,27 @@ Not Complete: :x:
 
 ## Unit 1-5 Learning Goals:
 ### Unit 1: HTML, CSS, JS
-By setting up global variables with Mixins, a SCSS functionality, for theme colors and font sizes, better codability was made possible. Since we had customised css design for the entire project, this feature was important for us to maintain consistency in our code.
+By setting up global variables with Mixins, a SCSS functionality for theme colors and font sizes, better codability was made possible. Since we had customised css designs for the entire project, this tool was important for us to maintain consistency in the look of our website.
 We also decided to use TypeScript over JavaScript when developing our project to ensure type safety.
 
 ### Unit 2: React & Redux
-Created more than 30 reusable react components with TypeScript such as TrecipeCards, DestinationCards, Button with redux, which allowed data change without reloading the entire page every time. Restricting types on the component props also increases robustness in our webapp.
+Created more than 30 reusable react components with TypeScript such as the TrecipeCards, DestinationCards, and Buttons. Restricting types on the component props with the help ot TS also increased robustness in our webapp. We also used redux to allow data change without reloading the entire page every time.
 
 ### Unit 3: Mongo DB
-Set-up MongoDB for a NoSQL Database to host all data related Trecipe, destination, user information, and ratings etc. Mongoose provides a `virtual` attribute to give developers flexibilities, so that a given model’s values can be set either manually or automatically with defined functionality. <Example> When implementing destinations in Trecipes, many-to-many relationship is easily achieved by use of Mongoose Virtual.
+We set up MongoDB for a NoSQL Database to host all data related to Trecipe, destination, user information, and ratings etc. Mongoose provides a `virtual` attribute to give developers flexibilities, so that a given model’s values can be set either manually or automatically with defined functionality. <Example> When implementing destinations in Trecipes, many-to-many relationship is easily achieved by use of Mongoose Virtual.
 
 ### Unit 4: Node & Express
-Used Express with typescript to implement endpoints queried by our react frontend. Extended by OpenAPIValidation middleware to validate incoming requests and outgoing responses. 
+Used Express with TypeScript to implement endpoints queried by our react frontend. We also attached OpenAPIValidation middleware to our endpoints for validating incoming requests and outgoing responses. This extension enabled better visibility of errors that occured during querying.
 
 ### Unit 5: Release Engineering
-Deployed and hosted Trecipe website on Heroku which is beginner/start-up friendly. GitHub integration makes deployment workflow simple and prevents build breaks.
+Deployed and hosted Trecipe website on Heroku which is beginner/start-up friendly. We also used Heroku's GitHub integration to automate the deployment process, which lead to increased maintainabiliy and less build breaks.
 
 ## Above and Beyond Functionalities
 ### Custom CSS
-We chose not to use ready made components/designs for our site, instead most of our styles are done via custom css. This allowed us to have more flexibility in terms of styling, as well as maintaining an overall consistent theme that aligns with the setting of this project, making our site more memorable and outstanding.
+We chose not to use ready made components/designs for our site, instead, most of our styles are done via custom css. This allowed us to have more flexibility in terms of styling, as well as maintaining an overall consistent theme that aligns with the setting of this project, making our site more memorable and outstanding.
 
 ### Integration with Google API
-We have very good integration with Google API, we use Google to look up destinations, pull reviews, and also images for destinations. This integration enabled users to perform powerful search, see the destinations being displayed on Google Map, and allows us to display information-rich pages that will be useful for users.
+We have very good integration with Google API, we use Google to look up destinations, pull reviews as well as images for destinations. This integration enabled our users to perform powerful search, see the destinations being displayed on Google Map, and allowed us to display information-rich pages that will be useful for users.
 
 ## Tasks breakdown
 Tasks have been broken-down into issues in this repository. [See Issues!](https://github.com/shizuko-akamoto/Trecipe/issues)
