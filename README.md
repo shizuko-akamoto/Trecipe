@@ -57,6 +57,20 @@ We chose not to use ready made components/designs for our site, instead, most of
 ### Integration with Google API
 We have very good integration with Google API, we use Google to look up destinations, pull reviews as well as images for destinations. This integration enabled our users to perform powerful search, see the destinations being displayed on Google Map, and allowed us to display information-rich pages that will be useful for users.
 
+## List of Contributions
+
+### Shizuko Akamoto (z8c1b): 
+Mainly worked on integrating the many sub-components into pages, making sure the components were logically connected, both to each other and to the backend. Plus, did a lot of code architecture management and CI/CD setup, including express/react integration, husky+lint configuration and heroku deployment.
+
+### Yun Lin (k7y0b): 
+Implemented component and backend for user rating and searching, and was responsible for filtering logic. Also produced some documentations for spikes. 
+
+### Tianyan Zhu (c8y0b): 
+Implemented front-end components, including Trecipe Cards, Search Result Page, etc. Drafted part of UI design such as Search Result Page and Login/Sign on component.
+
+### Jonathan (o1u1b): 
+Developed session less authentication (private route, protected endpoints, user related endpoints), integrated google API to display static/dynamic maps and linked them to destinations, implemented some front end components, including the login page, menu, destination info window, etc. Reorganized the project structure and setup Prettier with pre commit hook.
+
 ## Tasks breakdown
 Tasks have been broken-down into issues in this repository. [See Issues!](https://github.com/shizuko-akamoto/Trecipe/issues)
 
