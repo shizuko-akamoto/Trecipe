@@ -44,7 +44,7 @@ We also decided to use TypeScript over JavaScript when developing our project to
 Created more than 30 reusable react components with TypeScript such as the TrecipeCards, DestinationCards, and Buttons. Restricting types on the component props with the help of TS also increased robustness in our webapp. We also used redux to allow data change without reloading the entire page every time.
 
 ### Unit 3: Mongo DB
-We set up MongoDB for a NoSQL Database to host all data related to Trecipe, destination, user information, and ratings etc. Mongoose provides a `virtual` attribute to give developers flexibilities, so that a given model’s values can be set either manually or automatically with defined functionality. <Example> When implementing destinations in Trecipes, many-to-many relationship is easily achieved by the use of Mongoose Virtual.
+We set up MongoDB for a NoSQL Database to host all data related to Trecipe, destination, user information, and ratings etc, as NoSQL creates more flexibility in terms of having dynamic schemas for unstructured data. Mongoose provides a `virtual` attribute to give developers flexibilities, so that a given model’s values can be set either manually or automatically with defined functionality. <Example> When implementing destinations in Trecipes, many-to-many relationship is easily achieved by the use of Mongoose Virtual.
 
 ### Unit 4: Node & Express
 Used Express with TypeScript to implement endpoints queried by our react frontend. We also attached OpenAPIValidation middleware to our endpoints for validating incoming requests and outgoing responses. This extension enabled better visibility of errors that occurred during querying.
