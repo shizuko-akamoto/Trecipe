@@ -78,8 +78,9 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
             this.setState({ searchKey: searchKey, results: [], errMsg: '' });
         } else {
             if (this.timer) clearTimeout(this.timer);
+            this.setState({ searchKey: searchKey });
             this.timer = window.setTimeout(() => {
-                this.setState({ searchKey: searchKey, loading: true, errMsg: '' }, () =>
+                this.setState({ loading: true, errMsg: '' }, () =>
                     this.fetchSearchResults(searchKey, this.state.filter)
                 );
             }, 500);
@@ -192,11 +193,14 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
                         className="search-input"
                         onChange={this.handleOnSearchInputChange.bind(this)}
                     />
-                    <button type="submit" className="search-button">
-                        <Link className="router-link" to={`/search?q=${this.state.searchKey}`}>
+                    <Link
+                        className="router-link"
+                        to={`/search?q=${this.state.searchKey}`}
+                        onClick={(e) => this.setState({ resultsOpen: false })}>
+                        <button type="submit" className="search-button">
                             <FontAwesomeIcon icon="search" fixedWidth />
-                        </Link>
-                    </button>
+                        </button>
+                    </Link>
                 </form>
                 {this.renderSearchResults()}
             </div>

@@ -56,7 +56,8 @@ class SearchService {
                 return Promise.resolve(destiations);
             })
             .catch((err: any) => {
-                return Promise.reject(err);
+                // resolve silently when google place request fails
+                return Promise.resolve([]);
             });
     }
 
