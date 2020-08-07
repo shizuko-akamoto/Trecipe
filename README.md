@@ -1,6 +1,8 @@
 # Trecipe
-
 CPSC 436I Project: Team2 
+
+**Trecipe lets you explore destinations all around the world, and mix and match different ingredients to build your next dream vacation. See what other travel experts have come up with and even integrate their trecipes into your own.**
+
 
 ## Project description
 
