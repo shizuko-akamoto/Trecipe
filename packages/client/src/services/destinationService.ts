@@ -40,7 +40,7 @@ class DestinationService {
             .then((res: AxiosResponse<Destination>) => {
                 return Promise.resolve(res.data);
             })
-            .then((err) => {
+            .catch((err) => {
                 return Promise.reject(err);
             });
     }
