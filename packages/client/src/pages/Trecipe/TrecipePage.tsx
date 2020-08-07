@@ -162,8 +162,6 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
     }
 
     private onDestAddClick() {
-        // TODO: Modal is moved to here from SearchBarPopup so that the searchbar can be reused in map
-        // Might be a good idea to refactor SearchBarPopup and rename it
         this.props.showModal(
             <Modal>
                 <SearchBarPopup
@@ -252,8 +250,6 @@ class TrecipePage extends React.Component<TrecipeProps, TrecipeState> {
                         />
                     );
                 } else {
-                    // TODO Throw unauthenticated error!
-                    // For now pass a stub here
                     this.updateTrecipeDestOnComplete(destination.uuid, true, undefined);
                 }
             }
