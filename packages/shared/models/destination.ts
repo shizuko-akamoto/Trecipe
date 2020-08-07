@@ -39,11 +39,17 @@ export function getIcon(category: DestinationCategory): IconProp {
  */
 export type Rating = 0 | 1 | 2 | 3 | 4 | 5;
 
+/**
+ * User rating with username of rater and rating
+ */
 export type UserRating = {
     userId: string,
     rating: Rating,
 }
 
+/**
+ * Destination interface
+ */
 export default interface Destination {
     uuid: string;
     name: string;

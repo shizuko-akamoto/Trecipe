@@ -18,6 +18,8 @@ export const updateTrecipe = (trecipe: Trecipe) => {
     return typedAction(TrecipeActionTypes.UPDATE_TRECIPE_SUCCESS, trecipe);
 };
 
+/**----- Sends trecipe requests to server and dispatches trecipe actions with results -----**/
+
 export const fetchTrecipeRequest = (id: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         dispatch(typedAction(TrecipeActionTypes.FETCH_TRECIPE_REQUEST));

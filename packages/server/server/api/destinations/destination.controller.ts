@@ -9,6 +9,9 @@ import axios from 'axios';
 import logger from '../../common/logger';
 import { passportAuth, passportAuthAnon } from '../../common/passport/passportUtils';
 
+/**
+ * Destination Controller
+ */
 class DestinationController implements Controller {
     public readonly path = '/destinations';
     public readonly router = Router();
@@ -18,6 +21,9 @@ class DestinationController implements Controller {
         this.initializeRoutes();
     }
 
+    /**
+     * Registers each path in destination routes
+     */
     private initializeRoutes() {
         this.router.post(this.path, passportAuth, this.createDestination.bind(this));
         this.router.post(`${this.path}/rate/:id`, this.updateDestinationUserRating.bind(this));
@@ -30,6 +36,10 @@ class DestinationController implements Controller {
         this.router.get(`${this.path}/:id`, this.getDestinationById.bind(this));
     }
 
+    /**
+     * Queries google place photo api to fetch photo reference strings
+     * @param placeId: place id to fetch photos for
+     */
     private fetchPhotoRefs(placeId: string) {
         const url = new URL('https://maps.googleapis.com/maps/api/place/details/json');
         const urlParams = new URLSearchParams({
@@ -47,6 +57,11 @@ class DestinationController implements Controller {
         });
     }
 
+    /**
+     * Creates a new destination record.
+     * Fills in photoRefs with urls client can query to retreive photos.
+     * Initialize userRatings, uuid, and description with default values.
+     */
     private createDestination(req: Request, res: Response, next: NextFunction) {
         const dest: CreateNewDestinationDTO = req.body;
         this.fetchPhotoRefs(dest.placeId)
@@ -78,6 +93,9 @@ class DestinationController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Retrieves all destinations contained in a trecipe of given uuid
+     */
     private getDestinationsByTrecipeId(req: Request, res: Response, next: NextFunction) {
         const trecipeUUID: string = req.query.id as string;
         DestinationService.getDestinationsByTrecipeId(trecipeUUID, req.user)
@@ -87,6 +105,9 @@ class DestinationController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Gets a destination by its google place id
+     */
     private getDestinationByPlaceId(req: Request, res: Response, next: NextFunction) {
         const placeId: string = req.query.placeId as string;
         DestinationService.getDestinationByPlaceId(placeId)
@@ -96,6 +117,9 @@ class DestinationController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Gets a destination by its uuid
+     */
     private getDestinationById(req: Request, res: Response, next: NextFunction) {
         DestinationService.getDestinationById(req.params.id)
             .then((dest: Destination) => {
@@ -104,6 +128,9 @@ class DestinationController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Update a destination of given uuid with new user rating entry
+     */
     private updateDestinationUserRating(req: Request, res: Response, next: NextFunction) {
         DestinationService.getDestinationById(req.params.id)
             .then((dest: Destination) => {

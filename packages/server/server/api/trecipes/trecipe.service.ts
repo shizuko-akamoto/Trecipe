@@ -133,6 +133,8 @@ class TrecipeService {
             )
             .then((trecipeToCopy: Trecipe) => {
                 if (trecipeToCopy) {
+                    // if the copied trecipe is not owned by current authenticated user but is public,
+                    // go ahead and perform the copy
                     const isOwner = trecipeToCopy.owner === user.username;
                     if (isOwner || !trecipeToCopy.isPrivate) {
                         const copy: Trecipe = {
@@ -144,6 +146,7 @@ class TrecipeService {
                             collaborators: [],
                             image: trecipeToCopy.image,
                             destinations: trecipeToCopy.destinations.map((dest) => {
+                                // reset completion status to false
                                 return {
                                     destUUID: dest.destUUID,
                                     completed: isOwner ? dest.completed : false,

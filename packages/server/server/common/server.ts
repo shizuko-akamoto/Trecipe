@@ -57,6 +57,7 @@ export default class ExpressServer {
             app.use(express.static(`${root}/public`));
         }
 
+        // set up mongoose connection
         const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
         const connection = mongoose.connect(
             `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`,
@@ -73,6 +74,7 @@ export default class ExpressServer {
             exit(1);
         });
 
+        // initialize grid fs storage for image uploads to MongoDB
         const storage = new GridFsStorage({
             db: connection,
             file: (req, file) => {

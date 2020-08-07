@@ -9,6 +9,9 @@ import Destination from '../../../../shared/models/destination';
 import logger from '../../common/logger';
 import { mapToSearchResult } from './search.interface';
 
+/**
+ * Search controller
+ */
 class SearchController implements Controller {
     public readonly path = '/search';
     public readonly destinationPath = '/destinations';
@@ -31,6 +34,10 @@ class SearchController implements Controller {
         );
     }
 
+    /**
+     * Performs a generic search on all resources (trecipes, destinations, user),
+     * and responds with SearchResult object containing the found resources
+     */
     private performSearch(req: Request, res: Response, next: NextFunction) {
         const keyword = req.params.keyword;
         const offset = Number(req.query.offset as string);
@@ -49,6 +56,9 @@ class SearchController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Performs a search with trecipe scope.
+     */
     private performTrecipeSearch(req: Request, res: Response, next: NextFunction) {
         const keyword = req.params.keyword;
         const limit = Number(req.query.limit);
@@ -61,6 +71,9 @@ class SearchController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Performs a search with destination scope
+     */
     private performDestinationSearch(req: Request, res: Response, next: NextFunction) {
         const keyword = req.params.keyword;
         const limit = Number(req.query.limit);

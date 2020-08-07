@@ -7,6 +7,9 @@ import { passportAuth, signJwt } from '../../common/passport/passportUtils';
 import { Unauthorized } from 'express-openapi-validator';
 import logger from '../../common/logger';
 
+/**
+ * User controller
+ */
 class UserController implements Controller {
     public readonly path = '/users';
     public readonly router = Router();
@@ -23,6 +26,9 @@ class UserController implements Controller {
         this.router.get(`${this.path}`, passportAuth, this.getUser.bind(this));
     }
 
+    /**
+     * Signs up a new user
+     */
     private signup(req: Request, res: Response, next: NextFunction) {
         const createNewDTO: CreateUserDTO = req.body;
         const newUser: User = {
@@ -31,6 +37,7 @@ class UserController implements Controller {
             profilePic: '',
         };
 
+        // use Bcrypt to hash user's password for storage
         Bcrypt.hash(newUser.password, 12, function (err, hash) {
             if (err) {
                 return next(err);
@@ -101,6 +108,9 @@ class UserController implements Controller {
             );
     }
 
+    /**
+     * Logs out the currently authenticated user
+     */
     private logout(req: Request, res: Response) {
         const responseJson: UserResponse = {
             isAuthenticated: false,
@@ -120,6 +130,9 @@ class UserController implements Controller {
         res.status(200).json(responseJson);
     }
 
+    /**
+     * Gets the current authenticated user
+     */
     private getUser(req: Request, res: Response) {
         const user = req.user as User;
         const responseJson: UserResponse = {
@@ -134,6 +147,9 @@ class UserController implements Controller {
         res.status(200).json(responseJson);
     }
 
+    /**
+     * Performs update on current authenticated user
+     */
     private updateUser(req: Request, res: Response, next: NextFunction) {
         const requestData: Partial<User> = req.body;
         const user = req.user as User;

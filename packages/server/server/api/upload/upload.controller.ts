@@ -3,6 +3,9 @@ import mongoose from 'mongoose';
 import { NotFound } from 'express-openapi-validator/dist';
 import logger from '../../common/logger';
 
+/**
+ * Upload controller
+ */
 class UploadController {
     public readonly path = '/upload';
     public readonly router = Router();
@@ -18,6 +21,9 @@ class UploadController {
         this.router.get(`${this.path}/:filename`, this.getFile.bind(this));
     }
 
+    /**
+     * Creates a GFS bucket to store uplaoded images
+     */
     private createGFSStream() {
         mongoose.connection.once('open', () => {
             this.gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
@@ -27,6 +33,9 @@ class UploadController {
         });
     }
 
+    /**
+     * Uploads an image file to MongoDB
+     */
     private uploadFile(req: Request, res: Response, next: NextFunction) {
         if (!req.file) {
             logger.warn(`failed to upload file: file not found`);
@@ -39,6 +48,10 @@ class UploadController {
         }
     }
 
+    /**
+     * Retrieves image of given filename from mongoDB
+     * Image data is streamed into response
+     */
     private getFile(req: Request, res: Response, next: NextFunction) {
         const filename = req.params.filename;
         if (!this.gfs) {

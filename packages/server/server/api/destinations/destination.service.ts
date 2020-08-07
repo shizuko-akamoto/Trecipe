@@ -8,6 +8,9 @@ import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
 import { TrecipeNotFound } from '../trecipes/trecipe.error';
 import { User } from '../../../../shared/models/user';
 
+/**
+ * Destination service interacts with mongoose
+ */
 class DestinationService {
     public createDestination(destData: Destination) {
         return destinationModel
