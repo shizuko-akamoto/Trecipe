@@ -27,6 +27,29 @@ Our stretch goals include adding collaborators to any bucket list, viewing popul
 |          | Allow full review of destination (blog-style) upon check-off                                                           | :x:                     |
 |          | Allow user to rate a destination upon checking off                                                                     | :heavy_check_mark:      |
 
+**Legend:**
+Completed: :heavy_check_mark: 
+Amended: :large_orange_diamond:
+Not Complete: :x:
+
+
+## Unit 1-5 Learning Goals:
+### Unit 1: HTML, CSS, JS
+By setting up global variables with Mixins, a SCSS functionality, for theme colors and font sizes, better codability was made possible. Since we had customised css design for the entire project, this feature was important for us to maintain consistency in our code.
+We also decided to use TypeScript over JavaScript when developing our project to ensure type safety.
+
+### Unit 2: React & Redux
+Created more than 30 reusable react components with TypeScript such as TrecipeCards, DestinationCards, Button with redux, which allowed data change without reloading the entire page every time. Restricting types on the component props also increases robustness in our webapp.
+
+### Unit 3: Mongo DB
+Set-up MongoDB for a NoSQL Database to host all data related Trecipe, destination, user information, and ratings etc. Mongoose provides a `virtual` attribute to give developers flexibilities, so that a given model’s values can be set either manually or automatically with defined functionality. <Example> When implementing destinations in Trecipes, many-to-many relationship is easily achieved by use of Mongoose Virtual.
+
+### Unit 4: Node & Express
+Used Express with typescript to implement endpoints queried by our react frontend. Extended by OpenAPIValidation middleware to validate incoming requests and outgoing responses. 
+
+### Unit 5: Release Engineering
+Deployed and hosted Trecipe website on Heroku which is beginner/start-up friendly. GitHub integration makes deployment workflow simple and prevents build breaks.
+
 
 
 ## Tasks breakdown
