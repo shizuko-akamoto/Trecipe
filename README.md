@@ -61,6 +61,7 @@ We have very good integration with Google API, we use Google to look up destinat
 
 ## Next steps
 Some of the functionality that we wanted to implement include adding collaborators to a bucket list, displaying popular bucket lists, and allowing full review of a destination upon checkoff. The UI could also be more responsive, all content on the webpage should adjust smoothly based on the screen size.
+We also have a system of tracking any improvments each of us realizes, as github issues. With this system, we have better visibility of future development and can make continuous improvements on our project. Some sample issues are: [#74](https://github.com/shizuko-akamoto/Trecipe/issues/74), [#95](https://github.com/shizuko-akamoto/Trecipe/issues/95)
 
 ## List of Contributions
 
