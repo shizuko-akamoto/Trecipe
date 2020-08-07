@@ -50,7 +50,12 @@ Used Express with typescript to implement endpoints queried by our react fronten
 ### Unit 5: Release Engineering
 Deployed and hosted Trecipe website on Heroku which is beginner/start-up friendly. GitHub integration makes deployment workflow simple and prevents build breaks.
 
+## Above and Beyond Functionalities
+### Custom CSS
+We chose not to use ready made components/designs for our site, instead most of our styles are done via custom css. This allowed us to have more flexibility in terms of styling, as well as maintaining an overall consistent theme that aligns with the setting of this project, making our site more memorable and outstanding.
 
+### Integration with Google API
+We have very good integration with Google API, we use Google to look up destinations, pull reviews, and also images for destinations. This integration enabled users to perform powerful search, see the destinations being displayed on Google Map, and allows us to display information-rich pages that will be useful for users.
 
 ## Tasks breakdown
 Tasks have been broken-down into issues in this repository. [See Issues!](https://github.com/shizuko-akamoto/Trecipe/issues)
