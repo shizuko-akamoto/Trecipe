@@ -13,6 +13,40 @@ import { updateTrecipe } from '../Trecipe/action';
 import { UpdateDestinationRatingDTO } from '../../../../shared/models/updateDestinationRatingDTO';
 import { toast } from 'react-toastify';
 
+export const fetchByTrecipeId = (trecipeId: string, destinations: Array<Destination>) => {
+    return typedAction(DestinationsActionTypes.FETCH_DESTS_BY_TRECIPE_ID_SUCCESS, {
+        trecipeId: trecipeId,
+        dests: destinations,
+    });
+};
+
+export const addDestination = (trecipeId: string, destination: Destination) => {
+    return typedAction(DestinationsActionTypes.ADD_DESTINATION_SUCCESS, {
+        trecipeId: trecipeId,
+        dest: destination,
+    });
+};
+
+export const removeDestination = (trecipeId: string, destinationId: string) => {
+    return typedAction(DestinationsActionTypes.REMOVE_DESTINATION_SUCCESS, {
+        trecipeId: trecipeId,
+        destinationId: destinationId,
+    });
+};
+
+export const updateDestination = (trecipeId: string, destination: Destination) => {
+    return typedAction(DestinationsActionTypes.UPDATE_DESTINATION_SUCCESS, {
+        trecipeId: trecipeId,
+        destination: destination,
+    });
+};
+
+export const fetchDestinationByPlaceId = (destination: Destination) => {
+    return typedAction(DestinationsActionTypes.FETCH_DESTINATION_BY_PLACE_ID_SUCCESS, {
+        dest: destination,
+    });
+};
+
 /**----- Sends destination requests to server and dispatches destination actions with results -----**/
 
 export const getDestinationsByTrecipeId = (trecipeId: string): AppThunk => {
@@ -161,40 +195,6 @@ export const rateDestinationRequest = (
                 );
             });
     };
-};
-
-export const fetchByTrecipeId = (trecipeId: string, destinations: Array<Destination>) => {
-    return typedAction(DestinationsActionTypes.FETCH_DESTS_BY_TRECIPE_ID_SUCCESS, {
-        trecipeId: trecipeId,
-        dests: destinations,
-    });
-};
-
-export const addDestination = (trecipeId: string, destination: Destination) => {
-    return typedAction(DestinationsActionTypes.ADD_DESTINATION_SUCCESS, {
-        trecipeId: trecipeId,
-        dest: destination,
-    });
-};
-
-export const removeDestination = (trecipeId: string, destinationId: string) => {
-    return typedAction(DestinationsActionTypes.REMOVE_DESTINATION_SUCCESS, {
-        trecipeId: trecipeId,
-        destinationId: destinationId,
-    });
-};
-
-export const updateDestination = (trecipeId: string, destination: Destination) => {
-    return typedAction(DestinationsActionTypes.UPDATE_DESTINATION_SUCCESS, {
-        trecipeId: trecipeId,
-        destination: destination,
-    });
-};
-
-export const fetchDestinationByPlaceId = (destination: Destination) => {
-    return typedAction(DestinationsActionTypes.FETCH_DESTINATION_BY_PLACE_ID_SUCCESS, {
-        dest: destination,
-    });
 };
 
 export type DestinationsAction = ReturnType<

@@ -86,11 +86,19 @@ class TrecipeService {
         });
     }
 
+    /**
+     * Sends a request to get trecipes containing a particular destination
+     * @param placeId: place id of destination of interest
+     * @param limit: limit on number of results returned
+     * @param onlyOwned: true if we want to restrict results to trecipes owned by the user
+     */
     public fetchAssociatedTrecipes(
         placeId: string,
         limit?: number,
         onlyOwned?: boolean
     ): Promise<Array<Trecipe>> {
+        // call different endpoint depending on whether we want to fetch public associated trecipes,
+        // or owned trecipes
         const endpoint = onlyOwned
             ? `${this.apiEndpoint}/my-associated`
             : `${this.apiEndpoint}/associated`;

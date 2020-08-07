@@ -11,6 +11,8 @@ export const loadResult = (results: SearchResultModel) => {
     return typedAction(SearchResultActionTypes.LOAD_SEARCH_RESULTS_SUCCESS, results);
 };
 
+/**----- Sends search requests to server and dispatches search actions with results -----**/
+
 export const fetchResultRequest = (searchKey: string): AppThunk => {
     return (dispatch: ThunkDispatch<RootState, unknown, Action<string>>) => {
         dispatch(typedAction(SearchResultActionTypes.LOAD_SEARCH_RESULTS_REQUEST));

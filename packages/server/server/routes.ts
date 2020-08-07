@@ -17,10 +17,12 @@ export default function routes(app: Application): void {
         new PhotoController(),
         new SearchController(),
     ];
+    // register each routes in controllers
     controllers.forEach((controller: Controller) => {
         app.use(`/${process.env.API_VERSION}` || '/api/v1', controller.router);
     });
     if (process.env.NODE_ENV === 'production') {
+        // catch all - if path does not match any of the defined routes in prod, we serve our react frontend
         app.get('*', (req, res) => {
             res.sendFile(path.join(__dirname, '../../build/index.html'));
         });

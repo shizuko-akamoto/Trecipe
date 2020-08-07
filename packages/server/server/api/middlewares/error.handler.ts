@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 
+/**
+ * Generic error handler that responds with given error status code or by default, 500
+ */
 // eslint-disable-next-line no-unused-vars, no-shadow
 export default function errorHandler(
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

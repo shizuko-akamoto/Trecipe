@@ -13,6 +13,10 @@ type GetDestinationsResponse = Array<{
 class DestinationService {
     private apiEndpoint = 'destinations';
 
+    /**
+     * Gets destinations contained in a trecipe
+     * @param trecipeId: uuid of trecipe
+     */
     public getDestinationsByTrecipeId(trecipeId: string): Promise<Array<Destination>> {
         return API.get<GetDestinationsResponse>(`${this.apiEndpoint}/in`, {
             params: {
@@ -27,14 +31,24 @@ class DestinationService {
             });
     }
 
+    /**
+     * Creates a new destination
+     * @param destData: Destination data for this destination
+     */
     public createDestination(destData: CreateNewDestinationDTO): Promise<Destination> {
-        return API.post<Destination>(this.apiEndpoint, destData).then(
-            (res: AxiosResponse<Destination>) => {
+        return API.post<Destination>(this.apiEndpoint, destData)
+            .then((res: AxiosResponse<Destination>) => {
                 return Promise.resolve(res.data);
-            }
-        );
+            })
+            .catch((err) => {
+                return Promise.reject(err);
+            });
     }
 
+    /**
+     * Gets destination by google place id
+     * @param placeId: google place id to fetch destination data for
+     */
     public getDestinationByPlaceId(placeId: string): Promise<Destination> {
         return API.get<Destination>(this.apiEndpoint, {
             params: {
@@ -49,6 +63,11 @@ class DestinationService {
             });
     }
 
+    /**
+     * Updates destination with new rating entry
+     * @param destId: destination uuid
+     * @param updateRatingData: new rating
+     */
     public updateDestinationRating(
         destId: string,
         updateRatingData: UpdateDestinationRatingDTO

@@ -8,6 +8,9 @@ import { passportAuth, passportAuthAnon } from '../../common/passport/passportUt
 import { User } from '../../../../shared/models/user';
 import UserService from '../user/user.service';
 
+/**
+ * Trecipe controller
+ */
 class TrecipeController implements Controller {
     public readonly path = '/trecipes';
     public readonly router = Router();
@@ -31,6 +34,9 @@ class TrecipeController implements Controller {
         this.router.put(`${this.path}/:id`, passportAuth, this.updateTrecipeById.bind(this));
     }
 
+    /**
+     * Retrieves all trecipes owned by the authorized user
+     */
     private getAllTrecipes(req: Request, res: Response, next: NextFunction) {
         const user = req.user as User;
         TrecipeService.getAll(user)
@@ -40,6 +46,10 @@ class TrecipeController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Creates a new trecipe and responds with the newly created trecipe.
+     * Trecipe holds initial default values, including a newly assigned uuid
+     */
     private createTrecipe(req: Request, res: Response, next: NextFunction) {
         const createNewDTO: CreateNewTrecipeDTO = req.body;
         const user = req.user as User;
@@ -67,6 +77,9 @@ class TrecipeController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Gets a trecipe by its uuid
+     */
     private getTrecipeById(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.params.id;
         TrecipeService.getTrecipeById(uuid, req.user)
@@ -76,6 +89,9 @@ class TrecipeController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Deletes a trecipe by its uuid
+     */
     private deleteTrecipeById(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.params.id;
         const user = req.user as User;
@@ -95,6 +111,9 @@ class TrecipeController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Updates a trecipe by its uuid
+     */
     private updateTrecipeById(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.params.id;
         const updateData: Trecipe = req.body;
@@ -106,6 +125,9 @@ class TrecipeController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Duplicates a trecipe of given uuid.
+     */
     private duplicateTrecipe(req: Request, res: Response, next: NextFunction) {
         const uuid: string = req.query.id as string;
         const user = req.user as User;
@@ -123,6 +145,9 @@ class TrecipeController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Gets all trecipes owned by current authorized user that contains destination of given uuid
+     */
     private getMyAssociatedTrecipes(req: Request, res: Response, next: NextFunction) {
         const placeId: string = req.query.placeId as string;
         const limit: number = req.query.limit ? parseInt(req.query.limit as string) : 0;
@@ -134,6 +159,9 @@ class TrecipeController implements Controller {
             .catch((err) => next(err));
     }
 
+    /**
+     * Gets all the public trecipes containing destination of given uuid
+     */
     private getAssociatedTrecipes(req: Request, res: Response, next: NextFunction) {
         const placeId: string = req.query.placeId as string;
         const limit: number = req.query.limit ? parseInt(req.query.limit as string) : 0;

@@ -4,6 +4,9 @@ import logger from '../../common/logger';
 import { InternalServerError } from 'express-openapi-validator/dist';
 import { HttpError } from 'express-openapi-validator/dist/framework/types';
 
+/**
+ * Photo controller
+ */
 class PhotoController {
     public readonly path = '/photos';
     public readonly router = Router();
@@ -16,6 +19,9 @@ class PhotoController {
         this.router.get(`${this.path}/:photoRef`, this.getPhoto.bind(this));
     }
 
+    /**
+     * Retrieves and sends image data referred to by given photo reference string
+     */
     private getPhoto(req: Request, res: Response, next: NextFunction) {
         const photoRef = req.params.photoRef;
         const { maxHeight, maxWidth } = req.query;
@@ -38,6 +44,7 @@ class PhotoController {
             .get(url.toString(), { responseType: 'stream' })
             .then((result: AxiosResponse) => {
                 if (result.status === 200) {
+                    // stream data to result if success
                     result.data.pipe(res);
                 } else {
                     logger.info(`Google place photo request failed with: ${result.status}`);
