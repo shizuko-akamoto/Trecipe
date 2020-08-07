@@ -10,26 +10,24 @@ Our stretch goals include adding collaborators to any bucket list, viewing popul
 
 ## Project task requirements
 
-### Minimal requirements (will definitely complete)
-* User should be able to create, delete, edit buckets of travel destinations of interest
-* User should be able to add, remove, move, destinations within a bucket
-* Allow user to check-off destinations in a bucket when they are completed
-* Display destinations in a bucket on a map with markers marking each destination
-* Hover over each destination pin on map to see destination digest, and click to see a page with full detail
-### Standard requirements (will most likely complete)
-* Support for user/account system
-* ~Support filtering by different categories (eg. food, accomodation, attraction, etc) when viewing destinations on map~ 
-(Decided that since people are unlikely to put too many destinations in a trecipe, remove this as standard requirement)
-* Allow user to perform search on bucket/destinations using name or keyword
-* Implement various other bucket operations (duplicate, favorite)
-* Checking off destination in a bucket changes the bucket progress and progress is reflected on the UI
-* ~Allow user to rate a destination upon checking off~(Moved to stretch)
-* Privacy setting that allows the user to hide/show specific buckets 
-### Stretch requirements (plan to complete 1!)
-* Add collaborator to bucket list (access control)
-*	Display popular bucket list on homepage (highest star/favorite, etc)
-* ~Allow	full review of destination (blog-style) upon check-off~ (Converted to simpler rating style below)
-* Allow user to rate a destination upon checking off
+|          | Tasks                                                                                                                   | Completed?              |
+|----------|------------------------------------------------------------------------------------------------------------------------|-------------------------|
+| **Minimum**  | User should be able to create, delete, edit buckets of travel destinations of interest                                 | :heavy_check_mark:      |
+|          | User should be able to add, remove, reorder, destinations within a bucket                                              | :heavy_check_mark:      |
+|          | Allow user to check-off destinations in a bucket when they are completed                                               | :heavy_check_mark:      |
+|          | Display destinations in a bucket on a map with markers marking each destination                                        | :heavy_check_mark:      |
+|          | Hover over each destination pin on map to see destination digest, and click to see a page with full detail             | :heavy_check_mark:      |
+| **Standard** | Support for user/account system                                                                                        | :heavy_check_mark:      |
+|          | Support filtering by different categories (eg. food, accomodation, attraction, etc) when viewing destinations on map| :large_orange_diamond: |
+|          | Allow user to perform search on bucket/destinations using name or keyword                                              | :heavy_check_mark:      |
+|          | Implement various other bucket operations (copy Trecipe within/across accounts)                                        | :heavy_check_mark:      |
+|          | Checking off destination in a bucket changes the bucket progress and progress is reflected on the UI                   | :heavy_check_mark:      |
+| **Stretch**  | Add collaborator to bucket list (access control)                                                                       | :x:                     |
+|          | Display popular bucket list on homepage (highest star/favorite, etc)                                                   | :x:                     |
+|          | Allow full review of destination (blog-style) upon check-off                                                           | :x:                     |
+|          | Allow user to rate a destination upon checking off                                                                     | :heavy_check_mark:      |
+
+
 
 ## Tasks breakdown
 Tasks have been broken-down into issues in this repository. [See Issues!](https://github.com/shizuko-akamoto/Trecipe/issues)
