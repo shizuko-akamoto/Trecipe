@@ -147,8 +147,6 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
                     });
                 });
         } else {
-            // TODO: I just realized it might be unnecessary to remove dest from destinations store
-            // All we need is to remove destination id from the trecipe store
             this.props.onDestRemove(destinationId);
         }
     }

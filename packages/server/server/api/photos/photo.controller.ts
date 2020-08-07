@@ -40,6 +40,7 @@ class PhotoController {
                 if (result.status === 200) {
                     result.data.pipe(res);
                 } else {
+                    logger.info(`Google place photo request failed with: ${result.status}`);
                     next(
                         HttpError.create({
                             status: result.status,
@@ -48,14 +49,15 @@ class PhotoController {
                     );
                 }
             })
-            .catch((err) =>
+            .catch((err) => {
+                logger.info(`Google place photo request failed with: ${err}`);
                 next(
                     new InternalServerError({
                         path: `${this.path}/${photoRef}`,
                         message: err.toString(),
                     })
-                )
-            );
+                );
+            });
     }
 }
 

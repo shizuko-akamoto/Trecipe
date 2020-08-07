@@ -15,6 +15,7 @@ export const login = (userData: LoginDTO): AppThunk => {
             .then((response: UserResponse) => {
                 dispatch(setAuthenticated(response.isAuthenticated));
                 dispatch(setUser(response.user));
+                toast.info('Login successful!');
             })
             .catch((err: AxiosError) => {
                 if (err.response) {
@@ -62,6 +63,7 @@ export const logout = (callback?: () => void): AppThunk => {
             .then((response: UserResponse) => {
                 dispatch(setAuthenticated(response.isAuthenticated));
                 dispatch(setUser({}));
+                toast.info(`Successfully logged out!`);
                 if (callback) callback();
             })
             .catch((err: AxiosError) => {

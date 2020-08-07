@@ -12,7 +12,7 @@ import { passportAuth, passportAuthAnon } from '../../common/passport/passportUt
 class DestinationController implements Controller {
     public readonly path = '/destinations';
     public readonly router = Router();
-    private photosEndpoint = `http://localhost:${process.env.PORT}/${process.env.API_VERSION}/photos`;
+    private photosEndpoint = `/${process.env.API_VERSION}/photos`;
 
     constructor() {
         this.initializeRoutes();

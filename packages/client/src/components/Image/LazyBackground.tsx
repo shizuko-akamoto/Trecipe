@@ -12,14 +12,7 @@ export class LazyBackground extends React.Component<LazyBackgroundProps, { src: 
     private imageLoader: HTMLImageElement = new Image();
 
     componentDidMount() {
-        const { src } = this.props;
-        if (src) {
-            this.imageLoader.src = src;
-        }
-
-        this.imageLoader.onload = () => {
-            this.setState({ src: src });
-        };
+        this.loadImage(this.props.src);
     }
 
     componentWillUnmount(): void {
@@ -27,6 +20,26 @@ export class LazyBackground extends React.Component<LazyBackgroundProps, { src: 
             return;
         }
         this.imageLoader.onload = function () {};
+    }
+
+    componentDidUpdate(
+        prevProps: Readonly<LazyBackgroundProps>,
+        prevState: Readonly<{ src: string | null }>,
+        snapshot?: any
+    ): void {
+        if (prevProps.src !== this.props.src) {
+            this.loadImage(this.props.src);
+        }
+    }
+
+    private loadImage(src: string | null) {
+        if (src) {
+            this.imageLoader.src = src;
+        }
+
+        this.imageLoader.onload = () => {
+            this.setState({ src: src });
+        };
     }
 
     render() {
