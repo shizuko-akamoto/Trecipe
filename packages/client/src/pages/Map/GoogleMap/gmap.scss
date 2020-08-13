@@ -1,3 +1,5 @@
+@import '../../../components/mixins.scss';
+
 .gmap-wrapper {
     width: 100%;
     height: 100%;
@@ -9,6 +11,53 @@
     min-width: 20rem;
     top: 8px;
     right: 8px;
+}
+
+.gmap-search-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+
+    // TODO - modify button component instead
+    .icon-button {
+        background-color: $tc-white;
+        border: 1px solid $silver-gray;
+        outline: none;
+        box-sizing: border-box;
+        border-radius: 8px;
+        font-style: normal;
+        font-size: $button-font-size;
+        font-family: $default-font-family;
+        color: $mid-gray;
+        height: 2.5rem;
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: rgba($tc-white, 0.8);
+            color: $indigo-dye;
+            border-color: $indigo-dye;
+        }
+
+        &:active {
+            background: $indigo-dye;
+            color: $tc-white;
+        }
+
+        &:disabled {
+            color: $light-gray;
+            background-color: $white-gray;
+            border-color: $light-gray;
+        }
+
+        .button-icon {
+            padding: 5px;
+        }
+    }
 }
 
 .gmap-legend {

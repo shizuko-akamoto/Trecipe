@@ -1,4 +1,5 @@
 @import '../../components/variables';
+@import '../../components/mixins.scss';
 
 .map-page-wrapper {
     box-sizing: border-box;
@@ -29,6 +30,11 @@
                 background: $tc-white;
                 padding: 1rem 0.5rem;
 
+                .trecipe-title {
+                    min-width: 0;
+                    overflow: hidden;
+                }
+
                 .icon-button {
                     color: $mid-gray;
 
@@ -54,6 +60,33 @@
             flex: 1 1 100%;
             position: relative;
             overflow: hidden;
+        }
+    }
+
+    @include mobile {
+        .map-page-content {
+            flex-direction: column;
+
+            .map-side-bar {
+                flex: 1 1 100%;
+                order: 2;
+                width: 100vw;
+                overflow: hidden;
+
+                .trecipe-header {
+                    padding: 1rem 1rem;
+                }
+
+                .dest-card-list {
+                    display: flex;
+                    flex-direction: row;
+                }
+            }
+
+            .map-container {
+                flex: 0 0 40vh;
+                order: 1;
+            }
         }
     }
 }

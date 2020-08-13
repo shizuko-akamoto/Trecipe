@@ -31,3 +31,15 @@
         width: 100%;
     }
 }
+
+@mixin desktop {
+    @media only screen and (min-width: $breakpoint-tablet) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media only screen and (max-width: $breakpoint-tablet - 1px) {
+        @content;
+    }
+}

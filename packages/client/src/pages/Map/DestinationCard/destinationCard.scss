@@ -1,4 +1,5 @@
 @import '../../../components/variables';
+@import '../../../components/mixins.scss';
 
 .dest-card-item-wrapper {
     box-sizing: border-box;
@@ -87,5 +88,12 @@
                 margin: 0 0 0.5rem;
             }
         }
+    }
+}
+
+@include mobile {
+    .dest-card-item-wrapper {
+        flex: 0 0 350px;
+        min-width: 0;
     }
 }

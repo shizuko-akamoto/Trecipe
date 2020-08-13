@@ -8,6 +8,12 @@ import { SearchBarPopup } from '../../../components/SearchBarPopup/SearchBarPopu
 import { Legend } from './Legend';
 import { CreateNewDestinationDTO } from '../../../../../shared/models/createNewDestinationDTO';
 import Destination from '../../../../../shared/models/destination';
+import { Desktop, Mobile } from '../../../components/Reponsive/Responsive';
+import { Button } from '../../../components/Button/Button';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { showModal } from '../../../redux/Modal/action';
+import Modal from '../../../components/Modal/Modal';
 
 const mapOptions = {
     center: {
@@ -32,7 +38,9 @@ const mapOptions = {
     },
 };
 
-interface GMapProps {
+export type GMapProps = ReturnType<typeof mapDispatchToProps> & MapProps;
+
+interface MapProps {
     destinations: Array<Destination>;
     completedDest: Set<string>;
     onDestAdd: (destination: CreateNewDestinationDTO) => void;
@@ -44,7 +52,7 @@ interface GMapState {
     map: any;
 }
 
-export class GMap extends Component<GMapProps, GMapState> {
+class GMap extends Component<GMapProps, GMapState> {
     public readonly state: Readonly<GMapState> = {
         loading: true,
         map: null,
@@ -96,6 +104,17 @@ export class GMap extends Component<GMapProps, GMapState> {
         });
     };
 
+    private onSearchClick() {
+        this.props.showModal(
+            <Modal>
+                <SearchBarPopup
+                    onDestAdd={this.newDestAdd}
+                    onDestRemove={this.props.onDestRemove}
+                />
+            </Modal>
+        );
+    }
+
     render() {
         return (
             <div className="gmap-wrapper">
@@ -115,17 +134,35 @@ export class GMap extends Component<GMapProps, GMapState> {
                         />
                     ))}
                 </GoogleMap>
-                <div className="gmap-search-bar">
-                    <SearchBarPopup
-                        minWidth={20}
-                        onDestAdd={this.newDestAdd}
-                        onDestRemove={this.props.onDestRemove}
-                    />
-                </div>
-                <div className="gmap-legend">
-                    <Legend />
-                </div>
+                <Desktop>
+                    <div className="gmap-search-bar">
+                        <SearchBarPopup
+                            minWidth={20}
+                            onDestAdd={this.newDestAdd}
+                            onDestRemove={this.props.onDestRemove}
+                        />
+                    </div>
+                    <div className="gmap-legend">
+                        <Legend />
+                    </div>
+                </Desktop>
+                <Mobile>
+                    <div className="gmap-search-button">
+                        <Button icon={'search'} text="" onClick={this.onSearchClick.bind(this)} />
+                    </div>
+                </Mobile>
             </div>
         );
     }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+    return bindActionCreators(
+        {
+            showModal,
+        },
+        dispatch
+    );
+};
+
+export default connect(null, mapDispatchToProps)(GMap);

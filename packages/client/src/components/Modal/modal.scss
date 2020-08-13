@@ -23,6 +23,7 @@
     text-align: center;
     padding: 4px;
     cursor: pointer;
+    overflow: hidden;
 
     &:after {
         vertical-align: middle;
@@ -44,5 +45,19 @@
         border: 1px solid $silver-gray;
         border-radius: 8px;
         background-color: $tc-white;
+
+        .modal-close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+
+            .icon-button {
+                color: $mid-gray;
+
+                :hover {
+                    color: $silver-gray;
+                }
+            }
+        }
     }
 }
