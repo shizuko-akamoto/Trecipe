@@ -26,6 +26,7 @@ import {
     faExclamationTriangle,
     faSignOutAlt,
     faMapMarker,
+    faTimes,
     faPhone,
 } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -71,5 +72,6 @@ library.add(
     faUserCircle,
     faSignOutAlt,
     faMapMarker,
+    faTimes,
     faGoogle
 );

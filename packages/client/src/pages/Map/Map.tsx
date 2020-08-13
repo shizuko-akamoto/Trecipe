@@ -3,7 +3,7 @@ import './Map.scss';
 import { DestinationCard } from './DestinationCard/DestinationCard';
 import { CardMenu } from '../../components/CardMenu/CardMenu';
 import { MenuItem } from '../../components/Menu/Menu';
-import { GMap } from './GoogleMap/Gmap';
+import GMap from './GoogleMap/Gmap';
 import { RootState } from '../../redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
@@ -167,7 +167,7 @@ class Map extends React.Component<MapProps> {
                 <div className="map-page-content">
                     <aside className="map-side-bar">
                         <div className="trecipe-header">
-                            <span>{trecipe.name}</span>
+                            <span className="trecipe-title">{trecipe.name}</span>
                             {(canEdit || canSave) && (
                                 <CardMenu
                                     menuItems={

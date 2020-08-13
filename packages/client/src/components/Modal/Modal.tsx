@@ -3,6 +3,7 @@ import './modal.scss';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { hideModal } from '../../redux/Modal/action';
+import { Button } from '../Button/Button';
 
 /**
  * ComponentProps
@@ -66,6 +67,13 @@ class Modal extends React.Component<ModalProps, {}> {
                 <div className="modal-content" onClick={this.onOverlayClick.bind(this)}>
                     <div className="modal-dialog" onClick={this.onDialogClick}>
                         {this.props.children}
+                        <div className="modal-close-button">
+                            <Button
+                                onClick={this.onOverlayClick.bind(this)}
+                                icon={'times'}
+                                text=""
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
