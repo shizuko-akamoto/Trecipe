@@ -11,6 +11,7 @@
     .map-page-content {
         display: flex;
         flex-direction: row;
+        z-index: 0;
 
         .map-side-bar {
             flex: 0 0 400px;
@@ -29,6 +30,7 @@
                 font-family: $default-font-family;
                 background: $tc-white;
                 padding: 1rem 0.5rem;
+                z-index: 10;
 
                 .trecipe-title {
                     min-width: 0;
@@ -44,13 +46,22 @@
                 }
             }
 
+            .empty-text-wrapper {
+                position: relative;
+                height: calc(100vh - 4rem);
+                padding: 0 0.5rem;
+                z-index: 0;
+            }
+
             .dest-card-list {
-                overflow: auto;
-                max-height: calc(100vh - 4rem);
+                overflow-y: auto;
+                overflow-x: hidden;
+                height: calc(100vh - 4rem);
                 margin: 0;
                 padding: 0;
+                z-index: 0;
 
-                & > * {
+                & .dest-card-item-wrapper {
                     padding: 0.3rem 0.5rem;
                 }
             }
@@ -69,6 +80,7 @@
 
             .map-side-bar {
                 flex: 1 1 100%;
+                height: auto;
                 order: 2;
                 width: 100vw;
                 overflow: hidden;
@@ -80,6 +92,18 @@
                 .dest-card-list {
                     display: flex;
                     flex-direction: row;
+                    overflow-x: auto;
+                    height: auto;
+
+                    .dest-card-item-wrapper {
+                        &:nth-of-type(1) {
+                            margin-left: 0;
+                        }
+
+                        flex-shrink: 0;
+                        width: 23rem;
+                        margin-left: 1rem;
+                    }
                 }
             }
 

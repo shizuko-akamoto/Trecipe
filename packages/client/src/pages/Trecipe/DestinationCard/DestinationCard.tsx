@@ -6,6 +6,7 @@ import { RatingBar } from '../../../components/Rating/RatingBar';
 import { Draggable } from 'react-beautiful-dnd';
 import Destination, { getIcon } from '../../../../../shared/models/destination';
 import { isEmpty } from 'lodash';
+import destination from '../../../../../shared/models/destination';
 
 /**
  * DCProps
@@ -19,10 +20,11 @@ import { isEmpty } from 'lodash';
 export interface DCProps {
     index: number;
     destination: Destination;
-    isCompleted: boolean;
-    onClickDelete: (destId: string) => void;
-    onClickComplete: (destId: string, isCompleted: boolean) => void;
+    isCompleted?: boolean;
+    onClickDelete?: (destId: string, e: React.MouseEvent<HTMLElement>) => void;
+    onClickComplete?: (destId: destination, e: React.MouseEvent<HTMLElement>) => void;
     isInEdit?: boolean;
+    isReadOnly?: boolean;
 }
 
 export class DestinationCard extends React.Component<DCProps> {
@@ -30,7 +32,7 @@ export class DestinationCard extends React.Component<DCProps> {
         const defaultFilter = { filter: 'none' };
         if (this.props.isInEdit) {
             return defaultFilter;
-        } else if (this.props.isCompleted) {
+        } else if (!!this.props.isCompleted) {
             return { filter: 'opacity(50%)' };
         } else {
             return defaultFilter;
@@ -51,7 +53,7 @@ export class DestinationCard extends React.Component<DCProps> {
                                     src={
                                         isEmpty(this.props.destination.photoRefs)
                                             ? null
-                                            : this.props.destination.photoRefs[0]
+                                            : `${this.props.destination.photoRefs[0]}`
                                     }
                                     imgStyle={{ borderRadius: '8px 0 0 8px' }}
                                 />
@@ -74,43 +76,55 @@ export class DestinationCard extends React.Component<DCProps> {
                                     <p>{this.props.destination.website}</p>
                                 </div>
                             </div>
-                            <span
-                                className={`check-edit-wrapper ${
-                                    this.props.isInEdit ? 'in-edit' : ''
-                                }`}>
-                                <div className="completed-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        id={this.props.destination.uuid + '-completed'}
-                                        onChange={() =>
-                                            this.props.onClickComplete(
-                                                this.props.destination.uuid,
-                                                !this.props.isCompleted
-                                            )
-                                        }
-                                        checked={this.props.isCompleted}
-                                    />
-                                    <label
-                                        htmlFor={this.props.destination.uuid + '-completed'}
-                                        className="check-mark">
-                                        <FontAwesomeIcon icon="check" />
-                                    </label>
-                                </div>
+                            {!this.props.isReadOnly && (
                                 <span
-                                    {...provided.dragHandleProps}
-                                    className="edit-option"
-                                    id="dest-reorder">
-                                    <FontAwesomeIcon icon="bars" />
+                                    className={`check-edit-wrapper ${
+                                        this.props.isInEdit ? 'in-edit' : ''
+                                    }`}>
+                                    <div
+                                        className="completed-checkbox"
+                                        onClick={(e) => e.stopPropagation()}>
+                                        <input
+                                            type="checkbox"
+                                            id={this.props.destination.uuid + '-completed'}
+                                            onClick={(e) => {
+                                                if (this.props.onClickComplete) {
+                                                    this.props.onClickComplete(
+                                                        this.props.destination,
+                                                        e
+                                                    );
+                                                }
+                                            }}
+                                            checked={!!this.props.isCompleted}
+                                            readOnly
+                                        />
+                                        <label
+                                            htmlFor={this.props.destination.uuid + '-completed'}
+                                            className="check-mark">
+                                            <FontAwesomeIcon icon="check" />
+                                        </label>
+                                    </div>
+                                    <span
+                                        {...provided.dragHandleProps}
+                                        className="edit-option"
+                                        id="dest-reorder">
+                                        <FontAwesomeIcon icon="bars" />
+                                    </span>
+                                    <button
+                                        className="edit-option"
+                                        id="dest-delete"
+                                        onClick={(e) => {
+                                            if (this.props.onClickDelete) {
+                                                this.props.onClickDelete(
+                                                    this.props.destination.uuid,
+                                                    e
+                                                );
+                                            }
+                                        }}>
+                                        <FontAwesomeIcon icon={['far', 'trash-alt']} />
+                                    </button>
                                 </span>
-                                <button
-                                    className="edit-option"
-                                    id="dest-delete"
-                                    onClick={() =>
-                                        this.props.onClickDelete(this.props.destination.uuid)
-                                    }>
-                                    <FontAwesomeIcon icon={['far', 'trash-alt']} />
-                                </button>
-                            </span>
+                            )}
                         </div>
                     </div>
                 )}

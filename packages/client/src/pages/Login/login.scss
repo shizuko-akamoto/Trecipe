@@ -13,8 +13,6 @@
     width: 100%;
     padding: 60px 0;
     background-size: cover;
-    background-image: linear-gradient(rgba($tc-white, 1) 0%, rgba($tc-white, 0) 30%),
-        url('boat-4899802_1920.jpg');
 
     .login-window {
         height: 35rem;
@@ -24,6 +22,7 @@
         background-color: rgba($tc-white, 0.9);
         border-radius: 0.5rem;
         overflow: hidden;
+        position: relative;
 
         .login-nav {
             width: 100%;

@@ -27,14 +27,16 @@ import {
     faSignOutAlt,
     faMapMarker,
     faTimes,
+    faPhone,
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faQuestionCircle,
     faStar,
     faTrashAlt,
+    faWindowMaximize,
     faUserCircle,
 } from '@fortawesome/free-regular-svg-icons';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 library.add(
     faPlusCircle,
@@ -64,9 +66,12 @@ library.add(
     faBinoculars,
     faExternalLinkAlt,
     faMapMarkedAlt,
+    faPhone,
+    faWindowMaximize,
     faExclamationTriangle,
     faUserCircle,
     faSignOutAlt,
     faMapMarker,
-    faTimes
+    faTimes,
+    faGoogle
 );

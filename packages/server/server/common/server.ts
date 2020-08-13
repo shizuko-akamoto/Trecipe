@@ -9,7 +9,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import passport from 'passport';
 import { setupPassport } from './passport/passportUtils';
-import GridFsStorage, { ConnectionResult } from 'multer-gridfs-storage';
+import GridFsStorage from 'multer-gridfs-storage';
 
 import installValidator from './openapi';
 import multer from 'multer';
@@ -20,7 +20,17 @@ const exit = process.exit;
 export default class ExpressServer {
     private routes: (app: Application) => void;
     constructor() {
-        const root = path.normalize(__dirname + '/../..');
+        // after compiling the server side, we get a /dist folder with js files
+        // root here refers to the root of that /dist folder
+        // /dist
+        // -----/build
+        // -----/server
+        // ----------/server
+        // ---------------/api
+        // ---------------/common
+        // --------------------server.js
+        // ----------/shared
+        const root = path.normalize(__dirname + '/../../..');
         app.set('appPath', root + 'client');
         app.use(
             cors({
@@ -37,10 +47,17 @@ export default class ExpressServer {
         );
         app.use(bodyParser.text({ limit: process.env.REQUEST_LIMIT || '100kb' }));
         app.use(cookieParser(process.env.SESSION_SECRET));
-        app.use(express.static(`${root}/public`));
         app.use(passport.initialize());
         setupPassport(passport);
 
+        // if in prod, we serve react app, otherwise we serve swagger ui
+        if (process.env.NODE_ENV === 'production') {
+            app.use(express.static(`${root}/build`));
+        } else {
+            app.use(express.static(`${root}/public`));
+        }
+
+        // set up mongoose connection
         const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
         const connection = mongoose.connect(
             `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`,
@@ -57,6 +74,7 @@ export default class ExpressServer {
             exit(1);
         });
 
+        // initialize grid fs storage for image uploads to MongoDB
         const storage = new GridFsStorage({
             db: connection,
             file: (req, file) => {
@@ -76,7 +94,7 @@ export default class ExpressServer {
         });
         storage
             .ready()
-            .then((db: ConnectionResult) => {
+            .then(() => {
                 l.info('gridfs storage setup successful');
             })
             .catch((err) => {

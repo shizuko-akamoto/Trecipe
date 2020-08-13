@@ -1,0 +1,34 @@
+@import '../../../components/variables';
+
+.review-wrapper {
+    border: 1px solid $light-gray;
+    border-radius: 8px;
+    font-family: $default-font-family;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1rem;
+
+    .review-header-wrapper {
+        display: inline-flex;
+        max-height: 50px;
+
+        .user-profile {
+            width: 50px;
+            height: 100%;
+        }
+
+        .review-header-content {
+            margin-left: 0.5rem;
+
+            .review-metadata {
+                font-size: $subtext-font-size;
+            }
+        }
+    }
+
+    .review-text {
+        margin: 0.5rem 0 0;
+        font-size: $default-font-size;
+        color: $mid-gray;
+    }
+}

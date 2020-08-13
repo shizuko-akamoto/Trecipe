@@ -1,0 +1,66 @@
+@import '../../components/variables.scss';
+@import '../../components/mixins.scss';
+
+.search-result-wrapper {
+    box-sizing: border-box;
+    background-color: $tc-white;
+    margin: auto;
+    padding: 0.5rem 0 10rem 0;
+    min-height: 100vh;
+    box-shadow: 0 1.5rem 1.5rem 0 rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-grow: 1;
+
+    .content {
+        font-family: $default-font-family;
+        font-size: $default-font-size;
+        max-width: 1280px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow-x: hidden;
+
+        .result-row {
+            flex-basis: 50%;
+            position: relative;
+
+            .page-title {
+                @include title-border-bottom($powder-blue, $crayola-yellow);
+                margin-top: 1em;
+                font-size: $title-font-size;
+            }
+
+            .empty-text {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: $subtitle-font-size;
+                color: $silver-gray;
+            }
+
+            .cards-wrapper {
+                .card-list {
+                    list-style: none;
+                    padding: 0;
+                    display: flex;
+                    overflow-x: auto;
+                    width: 100%;
+
+                    .card-item {
+                        &:nth-of-type(1) {
+                            margin-left: 0;
+                        }
+
+                        flex-shrink: 0;
+                        width: 23rem;
+                        margin-left: 1rem;
+                    }
+                }
+            }
+        }
+    }
+}

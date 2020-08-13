@@ -9,17 +9,19 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../redux/Modal/action';
 import { deleteTrecipeRequest, duplicateTrecipeRequest } from '../../redux/TrecipeList/action';
 import {
-    getDestModelsByTrecipeId,
+    getDestinationsByTrecipeId,
     addDestinationRequest,
     removeDestinationRequest,
 } from '../../redux/Destinations/action';
 import { connect } from 'react-redux';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import TrecipePopup, { TrecipePopupType } from '../../components/TrecipePopup/TrecipePopup';
 import Trecipe, { DestWithStatus } from '../../../../shared/models/trecipe';
-import { fetchTrecipe, updateTrecipeRequest } from '../../redux/Trecipe/action';
+import { fetchTrecipeRequest, updateTrecipeRequest } from '../../redux/Trecipe/action';
 import Destination from '../../../../shared/models/destination';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
+import { isEmpty } from 'lodash';
+import { EmptyDestinations } from '../../components/EmptyText/EmptyDestinations';
 
 export type MapProps = ReturnType<typeof mapStateToProps> &
     ReturnType<typeof mapDispatchToProps> &
@@ -47,27 +49,66 @@ class Map extends React.Component<MapProps> {
         },
     ];
 
+    private trecipeSaveMenuItems: MenuItem[] = [
+        {
+            id: 1,
+            text: 'Save',
+            icon: ['far', 'star'],
+            onClick: () => this.onTrecipeCopyClick(),
+        },
+    ];
+
     componentDidMount(): void {
-        // fetch trecipe by id and destinations by trecipe id
-        const trecipeId = this.props.match.params.trecipeId;
-        this.props.fetchTrecipe(trecipeId);
-        this.props.getDestModelsByTrecipeId(trecipeId);
+        this.loadTrecipe();
     }
 
-    private onDestCompleteClick(destId: string) {
+    componentDidUpdate(prevProps: Readonly<MapProps>): void {
+        // when we're looking at new trecipe, refetch trecipe details and associated desetination
+        const trecipeId = this.props.match.params.trecipeId;
+        if (prevProps.match.params.trecipeId !== trecipeId) {
+            this.loadTrecipe();
+        }
+    }
+
+    // fetch trecipe by id and destinations by trecipe id
+    private loadTrecipe(): void {
+        const trecipeId = this.props.match.params.trecipeId;
+        this.props.fetchTrecipe(trecipeId);
+        this.props.getDestinationsByTrecipeId(trecipeId);
+    }
+
+    private onDestCompleteClick(destination: Destination, e: React.MouseEvent) {
+        e.preventDefault();
         if (this.props.trecipe) {
             const trecipe: Trecipe = this.props.trecipe;
             this.props.updateTrecipe(trecipe.uuid, {
                 destinations: trecipe.destinations.map((dest) =>
-                    dest.destUUID === destId ? { destUUID: destId, completed: true } : dest
+                    dest.destUUID === destination.uuid
+                        ? { destUUID: destination.uuid, completed: true }
+                        : dest
                 ),
             });
         }
     }
 
-    private onDestDeleteClick(idToDelete: string) {
+    /**
+     * Callback method when delete trecipe button on Destination card is clicked
+     * @param idToDelete: destination uuid
+     */
+    private onDestCardDeleteClick(idToDelete: string) {
         if (this.props.trecipe) {
-            this.props.removeDestination(this.props.trecipe, idToDelete);
+            this.props.removeDestination(this.props.trecipe, { destId: idToDelete });
+        }
+    }
+
+    /**
+     * Callback method when delete is called from search bar popup
+     * NOTE: difference between this "onDestCardDeleteClick" is the id provided
+     * @param placeIdToDelete: place id from Google Place api
+     */
+    private onDestRemoveClick(placeIdToDelete: string) {
+        if (this.props.trecipe) {
+            this.props.removeDestination(this.props.trecipe, { placeId: placeIdToDelete });
         }
     }
 
@@ -87,15 +128,19 @@ class Map extends React.Component<MapProps> {
 
     private onTrecipeCopyClick() {
         if (this.props.trecipe) {
-            this.props.duplicateTrecipe(this.props.trecipe.uuid);
-            // TODO: Redirect to Map page of copied Trecipe
+            this.props.duplicateTrecipe(this.props.trecipe.uuid, (uuid: string) => {
+                // Redirect to Trecipe map page
+                this.props.history.push(`/map/${uuid}`);
+            });
         }
     }
 
     private onTrecipeDeleteClick() {
         if (this.props.trecipe) {
-            this.props.deleteTrecipe(this.props.trecipe.uuid);
-            // TODO: Redirect back to My Trecipes page
+            this.props.deleteTrecipe(this.props.trecipe.uuid, () => {
+                // Redirect to My Trecipe page after delete
+                this.props.history.push('/mytrecipes');
+            });
         }
     }
 
@@ -111,35 +156,63 @@ class Map extends React.Component<MapProps> {
                 dest.completed ? [dest.destUUID] : []
             )
         );
+        // Show everything if user is signed in and is the owner/collaborator of the trecipe
+        const user = this.props.user;
+        const isAuthenticated = this.props.isAuthenticated;
+        const canEdit = !!(trecipe && isAuthenticated && user.trecipes?.includes(trecipe.uuid));
+        // Show the save button if user is signed in but is not the owner of the trecipe
+        const canSave = trecipe && isAuthenticated && !user.trecipes?.includes(trecipe.uuid);
         return (
             <div className="map-page-wrapper">
                 <div className="map-page-content">
                     <aside className="map-side-bar">
                         <div className="trecipe-header">
                             <span className="trecipe-title">{trecipe.name}</span>
-                            <CardMenu menuItems={this.trecipeEditMenuItems} />
+                            {(canEdit || canSave) && (
+                                <CardMenu
+                                    menuItems={
+                                        canEdit
+                                            ? this.trecipeEditMenuItems
+                                            : this.trecipeSaveMenuItems
+                                    }
+                                />
+                            )}
                         </div>
-                        <div>
+                        {isEmpty(destinations) ? (
+                            <div className="empty-text-wrapper">
+                                <EmptyDestinations />
+                            </div>
+                        ) : (
                             <ul className="dest-card-list">
                                 {destinations.map((dest, index) => (
-                                    <DestinationCard
-                                        index={index}
-                                        key={dest.uuid}
-                                        destination={dest}
-                                        isCompleted={completed.has(dest.uuid)}
-                                        onClickDelete={this.onDestDeleteClick.bind(this)}
-                                        onClickComplete={this.onDestCompleteClick.bind(this)}
-                                    />
+                                    <Link
+                                        className="router-link"
+                                        to={`/destinations/${dest.placeId}`}
+                                        target="_blank"
+                                        key={dest.uuid}>
+                                        <DestinationCard
+                                            index={index}
+                                            key={dest.uuid}
+                                            destination={dest}
+                                            isReadOnly={!canEdit}
+                                            isCompleted={canEdit && completed.has(dest.uuid)}
+                                            // for DC, delete by destination uuid
+                                            onClickDelete={this.onDestCardDeleteClick.bind(this)}
+                                            onClickComplete={this.onDestCompleteClick.bind(this)}
+                                        />
+                                    </Link>
                                 ))}
                             </ul>
-                        </div>
+                        )}
                     </aside>
                     <div className="map-container">
                         <GMap
                             destinations={destinations}
                             completedDest={completed}
                             onDestAdd={this.onDestAddClick.bind(this)}
-                            onDestRemove={this.onDestDeleteClick.bind(this)}
+                            // Since GMap deals with place ids instead of destination uuid, callback takes in placeId
+                            onDestRemove={this.onDestRemoveClick.bind(this)}
+                            readOnly={!canEdit}
                         />
                     </div>
                 </div>
@@ -154,9 +227,12 @@ const mapStateToProps = (
 ) => {
     const trecipeId = ownProps.match.params.trecipeId;
     const destinations = state.destinations.destsByTrecipeId.get(trecipeId);
+    const user = state.user;
     return {
         trecipe: state.trecipe.trecipe,
         destinations: destinations,
+        user: user.user,
+        isAuthenticated: user.isAuthenticated,
     };
 };
 
@@ -167,10 +243,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
             updateTrecipe: updateTrecipeRequest,
             deleteTrecipe: deleteTrecipeRequest,
             duplicateTrecipe: duplicateTrecipeRequest,
-            getDestModelsByTrecipeId,
+            getDestinationsByTrecipeId,
             addDestination: addDestinationRequest,
             removeDestination: removeDestinationRequest,
-            fetchTrecipe,
+            fetchTrecipe: fetchTrecipeRequest,
         },
         dispatch
     );

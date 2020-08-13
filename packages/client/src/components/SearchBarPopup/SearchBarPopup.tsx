@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './searchBarPopup.scss';
-import _ from 'lodash';
+import { debounce, isEmpty, isArray } from 'lodash';
 import { AutoComplete, getDestModel } from '../Map/mapHelper';
 import { CreateNewDestinationDTO } from '../../../../shared/models/createNewDestinationDTO';
+import OverlaySpinner from '../Loading/OverlaySpinner';
+import { toast } from 'react-toastify';
+import Destination from '../../../../shared/models/destination';
 
-interface Destination {
+interface DestinationResult {
     id: string;
     name: string;
     address: string;
@@ -21,7 +24,7 @@ interface Destination {
  */
 export interface SearchBarState {
     searchKey: string;
-    results: Array<Destination>;
+    results: Array<DestinationResult>;
     resultsOpen: boolean;
     loading: boolean;
     errMsg: string;
@@ -29,6 +32,7 @@ export interface SearchBarState {
 
 export interface SearchBarProps {
     minWidth: number;
+    addedDests: Array<Destination>;
     onDestAdd: (destData: CreateNewDestinationDTO) => void;
     onDestRemove: (destinationId: string) => void;
 }
@@ -37,41 +41,52 @@ export interface SearchBarProps {
  * A popup to search for places and to be added into a Trecipe
  */
 export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarState> {
-    constructor(props: any) {
-        super(props);
-        this.fetchSearchResults = _.debounce(this.fetchSearchResults, 500);
-    }
-
-    public static defaultProps: Partial<SearchBarProps> = {
-        minWidth: 31.25,
-    };
-
+    private container: RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
+    private addedPlaceIds: Set<string>;
     private autoComplete: AutoComplete = new AutoComplete();
 
     state = {
         searchKey: '',
         resultsOpen: false,
-        results: [
-            { id: '1', name: 'Place 1', address: 'City, County', isAdded: false },
-            { id: '2', name: 'Place 2', address: 'City, County', isAdded: false },
-            { id: '3', name: 'Place 3', address: 'City, County', isAdded: false },
-        ],
+        results: [] as DestinationResult[],
         loading: false,
         errMsg: '',
     };
 
+    public static defaultProps: Partial<SearchBarProps> = {
+        minWidth: 31.25,
+    };
+
+    constructor(props: SearchBarProps) {
+        super(props);
+        this.addedPlaceIds = new Set(props.addedDests.map((dest) => dest.placeId));
+        this.fetchSearchResults = debounce(this.fetchSearchResults, 500);
+    }
+
+    componentDidMount(): void {
+        // Register event listener to handle click outside
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount(): void {
+        // Unregister event listener
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
     private handleOnSearchInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
         const searchKey: string = e.target.value;
-        if (_.isEmpty(searchKey)) {
-            this.setState({ searchKey: searchKey, results: [], errMsg: '' });
+        if (isEmpty(searchKey)) {
+            // when no search key given, empty results and set loading to false
+            this.setState({ searchKey: searchKey, results: [], loading: false, errMsg: '' });
         } else {
+            // when search key is given, set loading to true
             this.setState({ searchKey: searchKey, loading: true, errMsg: '' });
         }
         this.fetchSearchResults(searchKey);
     }
 
     private fetchSearchResults(searchInput: string): void {
-        if (_.isEmpty(searchInput)) {
+        if (isEmpty(searchInput)) {
             return;
         }
 
@@ -85,19 +100,17 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
                             id: prediction.place_id,
                             name: prediction.structured_formatting.main_text,
                             address: prediction.structured_formatting.secondary_text,
-                            isAdded: false,
+                            isAdded: this.addedPlaceIds.has(prediction.place_id),
                         };
                     }
                 );
                 this.setState({
-                    resultsOpen: true,
                     results: newResult,
                     loading: false,
                 });
             })
             .catch((err: any) => {
                 this.setState({
-                    resultsOpen: false,
                     loading: false,
                     errMsg: err.toString(),
                 });
@@ -126,46 +139,59 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
                     this.props.onDestAdd(getDestModel(result));
                 })
                 .catch((err: any) => {
+                    toast.error(`Failed to fetch search results [${err.toString()}]`);
                     this.setState({
-                        resultsOpen: false,
+                        results: [],
                         loading: false,
                         errMsg: err.toString(),
                     });
                 });
         } else {
-            // TODO: I just realized it might be unnecessary to remove dest from destinations store
-            // All we need is to remove destination id from the trecipe store
             this.props.onDestRemove(destinationId);
         }
     }
 
     private renderSearchResults() {
         const { results } = this.state;
-        if (this.state.resultsOpen && _.isArray(results) && !_.isEmpty(results)) {
+        if (isArray(results) && !isEmpty(results)) {
             return (
-                <div className="results-container">
-                    <ul className="results-list">
-                        {results.map((result) => (
-                            <li
-                                className="results-entry"
-                                key={result.id}
-                                onClick={() => this.addRemovePlace(result.id)}>
-                                <div className="result">
-                                    <span className="placeName">{result['name']}</span>
-                                    <span className="address">{result['address']}</span>
-                                </div>
-                                {result.isAdded && <FontAwesomeIcon icon="check" />}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+                <ul className="results-list">
+                    {results.map((result) => (
+                        <li
+                            className="results-entry"
+                            key={result.id}
+                            onClick={() => this.addRemovePlace(result.id)}>
+                            <div className="result">
+                                <span className="placeName">{result['name']}</span>
+                                <span className="address">{result['address']}</span>
+                            </div>
+                            {result.isAdded && <FontAwesomeIcon icon="check" />}
+                        </li>
+                    ))}
+                </ul>
             );
+        } else {
+            return <p className="empty-result-text">No results</p>;
         }
     }
 
+    // Clicking outside the search bar closes the results section
+    private handleClickOutside = (event: MouseEvent) => {
+        if (this.container.current && event.target instanceof Node) {
+            if (!this.container.current.contains(event.target)) {
+                this.setState({ resultsOpen: false });
+            } else {
+                this.setState({ resultsOpen: true });
+            }
+        }
+    };
+
     render() {
         return (
-            <div className="searchBarPopup" style={{ minWidth: `${this.props.minWidth}rem` }}>
+            <div
+                className="searchBarPopup"
+                style={{ minWidth: `${this.props.minWidth}rem` }}
+                ref={this.container}>
                 <div className="contents">
                     <h1 className="title"> Find and add places </h1>
                     <input
@@ -173,9 +199,14 @@ export class SearchBarPopup extends React.Component<SearchBarProps, SearchBarSta
                         placeholder="Search for..."
                         className="search-input"
                         onChange={this.handleOnSearchInputChange.bind(this)}
+                        onFocus={() => this.setState({ resultsOpen: true })}
                     />
                 </div>
-                {this.renderSearchResults()}
+                {this.state.resultsOpen && (
+                    <div className="results-container">
+                        {this.state.loading ? <OverlaySpinner /> : this.renderSearchResults()}
+                    </div>
+                )}
             </div>
         );
     }

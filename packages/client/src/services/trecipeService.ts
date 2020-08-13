@@ -13,7 +13,7 @@ class TrecipeService {
      * Fetches all trecipes from server.
      * @returns a promise of trecipe models array if successful, otherwise a promise rejection
      */
-    public fetchAllTrecipes(): Promise<Array<Trecipe>> {
+    public fetchMyTrecipes(): Promise<Array<Trecipe>> {
         return API.get<Array<Trecipe>>(this.apiEndpoint).then(
             (res: AxiosResponse<Array<Trecipe>>) => {
                 return Promise.resolve(res.data);
@@ -82,6 +82,32 @@ class TrecipeService {
      */
     public getTrecipe(id: string): Promise<Trecipe> {
         return API.get<Trecipe>(`${this.apiEndpoint}/${id}`).then((res: AxiosResponse<Trecipe>) => {
+            return Promise.resolve(res.data);
+        });
+    }
+
+    /**
+     * Sends a request to get trecipes containing a particular destination
+     * @param placeId: place id of destination of interest
+     * @param limit: limit on number of results returned
+     * @param onlyOwned: true if we want to restrict results to trecipes owned by the user
+     */
+    public fetchAssociatedTrecipes(
+        placeId: string,
+        limit?: number,
+        onlyOwned?: boolean
+    ): Promise<Array<Trecipe>> {
+        // call different endpoint depending on whether we want to fetch public associated trecipes,
+        // or owned trecipes
+        const endpoint = onlyOwned
+            ? `${this.apiEndpoint}/my-associated`
+            : `${this.apiEndpoint}/associated`;
+        return API.get<Array<Trecipe>>(endpoint, {
+            params: {
+                placeId: placeId,
+                limit: limit,
+            },
+        }).then((res: AxiosResponse<Array<Trecipe>>) => {
             return Promise.resolve(res.data);
         });
     }

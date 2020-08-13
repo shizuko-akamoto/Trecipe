@@ -9,5 +9,6 @@ export default function validateEnv(): void {
         MONGO_PATH: str(),
         MONGO_USER: str(),
         PORT: port(),
+        API_VERSION: str(),
     });
 }

@@ -11,6 +11,10 @@ tags:
     description: Trecipe endpoints
   - name: Users
     description: User endpoints
+  - name: Destinations
+    description: Destination endpoints
+  - name: Upload
+    description: Upload endpoints
 paths:
   /trecipes:
     get:
@@ -75,6 +79,56 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  '/trecipes/associated':
+    get:
+      tags:
+        - Trecipes
+      summary: Gets all public trecipes that contain destination of given place id
+      description: Gets up to "limit" number of public trecipes containing destination of given place id
+      parameters:
+        - $ref: '#/components/parameters/queryPlaceId'
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The max number of trecipes to be returned
+      responses:
+        200:
+          description: Returns the list of trecipes containing the destination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trecipe'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  '/trecipes/my-associated':
+    get:
+      tags:
+        - Trecipes
+      summary: Gets user's trecipes that contain destination of given place id
+      description: Gets up to "limit" number of trecipes containing destination of given place id
+      security:
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/queryPlaceId'
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: The max number of trecipes to be returned
+      responses:
+        200:
+          description: Returns the list of trecipes containing the destination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trecipe'
+        500:
+          $ref: '#/components/responses/InternalServerError'
   '/trecipes/{id}':
     get:
       tags:
@@ -82,6 +136,7 @@ paths:
       summary: Gets a trecipe by uuid
       description: Gets a trecipe by uuid
       security:
+        - {}
         - cookieAuth: []
       parameters:
         - $ref: '#/components/parameters/pathId'
@@ -144,6 +199,8 @@ paths:
         - Destinations
       summary: Create new destination
       description: Create a new destination with given placeId
+      security:
+        - cookieAuth: []
       requestBody:
         description: Destination data
         content:
@@ -162,18 +219,16 @@ paths:
     get:
       tags:
         - Destinations
-      summary: Get destinations by trecipe uuid
-      description: Get all destinations in a trecipe with specified uuid
+      summary: Get destination by place id
+      description: Get all destinations in a trecipe with specified place id
       parameters:
-        - $ref: '#/components/parameters/queryTrecipeId'
+        - $ref: '#/components/parameters/queryPlaceId'
       responses:
         '200':
-          description: Returns an array of destinations in trecipe of given uuid
+          description: Returns destination with specified place id
           content:
             application/json:
               schema:
-                type: array
-                items:
                   $ref: '#/components/schemas/Destination'
         '404':
           $ref: '#/components/responses/NotFound'
@@ -196,7 +251,51 @@ paths:
                 $ref: '#/components/schemas/Destination'
         '404':
           $ref: '#/components/responses/NotFound'
-
+  /destinations/rate/{id}:
+    post:
+      tags:
+        - Destinations
+      summary: Rate a destination
+      description: Update the user rating of a destination
+      requestBody:
+        description: Rating Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDestinationRatingDTO'
+      responses:
+        200:
+          description: Returns the updated destination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Destination'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  '/destinations/in':
+    get:
+      tags:
+        - Destinations
+      summary: Get destinations by trecipe uuid
+      description: Get all destinations in a trecipe with specified uuid
+      security:
+        - {}
+        - cookieAuth: []
+      parameters:
+        - $ref: '#/components/parameters/queryTrecipeId'
+      responses:
+        '200':
+          description: Returns an array of destinations in trecipe of given uuid
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Destination'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /upload:
     post:
       tags:
@@ -239,6 +338,128 @@ paths:
               schema:
                 type: string
                 format: binary
+  /search/{keyword}:
+    get:
+      tags:
+        - Search
+      summary: Perform search on all data
+      parameters:
+        - in: path
+          name: keyword
+          required: true
+          schema:
+            type: string
+          description: The keyword to perform search
+        - in: query
+          name: offset
+          required: true
+          schema:
+            type: number
+            minimum: 0
+          description: Number of entries to skip
+        - in: query
+          name: limit
+          required: true
+          schema:
+            type: number
+            minimum: 1
+          description: Number of entries to retrieve
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+
+  /search/trecipes/{keyword}:
+    get:
+      tags:
+        - Search
+      summary: Perform search on trecipes
+      parameters:
+        - in: path
+          name: keyword
+          required: true
+          schema:
+            type: string
+          description: The keyword to perform search
+        - in: query
+          name: limit
+          required: true
+          schema:
+            type: number
+            minimum: 1
+          description: Number of entries to retrieve
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trecipe'
+
+  /search/destinations/{keyword}:
+    get:
+      tags:
+        - Search
+      summary: Perform search on destinations
+      parameters:
+        - in: path
+          name: keyword
+          required: true
+          schema:
+            type: string
+          description: The keyword to perform search
+        - in: query
+          name: limit
+          required: true
+          schema:
+            type: number
+            minimum: 1
+          description: Number of entries to retrieve
+      responses:
+        200:
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Destination'
+  /photos/{photoRef}:
+    get:
+      tags:
+        - Photos
+      summary: Gets a photo from google place service using a photo reference string
+      parameters:
+        - in: path
+          name: photoRef
+          required: true
+          schema:
+            type: string
+            description: photo reference string
+        - in: query
+          name: maxHeight
+          schema:
+            type: integer
+            description: maximum height in px of fetched image (range between 1 and 1600)
+        - in: query
+          name: maxWidth
+          schema:
+            type: integer
+            description: maximum width in px of fetched image (range between 1 and 1600)
+      responses:
+        200:
+          description: Fetched image
+          content:
+            image/*:
+              schema:
+                type: string
+        500:
+          $ref: '#/components/responses/InternalServerError'
 
   /spec:
     get:
@@ -369,6 +590,14 @@ components:
       schema:
         type: string
         format: uuid
+    queryPlaceId:
+      name: placeId
+      in: query
+      description: Destination place id (used for Google Place API)
+      example: ChIJN1t_tDeuEmsRUsoyG83frY4
+      required: true
+      schema:
+        type: string
   schemas:
     User:
       title: User
@@ -470,7 +699,7 @@ components:
         userRatings:
           type: array
           items:
-            $ref: '#/components/schemas/Rating'
+            $ref: '#/components/schemas/UserRating'
           example:
             - 4.2
             - 3
@@ -488,6 +717,28 @@ components:
           example:
             - >-
               CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU
+    UpdateDestinationRatingDTO:
+      title: updateDestinationRatingDTO
+      type: object
+      properties:
+        userId:
+          type: string
+        trecipeId:
+          type: string
+        rating:
+          $ref: '#/components/schemas/Rating'
+      required:
+        - userId
+        - trecipeId
+        - rating
+    UserRating:
+      title: UserRating
+      type: object
+      properties:
+        userId:
+          type: string
+        rating:
+          $ref: '#/components/schemas/Rating'
     DestinationCategory:
       title: DestinationCategory
       type: string
@@ -602,7 +853,7 @@ components:
         userRatings:
           type: array
           items:
-            $ref: '#/components/schemas/Rating'
+            $ref: '#/components/schemas/UserRating'
           example:
             - 4.2
             - 3
@@ -702,6 +953,43 @@ components:
           format: int32
         message:
           type: string
+    Usera:
+      title: User
+      type: object
+      properties:
+        username:
+          type: string
+          example: shumalll
+        displayName:
+          type: string
+          example: Display Name
+        email:
+          type: string
+          example: someone@email.com
+        password:
+          type: string
+          example: d1e8a70b5ccab1dc2f56bbf7e99f064a660c
+        trecipes:
+          type: array
+          items:
+            type: string
+          example: [123e4567-e89b-12d3-a456-426614174000, 243e4567-e89b-12d3-a456-42661417123]
+    SearchResult:
+      title: SearchResult
+      type: object
+      properties:
+        trecipeResult:
+          type: array
+          items:
+            $ref: '#/components/schemas/Trecipe'
+        destinationResult:
+          type: array
+          items:
+            $ref: '#/components/schemas/Destination'
+        userResult:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
   responses:
     NotFound:
       description: Entity not found

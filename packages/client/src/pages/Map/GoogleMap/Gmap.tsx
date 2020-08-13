@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { GoogleMap } from '@react-google-maps/api';
 import { HoverMarker } from './HoverMarker';
 import './gmap.scss';
-import Spinner from '../../../components/Loading/Spinner';
 import { mapColorStyle } from '../../../components/Map/mapHelper';
 import { SearchBarPopup } from '../../../components/SearchBarPopup/SearchBarPopup';
 import { Legend } from './Legend';
@@ -14,6 +13,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { showModal } from '../../../redux/Modal/action';
 import Modal from '../../../components/Modal/Modal';
+import OverlaySpinner from '../../../components/Loading/OverlaySpinner';
 
 const mapOptions = {
     center: {
@@ -45,6 +45,7 @@ interface MapProps {
     completedDest: Set<string>;
     onDestAdd: (destination: CreateNewDestinationDTO) => void;
     onDestRemove: (destinationId: string) => void;
+    readOnly: boolean;
 }
 
 interface GMapState {
@@ -108,6 +109,7 @@ class GMap extends Component<GMapProps, GMapState> {
         this.props.showModal(
             <Modal>
                 <SearchBarPopup
+                    addedDests={this.props.destinations}
                     onDestAdd={this.newDestAdd}
                     onDestRemove={this.props.onDestRemove}
                 />
@@ -118,7 +120,7 @@ class GMap extends Component<GMapProps, GMapState> {
     render() {
         return (
             <div className="gmap-wrapper">
-                {this.state.loading && <Spinner />}
+                {this.state.loading && <OverlaySpinner size={50} />}
                 <GoogleMap
                     mapContainerStyle={mapOptions.mapStyle}
                     mapContainerClassName={mapOptions.className}
@@ -130,21 +132,30 @@ class GMap extends Component<GMapProps, GMapState> {
                         <HoverMarker
                             key={dest.uuid}
                             dest={dest}
-                            completed={this.props.completedDest.has(dest.uuid)}
+                            completed={
+                                !this.props.readOnly
+                                    ? this.props.completedDest.has(dest.uuid)
+                                    : true
+                            }
                         />
                     ))}
                 </GoogleMap>
                 <Desktop>
-                    <div className="gmap-search-bar">
-                        <SearchBarPopup
-                            minWidth={20}
-                            onDestAdd={this.newDestAdd}
-                            onDestRemove={this.props.onDestRemove}
-                        />
-                    </div>
-                    <div className="gmap-legend">
-                        <Legend />
-                    </div>
+                    {!this.props.readOnly && (
+                        <div className="gmap-search-bar">
+                            <SearchBarPopup
+                                minWidth={20}
+                                addedDests={this.props.destinations}
+                                onDestAdd={this.newDestAdd}
+                                onDestRemove={this.props.onDestRemove}
+                            />
+                        </div>
+                    )}
+                    {!this.props.readOnly && (
+                        <div className="gmap-legend">
+                            <Legend />
+                        </div>
+                    )}
                 </Desktop>
                 <Mobile>
                     <div className="gmap-search-button">

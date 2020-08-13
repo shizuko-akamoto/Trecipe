@@ -2,6 +2,8 @@ import React, { RefObject } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './searchBar.scss';
 import _ from 'lodash';
+import searchService from '../../services/searchService';
+import { Link } from 'react-router-dom';
 
 /**
  * Search filters to filter search results by.
@@ -23,10 +25,17 @@ enum SearchFilter {
 export interface SearchBarState {
     filter: SearchFilter;
     searchKey: string;
-    results: Array<string>;
+    results: Array<SearchResultEntry>;
     resultsOpen: boolean;
     loading: boolean;
     errMsg: string;
+}
+
+export interface SearchResultEntry {
+    name: string;
+    href: string;
+    info: string;
+    uuid: string;
 }
 
 /**
@@ -34,6 +43,7 @@ export interface SearchBarState {
  */
 export class SearchBar extends React.Component<{}, SearchBarState> {
     private container: RefObject<HTMLDivElement> = React.createRef<HTMLDivElement>();
+    private timer: number = 0;
 
     public readonly state = {
         filter: SearchFilter.Trecipe,
@@ -67,26 +77,49 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
         if (_.isEmpty(searchKey)) {
             this.setState({ searchKey: searchKey, results: [], errMsg: '' });
         } else {
-            this.setState({ searchKey: searchKey, loading: true, errMsg: '' }, () =>
-                this.fetchSearchResults(searchKey, this.state.filter)
-            );
+            if (this.timer) clearTimeout(this.timer);
+            this.setState({ searchKey: searchKey });
+            this.timer = window.setTimeout(() => {
+                this.setState({ loading: true, errMsg: '' }, () =>
+                    this.fetchSearchResults(searchKey, this.state.filter)
+                );
+            }, 500);
         }
     }
 
     private fetchSearchResults(searchKey: string, searchFilter: SearchFilter): void {
-        new Promise<Array<string>>(function (resolve, reject) {
-            /** TODO: Modify logic here to make HTTP call to backend for fetching search results.
-             *  Right now, it just returns dummy list of strings based on current search filter selected.
-             */
-            let result: string[] = [];
+        new Promise<Array<SearchResultEntry>>(function (resolve, reject) {
+            let result: SearchResultEntry[] = [];
             if (_.isEqual(searchFilter, SearchFilter.Trecipe)) {
-                result = ['Trecipe1', 'Trecipe2', 'Trecipe3'];
+                searchService.performTrecipeSearch(searchKey).then((searchResult) => {
+                    result = searchResult.map((value) => {
+                        return {
+                            name: value.name,
+                            href: `/trecipes/${value.uuid}`,
+                            info: value.owner,
+                            uuid: value.uuid,
+                        };
+                    });
+                    return resolve(result);
+                });
             } else {
-                result = ['Place1', 'Place2', 'Place3'];
+                searchService.performDestinationSearchGoogle(searchKey).then((searchResult) => {
+                    result = searchResult.map((value) => {
+                        return {
+                            name: value.name,
+                            href: `/destinations/${value.placeId}`,
+                            info:
+                                typeof value.formattedAddress === 'undefined'
+                                    ? ''
+                                    : value.formattedAddress,
+                            uuid: value.placeId,
+                        };
+                    });
+                    return resolve(result);
+                });
             }
-            resolve(result);
         })
-            .then((results: string[]) => {
+            .then((results: SearchResultEntry[]) => {
                 this.setState({ resultsOpen: true, results: results, loading: false });
             })
             .catch((err) => {
@@ -99,17 +132,18 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
     }
 
     private renderSearchResults() {
-        const { results } = this.state;
+        const results: SearchResultEntry[] = this.state.results;
         if (this.state.resultsOpen && _.isArray(results) && !_.isEmpty(results)) {
             return (
                 <div className="results-container">
                     <ul className="results-list">
                         {results.map((result) => (
-                            // temporarily using result as key. Change to some id later
-                            // TODO: replace with valid href
-                            <li className="results-entry" key={result}>
-                                <a href="placeholder">{result}</a>
-                            </li>
+                            <Link
+                                to={result.href}
+                                onClick={(e) => this.setState({ resultsOpen: false })}
+                                key={result.uuid}>
+                                <li className="results-entry">{result.name}</li>
+                            </Link>
                         ))}
                     </ul>
                 </div>
@@ -159,9 +193,14 @@ export class SearchBar extends React.Component<{}, SearchBarState> {
                         className="search-input"
                         onChange={this.handleOnSearchInputChange.bind(this)}
                     />
-                    <button type="submit" className="search-button">
-                        <FontAwesomeIcon icon="search" fixedWidth />
-                    </button>
+                    <Link
+                        className="router-link"
+                        to={`/search?q=${this.state.searchKey}`}
+                        onClick={(e) => this.setState({ resultsOpen: false })}>
+                        <button type="submit" className="search-button">
+                            <FontAwesomeIcon icon="search" fixedWidth />
+                        </button>
+                    </Link>
                 </form>
                 {this.renderSearchResults()}
             </div>
